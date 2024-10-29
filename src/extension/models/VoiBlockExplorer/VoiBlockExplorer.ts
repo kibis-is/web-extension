@@ -8,7 +8,7 @@ import type {
   INewOptions,
 } from '@extension/models/BaseBlockExplorer';
 
-export default class VoiObserverBlockExplorer extends BaseBlockExplorer {
+export default class VoiBlockExplorer extends BaseBlockExplorer {
   constructor({
     baseURL,
     canonicalName,
@@ -16,8 +16,8 @@ export default class VoiObserverBlockExplorer extends BaseBlockExplorer {
   }: TPartialExcept<INewOptions, 'baseURL'>) {
     super({
       baseURL,
-      canonicalName: canonicalName || 'Voi Observer',
-      id: id || 'voi-observer-block-explorer',
+      canonicalName: canonicalName || 'Voi Block Explorer',
+      id: id || 'voi-block-explorer',
     });
   }
 

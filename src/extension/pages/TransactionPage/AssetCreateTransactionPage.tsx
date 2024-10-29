@@ -387,7 +387,12 @@ const AssetCreateTransactionPage: FC<IProps<IAssetCreateTransaction>> = ({
                       tooltipLabel={t<string>('captions.openOn', {
                         name: explorer.canonicalName,
                       })}
-                      url={explorer.groupURL(transaction.groupId)}
+                      url={explorer.groupURL({
+                        groupID: transaction.groupId,
+                        ...(transaction.block && {
+                          block: transaction.block,
+                        }),
+                      })}
                     />
                   )}
                 </HStack>

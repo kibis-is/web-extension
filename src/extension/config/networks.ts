@@ -12,11 +12,11 @@ import { AssetTypeEnum, NetworkTypeEnum } from '@extension/enums';
 
 // models
 import AlloBlockExplorer from '@extension/models/AlloBlockExplorer';
-import AVMExplorerBlockExplorer from '@extension/models/AVMExplorerBlockExplorer';
 import NautilusARC0072Indexer from '@extension/models/NautilusARC0072Indexer';
 import NFTNavigatorARC0072Indexer from '@extension/models/NFTNavigatorARC0072Indexer';
 import NFTNavigatorNFTExplorer from '@extension/models/NFTNavigatorNFTExplorer';
 import PeraBlockExplorer from '@extension/models/PeraBlockExplorer';
+import VoiBlockExplorer from '@extension/models/VoiBlockExplorer';
 import VoiObserverBlockExplorer from '@extension/models/VoiObserverBlockExplorer';
 
 // types
@@ -47,6 +47,9 @@ const networks: INetwork[] = [
     canonicalName: 'Voi',
     chakraTheme: 'voi',
     blockExplorers: [
+      new VoiBlockExplorer({
+        baseURL: 'https://block.voi.network',
+      }),
       new VoiObserverBlockExplorer({
         baseURL: 'https://explorer.voi.network/explorer',
         canonicalName: 'Voi Network',
@@ -93,38 +96,28 @@ const networks: INetwork[] = [
         id: null,
         port: null,
         token: null,
-        url: 'https://testnet-api.voi.nodly.io',
+        url: 'https://testnet-api.voi.nodely.dev',
       },
     ],
-    arc0072Indexers: [
-      new NautilusARC0072Indexer({
-        baseURL: 'https://arc72-idx.nautilus.sh',
-      }),
-      new NFTNavigatorARC0072Indexer({
-        baseURL: 'https://arc72-idx.nftnavigator.xyz',
-      }),
-    ],
+    arc0072Indexers: [],
     canonicalName: 'Voi',
     chakraTheme: 'voi',
     blockExplorers: [
-      new VoiObserverBlockExplorer({
-        baseURL: 'https://voi.observer/explorer',
-      }),
-      new AVMExplorerBlockExplorer({
-        baseURL: 'https://avmexplorer.com',
+      new VoiBlockExplorer({
+        baseURL: 'https://testnet.block.voi.network',
       }),
     ],
     feeSunkAddress:
-      'FEES3ZW52HQ7U7LB3OGLUFQX2DCCWPJ2LIMXAH75KYROBZBQRN3Q5OR3GI',
-    genesisId: 'voitest-v1',
-    genesisHash: 'IXnoWtviVVJW5LGivNFc0Dq14V3kqaXuK2u5OQrdVZo=',
+      'TBEIGCNK4UCN3YDP2NODK3MJHTUZMYS3TABRM2MVSI2MPUR2V36E5JYHSY',
+    genesisId: 'voitest',
+    genesisHash: '5pbhGq04byd0AgV/sbP+yITANqazgKBuaATr85n21wY=',
     indexers: [
       {
         canonicalName: 'Nodely',
         id: null,
         port: null,
         token: null,
-        url: 'https://testnet-idx.voi.nodly.io',
+        url: 'https://testnet-idx.voi.nodely.dev',
       },
     ],
     methods: SUPPORTED_METHODS,
@@ -140,11 +133,7 @@ const networks: INetwork[] = [
       type: AssetTypeEnum.Native,
       verified: true,
     },
-    nftExplorers: [
-      new NFTNavigatorNFTExplorer({
-        baseURL: 'https://arc72-idx.nftnavigator.xyz',
-      }),
-    ],
+    nftExplorers: [],
     type: NetworkTypeEnum.Test,
   },
   /**
