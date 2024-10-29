@@ -70,7 +70,6 @@ const networks: INetwork[] = [
     namespace: {
       key: 'avm',
       methods: ['avm_signTransactions', 'avm_signMessage'],
-      reference: 'r20fSQI8gWe_kFZziNonSPCXLwcQmH_n',
     },
     nativeCurrency: {
       decimals: 6,
@@ -132,7 +131,6 @@ const networks: INetwork[] = [
     namespace: {
       key: 'avm',
       methods: ['avm_signTransactions', 'avm_signMessage'],
-      reference: 'IXnoWtviVVJW5LGivNFc0Dq14V3kqaXu',
     },
     nativeCurrency: {
       decimals: 6,
@@ -190,7 +188,6 @@ const networks: INetwork[] = [
     namespace: {
       key: 'algorand',
       methods: ['algo_signTxn'],
-      reference: 'wGHE2Pwdvd7S12BL5FaOP20EGYesN73k',
     },
     nativeCurrency: {
       decimals: 6,
@@ -234,7 +231,6 @@ const networks: INetwork[] = [
     namespace: {
       key: 'algorand',
       methods: ['algo_signTxn'],
-      reference: 'mFgazF-2uRS1tMiL9dsj01hJGySEmPN2',
     },
     nativeCurrency: {
       decimals: 6,
@@ -282,7 +278,6 @@ const networks: INetwork[] = [
     namespace: {
       key: 'algorand',
       methods: ['algo_signTxn'],
-      reference: 'SGO1GKSzyE7IEPItTxCByw9x8FmnrCDe',
     },
     nativeCurrency: {
       decimals: 6,
