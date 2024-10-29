@@ -6,11 +6,11 @@ import { AssetTypeEnum } from '@extension/enums';
 // types
 import type {
   IAccountInformation,
-  IAlgorandAccountInformation,
+  IAVMAccountInformation,
 } from '@extension/types';
 
 export default function mapAVMAccountInformationToAccountInformation(
-  avmAccountInformation: IAlgorandAccountInformation,
+  avmAccountInformation: IAVMAccountInformation,
   accountInformation: IAccountInformation,
   updatedAt?: number
 ): IAccountInformation {

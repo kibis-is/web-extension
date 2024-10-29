@@ -3,11 +3,7 @@ import { Algodv2, IntDecoding } from 'algosdk';
 import BigNumber from 'bignumber.js';
 
 // types
-import {
-  IAlgorandAccountInformation,
-  IAlgorandAsset,
-  INetwork,
-} from '@extension/types';
+import { IAVMAccountInformation, IAVMAsset, INetwork } from '@extension/types';
 import { IAccountInformation, IAssetInformation } from '../types';
 
 // utils
@@ -18,22 +14,22 @@ export default async function getAccountInformation(
   network: INetwork
 ): Promise<IAccountInformation> {
   const client: Algodv2 = getRandomAlgodClient(network);
-  const accountInformation: IAlgorandAccountInformation = (await client
+  const accountInformation: IAVMAccountInformation = (await client
     .accountInformation(account.address)
     .setIntDecoding(IntDecoding.BIGINT)
-    .do()) as IAlgorandAccountInformation;
+    .do()) as IAVMAccountInformation;
   const assets: IAssetInformation[] = await Promise.all(
     accountInformation.assets.map<Promise<IAssetInformation>>(
       (value, index) =>
         new Promise((resolve, reject) =>
           setTimeout(async () => {
-            let assetInformation: IAlgorandAsset;
+            let assetInformation: IAVMAsset;
 
             try {
               assetInformation = (await client
                 .getAssetByID(Number(value['asset-id']))
                 .setIntDecoding(IntDecoding.BIGINT)
-                .do()) as IAlgorandAsset;
+                .do()) as IAVMAsset;
 
               resolve({
                 balance: new BigNumber(String(value.amount)),

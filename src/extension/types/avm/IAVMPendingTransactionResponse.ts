@@ -1,7 +1,7 @@
 // types
-import type IAlgorandTransaction from './IAlgorandTransaction';
+import type TAVMTransaction from './TAVMTransaction';
 
-interface IAlgorandPendingTransactionResponse {
+interface IAVMPendingTransactionResponse {
   ['application-index']?: bigint;
   ['asset-closing-amount']?: bigint;
   ['asset-index']?: bigint;
@@ -11,7 +11,7 @@ interface IAlgorandPendingTransactionResponse {
   ['pool-error']: string;
   ['receiver-rewards']?: bigint;
   ['sender-rewards']?: bigint;
-  ['txn ']: IAlgorandTransaction;
+  ['txn ']: TAVMTransaction;
 }
 
-export default IAlgorandPendingTransactionResponse;
+export default IAVMPendingTransactionResponse;

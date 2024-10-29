@@ -6,12 +6,12 @@ import { TransactionTypeEnum } from '@extension/enums';
 // types
 import {
   IBaseTransaction,
-  IAlgorandAssetTransferTransaction,
+  IAVMAssetTransferTransaction,
   IAssetTransferTransaction,
 } from '@extension/types';
 
 export default function parseAssetTransferTransaction(
-  algorandAssetTransferTransaction: IAlgorandAssetTransferTransaction,
+  algorandAssetTransferTransaction: IAVMAssetTransferTransaction,
   baseTransaction: IBaseTransaction
 ): IAssetTransferTransaction {
   return {

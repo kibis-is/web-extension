@@ -23,13 +23,13 @@ import BaseARC0072Indexer from '@extension/models/BaseARC0072Indexer';
 // types
 import type { ILogger } from '@common/types';
 import type {
-  IAlgorandAccountInformation,
-  IAlgorandAccountTransaction,
-  IAlgorandAsset,
-  IAlgorandPendingTransactionResponse,
-  IAlgorandSearchApplicationsResult,
-  IAlgorandSearchAssetsResult,
-  IAlgorandTransactionParams,
+  IAVMAccountInformation,
+  IAVMAccountTransaction,
+  IAVMAsset,
+  IAVMPendingTransactionResponse,
+  IAVMSearchApplicationsResult,
+  IAVMSearchAssetsResult,
+  IAVMTransactionParams,
   IARC0072AssetHolding,
   IARC0072AssetInformation,
   IARC0200AssetHolding,
@@ -89,7 +89,7 @@ export default class NetworkClient {
     address,
     delay,
     nodeID,
-  }: IByAddressWithDelayOptions): Promise<IAlgorandAccountInformation> {
+  }: IByAddressWithDelayOptions): Promise<IAVMAccountInformation> {
     const algod = this.algodByID(nodeID);
 
     return await this._sendRequestWithDelay({
@@ -98,7 +98,7 @@ export default class NetworkClient {
         (await algod
           .accountInformation(address)
           .setIntDecoding(IntDecoding.BIGINT)
-          .do()) as IAlgorandAccountInformation,
+          .do()) as IAVMAccountInformation,
     });
   }
 
@@ -312,7 +312,7 @@ export default class NetworkClient {
     limit,
     next,
     nodeID,
-  }: ILookupAccountTransactionWithDelayOptions): Promise<IAlgorandAccountTransaction> {
+  }: ILookupAccountTransactionWithDelayOptions): Promise<IAVMAccountTransaction> {
     const indexer = this.indexerByID(nodeID);
 
     return await this._sendRequestWithDelay({
@@ -332,7 +332,7 @@ export default class NetworkClient {
 
         return (await requestBuilder
           .setIntDecoding(IntDecoding.BIGINT)
-          .do()) as IAlgorandAccountTransaction;
+          .do()) as IAVMAccountTransaction;
       },
     });
   }
@@ -340,7 +340,7 @@ export default class NetworkClient {
   /**
    * Searches for applications by the application ID from the node with a delay.
    * @param {IOptions} options - options needed to send the request.
-   * @returns {Promise<IAlgorandSearchApplicationsResult>} a promise that resolves to the applications via the
+   * @returns {Promise<IAVMSearchApplicationsResult>} a promise that resolves to the applications via the
    * application ID.
    */
   public async searchApplicationsWithDelay({
@@ -349,7 +349,7 @@ export default class NetworkClient {
     limit,
     next,
     nodeID,
-  }: ISearchApplicationsWithDelayOptions): Promise<IAlgorandSearchApplicationsResult> {
+  }: ISearchApplicationsWithDelayOptions): Promise<IAVMSearchApplicationsResult> {
     const indexer = this.indexerByID(nodeID);
 
     return await this._sendRequestWithDelay({
@@ -366,7 +366,7 @@ export default class NetworkClient {
 
         return (await requestBuilder
           .setIntDecoding(IntDecoding.BIGINT)
-          .do()) as IAlgorandSearchApplicationsResult;
+          .do()) as IAVMSearchApplicationsResult;
       },
     });
   }
@@ -374,7 +374,7 @@ export default class NetworkClient {
   /**
    * Searches for standard assets by the asset index, name or unit from the node with a delay.
    * @param {IOptions} options - options needed to send the request.
-   * @returns {Promise<IAlgorandSearchAssetsResult>} a promise that resolves to the standard assets by the supplied
+   * @returns {Promise<IAVMSearchAssetsResult>} a promise that resolves to the standard assets by the supplied
    * parameters.
    */
   public async searchStandardAssetsWithDelay({
@@ -385,7 +385,7 @@ export default class NetworkClient {
     next,
     nodeID,
     unit,
-  }: ISearchStandardAssetsWithDelayOptions): Promise<IAlgorandSearchAssetsResult> {
+  }: ISearchStandardAssetsWithDelayOptions): Promise<IAVMSearchAssetsResult> {
     let indexer: Indexer;
 
     if (!assetId && !unit && !name) {
@@ -420,7 +420,7 @@ export default class NetworkClient {
 
         return (await requestBuilder
           .setIntDecoding(IntDecoding.BIGINT)
-          .do()) as IAlgorandSearchAssetsResult;
+          .do()) as IAVMSearchAssetsResult;
       },
     });
   }
@@ -437,7 +437,7 @@ export default class NetworkClient {
     const _functionName = 'sendTransactions';
     const algod = this.algodByID(nodeID);
     let sentRawTransaction: { txId: string };
-    let transactionsResponse: IAlgorandPendingTransactionResponse;
+    let transactionsResponse: IAVMPendingTransactionResponse;
 
     this._logger?.debug(
       `${_functionName}: sending transactions to the network "${this._network.genesisId}"`
@@ -456,7 +456,7 @@ export default class NetworkClient {
       algod,
       sentRawTransaction.txId,
       TRANSACTION_CONFIRMATION_ROUNDS
-    )) as IAlgorandPendingTransactionResponse;
+    )) as IAVMPendingTransactionResponse;
 
     this._logger?.debug(
       `${NetworkClient.name}#${_functionName}: transaction "${sentRawTransaction.txId}" confirmed in round "${transactionsResponse['confirmed-round']}"`
@@ -473,7 +473,7 @@ export default class NetworkClient {
     delay,
     id,
     nodeID,
-  }: IByIDWithDelayOptions): Promise<IAlgorandAsset> {
+  }: IByIDWithDelayOptions): Promise<IAVMAsset> {
     const algod = this.algodByID(nodeID);
 
     return await this._sendRequestWithDelay({
@@ -482,7 +482,7 @@ export default class NetworkClient {
         (await algod
           .getAssetByID(parseInt(id))
           .setIntDecoding(IntDecoding.BIGINT)
-          .do()) as IAlgorandAsset,
+          .do()) as IAVMAsset,
     });
   }
 
@@ -497,11 +497,11 @@ export default class NetworkClient {
   /**
    * Fetches the transaction params for the given network.
    * @param {string | null} nodeID - an optional node ID to choose.
-   * @returns {Promise<IAlgorandTransactionParams>} a promise that resolves to the transaction params.
+   * @returns {Promise<IAVMTransactionParams>} a promise that resolves to the transaction params.
    */
   public async transactionParams(
     nodeID: string | null
-  ): Promise<IAlgorandTransactionParams> {
+  ): Promise<IAVMTransactionParams> {
     const algodNode = this.algodNodeByID(nodeID);
     let response: Response;
 

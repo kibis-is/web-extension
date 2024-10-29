@@ -5,7 +5,7 @@ import { TransactionTypeEnum } from '@extension/enums';
 
 // types
 import {
-  IAlgorandAssetConfigTransaction,
+  IAVMAssetConfigTransaction,
   IAssetConfigTransaction,
   IAssetCreateTransaction,
   IAssetDestroyTransaction,
@@ -13,7 +13,7 @@ import {
 } from '@extension/types';
 
 export default function parseAssetConfigTransaction(
-  algorandAssetConfigTransaction: IAlgorandAssetConfigTransaction,
+  algorandAssetConfigTransaction: IAVMAssetConfigTransaction,
   baseTransaction: IBaseTransaction
 ):
   | IAssetConfigTransaction

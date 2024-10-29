@@ -17,8 +17,8 @@ import NetworkClient from '@extension/models/NetworkClient';
 
 // types
 import type {
-  IAlgorandAsset,
-  IAlgorandSearchAssetsResult,
+  IAVMAsset,
+  IAVMSearchAssetsResult,
   IStandardAsset,
   ITinyManAssetResponse,
 } from '@extension/types';
@@ -59,7 +59,7 @@ const queryStandardAssetThunk: AsyncThunk<
       networks,
       settings,
     });
-    let searchStandardAssetsResult: IAlgorandSearchAssetsResult;
+    let searchStandardAssetsResult: IAVMSearchAssetsResult;
     let networkClient: NetworkClient;
     let verifiedStandardAssets: ITinyManAssetResponse[];
     let updatedStandardAssets: IStandardAsset[] = [];
@@ -127,7 +127,7 @@ const queryStandardAssetThunk: AsyncThunk<
         index < searchStandardAssetsResult.assets.length;
         index++
       ) {
-        const asset: IAlgorandAsset = searchStandardAssetsResult.assets[index];
+        const asset: IAVMAsset = searchStandardAssetsResult.assets[index];
         const verifiedStandardAsset: ITinyManAssetResponse | null =
           verifiedStandardAssets.find(
             (value) => value.id === String(asset.index)

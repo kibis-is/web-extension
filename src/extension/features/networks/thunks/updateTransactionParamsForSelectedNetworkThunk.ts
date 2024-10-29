@@ -14,7 +14,7 @@ import NetworksRepository from '@extension/repositories/NetworksRepository';
 
 // types
 import type {
-  IAlgorandTransactionParams,
+  IAVMTransactionParams,
   IBaseAsyncThunkConfig,
   IMainRootState,
   INetworkWithTransactionParams,
@@ -39,7 +39,7 @@ const updateTransactionParamsForSelectedNetworkThunk: AsyncThunk<
     const networks = getState().networks.items;
     const online = getState().system.networkConnectivity.online;
     const settings = getState().settings;
-    let avmTransactionParams: IAlgorandTransactionParams;
+    let avmTransactionParams: IAVMTransactionParams;
     let networkClient: NetworkClient;
     let network: INetworkWithTransactionParams | null;
     let updatedAt: Date;

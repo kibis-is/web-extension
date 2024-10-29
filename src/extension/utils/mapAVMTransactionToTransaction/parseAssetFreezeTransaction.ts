@@ -5,14 +5,14 @@ import { TransactionTypeEnum } from '@extension/enums';
 
 // types
 import {
-  IAlgorandAssetFreezeTransaction,
+  IAVMAssetFreezeTransaction,
   IAssetFreezeTransaction,
   IAssetUnfreezeTransaction,
   IBaseTransaction,
 } from '@extension/types';
 
 export default function parseAssetFreezeTransaction(
-  algorandAssetFreezeTransaction: IAlgorandAssetFreezeTransaction,
+  algorandAssetFreezeTransaction: IAVMAssetFreezeTransaction,
   baseTransaction: IBaseTransaction
 ): IAssetFreezeTransaction | IAssetUnfreezeTransaction {
   return {

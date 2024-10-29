@@ -1,7 +1,7 @@
 // types
-import type IAlgorandStateSchema from './IAlgorandStateSchema';
+import type IAVMStateSchema from './IAVMStateSchema';
 
-interface IAlgorandApplicationTransaction {
+interface IAVMApplicationTransaction {
   accounts?: string[];
   ['application-args']?: string[];
   ['application-id']: bigint;
@@ -10,8 +10,8 @@ interface IAlgorandApplicationTransaction {
   ['extra-program-pages']?: bigint;
   ['foreign-apps']?: bigint[];
   ['foreign-assets']?: bigint[];
-  ['global-state-schema']?: IAlgorandStateSchema;
-  ['local-state-schema']?: IAlgorandStateSchema;
+  ['global-state-schema']?: IAVMStateSchema;
+  ['local-state-schema']?: IAVMStateSchema;
   ['on-completion']:
     | 'clear'
     | 'closeout'
@@ -21,4 +21,4 @@ interface IAlgorandApplicationTransaction {
     | 'update';
 }
 
-export default IAlgorandApplicationTransaction;
+export default IAVMApplicationTransaction;

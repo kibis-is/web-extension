@@ -1,13 +1,13 @@
-import { BigNumber } from 'bignumber.js';
+import BigNumber from 'bignumber.js';
 
 // enums
 import { TransactionTypeEnum } from '@extension/enums';
 
 // types
 import type {
-  IAlgorandTransaction,
   IBaseTransaction,
   ITransactions,
+  TAVMTransaction,
 } from '@extension/types';
 
 // utils
@@ -19,11 +19,12 @@ import parseKeyRegistrationTransaction from './parseKeyRegistrationTransaction';
 import parseNote from './parseNote';
 import parsePaymentAndReKeyTransaction from './parsePaymentAndReKeyTransaction';
 
-export default function mapAlgorandTransactionToTransaction(
-  avmTransaction: IAlgorandTransaction
+export default function mapAVMTransactionToTransaction(
+  avmTransaction: TAVMTransaction
 ): ITransactions {
   const baseTransaction: IBaseTransaction = {
     authAddr: avmTransaction['auth-addr'] || null,
+    block: String(avmTransaction['confirmed-round'] as bigint) || null,
     completedAt: avmTransaction['round-time']
       ? new BigNumber(String(avmTransaction['round-time'] as bigint))
           .multipliedBy(1000) // we want milliseconds, as 'round-time' is in seconds

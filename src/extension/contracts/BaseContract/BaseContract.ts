@@ -26,7 +26,7 @@ import { ReadABIContractError } from '@extension/errors';
 
 // types
 import type { ILogger } from '@common/types';
-import type { IAlgorandAccountInformation } from '@extension/types';
+import type { IAVMAccountInformation } from '@extension/types';
 import type {
   IABIResult,
   IBaseApplicationOptions,
@@ -345,12 +345,12 @@ export default class BaseContract {
 
   /**
    * Gets the account information for the account associated with the application.
-   * @returns {Promise<IAlgorandAccountInformation>} the application's account information.
+   * @returns {Promise<IAVMAccountInformation>} the application's account information.
    */
-  public async applicationAccountInformation(): Promise<IAlgorandAccountInformation> {
+  public async applicationAccountInformation(): Promise<IAVMAccountInformation> {
     return (await this._algod
       .accountInformation(this.applicationAddress())
-      .do()) as IAlgorandAccountInformation;
+      .do()) as IAVMAccountInformation;
   }
 
   public async boxByName(

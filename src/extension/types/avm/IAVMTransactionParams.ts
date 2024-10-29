@@ -1,4 +1,4 @@
-interface IAlgorandTransactionParams {
+interface IAVMTransactionParams {
   ['consensus-version']: string;
   fee: number;
   ['genesis-hash']: string;
@@ -7,4 +7,4 @@ interface IAlgorandTransactionParams {
   ['min-fee']: number;
 }
 
-export default IAlgorandTransactionParams;
+export default IAVMTransactionParams;

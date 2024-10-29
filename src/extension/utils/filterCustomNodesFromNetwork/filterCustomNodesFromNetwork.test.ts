@@ -48,7 +48,6 @@ describe('filterCustomNodesFromNetwork', () => {
       namespace: {
         key: 'voi',
         methods: ['signTransaction', 'signMessage'],
-        reference: 'IXnoWtviVVJW5LGivNFc0Dq14V3kqaXu',
       },
       nativeCurrency: {
         decimals: 6,

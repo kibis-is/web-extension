@@ -1,4 +1,4 @@
-interface IAlgorandAssetHolding {
+interface IAVMAssetHolding {
   amount: bigint;
   ['asset-id']: bigint;
   creator: string;
@@ -8,4 +8,4 @@ interface IAlgorandAssetHolding {
   ['opted-out-at-round']: bigint;
 }
 
-export default IAlgorandAssetHolding;
+export default IAVMAssetHolding;

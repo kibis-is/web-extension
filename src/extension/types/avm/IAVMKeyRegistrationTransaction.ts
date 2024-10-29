@@ -1,4 +1,4 @@
-interface IAlgorandKeyRegistrationTransaction {
+interface IAVMKeyRegistrationTransaction {
   ['non-participation']?: boolean;
   ['selection-participation-key']?: string;
   ['state-proof-key']?: string;
@@ -8,4 +8,4 @@ interface IAlgorandKeyRegistrationTransaction {
   ['vote-participation-key']?: string;
 }
 
-export default IAlgorandKeyRegistrationTransaction;
+export default IAVMKeyRegistrationTransaction;

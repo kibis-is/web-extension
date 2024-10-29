@@ -5,20 +5,20 @@ import { TransactionTypeEnum } from '@extension/enums';
 
 // types
 import {
-  IAlgorandApplicationTransaction,
-  IAlgorandTransaction,
   IApplicationTransaction,
   IApplicationTransactionTypes,
+  IAVMApplicationTransaction,
   IBaseTransaction,
+  TAVMTransaction,
 } from '@extension/types';
 
 // utils
-import mapAlgorandTransactionToTransaction from './mapAlgorandTransactionToTransaction';
+import mapAVMTransactionToTransaction from '@extension/utils/mapAVMTransactionToTransaction';
 
 export default function parseApplicationTransaction(
-  algorandApplicationTransaction: IAlgorandApplicationTransaction,
+  algorandApplicationTransaction: IAVMApplicationTransaction,
   baseTransaction: IBaseTransaction,
-  innerTransactions?: IAlgorandTransaction[]
+  innerTransactions?: TAVMTransaction[]
 ): IApplicationTransaction {
   const applicationId: string | null =
     algorandApplicationTransaction['application-id'] > 0
@@ -73,7 +73,7 @@ export default function parseApplicationTransaction(
         new BigNumber(String(value as bigint)).toFixed()
       ) || null,
     innerTransactions:
-      innerTransactions?.map(mapAlgorandTransactionToTransaction) || null,
+      innerTransactions?.map(mapAVMTransactionToTransaction) || null,
     type,
   };
 }

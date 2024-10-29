@@ -7,7 +7,7 @@ import NetworkClient from '@extension/models/NetworkClient';
 // types
 import type {
   IAccountInformation,
-  IAlgorandAccountInformation,
+  IAVMAccountInformation,
   IARC0072AssetHolding,
   IARC0200AssetHolding,
 } from '@extension/types';
@@ -31,7 +31,7 @@ export default async function updateAccountInformation({
   nodeID,
 }: IOptions): Promise<IAccountInformation> {
   const _functionName = 'updateAccountInformation';
-  let avmAccountInformation: IAlgorandAccountInformation;
+  let avmAccountInformation: IAVMAccountInformation;
   let arc0072AssetHoldings: IARC0072AssetHolding[];
   let arc200AssetHoldings: IARC0200AssetHolding[];
   let networkClient: NetworkClient;

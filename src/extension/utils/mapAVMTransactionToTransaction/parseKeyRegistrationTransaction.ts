@@ -5,14 +5,14 @@ import { TransactionTypeEnum } from '@extension/enums';
 
 // types
 import {
-  IAlgorandKeyRegistrationTransaction,
+  IAVMKeyRegistrationTransaction,
   IBaseTransaction,
   IKeyRegistrationOfflineTransaction,
   IKeyRegistrationOnlineTransaction,
 } from '@extension/types';
 
 export default function parseAssetFreezeTransaction(
-  algorandKeyRegistrationTransaction: IAlgorandKeyRegistrationTransaction,
+  algorandKeyRegistrationTransaction: IAVMKeyRegistrationTransaction,
   baseTransaction: IBaseTransaction
 ): IKeyRegistrationOfflineTransaction | IKeyRegistrationOnlineTransaction {
   if (

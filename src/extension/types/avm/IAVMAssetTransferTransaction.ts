@@ -1,4 +1,4 @@
-interface IAlgorandAssetTransferTransaction {
+interface IAVMAssetTransferTransaction {
   amount: bigint;
   ['asset-id']: bigint;
   ['close-amount']?: bigint;
@@ -7,4 +7,4 @@ interface IAlgorandAssetTransferTransaction {
   sender?: string;
 }
 
-export default IAlgorandAssetTransferTransaction;
+export default IAVMAssetTransferTransaction;

@@ -1,4 +1,4 @@
-interface IAlgorandAssetParams {
+interface IAVMAssetParams {
   clawback?: string;
   creator: string;
   decimals: bigint;
@@ -16,4 +16,4 @@ interface IAlgorandAssetParams {
   ['url-b64']?: string;
 }
 
-export default IAlgorandAssetParams;
+export default IAVMAssetParams;

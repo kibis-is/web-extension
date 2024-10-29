@@ -7,13 +7,13 @@ import { TransactionTypeEnum } from '@extension/enums';
 import type {
   IAccountReKeyTransaction,
   IAccountUndoReKeyTransaction,
-  IAlgorandPaymentTransaction,
+  IAVMPaymentTransaction,
   IBaseTransaction,
   IPaymentTransaction,
 } from '@extension/types';
 
 export default function parsePaymentAndReKeyTransaction(
-  algorandPaymentTransaction: IAlgorandPaymentTransaction,
+  algorandPaymentTransaction: IAVMPaymentTransaction,
   baseTransaction: IBaseTransaction
 ):
   | IAccountReKeyTransaction
