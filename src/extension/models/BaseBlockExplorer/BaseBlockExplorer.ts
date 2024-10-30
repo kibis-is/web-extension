@@ -1,6 +1,6 @@
 // types
 import type { IBaseNetworkServiceProvider } from '@extension/types';
-import type { INewOptions } from './types';
+import type { IGroupURLOptions, INewOptions } from './types';
 
 export default abstract class BaseBlockExplorer
   implements IBaseNetworkServiceProvider
@@ -25,6 +25,6 @@ export default abstract class BaseBlockExplorer
   public abstract applicationURL(appID: string): string;
   public abstract assetURL(assetID: string): string;
   public abstract blockURL(block: string): string;
-  public abstract groupURL(groupID: string): string;
+  public abstract groupURL(options: IGroupURLOptions): string;
   public abstract transactionURL(transactionID: string): string;
 }

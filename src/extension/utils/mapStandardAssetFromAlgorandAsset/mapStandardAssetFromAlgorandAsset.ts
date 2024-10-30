@@ -4,10 +4,10 @@ import { BigNumber } from 'bignumber.js';
 import { AssetTypeEnum } from '@extension/enums';
 
 // types
-import { IAlgorandAsset, IStandardAsset } from '@extension/types';
+import { IAVMAsset, IStandardAsset } from '@extension/types';
 
 export default function mapStandardAssetFromAlgorandAsset(
-  algorandAsset: IAlgorandAsset,
+  algorandAsset: IAVMAsset,
   iconUrl: string | null,
   verified: boolean
 ): IStandardAsset {

@@ -8,14 +8,11 @@ import {
 import NetworkClient from '@extension/models/NetworkClient';
 
 // types
-import type {
-  IAlgorandAccountTransaction,
-  ITransactions,
-} from '@extension/types';
+import type { IAVMAccountTransaction, ITransactions } from '@extension/types';
 import type { IOptions } from './types';
 
 // utils
-import mapAlgorandTransactionToTransaction from '../mapAlgorandTransactionToTransaction';
+import mapAVMTransactionToTransaction from '@extension/utils/mapAVMTransactionToTransaction';
 
 /**
  * Fetches all latest transactions from a given time. This function runs recursively until the 'next-token' is
@@ -34,7 +31,7 @@ export default async function refreshTransactions({
 }: IOptions): Promise<ITransactions[]> {
   const _functionName = 'refreshTransactions';
   const networkClient = new NetworkClient({ logger, network });
-  let avmAccountTransactions: IAlgorandAccountTransaction;
+  let avmAccountTransactions: IAVMAccountTransaction;
   let newestTransactions: ITransactions[];
 
   try {
@@ -48,7 +45,7 @@ export default async function refreshTransactions({
         nodeID,
       });
     newestTransactions = avmAccountTransactions.transactions.map(
-      mapAlgorandTransactionToTransaction
+      mapAVMTransactionToTransaction
     );
 
     logger?.debug(

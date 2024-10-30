@@ -17,6 +17,7 @@ import type {
 } from '../../types';
 
 // utils
+import chainReferenceFromGenesisHash from '@extension/utils/chainReferenceFromGenesisHash';
 import {
   getAccountInformation,
   extractWalletConnectNamespaceFromNetwork,
@@ -132,7 +133,9 @@ export default function useWalletConnectConnector({
     try {
       return await signClient.request<(string | null)[]>({
         topic: session.topic,
-        chainId: `${network.namespace.key}:${network.namespace.reference}`,
+        chainId: `${network.namespace.key}:${chainReferenceFromGenesisHash(
+          network.genesisHash
+        )}`,
         request: {
           method:
             network.namespace.key === 'algorand'

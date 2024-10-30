@@ -3,7 +3,10 @@ import BaseBlockExplorer from '@extension/models/BaseBlockExplorer';
 
 // types
 import type { TPartialExcept } from '@common/types';
-import type { INewOptions } from '@extension/models/BaseBlockExplorer';
+import type {
+  IGroupURLOptions,
+  INewOptions,
+} from '@extension/models/BaseBlockExplorer';
 
 export default class VoiObserverBlockExplorer extends BaseBlockExplorer {
   constructor({
@@ -38,8 +41,8 @@ export default class VoiObserverBlockExplorer extends BaseBlockExplorer {
     return `${this._baseURL}/block/${block}`;
   }
 
-  public groupURL(groupID: string): string {
-    return `${this._baseURL}/group/${encodeURIComponent(groupID)}`;
+  public groupURL({ block = '', groupID }: IGroupURLOptions): string {
+    return `${this._baseURL}/group/${encodeURIComponent(groupID)}/${block}`;
   }
 
   public transactionURL(transactionID: string): string {
