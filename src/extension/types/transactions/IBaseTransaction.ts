@@ -1,5 +1,6 @@
 interface IBaseTransaction {
   authAddr: string | null;
+  block: string | null;
   completedAt: number | null; // in milliseconds
   fee: string;
   genesisHash: string | null;

@@ -3,7 +3,10 @@ import BaseBlockExplorer from '@extension/models/BaseBlockExplorer';
 
 // types
 import type { TPartialExcept } from '@common/types';
-import type { INewOptions } from '@extension/models/BaseBlockExplorer';
+import type {
+  IGroupURLOptions,
+  INewOptions,
+} from '@extension/models/BaseBlockExplorer';
 
 export default class PeraBlockExplorer extends BaseBlockExplorer {
   constructor({
@@ -38,7 +41,7 @@ export default class PeraBlockExplorer extends BaseBlockExplorer {
     return `${this._baseURL}/block/${block}`;
   }
 
-  public groupURL(groupID: string): string {
+  public groupURL({ groupID }: IGroupURLOptions): string {
     return `${this._baseURL}/tx-group/${encodeURIComponent(groupID)}`;
   }
 

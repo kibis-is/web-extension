@@ -1,3 +1,24 @@
+# [2.4.0-beta.4](https://github.com/kibis-is/web-extension/compare/v2.4.0-beta.3...v2.4.0-beta.4) (2024-10-30)
+
+
+### Features
+
+* switch to new voi testnet ([#342](https://github.com/kibis-is/web-extension/issues/342)) ([a31c253](https://github.com/kibis-is/web-extension/commit/a31c253c46c82fad8e111669c5158939fc1edd8d))
+
+# [2.4.0-beta.3](https://github.com/kibis-is/web-extension/compare/v2.4.0-beta.2...v2.4.0-beta.3) (2024-10-18)
+
+
+### Bug Fixes
+
+* ignore non-utf-8 encoded notes ([#341](https://github.com/kibis-is/web-extension/issues/341)) ([a24d369](https://github.com/kibis-is/web-extension/commit/a24d3695c61c485f49254ca78682ee00af4e2aed))
+
+## [2.3.2](https://github.com/kibis-is/web-extension/compare/v2.3.1...v2.3.2) (2024-10-18)
+
+
+### Bug Fixes
+
+* ignore non-utf-8 encoded notes ([#341](https://github.com/kibis-is/web-extension/issues/341)) ([a24d369](https://github.com/kibis-is/web-extension/commit/a24d3695c61c485f49254ca78682ee00af4e2aed))
+
 # [2.4.0-beta.2](https://github.com/kibis-is/web-extensiontension/compare/v2.4.0-beta.1...v2.4.0-beta.2) (2024-10-03)
 
 

@@ -3,6 +3,9 @@ import type { SessionTypes } from '@walletconnect/types';
 // types
 import type { INetwork } from '@extension/types';
 
+// utils
+import chainReferenceFromGenesisHash from '@extension/utils/chainReferenceFromGenesisHash';
+
 /**
  * Extracts the WalletConnect namespace from the network.
  * @param {INetwork} network - the network to extract the namespace from.
@@ -13,7 +16,11 @@ export default function extractWalletConnectNamespaceFromNetwork(
 ): SessionTypes.BaseNamespace {
   return {
     accounts: [],
-    chains: [`${network.namespace.key}:${network.namespace.reference}`],
+    chains: [
+      `${network.namespace.key}:${chainReferenceFromGenesisHash(
+        network.genesisHash
+      )}`,
+    ],
     events: [],
     methods: network.namespace.methods,
   };

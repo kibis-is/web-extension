@@ -17,7 +17,7 @@ import NetworkClient from '@extension/models/NetworkClient';
 
 // types
 import type {
-  IAlgorandSearchApplicationsResult,
+  IAVMSearchApplicationsResult,
   IARC0200Asset,
 } from '@extension/types';
 import type {
@@ -57,7 +57,7 @@ const queryARC0200AssetThunk: AsyncThunk<
       networks,
       settings,
     });
-    let searchApplicationResult: IAlgorandSearchApplicationsResult;
+    let searchApplicationResult: IAVMSearchApplicationsResult;
     let arc200Assets: IARC0200Asset[];
     let networkClient: NetworkClient;
     let nodeID: string | null;

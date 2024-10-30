@@ -7,13 +7,13 @@ import NetworkClient from '@extension/models/NetworkClient';
 // types
 import type {
   IAccountTransactions,
-  IAlgorandAccountTransaction,
+  IAVMAccountTransaction,
 } from '@extension/types';
 import type { IOptions } from './types';
 
 // utils
-import mapAlgorandTransactionToTransaction from '../mapAlgorandTransactionToTransaction';
-import refreshTransactions from '../refreshTransactions';
+import mapAVMTransactionToTransaction from '@extension/utils/mapAVMTransactionToTransaction';
+import refreshTransactions from '@extension/utils/refreshTransactions';
 
 /**
  * Gets the account transactions.
@@ -30,7 +30,7 @@ export default async function updateAccountTransactions({
   refresh = false,
 }: IOptions): Promise<IAccountTransactions> {
   const _functionName = 'updateAccountTransactions';
-  let avmAccountTransaction: IAlgorandAccountTransaction;
+  let avmAccountTransaction: IAVMAccountTransaction;
   let mostRecentTransactionTime: number;
   let networkClient: NetworkClient;
 
@@ -82,7 +82,7 @@ export default async function updateAccountTransactions({
       transactions: [
         ...currentAccountTransactions.transactions,
         ...avmAccountTransaction.transactions.map(
-          mapAlgorandTransactionToTransaction
+          mapAVMTransactionToTransaction
         ),
       ],
     };

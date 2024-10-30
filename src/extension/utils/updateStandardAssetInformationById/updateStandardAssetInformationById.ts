@@ -3,7 +3,7 @@ import NetworkClient from '@extension/models/NetworkClient';
 
 // types
 import type {
-  IAlgorandAsset,
+  IAVMAsset,
   IStandardAsset,
   ITinyManAssetResponse,
 } from '@extension/types';
@@ -27,7 +27,7 @@ export default async function updateStandardAssetInformationById({
 }: IOptions): Promise<IStandardAsset | null> {
   const _functionName = 'updateStandardAssetInformationById';
   const networkClient = new NetworkClient({ logger, network });
-  let assetInformation: IAlgorandAsset;
+  let assetInformation: IAVMAsset;
   let verifiedAsset: ITinyManAssetResponse | null;
 
   try {
