@@ -67,6 +67,7 @@ const WhatsNewModal: FC<IModalProps> = ({ onClose }) => {
   const features = [
     '💅 Change account icon.',
     '💅 Change account background color.',
+    '🔁 Switch to new Voi testnet.',
   ];
   const fixes: string[] = [];
   // handlers
@@ -124,7 +125,7 @@ const WhatsNewModal: FC<IModalProps> = ({ onClose }) => {
               textAlign="left"
               w="full"
             >
-              Voi Launches MainNet!
+              Airdrops Have Dropped!
             </Heading>
 
             <Text
@@ -133,15 +134,42 @@ const WhatsNewModal: FC<IModalProps> = ({ onClose }) => {
               textAlign="left"
               w="full"
             >
-              Voi's Genesis Day took place on{' '}
+              On the 28th October 2024, all those that participated in the
+              Testnet Phase 1 & 2 and Staking programs will have received their
+              airdrops. For the Testnet program, 3.67% of the total token supply
+              (367 million VOI) was allocated and 1.4% of the total token supply
+              (140 million VOI) was allocated to the Staking program. Each
+              program had an optional lock-up period, with the Testnet program
+              having a higher lock-up period of upto 5 years, and, notably, 55%
+              of the participants chose to lock-up for the full 5 years.
+            </Text>
+
+            <Text
+              color={defaultTextColor}
+              fontSize="sm"
+              textAlign="left"
+              w="full"
+            >
+              These effort-based airdrops are testament to Voi's commitment to
+              being a truly community-driven blockchain.
+            </Text>
+
+            <Text
+              color={defaultTextColor}
+              fontSize="sm"
+              textAlign="left"
+              w="full"
+            >
+              You can check the state of your airdrop contracts using the
+              beautifully crafted airdrop tool{' '}
               <Link
                 fontSize="sm"
-                href="https://explorer.voi.network/explorer/block/1/transactions"
+                href="https://staking.voi.network/"
                 isExternal={true}
               >
-                12th September 2024
-              </Link>{' '}
-              which means Voi has officially launched its MainNet!
+                https://staking.voi.network/
+              </Link>
+              .
             </Text>
 
             <Text
@@ -150,58 +178,15 @@ const WhatsNewModal: FC<IModalProps> = ({ onClose }) => {
               textAlign="left"
               w="full"
             >
-              This truly has been a community effort; from the builders, the
-              node runners to the questers. Voi's TestNet has been a monumental
-              success and Voi has a solid foundation that makes it an ecosystem
-              that is run by you: the Voiagers.
-            </Text>
-
-            <Heading
-              color={primaryColor}
-              fontSize="sm"
-              textAlign="left"
-              w="full"
-            >
-              Voi MainNet Rollout: Staking Program
-            </Heading>
-
-            <Text
-              color={defaultTextColor}
-              fontSize="sm"
-              textAlign="left"
-              w="full"
-            >
-              With Voi's MainNet rollout, there is a new incentive for early
-              participation: the <strong>Staking Program</strong>.
-            </Text>
-
-            <Text
-              color={defaultTextColor}
-              fontSize="sm"
-              textAlign="left"
-              w="full"
-            >
-              The Staking Program is designed to incentivize long-term
-              commitment by offering two ways to earn rewards:{' '}
-              <strong>token lock-up</strong> and{' '}
-              <strong>staking those locked up tokens</strong>.
-            </Text>
-
-            <Text
-              color={defaultTextColor}
-              fontSize="sm"
-              textAlign="left"
-              w="full"
-            >
-              See{' '}
+              For more information relating to the airdrops, check{' '}
               <Link
                 fontSize="sm"
-                href="https://medium.com/@voifoundation/vois-staking-program-140mm-voi-4cbfd3a27f63"
+                href="https://medium.com/@voifoundation/airdrop-programs-everything-you-need-to-know-a84706bd8599"
                 isExternal={true}
               >
-                here
+                this
               </Link>{' '}
-              for more details.
+              blog post.
             </Text>
 
             {/*new release*/}
