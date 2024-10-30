@@ -1,3 +1,10 @@
+# [2.4.0-beta.4](https://github.com/kibis-is/web-extension/compare/v2.4.0-beta.3...v2.4.0-beta.4) (2024-10-30)
+
+
+### Features
+
+* switch to new voi testnet ([#342](https://github.com/kibis-is/web-extension/issues/342)) ([a31c253](https://github.com/kibis-is/web-extension/commit/a31c253c46c82fad8e111669c5158939fc1edd8d))
+
 # [2.4.0-beta.3](https://github.com/kibis-is/web-extension/compare/v2.4.0-beta.2...v2.4.0-beta.3) (2024-10-18)
 
 
