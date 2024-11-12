@@ -1,17 +1,20 @@
 import {
+  HStack,
   Input,
   InputGroup,
   InputRightElement,
-  Stack,
   Text,
+  Tooltip,
   VStack,
 } from '@chakra-ui/react';
 import { encodeURLSafe as encodeBase64URLSafe } from '@stablelib/base64';
 import React, { type FC } from 'react';
 import { useTranslation } from 'react-i18next';
+import { IoArrowForwardOutline } from 'react-icons/io5';
 import { randomBytes } from 'tweetnacl';
 
 // components
+import IconButton from '@extension/components/IconButton';
 import InformationIcon from '@extension/components/InformationIcon';
 import Label from '@extension/components/Label';
 
@@ -30,9 +33,11 @@ const GenericInput: FC<IProps> = ({
   error,
   id,
   informationText,
+  isLoading = false,
   label,
   required = false,
   validate,
+  onSubmit,
   ...inputProps
 }) => {
   const { t } = useTranslation();
@@ -41,6 +46,45 @@ const GenericInput: FC<IProps> = ({
   const subTextColor = useSubTextColor();
   // misc
   const _id = id || encodeBase64URLSafe(randomBytes(6));
+  // handlers
+  const handleOnSubmit = () => onSubmit && onSubmit();
+  // renders
+  const renderRightInputIcon = () => {
+    if (!informationText && !onSubmit) {
+      return null;
+    }
+
+    return (
+      <InputRightElement h={INPUT_HEIGHT}>
+        <HStack
+          alignItems="center"
+          h={INPUT_HEIGHT}
+          justifyContent="center"
+          spacing={0}
+        >
+          {informationText && (
+            <InformationIcon
+              ariaLabel={t<string>('ariaLabels.informationIcon')}
+              tooltipLabel={informationText}
+            />
+          )}
+          {onSubmit && (
+            <Tooltip label={t<string>('buttons.submit')}>
+              <IconButton
+                aria-label={t<string>('ariaLabels.forwardArrow')}
+                borderRadius="full"
+                icon={IoArrowForwardOutline}
+                isLoading={isLoading}
+                onClick={handleOnSubmit}
+                size="sm"
+                variant="ghost"
+              />
+            </Tooltip>
+          )}
+        </HStack>
+      </InputRightElement>
+    );
+  };
 
   return (
     <VStack alignItems="flex-start" spacing={DEFAULT_GAP / 3} w="full">
@@ -65,16 +109,7 @@ const GenericInput: FC<IProps> = ({
           w="full"
         />
 
-        {informationText && (
-          <InputRightElement h={INPUT_HEIGHT}>
-            <Stack alignItems="center" h={INPUT_HEIGHT} justifyContent="center">
-              <InformationIcon
-                ariaLabel="Information icon"
-                tooltipLabel={informationText}
-              />
-            </Stack>
-          </InputRightElement>
-        )}
+        {renderRightInputIcon()}
       </InputGroup>
 
       {/*character limit*/}

@@ -1,10 +1,9 @@
-import { useSelector } from 'react-redux';
-
 // selectors
 import useSelectActiveAccount from './useSelectActiveAccount';
+import useSelectAccountGroups from './useSelectAccountGroups';
 
 // types
-import type { IAccountGroup, IMainRootState } from '@extension/types';
+import type { IAccountGroup } from '@extension/types';
 
 /**
  * Selects the active account group, or null if it doesn't exist.
@@ -12,13 +11,11 @@ import type { IAccountGroup, IMainRootState } from '@extension/types';
  */
 export default function useSelectActiveAccountGroup(): IAccountGroup | null {
   const account = useSelectActiveAccount();
+  const groups = useSelectAccountGroups();
 
   if (!account || !account.groupID) {
     return null;
   }
 
-  return useSelector<IMainRootState, IAccountGroup | null>(
-    ({ accounts }) =>
-      accounts.groups.find(({ id }) => id === account.groupID) || null
-  );
+  return groups.find(({ id }) => id === account.groupID) || null;
 }

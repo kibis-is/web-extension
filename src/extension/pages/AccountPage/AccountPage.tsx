@@ -77,6 +77,7 @@ import usePrimaryColorScheme from '@extension/hooks/usePrimaryColorScheme';
 import useSubTextColor from '@extension/hooks/useSubTextColor';
 
 // modals
+import AddAccountToGroupModal from '@extension/modals/AddAccountToGroupModal';
 import EditAccountModal from '@extension/modals/EditAccountModal';
 import ShareAddressModal from '@extension/modals/ShareAddressModal';
 
@@ -118,6 +119,11 @@ import isReKeyedAuthAccountAvailable from '@extension/utils/isReKeyedAuthAccount
 const AccountPage: FC = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch<IAppThunkDispatch<IMainRootState>>();
+  const {
+    isOpen: isAddToGroupAccountModalOpen,
+    onClose: onAddToGroupAccountModalClose,
+    onOpen: onAddToGroupAccountModalOpen,
+  } = useDisclosure();
   const {
     isOpen: isEditAccountModalOpen,
     onClose: onEditAccountModalClose,
@@ -179,9 +185,7 @@ const AccountPage: FC = () => {
     }
   };
   const handleAddAccountClick = () => navigate(ADD_ACCOUNT_ROUTE);
-  const handleOnAddGroupClick = () => {
-    // TODO: open select group modal
-  };
+  const handleOnAddGroupClick = () => onAddToGroupAccountModalOpen();
   const handleOnEditAccountClick = () => onEditAccountModalOpen();
   const handleOnMakePrimaryClick = () =>
     account && dispatch(savePolisAccountIDThunk(account.id));
@@ -339,7 +343,7 @@ const AccountPage: FC = () => {
               {/*what's new*/}
               <Tooltip label={t<string>('labels.whatsNew')}>
                 <IconButton
-                  aria-label={t<string>('labels.whatsNew')}
+                  aria-label={t<string>('ariaLabels.plusIconToAddGroup')}
                   icon={IoGiftOutline}
                   onClick={handleOnWhatsNewClick}
                   size="sm"
@@ -656,6 +660,10 @@ const AccountPage: FC = () => {
     <>
       {account && (
         <>
+          <AddAccountToGroupModal
+            isOpen={isAddToGroupAccountModalOpen}
+            onClose={onAddToGroupAccountModalClose}
+          />
           <EditAccountModal
             isOpen={isEditAccountModalOpen}
             onClose={onEditAccountModalClose}

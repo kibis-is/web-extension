@@ -1,4 +1,5 @@
 interface IResourceLanguage {
+  ariaLabels: Record<string, string>;
   buttons: Record<string, string>;
   captions: Record<string, string>;
   errors: {
