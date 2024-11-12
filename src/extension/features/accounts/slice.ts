@@ -15,6 +15,8 @@ import {
   removeARC0200AssetHoldingsThunk,
   removeStandardAssetHoldingsThunk,
   saveAccountDetailsThunk,
+  saveAccountGroupIDThunk,
+  saveAccountGroupThunk,
   saveAccountsThunk,
   saveActiveAccountDetails,
   saveNewAccountsThunk,
@@ -25,7 +27,10 @@ import {
 } from './thunks';
 
 // types
-import type { IAccountWithExtendedProps } from '@extension/types';
+import type {
+  IAccountGroup,
+  IAccountWithExtendedProps,
+} from '@extension/types';
 import type { IState } from './types';
 
 // utils
@@ -242,6 +247,35 @@ const slice = createSlice({
     builder.addCase(saveAccountDetailsThunk.rejected, (state: IState) => {
       state.saving = false;
     });
+    /** save account group id **/
+    builder.addCase(
+      saveAccountGroupIDThunk.fulfilled,
+      (state: IState, action) => {
+        if (action.payload) {
+          state.items = upsertItemsById<IAccountWithExtendedProps>(
+            state.items,
+            [action.payload]
+          );
+        }
+
+        state.saving = false;
+      }
+    );
+    builder.addCase(saveAccountGroupIDThunk.pending, (state: IState) => {
+      state.saving = true;
+    });
+    builder.addCase(saveAccountGroupIDThunk.rejected, (state: IState) => {
+      state.saving = false;
+    });
+    /** save account group **/
+    builder.addCase(
+      saveAccountGroupThunk.fulfilled,
+      (state: IState, action) => {
+        state.groups = upsertItemsById<IAccountGroup>(state.groups, [
+          action.payload,
+        ]);
+      }
+    );
     /** save accounts **/
     builder.addCase(saveAccountsThunk.fulfilled, (state: IState, action) => {
       state.items = AccountRepository.sort<IAccountWithExtendedProps>(
