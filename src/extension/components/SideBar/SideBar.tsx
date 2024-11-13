@@ -257,9 +257,15 @@ const SideBar: FC = () => {
           activeAccount={activeAccount}
           isLoading={fetchingAccounts}
           isShortForm={!isOpen}
-          items={sortByIndex([...accounts, ...groups])}
+          items={sortByIndex([
+            ...accounts.filter(
+              ({ groupID }) =>
+                !groupID || !groups.some(({ id }) => id === groupID)
+            ), // remove any accounts that are in a group and the group is actually a group
+            ...groups,
+          ])}
           network={network}
-          onClick={handleOnAccountClick}
+          onAccountClick={handleOnAccountClick}
           onSort={handleOnAccountSort}
           systemInfo={systemInfo}
         />

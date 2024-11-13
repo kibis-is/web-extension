@@ -31,14 +31,14 @@ import useDefaultTextColor from '@extension/hooks/useDefaultTextColor';
 import useSubTextColor from '@extension/hooks/useSubTextColor';
 
 // types
-import type { IItemProps } from './types';
+import type { IAccountItemProps } from './types';
 
 // utils
 import calculateIconSize from '@extension/utils/calculateIconSize';
 import convertPublicKeyToAVMAddress from '@extension/utils/convertPublicKeyToAVMAddress';
 import ellipseAddress from '@extension/utils/ellipseAddress';
 
-const Item: FC<IItemProps> = ({
+const AccountItem: FC<IAccountItemProps> = ({
   account,
   accounts,
   active,
@@ -192,4 +192,4 @@ const Item: FC<IItemProps> = ({
   );
 };
 
-export default Item;
+export default AccountItem;

@@ -8,7 +8,7 @@ import type {
 /**
  * @property {boolean} isShortForm - Whether the full item is being shown or just the avatar.
  */
-interface IItemProps {
+interface IAccountItemProps {
   account: IAccountWithExtendedProps;
   accounts: IAccountWithExtendedProps[];
   active: boolean;
@@ -18,4 +18,4 @@ interface IItemProps {
   systemInfo: ISystemInfo | null;
 }
 
-export default IItemProps;
+export default IAccountItemProps;

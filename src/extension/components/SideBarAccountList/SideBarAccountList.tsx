@@ -16,8 +16,8 @@ import {
 import React, { type FC, useEffect, useState } from 'react';
 
 // components
+import AccountItem from './AccountItem';
 import GroupItem from './GroupItem';
-import Item from './Item';
 import SkeletonItem from './SkeletonItem';
 
 // enums
@@ -37,7 +37,7 @@ const SideBarAccountList: FC<IProps> = ({
   isShortForm,
   items,
   network,
-  onClick,
+  onAccountClick,
   onSort,
   systemInfo,
 }) => {
@@ -51,7 +51,7 @@ const SideBarAccountList: FC<IProps> = ({
   const [_items, setItems] =
     useState<(IAccountWithExtendedProps | IAccountGroup)[]>(items);
   // handlers
-  const handleOnClick = async (id: string) => onClick(id);
+  const handleOnAccountClick = async (id: string) => onAccountClick(id);
   const handleOnDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
     let previousIndex: number;
@@ -92,16 +92,16 @@ const SideBarAccountList: FC<IProps> = ({
             {_items.map((value) => {
               if (value._delimiter === DelimiterEnum.Account) {
                 return (
-                  <Item
+                  <AccountItem
                     account={value}
                     accounts={accounts}
                     active={
                       activeAccount ? value.id === activeAccount.id : false
                     }
                     isShortForm={isShortForm}
-                    key={value.id}
+                    key={`account-item-${value.id}`}
                     network={network}
-                    onClick={handleOnClick}
+                    onClick={handleOnAccountClick}
                     systemInfo={systemInfo}
                   />
                 );
@@ -109,9 +109,14 @@ const SideBarAccountList: FC<IProps> = ({
 
               return (
                 <GroupItem
+                  activeAccountID={activeAccount?.id || null}
+                  accounts={accounts}
                   group={value}
                   isShortForm={isShortForm}
-                  key={value.id}
+                  key={`group-item-${value.id}`}
+                  network={network}
+                  onAccountClick={handleOnAccountClick}
+                  systemInfo={systemInfo}
                 />
               );
             })}

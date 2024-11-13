@@ -13,7 +13,7 @@ interface IProps {
   isShortForm: boolean;
   items: (IAccountWithExtendedProps | IAccountGroup)[];
   network: INetworkWithTransactionParams | null;
-  onClick: (id: string) => void;
+  onAccountClick: (id: string) => void;
   onSort: (items: (IAccountWithExtendedProps | IAccountGroup)[]) => void;
   systemInfo: ISystemInfo | null;
 }
