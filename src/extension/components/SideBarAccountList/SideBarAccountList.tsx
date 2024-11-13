@@ -1,7 +1,7 @@
 import {
+  closestCenter,
   DndContext,
   type DragEndEvent,
-  closestCenter,
   KeyboardSensor,
   PointerSensor,
   useSensor,
@@ -16,11 +16,18 @@ import {
 import React, { type FC, useEffect, useState } from 'react';
 
 // components
+import GroupItem from './GroupItem';
 import Item from './Item';
 import SkeletonItem from './SkeletonItem';
 
+// enums
+import { DelimiterEnum } from '@extension/enums';
+
 // types
-import type { IAccountWithExtendedProps } from '@extension/types';
+import type {
+  IAccountGroup,
+  IAccountWithExtendedProps,
+} from '@extension/types';
 import type { IProps } from './types';
 
 const SideBarAccountList: FC<IProps> = ({
@@ -28,6 +35,7 @@ const SideBarAccountList: FC<IProps> = ({
   activeAccount,
   isLoading,
   isShortForm,
+  items,
   network,
   onClick,
   onSort,
@@ -40,33 +48,33 @@ const SideBarAccountList: FC<IProps> = ({
     })
   );
   // states
-  const [_accounts, setAccounts] =
-    useState<IAccountWithExtendedProps[]>(accounts);
+  const [_items, setItems] =
+    useState<(IAccountWithExtendedProps | IAccountGroup)[]>(items);
   // handlers
   const handleOnClick = async (id: string) => onClick(id);
   const handleOnDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
     let previousIndex: number;
     let nextIndex: number;
-    let updatedAccounts: IAccountWithExtendedProps[];
+    let updatedItems: (IAccountWithExtendedProps | IAccountGroup)[];
 
     if (active.id !== over?.id) {
-      previousIndex = _accounts.findIndex(({ id }) => id === active.id);
-      nextIndex = _accounts.findIndex(({ id }) => id === over?.id);
+      previousIndex = items.findIndex(({ id }) => id === active.id);
+      nextIndex = items.findIndex(({ id }) => id === over?.id);
 
-      setAccounts((prevState) => {
-        updatedAccounts = arrayMove(prevState, previousIndex, nextIndex);
+      setItems((prevState) => {
+        updatedItems = arrayMove(prevState, previousIndex, nextIndex);
 
-        // update the external account state
-        onSort(updatedAccounts);
+        // update the external account/group state
+        onSort(updatedItems);
 
-        return updatedAccounts;
+        return updatedItems;
       });
     }
   };
 
-  // update the internal accounts state with the incoming state
-  useEffect(() => setAccounts(accounts), [accounts]);
+  // update the internal accounts/groups state with the incoming state
+  useEffect(() => setItems(items), [items]);
 
   return (
     <>
@@ -80,22 +88,33 @@ const SideBarAccountList: FC<IProps> = ({
           collisionDetection={closestCenter}
           onDragEnd={handleOnDragEnd}
         >
-          <SortableContext
-            items={_accounts}
-            strategy={verticalListSortingStrategy}
-          >
-            {_accounts.map((value) => (
-              <Item
-                account={value}
-                accounts={_accounts}
-                active={activeAccount ? value.id === activeAccount.id : false}
-                isShortForm={isShortForm}
-                key={value.id}
-                network={network}
-                onClick={handleOnClick}
-                systemInfo={systemInfo}
-              />
-            ))}
+          <SortableContext items={items} strategy={verticalListSortingStrategy}>
+            {_items.map((value) => {
+              if (value._delimiter === DelimiterEnum.Account) {
+                return (
+                  <Item
+                    account={value}
+                    accounts={accounts}
+                    active={
+                      activeAccount ? value.id === activeAccount.id : false
+                    }
+                    isShortForm={isShortForm}
+                    key={value.id}
+                    network={network}
+                    onClick={handleOnClick}
+                    systemInfo={systemInfo}
+                  />
+                );
+              }
+
+              return (
+                <GroupItem
+                  group={value}
+                  isShortForm={isShortForm}
+                  key={value.id}
+                />
+              );
+            })}
           </SortableContext>
         </DndContext>
       )}

@@ -1,4 +1,7 @@
-//
+// enums
+import { DelimiterEnum } from '@extension/enums';
+
+// types
 import type { IAccount, IAccountWithExtendedProps } from '@extension/types';
 
 /**
@@ -11,6 +14,7 @@ export default function mapAccountWithExtendedPropsToAccount({
   color,
   createdAt,
   groupID,
+  groupIndex,
   icon,
   id,
   name,
@@ -21,9 +25,11 @@ export default function mapAccountWithExtendedPropsToAccount({
   updatedAt,
 }: IAccountWithExtendedProps): IAccount {
   return {
+    _delimiter: DelimiterEnum.Account,
     color,
     createdAt,
     groupID,
+    groupIndex,
     icon,
     id,
     name,

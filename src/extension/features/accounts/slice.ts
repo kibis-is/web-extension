@@ -3,9 +3,6 @@ import { createSlice } from '@reduxjs/toolkit';
 // enums
 import { StoreNameEnum } from '@extension/enums';
 
-// repositories
-import AccountRepository from '@extension/repositories/AccountRepository';
-
 // thunks
 import {
   addARC0200AssetHoldingsThunk,
@@ -16,7 +13,7 @@ import {
   removeStandardAssetHoldingsThunk,
   saveAccountDetailsThunk,
   saveAccountGroupIDThunk,
-  saveAccountGroupThunk,
+  saveAccountGroupsThunk,
   saveAccountsThunk,
   saveActiveAccountDetails,
   saveNewAccountsThunk,
@@ -34,6 +31,7 @@ import type {
 import type { IState } from './types';
 
 // utils
+import sortByIndex from '@extension/utils/sortByIndex';
 import upsertItemsById from '@extension/utils/upsertItemsById';
 import { getInitialState } from './utils';
 
@@ -267,18 +265,19 @@ const slice = createSlice({
     builder.addCase(saveAccountGroupIDThunk.rejected, (state: IState) => {
       state.saving = false;
     });
-    /** save account group **/
+    /** save account groups **/
     builder.addCase(
-      saveAccountGroupThunk.fulfilled,
+      saveAccountGroupsThunk.fulfilled,
       (state: IState, action) => {
-        state.groups = upsertItemsById<IAccountGroup>(state.groups, [
-          action.payload,
-        ]);
+        state.groups = upsertItemsById<IAccountGroup>(
+          state.groups,
+          action.payload
+        );
       }
     );
     /** save accounts **/
     builder.addCase(saveAccountsThunk.fulfilled, (state: IState, action) => {
-      state.items = AccountRepository.sort<IAccountWithExtendedProps>(
+      state.items = sortByIndex<IAccountWithExtendedProps>(
         upsertItemsById<IAccountWithExtendedProps>(state.items, action.payload)
       );
       state.saving = false;

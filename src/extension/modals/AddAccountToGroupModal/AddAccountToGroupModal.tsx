@@ -32,7 +32,7 @@ import {
 // features
 import {
   saveAccountGroupIDThunk,
-  saveAccountGroupThunk,
+  saveAccountGroupsThunk,
 } from '@extension/features/accounts';
 import { create as createNotification } from '@extension/features/notifications';
 
@@ -40,6 +40,9 @@ import { create as createNotification } from '@extension/features/notifications'
 import useDefaultTextColor from '@extension/hooks/useDefaultTextColor';
 import useGenericInput from '@extension/hooks/useGenericInput';
 import useSubTextColor from '@extension/hooks/useSubTextColor';
+
+// repositories
+import AccountGroupRepository from '@extension/repositories/AccountGroupRepository';
 
 // selectors
 import {
@@ -96,7 +99,11 @@ const AddAccountToGroupModal: FC<IProps> = ({ isOpen, onClose }) => {
     }
 
     // add the new group
-    await dispatch(saveAccountGroupThunk(nameValue)).unwrap();
+    await dispatch(
+      saveAccountGroupsThunk([
+        AccountGroupRepository.initializeDefaultAccountGroup(nameValue),
+      ])
+    ).unwrap();
 
     // reset input
     resetName();

@@ -343,7 +343,7 @@ const AccountPage: FC = () => {
               {/*what's new*/}
               <Tooltip label={t<string>('labels.whatsNew')}>
                 <IconButton
-                  aria-label={t<string>('ariaLabels.plusIconToAddGroup')}
+                  aria-label={t<string>('ariaLabels.plusIcon')}
                   icon={IoGiftOutline}
                   onClick={handleOnWhatsNewClick}
                   size="sm"

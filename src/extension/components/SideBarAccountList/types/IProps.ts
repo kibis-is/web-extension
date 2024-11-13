@@ -1,21 +1,20 @@
 // types
 import type {
+  IAccountGroup,
   IAccountWithExtendedProps,
   INetworkWithTransactionParams,
   ISystemInfo,
 } from '@extension/types';
 
-/**
- * @property {boolean} isShortForm - Whether the full item is being shown or just the avatar.
- */
 interface IProps {
   accounts: IAccountWithExtendedProps[];
   activeAccount: IAccountWithExtendedProps | null;
   isLoading: boolean;
   isShortForm: boolean;
+  items: (IAccountWithExtendedProps | IAccountGroup)[];
   network: INetworkWithTransactionParams | null;
   onClick: (id: string) => void;
-  onSort: (accounts: IAccountWithExtendedProps[]) => void;
+  onSort: (items: (IAccountWithExtendedProps | IAccountGroup)[]) => void;
   systemInfo: ISystemInfo | null;
 }
 

@@ -37,10 +37,11 @@ import {
 } from '@extension/constants';
 
 // enums
-import { AccountTabEnum } from '@extension/enums';
+import { AccountTabEnum, DelimiterEnum } from '@extension/enums';
 
 // features
 import {
+  saveAccountGroupsThunk,
   saveAccountsThunk,
   saveActiveAccountDetails,
   updateAccountsThunk,
@@ -55,6 +56,7 @@ import usePrimaryColor from '@extension/hooks/usePrimaryColor';
 
 // selectors
 import {
+  useSelectAccountGroups,
   useSelectAccounts,
   useSelectAccountsFetching,
   useSelectActiveAccount,
@@ -66,6 +68,7 @@ import {
 
 // types
 import type {
+  IAccountGroup,
   IAccountWithExtendedProps,
   IAppThunkDispatch,
   IMainRootState,
@@ -73,6 +76,7 @@ import type {
 
 // utils
 import calculateIconSize from '@extension/utils/calculateIconSize';
+import sortByIndex from '@extension/utils/sortByIndex';
 
 const SideBar: FC = () => {
   const { t } = useTranslation();
@@ -84,6 +88,7 @@ const SideBar: FC = () => {
   const activeAccountDetails = useSelectActiveAccountDetails();
   const availableAccounts = useSelectAvailableAccountsForSelectedNetwork();
   const fetchingAccounts = useSelectAccountsFetching();
+  const groups = useSelectAccountGroups();
   const network = useSelectSettingsSelectedNetwork();
   const systemInfo = useSelectSystemInfo();
   // hooks
@@ -127,15 +132,23 @@ const SideBar: FC = () => {
 
     onCloseSideBar();
   };
-  const handleOnAccountSort = (_accounts: IAccountWithExtendedProps[]) =>
-    dispatch(
-      saveAccountsThunk(
-        _accounts.map((value, index) => ({
-          ...value,
-          index,
-        }))
-      )
-    );
+  const handleOnAccountSort = (
+    items: (IAccountWithExtendedProps | IAccountGroup)[]
+  ) => {
+    const _items = items.map((value, index) => ({
+      ...value,
+      index,
+    }));
+    const _accounts = _items.filter(
+      ({ _delimiter }) => _delimiter === DelimiterEnum.Account
+    ) as IAccountWithExtendedProps[];
+    const _groups = _items.filter(
+      ({ _delimiter }) => _delimiter === DelimiterEnum.Group
+    ) as IAccountGroup[];
+
+    dispatch(saveAccountsThunk(_accounts));
+    dispatch(saveAccountGroupsThunk(_groups));
+  };
   const handleScanQRCodeClick = () =>
     dispatch(
       setScanQRCodeModal({
@@ -244,6 +257,7 @@ const SideBar: FC = () => {
           activeAccount={activeAccount}
           isLoading={fetchingAccounts}
           isShortForm={!isOpen}
+          items={sortByIndex([...accounts, ...groups])}
           network={network}
           onClick={handleOnAccountClick}
           onSort={handleOnAccountSort}
