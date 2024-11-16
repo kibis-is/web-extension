@@ -10,7 +10,7 @@ import { DelimiterEnum } from '@extension/enums';
 import BaseRepository from '@extension/repositories/BaseRepository';
 
 // types
-import type { IAccountGroup } from '@extension/types';
+import type { IAccount, IAccountGroup } from '@extension/types';
 
 // utils
 import upsertItemsById from '@extension/utils/upsertItemsById';
@@ -28,6 +28,23 @@ export default class AccountGroupRepository extends BaseRepository {
       index: null,
       name,
     };
+  }
+
+  /**
+   * Convenience function to count the number of accounts that belong to a group.
+   * @param {string} groupID - The group ID to check.
+   * @param {IAccount[]} accounts - A list of accounts to check through.
+   * @returns {number} The number of accounts that belong to a group.
+   * @public
+   * @static
+   */
+  public static numberOfAccountsInGroup(
+    groupID: string,
+    accounts: IAccount[]
+  ): number {
+    return accounts.filter(
+      (value) => !!value.groupID && value.groupID === groupID
+    ).length;
   }
 
   /**

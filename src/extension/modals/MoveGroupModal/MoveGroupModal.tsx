@@ -46,6 +46,7 @@ import AccountGroupRepository from '@extension/repositories/AccountGroupReposito
 
 // selectors
 import {
+  useSelectAccounts,
   useSelectActiveAccount,
   useSelectAccountsSaving,
   useSelectAccountGroups,
@@ -65,7 +66,6 @@ import type { IProps } from './types';
 
 // utils
 import convertPublicKeyToAVMAddress from '@extension/utils/convertPublicKeyToAVMAddress';
-import convertToKebabCase from '@extension/utils/convertToKebabCase';
 import ellipseAddress from '@extension/utils/ellipseAddress';
 
 const MoveGroupModal: FC<IProps> = ({ isOpen, onClose }) => {
@@ -73,6 +73,7 @@ const MoveGroupModal: FC<IProps> = ({ isOpen, onClose }) => {
   const dispatch = useDispatch<IAppThunkDispatch<IMainRootState>>();
   // selectors
   const account = useSelectActiveAccount();
+  const accounts = useSelectAccounts();
   const groups = useSelectAccountGroups();
   const saving = useSelectAccountsSaving();
   // hooks
@@ -177,12 +178,17 @@ const MoveGroupModal: FC<IProps> = ({ isOpen, onClose }) => {
 
     return (
       <ScrollableContainer showScrollBars={true} w="full">
-        {groups.map((value, index) => (
+        {groups.map((value) => (
           <ActionItem
             icon={IoFolderOutline}
             isSelected={value.id === account?.groupID}
-            key={`${convertToKebabCase(value.name)}-${index}`}
-            label={value.name}
+            key={value.id}
+            label={`${
+              value.name
+            } (${AccountGroupRepository.numberOfAccountsInGroup(
+              value.id,
+              accounts
+            )})`}
             onClick={handleOnSelect(value.id)}
           />
         ))}
