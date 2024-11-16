@@ -118,6 +118,8 @@ import type {
 import convertPublicKeyToAVMAddress from '@extension/utils/convertPublicKeyToAVMAddress';
 import ellipseAddress from '@extension/utils/ellipseAddress';
 import isReKeyedAuthAccountAvailable from '@extension/utils/isReKeyedAuthAccountAvailable';
+import { HiSave } from 'react-icons/hi';
+import GroupBadge from '@extension/components/GroupBadge';
 
 const AccountPage: FC = () => {
   const { t } = useTranslation();
@@ -540,12 +542,22 @@ const AccountPage: FC = () => {
                     <PolisAccountBadge />
                   )}
 
-                {/*watch account badge*/}
-                {renderWatchAccountBadge()}
+                {/*group badge*/}
+                {group && <GroupBadge group={group} />}
               </HStack>
 
-              {/*re-keyed badge*/}
-              {renderReKeyedAccountBadge()}
+              <HStack
+                alignItems="center"
+                spacing={DEFAULT_GAP / 3}
+                justifyContent="flex-end"
+                w="full"
+              >
+                {/*watch account badge*/}
+                {renderWatchAccountBadge()}
+
+                {/*re-keyed badge*/}
+                {renderReKeyedAccountBadge()}
+              </HStack>
             </VStack>
           </VStack>
 
