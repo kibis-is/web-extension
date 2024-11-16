@@ -1,3 +1,10 @@
+# [2.4.0-beta.5](https://github.com/kibis-is/web-extension/compare/v2.4.0-beta.4...v2.4.0-beta.5) (2024-11-16)
+
+
+### Features
+
+* group accounts ([#343](https://github.com/kibis-is/web-extension/issues/343)) ([28dc915](https://github.com/kibis-is/web-extension/commit/28dc9153cbd05df839c1d229b68e167dfe400811))
+
 # [2.4.0-beta.4](https://github.com/kibis-is/web-extension/compare/v2.4.0-beta.3...v2.4.0-beta.4) (2024-10-30)
 
 
