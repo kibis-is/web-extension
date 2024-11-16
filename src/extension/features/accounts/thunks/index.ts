@@ -5,6 +5,7 @@ export { default as fetchAccountsFromStorageThunk } from './fetchAccountsFromSto
 export { default as removeAccountByIdThunk } from './removeAccountByIdThunk';
 export { default as removeARC0200AssetHoldingsThunk } from './removeARC0200AssetHoldingsThunk';
 export { default as removeFromGroupThunk } from './removeFromGroupThunk';
+export { default as removeGroupByIDThunk } from './removeGroupByIDThunk';
 export { default as removeStandardAssetHoldingsThunk } from './removeStandardAssetHoldingsThunk';
 export { default as saveAccountDetailsThunk } from './saveAccountDetailsThunk';
 export { default as saveAccountGroupsThunk } from './saveAccountGroupsThunk';

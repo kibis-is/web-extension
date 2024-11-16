@@ -64,7 +64,7 @@ import {
   saveActiveAccountDetails,
   updateAccountsThunk,
 } from '@extension/features/accounts';
-import { setConfirmModal, setWhatsNewModal } from '@extension/features/layout';
+import { openConfirmModal, setWhatsNewModal } from '@extension/features/layout';
 import { openModal as openMoveGroupModal } from '@extension/features/move-group-modal';
 import { create as createNotification } from '@extension/features/notifications';
 import { updateTransactionParamsForSelectedNetworkThunk } from '@extension/features/networks';
@@ -200,7 +200,7 @@ const AccountPage: FC = () => {
     );
   };
   const handleOnMoveGroupClick = () =>
-    account && openMoveGroupModal(account.id);
+    account && dispatch(openMoveGroupModal(account.id));
   const handleOnRemoveGroupClick = async () => {
     let _account: IAccountWithExtendedProps | null;
 
@@ -252,7 +252,7 @@ const AccountPage: FC = () => {
   const handleRemoveAccountClick = () => {
     if (account) {
       dispatch(
-        setConfirmModal({
+        openConfirmModal({
           description: t<string>('captions.removeAccount', {
             address: ellipseAddress(
               convertPublicKeyToAVMAddress(

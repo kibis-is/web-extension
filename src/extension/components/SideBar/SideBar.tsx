@@ -9,6 +9,7 @@ import {
   IoAddCircleOutline,
   IoChevronBack,
   IoChevronForward,
+  IoFolderOutline,
   IoScanOutline,
   IoSendOutline,
   IoSettingsOutline,
@@ -50,9 +51,10 @@ import {
   updateAccountsThunk,
 } from '@extension/features/accounts';
 import {
-  setConfirmModal,
+  openConfirmModal,
   setScanQRCodeModal,
 } from '@extension/features/layout';
+import { openModal as openManageGroupsModal } from '@extension/features/manage-groups-modal';
 import { openModal as openMoveGroupModal } from '@extension/features/move-group-modal';
 import { initialize as initializeSendAssets } from '@extension/features/send-assets';
 
@@ -146,6 +148,7 @@ const SideBar: FC = () => {
     dispatch(openMoveGroupModal(accountID));
   const handleOnGroupSort = (items: IAccountGroup[]) =>
     dispatch(saveAccountGroupsThunk(items));
+  const handleOnManageGroupsClick = () => dispatch(openManageGroupsModal());
   const handleOnRemoveFromGroupClick = (accountID: string) => {
     const account = accounts.find((value) => value.id === accountID) || null;
     let group: IAccountGroup | null;
@@ -160,7 +163,7 @@ const SideBar: FC = () => {
     }
 
     dispatch(
-      setConfirmModal({
+      openConfirmModal({
         description: t<string>('captions.removedFromGroupConfirm', {
           account:
             account.name ||
@@ -343,6 +346,14 @@ const SideBar: FC = () => {
         isShortForm={!isOpen}
         label={t<string>('labels.addAccount')}
         onClick={handleAddAccountClick}
+      />
+
+      {/*manage groups*/}
+      <SideBarActionItem
+        icon={IoFolderOutline}
+        isShortForm={!isOpen}
+        label={t<string>('labels.manageGroups')}
+        onClick={handleOnManageGroupsClick}
       />
 
       {/*settings*/}

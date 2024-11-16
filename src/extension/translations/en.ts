@@ -6,6 +6,7 @@ import { IResourceLanguage } from '@extension/types';
 
 const translation: IResourceLanguage = {
   ariaLabels: {
+    deleteIcon: 'A trash can icon.',
     forwardArrow: 'Forward arrow "->".',
     informationIcon: 'An "i" icon for information.',
     plusIcon: 'Plus "+" icon.',
@@ -28,6 +29,7 @@ const translation: IResourceLanguage = {
     create: 'Create',
     disconnectAllSessions: 'Disconnect All Sessions',
     dismiss: 'Dismiss',
+    done: 'Done',
     encrypt: 'Encrypt',
     getStarted: 'Get Started',
     hide: 'Hide',
@@ -257,6 +259,10 @@ const translation: IResourceLanguage = {
     removedFromGroupConfirm:
       'Are you sure you want to remove account "{{account}}" from "{{group}}" group?',
     removedCustomNode: 'The custom node {{name}} has been removed.',
+    removeGroupConfirm:
+      'This group contains {{numberOfAccounts}} accounts. Are you sure you want to remove "{{group}}"?',
+    removeGroupConfirmWarning:
+      'This action will ONLY remove the group your accounts will remain.',
     removePasskey:
       'You are about to remove the passkey "{{name}}". This action will re-enable password authentication.',
     removePasskeyInstruction1:
@@ -385,6 +391,7 @@ const translation: IResourceLanguage = {
     importAccountViaQRCode: 'Import An Account Via A QR Code',
     importAccountViaSeedPhrase: 'Import An Account Via Seed Phrase',
     indexerDetails: 'Indexer Details',
+    manageGroups: 'Manage Groups',
     nameYourAccount: 'Name your account',
     network: 'Network',
     networks: 'Networks',
@@ -416,6 +423,8 @@ const translation: IResourceLanguage = {
     removedCustomNode: 'Removed Custom Node',
     removedFromGroupConfirm: 'Remove From Group',
     removedGroup: 'Removed Group',
+    removeGroup: 'Remove Group',
+    removeGroups: 'Remove Groups',
     removePasskey: 'Remove Passkey',
     scanQrCode: 'Scan QR Code(s)',
     selectAccount: 'Select Account',
@@ -579,6 +588,7 @@ const translation: IResourceLanguage = {
     makePrimary: 'Make Primary',
     manage: 'Manage',
     managerAccount: 'Manager Account',
+    manageGroups: 'Manage Groups',
     max: 'Max',
     message: 'Message',
     moreInformation: 'More Information',

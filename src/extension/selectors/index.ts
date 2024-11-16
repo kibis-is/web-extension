@@ -5,6 +5,7 @@ export * from './arc-0200-assets';
 export * from './credential-lock';
 export * from './events';
 export * from './layout';
+export * from './manage-groups-modal';
 export * from './misc';
 export * from './move-group-modal';
 export * from './networks';

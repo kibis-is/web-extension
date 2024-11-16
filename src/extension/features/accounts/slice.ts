@@ -12,6 +12,7 @@ import {
   removeAccountByIdThunk,
   removeARC0200AssetHoldingsThunk,
   removeFromGroupThunk,
+  removeGroupByIDThunk,
   removeStandardAssetHoldingsThunk,
   saveAccountDetailsThunk,
   saveAccountGroupsThunk,
@@ -217,6 +218,20 @@ const slice = createSlice({
     });
     builder.addCase(removeFromGroupThunk.rejected, (state: IState) => {
       state.saving = false;
+    });
+    /** remove group by id **/
+    builder.addCase(removeGroupByIDThunk.fulfilled, (state: IState, action) => {
+      if (action.payload) {
+        state.groups = state.groups.filter(({ id }) => id !== action.payload);
+        state.items = state.items.map((value) => ({
+          ...value,
+          ...(!!value.groupID &&
+            value.groupID === action.payload && {
+              groupID: null,
+              groupIndex: null,
+            }),
+        }));
+      }
     });
     /** remove standard asset holdings **/
     builder.addCase(

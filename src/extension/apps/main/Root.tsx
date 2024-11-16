@@ -12,10 +12,11 @@ import { startPollingForAccountsThunk } from '@extension/features/accounts';
 import { fetchARC0072AssetsFromStorageThunk } from '@extension/features/arc0072-assets';
 import { fetchARC0200AssetsFromStorageThunk } from '@extension/features/arc0200-assets';
 import {
-  setConfirmModal,
+  openConfirmModal,
   setScanQRCodeModal,
   setWhatsNewModal,
 } from '@extension/features/layout';
+import { closeModal as closeManageGroupsModal } from '@extension/features/manage-groups-modal';
 import { closeModal as closeMoveGroupModal } from '@extension/features/move-group-modal';
 import { startPollingForTransactionsParamsThunk } from '@extension/features/networks';
 import { setShowingConfetti } from '@extension/features/notifications';
@@ -42,6 +43,7 @@ import ARC0300KeyRegistrationTransactionSendEventModal from '@extension/modals/A
 import ConfirmModal from '@extension/modals/ConfirmModal';
 import CredentialLockModal from '@extension/modals/CredentialLockModal';
 import EnableModal from '@extension/modals/EnableModal';
+import ManageGroupsModal from '@extension/modals/ManageGroupsModal';
 import MoveGroupModal from '@extension/modals/MoveGroupModal';
 import ReKeyAccountModal from '@extension/modals/ReKeyAccountModal';
 import RemoveAssetsModal from '@extension/modals/RemoveAssetsModal';
@@ -71,8 +73,9 @@ const Root: FC<IRootProps> = ({ i18n }) => {
   const whatsNewInfo = useSelectSystemWhatsNewInfo();
   // handlers
   const handleAddAssetsModalClose = () => dispatch(resetAddAsset());
-  const handleConfirmClose = () => dispatch(setConfirmModal(null));
+  const handleConfirmClose = () => dispatch(openConfirmModal(null));
   const handleConfettiComplete = () => dispatch(setShowingConfetti(false));
+  const handleManageGroupsModalClose = () => dispatch(closeManageGroupsModal());
   const handleMoveGroupModalClose = () => dispatch(closeMoveGroupModal());
   const handleReKeyAccountModalClose = () => dispatch(resetReKeyAccount());
   const handleRemoveAssetsModalClose = () => dispatch(resetRemoveAssets());
@@ -129,6 +132,7 @@ const Root: FC<IRootProps> = ({ i18n }) => {
       {/*action modals*/}
       <AddAssetsModal onClose={handleAddAssetsModalClose} />
       <AddAssetsForWatchAccountModal onClose={handleAddAssetsModalClose} />
+      <ManageGroupsModal onClose={handleManageGroupsModalClose} />
       <MoveGroupModal onClose={handleMoveGroupModalClose} />
       <ReKeyAccountModal onClose={handleReKeyAccountModalClose} />
       <RemoveAssetsModal onClose={handleRemoveAssetsModalClose} />

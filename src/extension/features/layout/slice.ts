@@ -4,7 +4,6 @@ import { createSlice, Draft, PayloadAction, Reducer } from '@reduxjs/toolkit';
 import { StoreNameEnum } from '@extension/enums';
 
 // types
-import type { IAccountWithExtendedProps } from '@extension/types';
 import type { IConfirmModal, IScanQRCodeModal, IState } from './types';
 
 // utils
@@ -14,17 +13,11 @@ const slice = createSlice({
   initialState: getInitialState(),
   name: StoreNameEnum.Layout,
   reducers: {
-    setConfirmModal: (
+    openConfirmModal: (
       state: Draft<IState>,
       action: PayloadAction<IConfirmModal | null>
     ) => {
       state.confirmModal = action.payload;
-    },
-    setMoveAccountGroupModal: (
-      state: Draft<IState>,
-      action: PayloadAction<IAccountWithExtendedProps | null>
-    ) => {
-      state.moveAccountGroupModal = action.payload;
     },
     setScanQRCodeModal: (
       state: Draft<IState>,
@@ -46,8 +39,7 @@ const slice = createSlice({
 
 export const reducer: Reducer = slice.reducer;
 export const {
-  setConfirmModal,
-  setMoveAccountGroupModal,
+  openConfirmModal,
   setScanQRCodeModal,
   setSideBar,
   setWhatsNewModal,

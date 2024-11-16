@@ -83,6 +83,19 @@ export default class AccountGroupRepository extends BaseRepository {
   }
 
   /**
+   * Removes a group by its ID.
+   * @param {string} id - the group ID.
+   * @public
+   */
+  public async removeByID(id: string): Promise<void> {
+    const items = await this.fetchAll();
+
+    await this._save<IAccountGroup[]>({
+      [ACCOUNT_GROUPS_ITEM_KEY]: items.filter((value) => value.id !== id),
+    });
+  }
+
+  /**
    * Saves the account group to storage.
    * @param {IAccountGroup} value - The account group to upsert.
    * @returns {Promise<IAccountGroup>} A promise that resolves to the account group.

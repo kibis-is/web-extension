@@ -16,7 +16,7 @@ import ScrollableContainer from '@extension/components/ScrollableContainer';
 import { DEFAULT_GAP } from '@extension/constants';
 
 // features
-import { setConfirmModal } from '@extension/features/layout';
+import { openConfirmModal } from '@extension/features/layout';
 import { removeCustomNodeThunk } from '@extension/features/networks';
 import { create as createNotification } from '@extension/features/notifications';
 import { saveToStorageThunk as saveSettingsToStorageThunk } from '@extension/features/settings';
@@ -125,7 +125,7 @@ const CustomNodesPage: FC = () => {
     }
 
     dispatch(
-      setConfirmModal({
+      openConfirmModal({
         description: t<string>('captions.removeCustomNodeConfirm', {
           name: item.name,
         }),
