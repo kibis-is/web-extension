@@ -13,24 +13,25 @@ import {
   sortableKeyboardCoordinates,
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
-import React, { type FC, useEffect, useState } from 'react';
+import React, { type FC, useEffect, useMemo, useState } from 'react';
 
 // components
-import SideBarAccountItem from '@extension/components/SideBarAccountItem';
 import SideBarGroupItem from '@extension/components/SideBarGroupItem';
 
 // types
 import type { IAccountGroup } from '@extension/types';
 import type { IProps } from './types';
+import sortByIndex from '@extension/utils/sortByIndex';
 
 const SideBarGroupList: FC<IProps> = ({
   accounts,
-  activeAccount,
+  activeAccountID,
   groups,
   isShortForm,
   network,
   onAccountClick,
-  onSort,
+  onAccountSort,
+  onGroupSort,
   systemInfo,
 }) => {
   const sensors = useSensors(
@@ -39,11 +40,13 @@ const SideBarGroupList: FC<IProps> = ({
       coordinateGetter: sortableKeyboardCoordinates,
     })
   );
+  // memos
+  const sortedGroups = useMemo(() => sortByIndex([...groups]), [groups]);
   // states
-  const [_groups, setGroups] = useState<IAccountGroup[]>(groups);
+  const [_groups, setGroups] = useState<IAccountGroup[]>(sortedGroups); // a local state fixes the delay between the ui and redux updates
   // handlers
   const handleOnAccountClick = async (id: string) => onAccountClick(id);
-  const handleOnDragEnd = (event: DragEndEvent) => {
+  const handleOnGroupDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
     let previousIndex: number;
     let nextIndex: number;
@@ -57,52 +60,41 @@ const SideBarGroupList: FC<IProps> = ({
     nextIndex = _groups.findIndex(({ id }) => id === over.id);
 
     setGroups((prevState) => {
-      updatedItems = arrayMove(prevState, previousIndex, nextIndex);
+      updatedItems = arrayMove(prevState, previousIndex, nextIndex).map(
+        (value, index) => ({
+          ...value,
+          index,
+        })
+      );
 
       // update the external state
-      onSort(updatedItems);
+      onGroupSort(updatedItems);
 
       return updatedItems;
     });
   };
 
-  useEffect(() => setGroups(groups), [groups]);
+  useEffect(() => setGroups(sortedGroups), [sortedGroups]);
 
   return (
     <DndContext
       sensors={sensors}
       collisionDetection={closestCenter}
-      onDragEnd={handleOnDragEnd}
+      onDragEnd={handleOnGroupDragEnd}
     >
       <SortableContext items={groups} strategy={verticalListSortingStrategy}>
         {groups.map((group) => (
           <SideBarGroupItem
-            activeAccountID={activeAccount?.id || null}
+            activeAccountID={activeAccountID}
             accounts={accounts}
             group={group}
             isShortForm={isShortForm}
             key={group.id}
             network={network}
             onAccountClick={handleOnAccountClick}
+            onAccountSort={onAccountSort}
             systemInfo={systemInfo}
-          >
-            {accounts
-              .filter(({ groupID }) => !!groupID && groupID === group.id)
-              .map((value) => (
-                <SideBarAccountItem
-                  account={value}
-                  accounts={accounts}
-                  active={
-                    activeAccount?.id ? value.id === activeAccount.id : false
-                  }
-                  isShortForm={isShortForm}
-                  key={value.id}
-                  network={network}
-                  onClick={onAccountClick}
-                  systemInfo={systemInfo}
-                />
-              ))}
-          </SideBarGroupItem>
+          />
         ))}
       </SortableContext>
     </DndContext>

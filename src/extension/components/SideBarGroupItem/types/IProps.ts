@@ -1,8 +1,3 @@
-import type { ReactElement } from 'react';
-
-// types
-import type { IProps as ISideBarAccountItemProps } from '@extension/components/SideBarAccountItem';
-
 // types
 import type {
   IAccountGroup,
@@ -17,17 +12,13 @@ import type {
  * @property {boolean} isShortForm - Whether the full item is being shown or just the avatar.
  */
 interface IProps {
-  activeAccountID: string | null;
   accounts: IAccountWithExtendedProps[];
-  children:
-    | ReactElement<ISideBarAccountItemProps>
-    | ReactElement<ISideBarAccountItemProps>[]
-    | null;
-  defaultIsOpen?: boolean;
+  activeAccountID: string | null;
   group: IAccountGroup;
   isShortForm: boolean;
   network: INetworkWithTransactionParams;
   onAccountClick: (id: string) => void;
+  onAccountSort: (items: IAccountWithExtendedProps[]) => void;
   systemInfo: ISystemInfo | null;
 }
 

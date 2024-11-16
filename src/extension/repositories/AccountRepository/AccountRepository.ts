@@ -17,6 +17,7 @@ import type {
   IAccount,
   IAccountInformation,
   IAccountTransactions,
+  IAccountWithExtendedProps,
   IInitializeAccountOptions,
   INetwork,
 } from '@extension/types';
@@ -132,6 +133,38 @@ export default class AccountRepository extends BaseRepository {
       next: null,
       transactions: [],
     };
+  }
+
+  /**
+   * Sorts a list by the `groupIndex` property, where lower indexes take precedence. If `groupIndex` is null they are put
+   * to the back and sorted by the `createdAt` property, ascending order (oldest first).
+   * @param {IAccountWithExtendedProps[]} items - The items to sort.
+   * @returns {IAccountWithExtendedProps[]} the sorted items.
+   * @public
+   * @static
+   */
+  public static sortByGroupIndex(
+    items: IAccountWithExtendedProps[]
+  ): IAccountWithExtendedProps[] {
+    return items.sort((a, b) => {
+      // if both positions are non-null, sort by position
+      if (a.groupIndex !== null && b.groupIndex !== null) {
+        return a.groupIndex - b.groupIndex;
+      }
+
+      // if `a` position is null, place it after a `b` non-null position
+      if (a.groupIndex === null && b.groupIndex !== null) {
+        return 1; // `a` comes after `b`
+      }
+
+      // if `b` position is null, place it after a `a` non-null position
+      if (a.groupIndex !== null && b.groupIndex === null) {
+        return -1; // `a` comes before `b`
+      }
+
+      // if both positions are null, sort by `createdat` (ascending)
+      return a.createdAt - b.createdAt;
+    });
   }
 
   /**

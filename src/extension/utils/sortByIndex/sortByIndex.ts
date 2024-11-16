@@ -7,8 +7,6 @@ import type { IOptions, IType } from './types';
  * @param {Type extends IType[]} items - The items to sort.
  * @param {IOptions} options - [optional] applies indexes on items that do not have indexes.
  * @returns {Type extends IType[]} the sorted items.
- * @public
- * @static
  */
 export default function sortByIndex<Type extends IType>(
   items: Type[],

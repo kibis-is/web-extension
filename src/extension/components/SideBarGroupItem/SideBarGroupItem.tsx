@@ -1,5 +1,16 @@
 import {
+  closestCenter,
+  DndContext,
+  type DragEndEvent,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from '@dnd-kit/core';
+import {
+  arrayMove,
   SortableContext,
+  sortableKeyboardCoordinates,
   useSortable,
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
@@ -15,7 +26,7 @@ import {
   Tooltip,
   useDisclosure,
 } from '@chakra-ui/react';
-import React, { type FC } from 'react';
+import React, { type FC, useMemo, useState } from 'react';
 import {
   IoFolderOutline,
   IoFolderOpenOutline,
@@ -30,13 +41,20 @@ import {
   SIDEBAR_MIN_WIDTH,
 } from '@extension/constants';
 
+// components
+import SideBarAccountItem from '@extension/components/SideBarAccountItem';
+
 // hooks
 import useButtonHoverBackgroundColor from '@extension/hooks/useButtonHoverBackgroundColor';
 import useColorModeValue from '@extension/hooks/useColorModeValue';
 import useDefaultTextColor from '@extension/hooks/useDefaultTextColor';
 import useSubTextColor from '@extension/hooks/useSubTextColor';
 
+// repositories
+import AccountRepository from '@extension/repositories/AccountRepository';
+
 // types
+import type { IAccountWithExtendedProps } from '@extension/types';
 import type { IProps } from './types';
 
 // utils
@@ -45,9 +63,12 @@ import calculateIconSize from '@extension/utils/calculateIconSize';
 const SideBarGroupItem: FC<IProps> = ({
   activeAccountID,
   accounts,
-  children,
   group,
   isShortForm,
+  network,
+  onAccountClick,
+  onAccountSort,
+  systemInfo,
 }) => {
   const { isOpen, onToggle } = useDisclosure({
     defaultIsOpen:
@@ -56,6 +77,12 @@ const SideBarGroupItem: FC<IProps> = ({
         .filter(({ groupID }) => groupID === group.id)
         .find(({ id }) => id === activeAccountID),
   });
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
   const {
     attributes,
     isDragging,
@@ -71,8 +98,46 @@ const SideBarGroupItem: FC<IProps> = ({
   const defaultTextColor = useDefaultTextColor();
   const subTextColor = useSubTextColor();
   const iconBackground = useColorModeValue('gray.300', 'whiteAlpha.400');
+  // memos
+  const groupAccounts = useMemo(
+    () =>
+      AccountRepository.sortByGroupIndex(
+        accounts.filter(({ groupID }) => !!groupID && groupID === group.id)
+      ),
+    [accounts]
+  );
+  // states
+  const [_accounts, setAccounts] =
+    useState<IAccountWithExtendedProps[]>(groupAccounts); // a local state fixes the delay between the ui and redux updates
   // handlers
   const handleOnClick = () => onToggle();
+  const handleOnDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    let previousIndex: number;
+    let nextIndex: number;
+    let updatedItems: IAccountWithExtendedProps[];
+
+    if (!over || active.id === over.id) {
+      return;
+    }
+
+    previousIndex = _accounts.findIndex(({ id }) => id === active.id);
+    nextIndex = _accounts.findIndex(({ id }) => id === over.id);
+
+    setAccounts((prevState) => {
+      updatedItems = arrayMove(prevState, previousIndex, nextIndex).map(
+        (value, index) => ({
+          ...value,
+          groupIndex: index,
+        })
+      );
+
+      // update the external state
+      onAccountSort(updatedItems);
+
+      return updatedItems;
+    });
+  };
 
   return (
     <>
@@ -167,7 +232,29 @@ const SideBarGroupItem: FC<IProps> = ({
 
       {/*accounts*/}
       <Collapse in={isOpen} animateOpacity={true}>
-        <>{children}</>
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragEnd={handleOnDragEnd}
+        >
+          <SortableContext
+            items={_accounts}
+            strategy={verticalListSortingStrategy}
+          >
+            {_accounts.map((value) => (
+              <SideBarAccountItem
+                account={value}
+                accounts={accounts}
+                active={activeAccountID ? value.id === activeAccountID : false}
+                isShortForm={isShortForm}
+                key={value.id}
+                network={network}
+                onClick={onAccountClick}
+                systemInfo={systemInfo}
+              />
+            ))}
+          </SortableContext>
+        </DndContext>
       </Collapse>
     </>
   );

@@ -7,7 +7,7 @@ import type {
 
 interface IProps {
   accounts: IAccountWithExtendedProps[];
-  activeAccount: IAccountWithExtendedProps | null;
+  activeAccountID: string | null;
   isShortForm: boolean;
   network: INetworkWithTransactionParams;
   onAccountClick: (id: string) => void;

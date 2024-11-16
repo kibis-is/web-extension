@@ -8,12 +8,13 @@ import type {
 
 interface IProps {
   accounts: IAccountWithExtendedProps[];
-  activeAccount: IAccountWithExtendedProps | null;
+  activeAccountID: string | null;
   groups: IAccountGroup[];
   isShortForm: boolean;
   network: INetworkWithTransactionParams;
   onAccountClick: (id: string) => void;
-  onSort: (items: IAccountGroup[]) => void;
+  onAccountSort: (items: IAccountWithExtendedProps[]) => void;
+  onGroupSort: (items: IAccountGroup[]) => void;
   systemInfo: ISystemInfo | null;
 }
 

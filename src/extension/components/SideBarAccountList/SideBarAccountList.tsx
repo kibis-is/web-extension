@@ -21,10 +21,11 @@ import SideBarAccountItem from '@extension/components/SideBarAccountItem';
 // types
 import type { IAccountWithExtendedProps } from '@extension/types';
 import type { IProps } from './types';
+import sortByIndex from '@extension/utils/sortByIndex';
 
 const SideBarAccountList: FC<IProps> = ({
   accounts,
-  activeAccount,
+  activeAccountID,
   isShortForm,
   network,
   onAccountClick,
@@ -39,12 +40,12 @@ const SideBarAccountList: FC<IProps> = ({
   );
   // memos
   const accountsWithoutGroup = useMemo(
-    () => accounts.filter(({ groupID }) => !groupID),
+    () => sortByIndex(accounts.filter(({ groupID }) => !groupID)),
     [accounts]
   );
   // states
   const [_accounts, setAccounts] =
-    useState<IAccountWithExtendedProps[]>(accountsWithoutGroup);
+    useState<IAccountWithExtendedProps[]>(accountsWithoutGroup); // a local state fixes the delay between the ui and redux updates
   // handlers
   const handleOnAccountClick = async (id: string) => onAccountClick(id);
   const handleOnDragEnd = (event: DragEndEvent) => {
@@ -61,7 +62,12 @@ const SideBarAccountList: FC<IProps> = ({
     nextIndex = _accounts.findIndex(({ id }) => id === over.id);
 
     setAccounts((prevState) => {
-      updatedItems = arrayMove(prevState, previousIndex, nextIndex);
+      updatedItems = arrayMove(prevState, previousIndex, nextIndex).map(
+        (value, index) => ({
+          ...value,
+          index,
+        })
+      );
 
       // update the external state
       onSort(updatedItems);
@@ -86,7 +92,7 @@ const SideBarAccountList: FC<IProps> = ({
           <SideBarAccountItem
             account={value}
             accounts={accounts}
-            active={activeAccount ? value.id === activeAccount.id : false}
+            active={activeAccountID ? value.id === activeAccountID : false}
             isShortForm={isShortForm}
             key={value.id}
             network={network}

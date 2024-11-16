@@ -133,25 +133,10 @@ const SideBar: FC = () => {
 
     onCloseSideBar();
   };
-  const handleOnAccountSort = (items: IAccountWithExtendedProps[]) => {
-    const _items = items.map((value, index) => ({
-      ...value,
-      index,
-    }));
-
-    dispatch(saveAccountsThunk(_items));
-  };
-  const handleOnGroupSort = (items: IAccountGroup[]) => {
-    console.log('groups:', groups);
-    console.log('items:', items);
-    const _items = items.map((value, index) => ({
-      ...value,
-      index,
-    }));
-    console.log('_items:', _items);
-
-    dispatch(saveAccountGroupsThunk(_items));
-  };
+  const handleOnAccountSort = (items: IAccountWithExtendedProps[]) =>
+    dispatch(saveAccountsThunk(items));
+  const handleOnGroupSort = (items: IAccountGroup[]) =>
+    dispatch(saveAccountGroupsThunk(items));
   const handleScanQRCodeClick = () =>
     dispatch(
       setScanQRCodeModal({
@@ -266,12 +251,13 @@ const SideBar: FC = () => {
               <>
                 <SideBarGroupList
                   accounts={accounts}
-                  activeAccount={activeAccount}
+                  activeAccountID={activeAccount?.id || null}
                   groups={groups}
                   isShortForm={!isOpen}
                   network={network}
                   onAccountClick={handleOnAccountClick}
-                  onSort={handleOnGroupSort}
+                  onAccountSort={handleOnAccountSort}
+                  onGroupSort={handleOnGroupSort}
                   systemInfo={systemInfo}
                 />
                 <Divider />
@@ -281,7 +267,7 @@ const SideBar: FC = () => {
             {/*accounts*/}
             <SideBarAccountList
               accounts={accounts}
-              activeAccount={activeAccount}
+              activeAccountID={activeAccount?.id || null}
               isShortForm={!isOpen}
               network={network}
               onAccountClick={handleOnAccountClick}

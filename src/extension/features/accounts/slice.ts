@@ -31,7 +31,6 @@ import type {
 import type { IState } from './types';
 
 // utils
-import sortByIndex from '@extension/utils/sortByIndex';
 import upsertItemsById from '@extension/utils/upsertItemsById';
 import { getInitialState } from './utils';
 
@@ -269,15 +268,17 @@ const slice = createSlice({
     builder.addCase(
       saveAccountGroupsThunk.fulfilled,
       (state: IState, action) => {
-        state.groups = sortByIndex<IAccountGroup>(
-          upsertItemsById<IAccountGroup>(state.groups, action.payload)
+        state.groups = upsertItemsById<IAccountGroup>(
+          state.groups,
+          action.payload
         );
       }
     );
     /** save accounts **/
     builder.addCase(saveAccountsThunk.fulfilled, (state: IState, action) => {
-      state.items = sortByIndex<IAccountWithExtendedProps>(
-        upsertItemsById<IAccountWithExtendedProps>(state.items, action.payload)
+      state.items = upsertItemsById<IAccountWithExtendedProps>(
+        state.items,
+        action.payload
       );
       state.saving = false;
     });
