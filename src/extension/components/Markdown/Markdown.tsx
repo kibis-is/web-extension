@@ -8,7 +8,7 @@ import {
   UnorderedList,
 } from '@chakra-ui/react';
 import React, { type FC } from 'react';
-import Markdown from 'react-markdown';
+import ReactMarkdown from 'react-markdown';
 
 // components
 import Link from '@extension/components/Link';
@@ -20,13 +20,13 @@ import usePrimaryColor from '@extension/hooks/usePrimaryColor';
 // types
 import type { IProps } from './types';
 
-const Document: FC<IProps> = ({ sourceAsString }) => {
+const Markdown: FC<IProps> = ({ sourceAsString }) => {
   // hooks
   const defaultTextColor = useDefaultTextColor();
   const primaryColor = usePrimaryColor();
 
   return (
-    <Markdown
+    <ReactMarkdown
       children={sourceAsString}
       components={{
         a: ({ children, href }) => (
@@ -91,4 +91,4 @@ const Document: FC<IProps> = ({ sourceAsString }) => {
   );
 };
 
-export default Document;
+export default Markdown;
