@@ -59,6 +59,7 @@ const configs: (
   let fontLoaderRule: RuleSetRule;
   let handleBarsLoaderRule: RuleSetRule;
   let imageLoaderRule: RuleSetRule;
+  let markdownLoaderRule: RuleSetRule;
   let stylesLoaderRule: RuleSetRule;
   let tsLoaderRule: RuleSetRule;
 
@@ -87,6 +88,10 @@ const configs: (
   imageLoaderRule = {
     test: /\.(png|jpg|jpeg|gif)$/i,
     type: 'asset/resource',
+  };
+  markdownLoaderRule = {
+    test: /\.md/,
+    use: 'raw-loader',
   };
   maxSize = 4000000; // 4 MB
   stylesLoaderRule = {
@@ -295,6 +300,7 @@ const configs: (
           handleBarsLoaderRule,
           fontLoaderRule,
           imageLoaderRule,
+          markdownLoaderRule,
         ],
       },
       name: ConfigNameEnum.ExtensionApps,

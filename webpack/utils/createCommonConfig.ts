@@ -24,6 +24,7 @@ export default function createCommonConfig(): Configuration {
         ['@common/messages']: resolve(commonPath, 'messages'),
         ['@common/types']: resolve(commonPath, 'types'),
         ['@common/utils']: resolve(commonPath, 'utils'),
+        ['@docs']: resolve(SRC_PATH, 'docs'),
         // extension
         ['@extension/components']: resolve(extensionPath, 'components'),
         ['@extension/config']: resolve(extensionPath, 'config'),
