@@ -24,6 +24,7 @@
       "@common/messages": ["src/common/messages"],
       "@common/types": ["src/common/types"],
       "@common/utils/*": ["src/common/utils/*"],
+      "@docs/*": ["src/docs/*"],
       "@extension/components/*": ["src/extension/components/*"],
       "@extension/config": ["src/extension/config"],
       "@extension/constants": ["src/extension/constants"],
