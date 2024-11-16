@@ -65,6 +65,7 @@ import {
   updateAccountsThunk,
 } from '@extension/features/accounts';
 import { setConfirmModal, setWhatsNewModal } from '@extension/features/layout';
+import { openModal as openMoveGroupModal } from '@extension/features/move-group-modal';
 import { create as createNotification } from '@extension/features/notifications';
 import { updateTransactionParamsForSelectedNetworkThunk } from '@extension/features/networks';
 import { setAccountAndType as setReKeyAccount } from '@extension/features/re-key-account';
@@ -81,7 +82,6 @@ import BsFolderMove from '@extension/icons/BsFolderMove';
 
 // modals
 import EditAccountModal from '@extension/modals/EditAccountModal';
-import MoveGroupModal from '@extension/modals/MoveGroupModal';
 import ShareAddressModal from '@extension/modals/ShareAddressModal';
 
 // repositories
@@ -124,11 +124,6 @@ import GroupBadge from '@extension/components/GroupBadge';
 const AccountPage: FC = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch<IAppThunkDispatch<IMainRootState>>();
-  const {
-    isOpen: isMoveGroupModalOpen,
-    onClose: onMoveGroupModalClose,
-    onOpen: onMoveGroupModalOpen,
-  } = useDisclosure();
   const {
     isOpen: isEditAccountModalOpen,
     onClose: onEditAccountModalClose,
@@ -204,7 +199,8 @@ const AccountPage: FC = () => {
       })
     );
   };
-  const handleOnMoveGroupClick = () => onMoveGroupModalOpen();
+  const handleOnMoveGroupClick = () =>
+    account && openMoveGroupModal(account.id);
   const handleOnRemoveGroupClick = async () => {
     let _account: IAccountWithExtendedProps | null;
 
@@ -675,10 +671,6 @@ const AccountPage: FC = () => {
     <>
       {account && (
         <>
-          <MoveGroupModal
-            isOpen={isMoveGroupModalOpen}
-            onClose={onMoveGroupModalClose}
-          />
           <EditAccountModal
             isOpen={isEditAccountModalOpen}
             onClose={onEditAccountModalClose}

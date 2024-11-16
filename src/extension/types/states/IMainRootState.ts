@@ -4,6 +4,7 @@ import type { IState as IAddAssetsState } from '@extension/features/add-assets';
 import type { IState as IARC0072AssetsState } from '@extension/features/arc0072-assets';
 import type { IState as ICredentialLockState } from '@extension/features/credential-lock';
 import type { IState as IEventsState } from '@extension/features/events';
+import type { IState as IMoveGroupModalState } from '@extension/features/move-group-modal';
 import type { IState as INetworksState } from '@extension/features/networks';
 import type { IState as INotificationsState } from '@extension/features/notifications';
 import type { IState as IPasskeysState } from '@extension/features/passkeys';
@@ -23,6 +24,7 @@ interface IMainRootState extends IBaseRootState {
   arc0072Assets: IARC0072AssetsState;
   credentialLock: ICredentialLockState;
   events: IEventsState;
+  moveGroupModal: IMoveGroupModalState;
   networks: INetworksState;
   notifications: INotificationsState;
   passkeys: IPasskeysState;

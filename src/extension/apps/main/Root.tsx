@@ -16,6 +16,7 @@ import {
   setScanQRCodeModal,
   setWhatsNewModal,
 } from '@extension/features/layout';
+import { closeModal as closeMoveGroupModal } from '@extension/features/move-group-modal';
 import { startPollingForTransactionsParamsThunk } from '@extension/features/networks';
 import { setShowingConfetti } from '@extension/features/notifications';
 import { reset as resetReKeyAccount } from '@extension/features/re-key-account';
@@ -41,6 +42,7 @@ import ARC0300KeyRegistrationTransactionSendEventModal from '@extension/modals/A
 import ConfirmModal from '@extension/modals/ConfirmModal';
 import CredentialLockModal from '@extension/modals/CredentialLockModal';
 import EnableModal from '@extension/modals/EnableModal';
+import MoveGroupModal from '@extension/modals/MoveGroupModal';
 import ReKeyAccountModal from '@extension/modals/ReKeyAccountModal';
 import RemoveAssetsModal from '@extension/modals/RemoveAssetsModal';
 import ScanQRCodeModal from '@extension/modals/ScanQRCodeModal';
@@ -71,6 +73,7 @@ const Root: FC<IRootProps> = ({ i18n }) => {
   const handleAddAssetsModalClose = () => dispatch(resetAddAsset());
   const handleConfirmClose = () => dispatch(setConfirmModal(null));
   const handleConfettiComplete = () => dispatch(setShowingConfetti(false));
+  const handleMoveGroupModalClose = () => dispatch(closeMoveGroupModal());
   const handleReKeyAccountModalClose = () => dispatch(resetReKeyAccount());
   const handleRemoveAssetsModalClose = () => dispatch(resetRemoveAssets());
   const handleScanQRCodeModalClose = () => dispatch(setScanQRCodeModal(null));
@@ -126,6 +129,7 @@ const Root: FC<IRootProps> = ({ i18n }) => {
       {/*action modals*/}
       <AddAssetsModal onClose={handleAddAssetsModalClose} />
       <AddAssetsForWatchAccountModal onClose={handleAddAssetsModalClose} />
+      <MoveGroupModal onClose={handleMoveGroupModalClose} />
       <ReKeyAccountModal onClose={handleReKeyAccountModalClose} />
       <RemoveAssetsModal onClose={handleRemoveAssetsModalClose} />
       <SendAssetModal onClose={handleSendAssetModalClose} />

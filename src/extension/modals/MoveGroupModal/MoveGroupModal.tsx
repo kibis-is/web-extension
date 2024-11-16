@@ -47,9 +47,9 @@ import AccountGroupRepository from '@extension/repositories/AccountGroupReposito
 // selectors
 import {
   useSelectAccounts,
-  useSelectActiveAccount,
   useSelectAccountsSaving,
   useSelectAccountGroups,
+  useSelectMoveGroupModalAccount,
 } from '@extension/selectors';
 
 // theme
@@ -61,18 +61,18 @@ import type {
   IAccountWithExtendedProps,
   IAppThunkDispatch,
   IMainRootState,
+  IModalProps,
 } from '@extension/types';
-import type { IProps } from './types';
 
 // utils
 import convertPublicKeyToAVMAddress from '@extension/utils/convertPublicKeyToAVMAddress';
 import ellipseAddress from '@extension/utils/ellipseAddress';
 
-const MoveGroupModal: FC<IProps> = ({ isOpen, onClose }) => {
+const MoveGroupModal: FC<IModalProps> = ({ onClose }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch<IAppThunkDispatch<IMainRootState>>();
   // selectors
-  const account = useSelectActiveAccount();
+  const account = useSelectMoveGroupModalAccount();
   const accounts = useSelectAccounts();
   const groups = useSelectAccountGroups();
   const saving = useSelectAccountsSaving();
@@ -198,7 +198,7 @@ const MoveGroupModal: FC<IProps> = ({ isOpen, onClose }) => {
 
   return (
     <Modal
-      isOpen={isOpen}
+      isOpen={!!account}
       motionPreset="slideInBottom"
       onClose={handleClose}
       size="full"

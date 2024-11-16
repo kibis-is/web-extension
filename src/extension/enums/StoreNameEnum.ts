@@ -7,6 +7,7 @@ enum StoreNameEnum {
   Events = 'events',
   Messages = 'messages',
   Layout = 'layout',
+  MoveGroupModal = 'move-group-modal',
   Networks = 'networks',
   Notifications = 'notifications',
   Passkeys = 'passkeys',

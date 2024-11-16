@@ -14,6 +14,7 @@ interface IProps {
   active: boolean;
   isShortForm: boolean;
   network: INetworkWithTransactionParams;
+  onAddToGroupClick?: (accountID: string) => void;
   onClick: (id: string) => void;
   onRemoveFromGroupClick?: (accountID: string) => void;
   systemInfo: ISystemInfo | null;

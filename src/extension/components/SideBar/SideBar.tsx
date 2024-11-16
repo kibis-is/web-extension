@@ -53,6 +53,7 @@ import {
   setConfirmModal,
   setScanQRCodeModal,
 } from '@extension/features/layout';
+import { openModal as openMoveGroupModal } from '@extension/features/move-group-modal';
 import { initialize as initializeSendAssets } from '@extension/features/send-assets';
 
 // hooks
@@ -141,19 +142,19 @@ const SideBar: FC = () => {
   };
   const handleOnAccountSort = (items: IAccountWithExtendedProps[]) =>
     dispatch(saveAccountsThunk(items));
+  const handleOnAddToGroupClick = (accountID: string) =>
+    dispatch(openMoveGroupModal(accountID));
   const handleOnGroupSort = (items: IAccountGroup[]) =>
     dispatch(saveAccountGroupsThunk(items));
   const handleOnRemoveFromGroupClick = (accountID: string) => {
     const account = accounts.find((value) => value.id === accountID) || null;
     let group: IAccountGroup | null;
-    console.log('accountID:', accountID);
-    console.log('account:', account);
     if (!account) {
       return;
     }
 
     group = groups.find((value) => value.id === account?.groupID) || null;
-    console.log('group:', group);
+
     if (!group) {
       return;
     }
@@ -306,7 +307,7 @@ const SideBar: FC = () => {
               isShortForm={!isOpen}
               network={network}
               onAccountClick={handleOnAccountClick}
-              onRemoveFromGroupClick={handleOnRemoveFromGroupClick}
+              onAddToGroupClick={handleOnAddToGroupClick}
               onSort={handleOnAccountSort}
               systemInfo={systemInfo}
             />

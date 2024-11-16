@@ -11,7 +11,7 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import React, { type FC } from 'react';
-import { BsFolderMinus } from 'react-icons/bs';
+import { BsFolderMinus, BsFolderPlus } from 'react-icons/bs';
 import { IoReorderTwoOutline } from 'react-icons/io5';
 
 // components
@@ -45,6 +45,7 @@ const SideBarAccountItem: FC<IProps> = ({
   active,
   isShortForm,
   network,
+  onAddToGroupClick,
   onClick,
   onRemoveFromGroupClick,
   systemInfo,
@@ -80,6 +81,8 @@ const SideBarAccountItem: FC<IProps> = ({
         bg: BODY_BACKGROUND_COLOR,
       };
   // handlers
+  const handleOnAddToGroupClick = () =>
+    onAddToGroupClick && onAddToGroupClick(account.id);
   const handleOnClick = () => onClick(account.id);
   const handleOnRemoveFromGroupClick = () =>
     account.groupID &&
@@ -170,8 +173,8 @@ const SideBarAccountItem: FC<IProps> = ({
           </HStack>
         </Button>
 
-        {/*remove from group button*/}
-        {account.groupID && (
+        {/*add/remove group button*/}
+        {account.groupID ? (
           <Button
             _hover={{
               bg: 'none',
@@ -189,6 +192,28 @@ const SideBarAccountItem: FC<IProps> = ({
           >
             <Icon
               as={BsFolderMinus}
+              boxSize={calculateIconSize()}
+              color={subTextColor}
+            />
+          </Button>
+        ) : (
+          <Button
+            _hover={{
+              bg: 'none',
+            }}
+            bgColor="none"
+            borderRadius={0}
+            cursor="pointer"
+            minH={SIDEBAR_ITEM_HEIGHT}
+            p={0}
+            onClick={handleOnAddToGroupClick}
+            variant="ghost"
+            {...(isShortForm && {
+              display: 'none',
+            })}
+          >
+            <Icon
+              as={BsFolderPlus}
               boxSize={calculateIconSize()}
               color={subTextColor}
             />

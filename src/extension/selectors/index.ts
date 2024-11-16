@@ -6,6 +6,7 @@ export * from './credential-lock';
 export * from './events';
 export * from './layout';
 export * from './misc';
+export * from './move-group-modal';
 export * from './networks';
 export * from './notifications';
 export * from './passkeys';

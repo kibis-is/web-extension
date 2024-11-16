@@ -31,6 +31,7 @@ const SideBarAccountList: FC<IProps> = ({
   isShortForm,
   network,
   onAccountClick,
+  onAddToGroupClick,
   onSort,
   systemInfo,
 }) => {
@@ -98,6 +99,7 @@ const SideBarAccountList: FC<IProps> = ({
             isShortForm={isShortForm}
             key={value.id}
             network={network}
+            onAddToGroupClick={onAddToGroupClick}
             onClick={handleOnAccountClick}
             systemInfo={systemInfo}
           />
