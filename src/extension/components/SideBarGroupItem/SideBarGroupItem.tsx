@@ -17,6 +17,7 @@ import {
 import { CSS } from '@dnd-kit/utilities';
 import {
   Avatar,
+  AvatarBadge,
   Button,
   Center,
   Collapse,
@@ -32,6 +33,7 @@ import {
   IoFolderOutline,
   IoFolderOpenOutline,
   IoReorderTwoOutline,
+  IoEyeOutline,
 } from 'react-icons/io5';
 
 // constants
@@ -49,6 +51,8 @@ import SideBarAccountItem from '@extension/components/SideBarAccountItem';
 import useButtonHoverBackgroundColor from '@extension/hooks/useButtonHoverBackgroundColor';
 import useColorModeValue from '@extension/hooks/useColorModeValue';
 import useDefaultTextColor from '@extension/hooks/useDefaultTextColor';
+import usePrimaryButtonTextColor from '@extension/hooks/usePrimaryButtonTextColor';
+import usePrimaryColor from '@extension/hooks/usePrimaryColor';
 import useSubTextColor from '@extension/hooks/useSubTextColor';
 
 // repositories
@@ -97,6 +101,8 @@ const SideBarGroupItem: FC<IProps> = ({
   // hooks
   const buttonHoverBackgroundColor = useButtonHoverBackgroundColor();
   const defaultTextColor = useDefaultTextColor();
+  const primaryButtonTextColor = usePrimaryButtonTextColor();
+  const primaryColor = usePrimaryColor();
   const subTextColor = useSubTextColor();
   const iconBackground = useColorModeValue('gray.300', 'whiteAlpha.400');
   // memos
@@ -193,7 +199,23 @@ const SideBarGroupItem: FC<IProps> = ({
                     />
                   }
                   size="sm"
-                />
+                >
+                  <AvatarBadge
+                    bg={primaryColor}
+                    borderWidth={0}
+                    boxSize="1.25em"
+                    p={1}
+                    placement="bottom-end"
+                  >
+                    <Text
+                      color={primaryButtonTextColor}
+                      fontSize="xxs"
+                      textAlign="center"
+                    >
+                      {groupAccounts.length}
+                    </Text>
+                  </AvatarBadge>
+                </Avatar>
               </Center>
 
               {/*name*/}
