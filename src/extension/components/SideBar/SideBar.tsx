@@ -43,12 +43,16 @@ import { AccountTabEnum } from '@extension/enums';
 
 // features
 import {
+  removeFromGroupThunk,
   saveAccountGroupsThunk,
   saveAccountsThunk,
   saveActiveAccountDetails,
   updateAccountsThunk,
 } from '@extension/features/accounts';
-import { setScanQRCodeModal } from '@extension/features/layout';
+import {
+  setConfirmModal,
+  setScanQRCodeModal,
+} from '@extension/features/layout';
 import { initialize as initializeSendAssets } from '@extension/features/send-assets';
 
 // hooks
@@ -78,6 +82,8 @@ import type {
 
 // utils
 import calculateIconSize from '@extension/utils/calculateIconSize';
+import ellipseAddress from '@extension/utils/ellipseAddress';
+import convertPublicKeyToAVMAddress from '@extension/utils/convertPublicKeyToAVMAddress';
 
 const SideBar: FC = () => {
   const { t } = useTranslation();
@@ -137,6 +143,34 @@ const SideBar: FC = () => {
     dispatch(saveAccountsThunk(items));
   const handleOnGroupSort = (items: IAccountGroup[]) =>
     dispatch(saveAccountGroupsThunk(items));
+  const handleOnRemoveFromGroupClick = (accountID: string) => {
+    const account = accounts.find((value) => value.id === accountID) || null;
+    let group: IAccountGroup | null;
+    console.log('accountID:', accountID);
+    console.log('account:', account);
+    if (!account) {
+      return;
+    }
+
+    group = groups.find((value) => value.id === account?.groupID) || null;
+    console.log('group:', group);
+    if (!group) {
+      return;
+    }
+
+    dispatch(
+      setConfirmModal({
+        description: t<string>('captions.removedFromGroupConfirm', {
+          account:
+            account.name ||
+            ellipseAddress(convertPublicKeyToAVMAddress(account.publicKey)),
+          group: group.name,
+        }),
+        onConfirm: () => dispatch(removeFromGroupThunk(account.id)),
+        title: t<string>('headings.removedFromGroupConfirm'),
+      })
+    );
+  };
   const handleScanQRCodeClick = () =>
     dispatch(
       setScanQRCodeModal({
@@ -258,6 +292,7 @@ const SideBar: FC = () => {
                   onAccountClick={handleOnAccountClick}
                   onAccountSort={handleOnAccountSort}
                   onGroupSort={handleOnGroupSort}
+                  onRemoveAccountFromGroupClick={handleOnRemoveFromGroupClick}
                   systemInfo={systemInfo}
                 />
                 <Divider />
@@ -271,6 +306,7 @@ const SideBar: FC = () => {
               isShortForm={!isOpen}
               network={network}
               onAccountClick={handleOnAccountClick}
+              onRemoveFromGroupClick={handleOnRemoveFromGroupClick}
               onSort={handleOnAccountSort}
               systemInfo={systemInfo}
             />

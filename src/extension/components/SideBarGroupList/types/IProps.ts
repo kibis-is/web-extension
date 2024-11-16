@@ -15,6 +15,7 @@ interface IProps {
   onAccountClick: (id: string) => void;
   onAccountSort: (items: IAccountWithExtendedProps[]) => void;
   onGroupSort: (items: IAccountGroup[]) => void;
+  onRemoveAccountFromGroupClick: (accountID: string) => void;
   systemInfo: ISystemInfo | null;
 }
 

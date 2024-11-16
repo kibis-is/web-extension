@@ -33,7 +33,6 @@ import {
   IoFolderOutline,
   IoFolderOpenOutline,
   IoReorderTwoOutline,
-  IoEyeOutline,
 } from 'react-icons/io5';
 
 // constants
@@ -73,6 +72,7 @@ const SideBarGroupItem: FC<IProps> = ({
   network,
   onAccountClick,
   onAccountSort,
+  onRemoveAccountFromGroupClick,
   systemInfo,
 }) => {
   const { isOpen, onToggle } = useDisclosure({
@@ -278,6 +278,7 @@ const SideBarGroupItem: FC<IProps> = ({
                 key={value.id}
                 network={network}
                 onClick={onAccountClick}
+                onRemoveFromGroupClick={onRemoveAccountFromGroupClick}
                 systemInfo={systemInfo}
               />
             ))}

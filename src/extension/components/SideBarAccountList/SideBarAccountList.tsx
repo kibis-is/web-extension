@@ -21,6 +21,8 @@ import SideBarAccountItem from '@extension/components/SideBarAccountItem';
 // types
 import type { IAccountWithExtendedProps } from '@extension/types';
 import type { IProps } from './types';
+
+// utils
 import sortByIndex from '@extension/utils/sortByIndex';
 
 const SideBarAccountList: FC<IProps> = ({

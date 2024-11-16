@@ -19,6 +19,7 @@ interface IProps {
   network: INetworkWithTransactionParams;
   onAccountClick: (id: string) => void;
   onAccountSort: (items: IAccountWithExtendedProps[]) => void;
+  onRemoveAccountFromGroupClick: (accountID: string) => void;
   systemInfo: ISystemInfo | null;
 }
 

@@ -21,6 +21,8 @@ import SideBarGroupItem from '@extension/components/SideBarGroupItem';
 // types
 import type { IAccountGroup } from '@extension/types';
 import type { IProps } from './types';
+
+// utils
 import sortByIndex from '@extension/utils/sortByIndex';
 
 const SideBarGroupList: FC<IProps> = ({
@@ -32,6 +34,7 @@ const SideBarGroupList: FC<IProps> = ({
   onAccountClick,
   onAccountSort,
   onGroupSort,
+  onRemoveAccountFromGroupClick,
   systemInfo,
 }) => {
   const sensors = useSensors(
@@ -93,6 +96,7 @@ const SideBarGroupList: FC<IProps> = ({
             network={network}
             onAccountClick={handleOnAccountClick}
             onAccountSort={onAccountSort}
+            onRemoveAccountFromGroupClick={onRemoveAccountFromGroupClick}
             systemInfo={systemInfo}
           />
         ))}

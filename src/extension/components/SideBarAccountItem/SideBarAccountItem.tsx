@@ -11,6 +11,7 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import React, { type FC } from 'react';
+import { BsFolderMinus } from 'react-icons/bs';
 import { IoReorderTwoOutline } from 'react-icons/io5';
 
 // components
@@ -45,6 +46,7 @@ const SideBarAccountItem: FC<IProps> = ({
   isShortForm,
   network,
   onClick,
+  onRemoveFromGroupClick,
   systemInfo,
 }) => {
   const {
@@ -79,6 +81,10 @@ const SideBarAccountItem: FC<IProps> = ({
       };
   // handlers
   const handleOnClick = () => onClick(account.id);
+  const handleOnRemoveFromGroupClick = () =>
+    account.groupID &&
+    onRemoveFromGroupClick &&
+    onRemoveFromGroupClick(account.id);
 
   return (
     <Tooltip
@@ -163,6 +169,31 @@ const SideBarAccountItem: FC<IProps> = ({
             )}
           </HStack>
         </Button>
+
+        {/*remove from group button*/}
+        {account.groupID && (
+          <Button
+            _hover={{
+              bg: 'none',
+            }}
+            bgColor="none"
+            borderRadius={0}
+            cursor="pointer"
+            minH={SIDEBAR_ITEM_HEIGHT}
+            p={0}
+            onClick={handleOnRemoveFromGroupClick}
+            variant="ghost"
+            {...(isShortForm && {
+              display: 'none',
+            })}
+          >
+            <Icon
+              as={BsFolderMinus}
+              boxSize={calculateIconSize()}
+              color={subTextColor}
+            />
+          </Button>
+        )}
 
         {/*re-order button*/}
         <Button

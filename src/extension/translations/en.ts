@@ -254,6 +254,8 @@ const translation: IResourceLanguage = {
     removeCredentialLock_password:
       'You will need to enter your password to unlock.',
     removeCustomNodeConfirm: 'Are you sure you want to remove "{{name}}"?',
+    removedFromGroupConfirm:
+      'Are you sure you want to remove account "{{account}}" from "{{group}}" group?',
     removedCustomNode: 'The custom node {{name}} has been removed.',
     removePasskey:
       'You are about to remove the passkey "{{name}}". This action will re-enable password authentication.',
@@ -412,6 +414,7 @@ const translation: IResourceLanguage = {
     [`removedAsset_${AssetTypeEnum.ARC0200}`]: 'Asset {{symbol}} Hidden!',
     removeCustomNode: 'Remove Custom Node',
     removedCustomNode: 'Removed Custom Node',
+    removedFromGroupConfirm: 'Remove From Group',
     removedGroup: 'Removed Group',
     removePasskey: 'Remove Passkey',
     scanQrCode: 'Scan QR Code(s)',
