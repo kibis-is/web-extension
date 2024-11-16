@@ -71,7 +71,7 @@ jobs:
       - name: "🔧 Setup"
         uses: ./.github/actions/use-dependencies
       - name: "🔍 Type Check"
-        run: yarn types:check
+        run: yarn check:types
 
   test:
     name: "Test"
