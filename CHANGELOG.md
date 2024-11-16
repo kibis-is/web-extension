@@ -1,3 +1,13 @@
+# [2.4.0](https://github.com/kibis-is/web-extension/compare/v2.3.2...v2.4.0) (2024-11-16)
+
+
+### Features
+
+* change icon of account ([#335](https://github.com/kibis-is/web-extension/issues/335)) ([0174529](https://github.com/kibis-is/web-extension/commit/01745293a5f54ca0274b971251b4eaf12a4de9a4))
+* group accounts ([#343](https://github.com/kibis-is/web-extension/issues/343)) ([28dc915](https://github.com/kibis-is/web-extension/commit/28dc9153cbd05df839c1d229b68e167dfe400811))
+* render markdown for whats new ([#344](https://github.com/kibis-is/web-extension/issues/344)) ([4376081](https://github.com/kibis-is/web-extension/commit/43760819e7ec060ee775b66190b8790222f9b3a4))
+* switch to new voi testnet ([#342](https://github.com/kibis-is/web-extension/issues/342)) ([a31c253](https://github.com/kibis-is/web-extension/commit/a31c253c46c82fad8e111669c5158939fc1edd8d))
+
 # [2.4.0-beta.6](https://github.com/kibis-is/web-extension/compare/v2.4.0-beta.5...v2.4.0-beta.6) (2024-11-16)
 
 
