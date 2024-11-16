@@ -1,3 +1,10 @@
+# [2.4.0-beta.6](https://github.com/kibis-is/web-extension/compare/v2.4.0-beta.5...v2.4.0-beta.6) (2024-11-16)
+
+
+### Features
+
+* render markdown for whats new ([#344](https://github.com/kibis-is/web-extension/issues/344)) ([4376081](https://github.com/kibis-is/web-extension/commit/43760819e7ec060ee775b66190b8790222f9b3a4))
+
 # [2.4.0-beta.5](https://github.com/kibis-is/web-extension/compare/v2.4.0-beta.4...v2.4.0-beta.5) (2024-11-16)
 
 
