@@ -30,9 +30,6 @@ import {
   SIDEBAR_MIN_WIDTH,
 } from '@extension/constants';
 
-// components
-import AccountItem from './AccountItem';
-
 // hooks
 import useButtonHoverBackgroundColor from '@extension/hooks/useButtonHoverBackgroundColor';
 import useColorModeValue from '@extension/hooks/useColorModeValue';
@@ -40,19 +37,17 @@ import useDefaultTextColor from '@extension/hooks/useDefaultTextColor';
 import useSubTextColor from '@extension/hooks/useSubTextColor';
 
 // types
-import type { IGroupItemProps } from './types';
+import type { IProps } from './types';
 
 // utils
 import calculateIconSize from '@extension/utils/calculateIconSize';
 
-const GroupItem: FC<IGroupItemProps> = ({
+const SideBarGroupItem: FC<IProps> = ({
   activeAccountID,
   accounts,
+  children,
   group,
   isShortForm,
-  network,
-  onAccountClick,
-  systemInfo,
 }) => {
   const { isOpen, onToggle } = useDisclosure({
     defaultIsOpen:
@@ -76,8 +71,6 @@ const GroupItem: FC<IGroupItemProps> = ({
   const defaultTextColor = useDefaultTextColor();
   const subTextColor = useSubTextColor();
   const iconBackground = useColorModeValue('gray.300', 'whiteAlpha.400');
-  // misc
-  const _accounts = accounts.filter(({ groupID }) => groupID === group.id);
   // handlers
   const handleOnClick = () => onToggle();
 
@@ -174,26 +167,10 @@ const GroupItem: FC<IGroupItemProps> = ({
 
       {/*accounts*/}
       <Collapse in={isOpen} animateOpacity={true}>
-        <SortableContext
-          items={_accounts}
-          strategy={verticalListSortingStrategy}
-        >
-          {_accounts.map((value) => (
-            <AccountItem
-              account={value}
-              accounts={accounts}
-              active={activeAccountID ? value.id === activeAccountID : false}
-              isShortForm={isShortForm}
-              key={`group-account-item-${value.id}`}
-              network={network}
-              onClick={onAccountClick}
-              systemInfo={systemInfo}
-            />
-          ))}
-        </SortableContext>
+        <>{children}</>
       </Collapse>
     </>
   );
 };
 
-export default GroupItem;
+export default SideBarGroupItem;

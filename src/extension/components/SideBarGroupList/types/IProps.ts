@@ -1,5 +1,6 @@
 // types
 import type {
+  IAccountGroup,
   IAccountWithExtendedProps,
   INetworkWithTransactionParams,
   ISystemInfo,
@@ -8,10 +9,11 @@ import type {
 interface IProps {
   accounts: IAccountWithExtendedProps[];
   activeAccount: IAccountWithExtendedProps | null;
+  groups: IAccountGroup[];
   isShortForm: boolean;
   network: INetworkWithTransactionParams;
   onAccountClick: (id: string) => void;
-  onSort: (items: IAccountWithExtendedProps[]) => void;
+  onSort: (items: IAccountGroup[]) => void;
   systemInfo: ISystemInfo | null;
 }
 

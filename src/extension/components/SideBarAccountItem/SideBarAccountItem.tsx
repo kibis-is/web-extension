@@ -31,14 +31,14 @@ import useDefaultTextColor from '@extension/hooks/useDefaultTextColor';
 import useSubTextColor from '@extension/hooks/useSubTextColor';
 
 // types
-import type { IAccountItemProps } from './types';
+import type { IProps } from './types';
 
 // utils
 import calculateIconSize from '@extension/utils/calculateIconSize';
 import convertPublicKeyToAVMAddress from '@extension/utils/convertPublicKeyToAVMAddress';
 import ellipseAddress from '@extension/utils/ellipseAddress';
 
-const AccountItem: FC<IAccountItemProps> = ({
+const SideBarAccountItem: FC<IProps> = ({
   account,
   accounts,
   active,
@@ -192,4 +192,4 @@ const AccountItem: FC<IAccountItemProps> = ({
   );
 };
 
-export default AccountItem;
+export default SideBarAccountItem;

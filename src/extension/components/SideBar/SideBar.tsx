@@ -24,6 +24,8 @@ import KibisisIcon from '@extension/components/KibisisIcon';
 import ScrollableContainer from '@extension/components/ScrollableContainer';
 import SideBarAccountList from '@extension/components/SideBarAccountList';
 import SideBarActionItem from '@extension/components/SideBarActionItem';
+import SideBarGroupList from '@extension/components/SideBarGroupList';
+import SideBarSkeletonItem from '@extension/components/SideBarSkeletonItem';
 
 // constants
 import {
@@ -37,7 +39,7 @@ import {
 } from '@extension/constants';
 
 // enums
-import { AccountTabEnum, DelimiterEnum } from '@extension/enums';
+import { AccountTabEnum } from '@extension/enums';
 
 // features
 import {
@@ -76,7 +78,6 @@ import type {
 
 // utils
 import calculateIconSize from '@extension/utils/calculateIconSize';
-import sortByIndex from '@extension/utils/sortByIndex';
 
 const SideBar: FC = () => {
   const { t } = useTranslation();
@@ -132,22 +133,24 @@ const SideBar: FC = () => {
 
     onCloseSideBar();
   };
-  const handleOnAccountSort = (
-    items: (IAccountWithExtendedProps | IAccountGroup)[]
-  ) => {
+  const handleOnAccountSort = (items: IAccountWithExtendedProps[]) => {
     const _items = items.map((value, index) => ({
       ...value,
       index,
     }));
-    const _accounts = _items.filter(
-      ({ _delimiter }) => _delimiter === DelimiterEnum.Account
-    ) as IAccountWithExtendedProps[];
-    const _groups = _items.filter(
-      ({ _delimiter }) => _delimiter === DelimiterEnum.Group
-    ) as IAccountGroup[];
 
-    dispatch(saveAccountsThunk(_accounts));
-    dispatch(saveAccountGroupsThunk(_groups));
+    dispatch(saveAccountsThunk(_items));
+  };
+  const handleOnGroupSort = (items: IAccountGroup[]) => {
+    console.log('groups:', groups);
+    console.log('items:', items);
+    const _items = items.map((value, index) => ({
+      ...value,
+      index,
+    }));
+    console.log('_items:', _items);
+
+    dispatch(saveAccountGroupsThunk(_items));
   };
   const handleScanQRCodeClick = () =>
     dispatch(
@@ -243,7 +246,7 @@ const SideBar: FC = () => {
 
       <Divider />
 
-      {/*accounts*/}
+      {/*groups/accounts*/}
       <ScrollableContainer
         direction="column"
         flexGrow={1}
@@ -252,23 +255,41 @@ const SideBar: FC = () => {
         spacing={0}
         w="full"
       >
-        <SideBarAccountList
-          accounts={accounts}
-          activeAccount={activeAccount}
-          isLoading={fetchingAccounts}
-          isShortForm={!isOpen}
-          items={sortByIndex([
-            ...accounts.filter(
-              ({ groupID }) =>
-                !groupID || !groups.some(({ id }) => id === groupID)
-            ), // remove any accounts that are in a group and the group is actually a group
-            ...groups,
-          ])}
-          network={network}
-          onAccountClick={handleOnAccountClick}
-          onSort={handleOnAccountSort}
-          systemInfo={systemInfo}
-        />
+        {!network || fetchingAccounts ? (
+          Array.from({ length: 3 }, (_, index) => (
+            <SideBarSkeletonItem key={`sidebar-fetching-item-${index}`} />
+          ))
+        ) : (
+          <>
+            {/*groups*/}
+            {groups.length > 0 && (
+              <>
+                <SideBarGroupList
+                  accounts={accounts}
+                  activeAccount={activeAccount}
+                  groups={groups}
+                  isShortForm={!isOpen}
+                  network={network}
+                  onAccountClick={handleOnAccountClick}
+                  onSort={handleOnGroupSort}
+                  systemInfo={systemInfo}
+                />
+                <Divider />
+              </>
+            )}
+
+            {/*accounts*/}
+            <SideBarAccountList
+              accounts={accounts}
+              activeAccount={activeAccount}
+              isShortForm={!isOpen}
+              network={network}
+              onAccountClick={handleOnAccountClick}
+              onSort={handleOnAccountSort}
+              systemInfo={systemInfo}
+            />
+          </>
+        )}
       </ScrollableContainer>
 
       <Divider />

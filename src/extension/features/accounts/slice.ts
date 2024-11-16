@@ -269,9 +269,8 @@ const slice = createSlice({
     builder.addCase(
       saveAccountGroupsThunk.fulfilled,
       (state: IState, action) => {
-        state.groups = upsertItemsById<IAccountGroup>(
-          state.groups,
-          action.payload
+        state.groups = sortByIndex<IAccountGroup>(
+          upsertItemsById<IAccountGroup>(state.groups, action.payload)
         );
       }
     );
