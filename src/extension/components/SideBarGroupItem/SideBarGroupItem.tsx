@@ -27,7 +27,7 @@ import {
   useDisclosure,
   VStack,
 } from '@chakra-ui/react';
-import React, { type FC, useMemo, useState } from 'react';
+import React, { type FC, useEffect, useMemo, useState } from 'react';
 import {
   IoFolderOutline,
   IoFolderOpenOutline,
@@ -139,6 +139,8 @@ const SideBarGroupItem: FC<IProps> = ({
       return updatedItems;
     });
   };
+
+  useEffect(() => setAccounts(groupAccounts), [groupAccounts]);
 
   return (
     <VStack

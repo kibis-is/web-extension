@@ -35,6 +35,7 @@ export default function createCommonConfig(): Configuration {
         ['@extension/features']: resolve(extensionPath, 'features'),
         ['@extension/fonts']: resolve(extensionPath, 'fonts'),
         ['@extension/hooks']: resolve(extensionPath, 'hooks'),
+        ['@extension/icons']: resolve(extensionPath, 'icons'),
         ['@extension/images']: resolve(extensionPath, 'images'),
         ['@extension/managers']: resolve(extensionPath, 'managers'),
         ['@extension/modals']: resolve(extensionPath, 'modals'),

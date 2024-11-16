@@ -7,12 +7,13 @@ import { StoreNameEnum } from '@extension/enums';
 import {
   addARC0200AssetHoldingsThunk,
   addStandardAssetHoldingsThunk,
+  addToGroupThunk,
   fetchAccountsFromStorageThunk,
   removeAccountByIdThunk,
   removeARC0200AssetHoldingsThunk,
+  removeFromGroupThunk,
   removeStandardAssetHoldingsThunk,
   saveAccountDetailsThunk,
-  saveAccountGroupIDThunk,
   saveAccountGroupsThunk,
   saveAccountsThunk,
   saveActiveAccountDetails,
@@ -114,6 +115,22 @@ const slice = createSlice({
         );
       }
     );
+    /** remove from group **/
+    builder.addCase(addToGroupThunk.fulfilled, (state: IState, action) => {
+      if (action.payload) {
+        state.items = upsertItemsById<IAccountWithExtendedProps>(state.items, [
+          action.payload,
+        ]);
+      }
+
+      state.saving = false;
+    });
+    builder.addCase(addToGroupThunk.pending, (state: IState) => {
+      state.saving = true;
+    });
+    builder.addCase(addToGroupThunk.rejected, (state: IState) => {
+      state.saving = false;
+    });
     /** fetch accounts from storage **/
     builder.addCase(
       fetchAccountsFromStorageThunk.fulfilled,
@@ -185,6 +202,22 @@ const slice = createSlice({
         );
       }
     );
+    /** remove from group **/
+    builder.addCase(removeFromGroupThunk.fulfilled, (state: IState, action) => {
+      if (action.payload) {
+        state.items = upsertItemsById<IAccountWithExtendedProps>(state.items, [
+          action.payload,
+        ]);
+      }
+
+      state.saving = false;
+    });
+    builder.addCase(removeFromGroupThunk.pending, (state: IState) => {
+      state.saving = true;
+    });
+    builder.addCase(removeFromGroupThunk.rejected, (state: IState) => {
+      state.saving = false;
+    });
     /** remove standard asset holdings **/
     builder.addCase(
       removeStandardAssetHoldingsThunk.fulfilled,
@@ -242,26 +275,6 @@ const slice = createSlice({
       state.saving = true;
     });
     builder.addCase(saveAccountDetailsThunk.rejected, (state: IState) => {
-      state.saving = false;
-    });
-    /** save account group id **/
-    builder.addCase(
-      saveAccountGroupIDThunk.fulfilled,
-      (state: IState, action) => {
-        if (action.payload) {
-          state.items = upsertItemsById<IAccountWithExtendedProps>(
-            state.items,
-            [action.payload]
-          );
-        }
-
-        state.saving = false;
-      }
-    );
-    builder.addCase(saveAccountGroupIDThunk.pending, (state: IState) => {
-      state.saving = true;
-    });
-    builder.addCase(saveAccountGroupIDThunk.rejected, (state: IState) => {
       state.saving = false;
     });
     /** save account groups **/

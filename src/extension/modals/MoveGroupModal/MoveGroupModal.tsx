@@ -31,7 +31,7 @@ import {
 
 // features
 import {
-  saveAccountGroupIDThunk,
+  addToGroupThunk,
   saveAccountGroupsThunk,
 } from '@extension/features/accounts';
 import { create as createNotification } from '@extension/features/notifications';
@@ -68,7 +68,7 @@ import convertPublicKeyToAVMAddress from '@extension/utils/convertPublicKeyToAVM
 import convertToKebabCase from '@extension/utils/convertToKebabCase';
 import ellipseAddress from '@extension/utils/ellipseAddress';
 
-const AddAccountToGroupModal: FC<IProps> = ({ isOpen, onClose }) => {
+const MoveGroupModal: FC<IProps> = ({ isOpen, onClose }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch<IAppThunkDispatch<IMainRootState>>();
   // selectors
@@ -128,9 +128,21 @@ const AddAccountToGroupModal: FC<IProps> = ({ isOpen, onClose }) => {
       return;
     }
 
+    // if it is the same group, just ignore
+    if (account.groupID === groupID) {
+      handleClose();
+
+      return;
+    }
+
     group = groups.find(({ id }) => id === groupID) || null;
+
+    if (!group) {
+      return;
+    }
+
     _account = await dispatch(
-      saveAccountGroupIDThunk({
+      addToGroupThunk({
         accountID: account.id,
         groupID,
       })
@@ -276,4 +288,4 @@ const AddAccountToGroupModal: FC<IProps> = ({ isOpen, onClose }) => {
   );
 };
 
-export default AddAccountToGroupModal;
+export default MoveGroupModal;

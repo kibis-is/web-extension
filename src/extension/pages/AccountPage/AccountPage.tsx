@@ -59,9 +59,9 @@ import { AccountTabEnum } from '@extension/enums';
 
 // features
 import {
+  removeFromGroupThunk,
   removeAccountByIdThunk,
   saveActiveAccountDetails,
-  saveAccountGroupIDThunk,
   updateAccountsThunk,
 } from '@extension/features/accounts';
 import { setConfirmModal, setWhatsNewModal } from '@extension/features/layout';
@@ -76,9 +76,12 @@ import useDefaultTextColor from '@extension/hooks/useDefaultTextColor';
 import usePrimaryColorScheme from '@extension/hooks/usePrimaryColorScheme';
 import useSubTextColor from '@extension/hooks/useSubTextColor';
 
+// icons
+import BsFolderMove from '@extension/icons/BsFolderMove';
+
 // modals
-import AddAccountToGroupModal from '@extension/modals/AddAccountToGroupModal';
 import EditAccountModal from '@extension/modals/EditAccountModal';
+import MoveGroupModal from '@extension/modals/MoveGroupModal';
 import ShareAddressModal from '@extension/modals/ShareAddressModal';
 
 // repositories
@@ -120,9 +123,9 @@ const AccountPage: FC = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch<IAppThunkDispatch<IMainRootState>>();
   const {
-    isOpen: isAddToGroupAccountModalOpen,
-    onClose: onAddToGroupAccountModalClose,
-    onOpen: onAddToGroupAccountModalOpen,
+    isOpen: isMoveGroupModalOpen,
+    onClose: onMoveGroupModalClose,
+    onOpen: onMoveGroupModalOpen,
   } = useDisclosure();
   const {
     isOpen: isEditAccountModalOpen,
@@ -185,7 +188,6 @@ const AccountPage: FC = () => {
     }
   };
   const handleAddAccountClick = () => navigate(ADD_ACCOUNT_ROUTE);
-  const handleOnAddGroupClick = () => onAddToGroupAccountModalOpen();
   const handleOnEditAccountClick = () => onEditAccountModalOpen();
   const handleOnMakePrimaryClick = () =>
     account && dispatch(savePolisAccountIDThunk(account.id));
@@ -200,6 +202,7 @@ const AccountPage: FC = () => {
       })
     );
   };
+  const handleOnMoveGroupClick = () => onMoveGroupModalOpen();
   const handleOnRemoveGroupClick = async () => {
     let _account: IAccountWithExtendedProps | null;
 
@@ -207,12 +210,7 @@ const AccountPage: FC = () => {
       return;
     }
 
-    _account = await dispatch(
-      saveAccountGroupIDThunk({
-        accountID: account.id,
-        groupID: null,
-      })
-    ).unwrap();
+    _account = await dispatch(removeFromGroupThunk(account.id)).unwrap();
 
     if (!_account) {
       return;
@@ -474,6 +472,11 @@ const AccountPage: FC = () => {
                   ...(group
                     ? [
                         {
+                          icon: BsFolderMove,
+                          label: t<string>('labels.moveGroup'),
+                          onSelect: handleOnMoveGroupClick,
+                        },
+                        {
                           icon: BsFolderMinus,
                           label: t<string>('labels.removeFromGroup', {
                             name: group.name,
@@ -485,7 +488,7 @@ const AccountPage: FC = () => {
                         {
                           icon: BsFolderPlus,
                           label: t<string>('labels.addToGroup'),
-                          onSelect: handleOnAddGroupClick,
+                          onSelect: handleOnMoveGroupClick,
                         },
                       ]),
                   // re-key
@@ -660,9 +663,9 @@ const AccountPage: FC = () => {
     <>
       {account && (
         <>
-          <AddAccountToGroupModal
-            isOpen={isAddToGroupAccountModalOpen}
-            onClose={onAddToGroupAccountModalClose}
+          <MoveGroupModal
+            isOpen={isMoveGroupModalOpen}
+            onClose={onMoveGroupModalClose}
           />
           <EditAccountModal
             isOpen={isEditAccountModalOpen}
