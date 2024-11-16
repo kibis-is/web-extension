@@ -25,6 +25,7 @@ import {
   Text,
   Tooltip,
   useDisclosure,
+  VStack,
 } from '@chakra-ui/react';
 import React, { type FC, useMemo, useState } from 'react';
 import {
@@ -140,24 +141,27 @@ const SideBarGroupItem: FC<IProps> = ({
   };
 
   return (
-    <>
+    <VStack
+      ref={setNodeRef}
+      spacing={0}
+      transform={CSS.Translate.toString({
+        x: 0,
+        y: transform?.y ?? 0,
+        scaleX: transform?.scaleX ?? 1,
+        scaleY: transform?.scaleY ?? 1,
+      })}
+      transition={transition}
+      w="full"
+      zIndex={isDragging ? 1 : 'auto'}
+    >
       <Tooltip label={group.name}>
         <HStack
           _hover={{
             bg: buttonHoverBackgroundColor,
           }}
           bg={BODY_BACKGROUND_COLOR}
-          ref={setNodeRef}
           spacing={0}
-          transform={CSS.Translate.toString({
-            x: 0,
-            y: transform?.y ?? 0,
-            scaleX: transform?.scaleX ?? 1,
-            scaleY: transform?.scaleY ?? 1,
-          })}
-          transition={transition}
           w="full"
-          zIndex={isDragging ? 1 : 'auto'}
         >
           <Button
             _hover={{
@@ -231,7 +235,7 @@ const SideBarGroupItem: FC<IProps> = ({
       </Tooltip>
 
       {/*accounts*/}
-      <Collapse in={isOpen} animateOpacity={true}>
+      <Collapse in={isOpen} animateOpacity={true} style={{ width: '100%' }}>
         <DndContext
           sensors={sensors}
           collisionDetection={closestCenter}
@@ -256,7 +260,7 @@ const SideBarGroupItem: FC<IProps> = ({
           </SortableContext>
         </DndContext>
       </Collapse>
-    </>
+    </VStack>
   );
 };
 

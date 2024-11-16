@@ -82,8 +82,8 @@ const SideBarGroupList: FC<IProps> = ({
       collisionDetection={closestCenter}
       onDragEnd={handleOnGroupDragEnd}
     >
-      <SortableContext items={groups} strategy={verticalListSortingStrategy}>
-        {groups.map((group) => (
+      <SortableContext items={_groups} strategy={verticalListSortingStrategy}>
+        {_groups.map((group) => (
           <SideBarGroupItem
             activeAccountID={activeAccountID}
             accounts={accounts}
