@@ -6,10 +6,13 @@ import { IResourceLanguage } from '@extension/types';
 
 const translation: IResourceLanguage = {
   ariaLabels: {
+    checkIcon: 'A checkmark icon.',
+    crossIcon: 'A cross icon.',
     deleteIcon: 'A trash can icon.',
-    forwardArrow: 'Forward arrow "->".',
+    forwardArrow: 'A forward arrow.',
     informationIcon: 'An "i" icon for information.',
-    plusIcon: 'Plus "+" icon.',
+    pencilIcon: 'A pencil icon.',
+    plusIcon: 'A plus icon.',
   },
   buttons: {
     add: 'Add',
@@ -379,6 +382,7 @@ const translation: IResourceLanguage = {
     developer: 'Developer',
     disconnectAllSessions: 'Disconnect All Sessions',
     editAccount: 'Edit Account',
+    editGroups: 'Edit Groups',
     enterAnAddress: 'Enter an address',
     enterYourSeedPhrase: 'Enter your seed phrase',
     experimental: 'Experimental',
@@ -424,7 +428,6 @@ const translation: IResourceLanguage = {
     removedFromGroupConfirm: 'Remove From Group',
     removedGroup: 'Removed Group',
     removeGroup: 'Remove Group',
-    removeGroups: 'Remove Groups',
     removePasskey: 'Remove Passkey',
     scanQrCode: 'Scan QR Code(s)',
     selectAccount: 'Select Account',
@@ -559,6 +562,7 @@ const translation: IResourceLanguage = {
     disabled: 'Disabled',
     disconnect: 'Disconnect',
     editAccount: 'Edit Account',
+    editGroup: 'Edit Group',
     enableCredentialsLock: 'Enable Credential Lock?',
     enabled: 'Enabled',
     experimental: 'Experimental',

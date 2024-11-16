@@ -12,13 +12,18 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import { randomString } from '@stablelib/random';
-import React, { type FC, KeyboardEvent, useMemo } from 'react';
+import React, { type FC, KeyboardEvent, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { IoFolderOutline, IoTrashOutline } from 'react-icons/io5';
+import {
+  IoFolderOutline,
+  IoPencilOutline,
+  IoTrashOutline,
+} from 'react-icons/io5';
 import { useDispatch } from 'react-redux';
 
 // components
 import Button from '@extension/components/Button';
+import EditableText from '@extension/components/EditableText';
 import GenericInput from '@extension/components/GenericInput';
 import IconButton from '@extension/components/IconButton';
 import ModalSubHeading from '@extension/components/ModalSubHeading';
@@ -29,6 +34,7 @@ import {
   ACCOUNT_GROUP_NAME_BYTE_LIMIT,
   BODY_BACKGROUND_COLOR,
   DEFAULT_GAP,
+  INPUT_HEIGHT,
 } from '@extension/constants';
 
 // features
@@ -94,6 +100,8 @@ const ManageGroupsModal: FC<IModalProps> = ({ onClose }) => {
   const subTextColor = useSubTextColor();
   // memo
   const _context = useMemo(() => randomString(9), []);
+  // states
+  const [editingGroupID, setEditingGroupID] = useState<string | null>(null);
   // handlers
   const handleOnAddSubmit = async () => {
     if (nameValue.length <= 0 || !!validateName(nameValue)) {
@@ -116,6 +124,26 @@ const ManageGroupsModal: FC<IModalProps> = ({ onClose }) => {
     resetName();
     // close
     onClose && onClose();
+  };
+  const handleOnEditCancel = () => setEditingGroupID(null);
+  const handleOnEditClick = (id: string) => () => setEditingGroupID(id);
+  const handleOnEditSubmit = (id: string) => (value: string) => {
+    const group = groups.find((_value) => _value.id === id) || null;
+
+    setEditingGroupID(null);
+
+    if (!group || value === group.name || value.length <= 0) {
+      return;
+    }
+
+    dispatch(
+      saveAccountGroupsThunk([
+        {
+          ...group,
+          name: value,
+        },
+      ])
+    );
   };
   const handleOnKeyUp = async (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
@@ -172,6 +200,7 @@ const ManageGroupsModal: FC<IModalProps> = ({ onClose }) => {
           <HStack
             alignItems="center"
             justifyContent="flex-start"
+            h={INPUT_HEIGHT}
             key={`${_context}-${value.id}`}
             m={0}
             p={DEFAULT_GAP / 2}
@@ -179,21 +208,45 @@ const ManageGroupsModal: FC<IModalProps> = ({ onClose }) => {
             w="full"
           >
             {/*icon*/}
-            <Icon as={IoFolderOutline} boxSize={calculateIconSize()} />
+            <Icon
+              as={IoFolderOutline}
+              boxSize={calculateIconSize('md')}
+              color={defaultTextColor}
+            />
 
             {/*name*/}
-            <Text
-              color={defaultTextColor}
-              flexGrow={1}
-              noOfLines={1}
-              textAlign="left"
-              w="full"
-            >
-              {`${value.name} (${AccountGroupRepository.numberOfAccountsInGroup(
-                value.id,
-                accounts
-              )})`}
-            </Text>
+            <HStack flexGrow={1} spacing={1} w="full">
+              <Text color={defaultTextColor} textAlign="left">
+                {`(${AccountGroupRepository.numberOfAccountsInGroup(
+                  value.id,
+                  accounts
+                )})`}
+              </Text>
+
+              <EditableText
+                characterLimit={ACCOUNT_GROUP_NAME_BYTE_LIMIT}
+                color={defaultTextColor}
+                flexGrow={1}
+                isEditing={!!editingGroupID && editingGroupID === value.id}
+                noOfLines={1}
+                onCancel={handleOnEditCancel}
+                onSubmit={handleOnEditSubmit(value.id)}
+                textAlign="left"
+                w="full"
+                value={value.name}
+              />
+            </HStack>
+
+            {/*edit button*/}
+            <Tooltip label={t<string>('labels.editGroup')}>
+              <IconButton
+                aria-label={t<string>('ariaLabels.pencilIcon')}
+                icon={IoPencilOutline}
+                onClick={handleOnEditClick(value.id)}
+                size="sm"
+                variant="ghost"
+              />
+            </Tooltip>
 
             {/*remove button*/}
             <Tooltip label={t<string>('labels.remove')}>
@@ -258,7 +311,7 @@ const ManageGroupsModal: FC<IModalProps> = ({ onClose }) => {
               value={nameValue}
             />
 
-            <ModalSubHeading text={t<string>('headings.removeGroups')} />
+            <ModalSubHeading text={t<string>('headings.editGroups')} />
 
             {/*remove groups*/}
             {renderGroupItems()}

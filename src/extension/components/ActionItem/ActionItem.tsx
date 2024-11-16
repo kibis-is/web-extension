@@ -64,7 +64,7 @@ const ActionItem: FC<IProps> = ({
         w="full"
       >
         {/*icon*/}
-        <Icon as={icon} boxSize={iconSize} />
+        <Icon as={icon} boxSize={iconSize} color={textColor} />
 
         {/*content*/}
         <Text color={textColor} noOfLines={1}>
