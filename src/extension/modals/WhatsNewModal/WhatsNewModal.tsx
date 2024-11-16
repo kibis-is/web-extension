@@ -16,6 +16,7 @@ import { useDispatch } from 'react-redux';
 
 // components
 import Button from '@extension/components/Button';
+import Markdown from '@extension/components/Markdown';
 
 // constants
 import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@extension/constants';
@@ -49,7 +50,6 @@ import type {
   IMainRootState,
   IModalProps,
 } from '@extension/types';
-import Document from '@extension/components/Document';
 
 const WhatsNewModal: FC<IModalProps> = ({ onClose }) => {
   const { t } = useTranslation();
@@ -101,7 +101,7 @@ const WhatsNewModal: FC<IModalProps> = ({ onClose }) => {
 
         <ModalBody>
           <VStack spacing={DEFAULT_GAP - 2} w="full">
-            <Document sourceAsString={whatsNewDocument} />
+            <Markdown sourceAsString={whatsNewDocument} />
           </VStack>
         </ModalBody>
 
