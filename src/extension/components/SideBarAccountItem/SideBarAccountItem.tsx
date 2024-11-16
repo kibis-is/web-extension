@@ -11,6 +11,7 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import React, { type FC } from 'react';
+import { BsFolderMinus, BsFolderPlus } from 'react-icons/bs';
 import { IoReorderTwoOutline } from 'react-icons/io5';
 
 // components
@@ -31,20 +32,22 @@ import useDefaultTextColor from '@extension/hooks/useDefaultTextColor';
 import useSubTextColor from '@extension/hooks/useSubTextColor';
 
 // types
-import type { IItemProps } from './types';
+import type { IProps } from './types';
 
 // utils
 import calculateIconSize from '@extension/utils/calculateIconSize';
 import convertPublicKeyToAVMAddress from '@extension/utils/convertPublicKeyToAVMAddress';
 import ellipseAddress from '@extension/utils/ellipseAddress';
 
-const Item: FC<IItemProps> = ({
+const SideBarAccountItem: FC<IProps> = ({
   account,
   accounts,
   active,
   isShortForm,
   network,
+  onAddToGroupClick,
   onClick,
+  onRemoveFromGroupClick,
   systemInfo,
 }) => {
   const {
@@ -78,7 +81,13 @@ const Item: FC<IItemProps> = ({
         bg: BODY_BACKGROUND_COLOR,
       };
   // handlers
+  const handleOnAddToGroupClick = () =>
+    onAddToGroupClick && onAddToGroupClick(account.id);
   const handleOnClick = () => onClick(account.id);
+  const handleOnRemoveFromGroupClick = () =>
+    account.groupID &&
+    onRemoveFromGroupClick &&
+    onRemoveFromGroupClick(account.id);
 
   return (
     <Tooltip
@@ -164,6 +173,53 @@ const Item: FC<IItemProps> = ({
           </HStack>
         </Button>
 
+        {/*add/remove group button*/}
+        {account.groupID ? (
+          <Button
+            _hover={{
+              bg: 'none',
+            }}
+            bgColor="none"
+            borderRadius={0}
+            cursor="pointer"
+            minH={SIDEBAR_ITEM_HEIGHT}
+            p={0}
+            onClick={handleOnRemoveFromGroupClick}
+            variant="ghost"
+            {...(isShortForm && {
+              display: 'none',
+            })}
+          >
+            <Icon
+              as={BsFolderMinus}
+              boxSize={calculateIconSize()}
+              color={subTextColor}
+            />
+          </Button>
+        ) : (
+          <Button
+            _hover={{
+              bg: 'none',
+            }}
+            bgColor="none"
+            borderRadius={0}
+            cursor="pointer"
+            minH={SIDEBAR_ITEM_HEIGHT}
+            p={0}
+            onClick={handleOnAddToGroupClick}
+            variant="ghost"
+            {...(isShortForm && {
+              display: 'none',
+            })}
+          >
+            <Icon
+              as={BsFolderPlus}
+              boxSize={calculateIconSize()}
+              color={subTextColor}
+            />
+          </Button>
+        )}
+
         {/*re-order button*/}
         <Button
           _hover={{
@@ -192,4 +248,4 @@ const Item: FC<IItemProps> = ({
   );
 };
 
-export default Item;
+export default SideBarAccountItem;

@@ -34,6 +34,7 @@
       "@extension/features/*": ["src/extension/features/*"],
       "@extension/fonts/*": ["src/extension/fonts/*"],
       "@extension/hooks/*": ["src/extension/hooks/*"],
+      "@extension/icons/*": ["src/extension/icons/*"],
       "@extension/images/*": ["src/extension/images/*"],
       "@extension/managers/*": ["src/extension/managers/*"],
       "@extension/modals/*": ["src/extension/modals/*"],

@@ -7,7 +7,7 @@ import { networks } from '@extension/config';
 import { ACCOUNTS_ITEM_KEY_PREFIX } from '@extension/constants';
 
 // enums
-import { AssetTypeEnum } from '@extension/enums';
+import { AssetTypeEnum, DelimiterEnum } from '@extension/enums';
 
 // repositories
 import BaseRepository from '@extension/repositories/BaseRepository';
@@ -17,13 +17,15 @@ import type {
   IAccount,
   IAccountInformation,
   IAccountTransactions,
+  IAccountWithExtendedProps,
   IInitializeAccountOptions,
   INetwork,
 } from '@extension/types';
-import { ISaveOptions, ISortOptions } from './types';
+import type { ISaveOptions } from './types';
 
 // utils
 import convertGenesisHashToHex from '@extension/utils/convertGenesisHashToHex';
+import sortByIndex from '@extension/utils/sortByIndex';
 
 export default class AccountRepository extends BaseRepository {
   /**
@@ -82,8 +84,11 @@ export default class AccountRepository extends BaseRepository {
     const createdAtOrNow: number = createdAt || new Date().getTime();
 
     return {
+      _delimiter: DelimiterEnum.Account,
       color: null,
       createdAt: createdAtOrNow,
+      groupID: null,
+      groupIndex: null,
       icon: null,
       id: id || uuid(),
       name: name || null,
@@ -131,47 +136,35 @@ export default class AccountRepository extends BaseRepository {
   }
 
   /**
-   * Sorts the accounts by the `index` property, where lower indexes take precedence. If `index` is null they are put
+   * Sorts a list by the `groupIndex` property, where lower indexes take precedence. If `groupIndex` is null they are put
    * to the back and sorted by the `createdAt` property, ascending order (oldest first).
-   * @param {Type extends IAccount[]} items - The accounts to sort.
-   * @param {ISortOptions} options - [optional] applies indexes on accounts that do not have indexes.
-   * @returns {Type extends IAccount[]} the sorted accounts.
+   * @param {IAccountWithExtendedProps[]} items - The items to sort.
+   * @returns {IAccountWithExtendedProps[]} the sorted items.
    * @public
    * @static
    */
-  public static sort<Type extends IAccount>(
-    items: Type[],
-    { mutateIndex }: ISortOptions = { mutateIndex: false }
-  ): Type[] {
-    const _items = items.sort((a, b) => {
+  public static sortByGroupIndex(
+    items: IAccountWithExtendedProps[]
+  ): IAccountWithExtendedProps[] {
+    return items.sort((a, b) => {
       // if both positions are non-null, sort by position
-      if (a.index !== null && b.index !== null) {
-        return a.index - b.index;
+      if (a.groupIndex !== null && b.groupIndex !== null) {
+        return a.groupIndex - b.groupIndex;
       }
 
       // if `a` position is null, place it after a `b` non-null position
-      if (a.index === null && b.index !== null) {
+      if (a.groupIndex === null && b.groupIndex !== null) {
         return 1; // `a` comes after `b`
       }
 
       // if `b` position is null, place it after a `a` non-null position
-      if (a.index !== null && b.index === null) {
+      if (a.groupIndex !== null && b.groupIndex === null) {
         return -1; // `a` comes before `b`
       }
 
       // if both positions are null, sort by `createdat` (ascending)
       return a.createdAt - b.createdAt;
     });
-
-    if (!mutateIndex) {
-      return _items;
-    }
-
-    // apply the positions to the
-    return _items.map((value, index) => ({
-      ...value,
-      index,
-    }));
   }
 
   /**
@@ -195,8 +188,12 @@ export default class AccountRepository extends BaseRepository {
    */
   private _sanitize(account: IAccount): IAccount {
     return {
+      _delimiter: DelimiterEnum.Account,
       color: account.color,
       createdAt: account.createdAt,
+      groupID: account.groupID,
+      groupIndex:
+        typeof account.groupIndex === 'number' ? account.groupIndex : null, // if 0, this is "falsy" in the js world, so let's be specific
       icon: account.icon,
       id: account.id,
       name: account.name,
@@ -222,7 +219,7 @@ export default class AccountRepository extends BaseRepository {
         }),
         {}
       ),
-      index: typeof account.index === 'number' ? account.index : null,
+      index: typeof account.index === 'number' ? account.index : null, // if 0, this is "falsy" in the js world, so let's be specific
       publicKey: account.publicKey,
       updatedAt: account.updatedAt,
     };
@@ -279,6 +276,7 @@ export default class AccountRepository extends BaseRepository {
 
     accounts = accounts.map((account) => ({
       ...account,
+      _delimiter: DelimiterEnum.Account,
       // if there are new networks in the config, create default account information and transactions for these new networks
       networkInformation: networks.reduce<Record<string, IAccountInformation>>(
         (acc, { genesisHash }) => {
@@ -330,7 +328,7 @@ export default class AccountRepository extends BaseRepository {
       }, {}),
     }));
 
-    return AccountRepository.sort(accounts);
+    return sortByIndex(accounts);
   }
 
   /**

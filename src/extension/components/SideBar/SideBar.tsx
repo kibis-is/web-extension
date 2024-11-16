@@ -9,6 +9,7 @@ import {
   IoAddCircleOutline,
   IoChevronBack,
   IoChevronForward,
+  IoFolderOutline,
   IoScanOutline,
   IoSendOutline,
   IoSettingsOutline,
@@ -24,6 +25,8 @@ import KibisisIcon from '@extension/components/KibisisIcon';
 import ScrollableContainer from '@extension/components/ScrollableContainer';
 import SideBarAccountList from '@extension/components/SideBarAccountList';
 import SideBarActionItem from '@extension/components/SideBarActionItem';
+import SideBarGroupList from '@extension/components/SideBarGroupList';
+import SideBarSkeletonItem from '@extension/components/SideBarSkeletonItem';
 
 // constants
 import {
@@ -41,11 +44,18 @@ import { AccountTabEnum } from '@extension/enums';
 
 // features
 import {
+  removeFromGroupThunk,
+  saveAccountGroupsThunk,
   saveAccountsThunk,
   saveActiveAccountDetails,
   updateAccountsThunk,
 } from '@extension/features/accounts';
-import { setScanQRCodeModal } from '@extension/features/layout';
+import {
+  openConfirmModal,
+  setScanQRCodeModal,
+} from '@extension/features/layout';
+import { openModal as openManageGroupsModal } from '@extension/features/manage-groups-modal';
+import { openModal as openMoveGroupModal } from '@extension/features/move-group-modal';
 import { initialize as initializeSendAssets } from '@extension/features/send-assets';
 
 // hooks
@@ -55,6 +65,7 @@ import usePrimaryColor from '@extension/hooks/usePrimaryColor';
 
 // selectors
 import {
+  useSelectAccountGroups,
   useSelectAccounts,
   useSelectAccountsFetching,
   useSelectActiveAccount,
@@ -66,6 +77,7 @@ import {
 
 // types
 import type {
+  IAccountGroup,
   IAccountWithExtendedProps,
   IAppThunkDispatch,
   IMainRootState,
@@ -73,6 +85,8 @@ import type {
 
 // utils
 import calculateIconSize from '@extension/utils/calculateIconSize';
+import ellipseAddress from '@extension/utils/ellipseAddress';
+import convertPublicKeyToAVMAddress from '@extension/utils/convertPublicKeyToAVMAddress';
 
 const SideBar: FC = () => {
   const { t } = useTranslation();
@@ -84,6 +98,7 @@ const SideBar: FC = () => {
   const activeAccountDetails = useSelectActiveAccountDetails();
   const availableAccounts = useSelectAvailableAccountsForSelectedNetwork();
   const fetchingAccounts = useSelectAccountsFetching();
+  const groups = useSelectAccountGroups();
   const network = useSelectSettingsSelectedNetwork();
   const systemInfo = useSelectSystemInfo();
   // hooks
@@ -127,15 +142,39 @@ const SideBar: FC = () => {
 
     onCloseSideBar();
   };
-  const handleOnAccountSort = (_accounts: IAccountWithExtendedProps[]) =>
+  const handleOnAccountSort = (items: IAccountWithExtendedProps[]) =>
+    dispatch(saveAccountsThunk(items));
+  const handleOnAddToGroupClick = (accountID: string) =>
+    dispatch(openMoveGroupModal(accountID));
+  const handleOnGroupSort = (items: IAccountGroup[]) =>
+    dispatch(saveAccountGroupsThunk(items));
+  const handleOnManageGroupsClick = () => dispatch(openManageGroupsModal());
+  const handleOnRemoveFromGroupClick = (accountID: string) => {
+    const account = accounts.find((value) => value.id === accountID) || null;
+    let group: IAccountGroup | null;
+    if (!account) {
+      return;
+    }
+
+    group = groups.find((value) => value.id === account?.groupID) || null;
+
+    if (!group) {
+      return;
+    }
+
     dispatch(
-      saveAccountsThunk(
-        _accounts.map((value, index) => ({
-          ...value,
-          index,
-        }))
-      )
+      openConfirmModal({
+        description: t<string>('captions.removedFromGroupConfirm', {
+          account:
+            account.name ||
+            ellipseAddress(convertPublicKeyToAVMAddress(account.publicKey)),
+          group: group.name,
+        }),
+        onConfirm: () => dispatch(removeFromGroupThunk(account.id)),
+        title: t<string>('headings.removedFromGroupConfirm'),
+      })
     );
+  };
   const handleScanQRCodeClick = () =>
     dispatch(
       setScanQRCodeModal({
@@ -230,7 +269,7 @@ const SideBar: FC = () => {
 
       <Divider />
 
-      {/*accounts*/}
+      {/*groups/accounts*/}
       <ScrollableContainer
         direction="column"
         flexGrow={1}
@@ -239,16 +278,44 @@ const SideBar: FC = () => {
         spacing={0}
         w="full"
       >
-        <SideBarAccountList
-          accounts={accounts}
-          activeAccount={activeAccount}
-          isLoading={fetchingAccounts}
-          isShortForm={!isOpen}
-          network={network}
-          onClick={handleOnAccountClick}
-          onSort={handleOnAccountSort}
-          systemInfo={systemInfo}
-        />
+        {!network || fetchingAccounts ? (
+          Array.from({ length: 3 }, (_, index) => (
+            <SideBarSkeletonItem key={`sidebar-fetching-item-${index}`} />
+          ))
+        ) : (
+          <>
+            {/*groups*/}
+            {groups.length > 0 && (
+              <>
+                <SideBarGroupList
+                  accounts={accounts}
+                  activeAccountID={activeAccount?.id || null}
+                  groups={groups}
+                  isShortForm={!isOpen}
+                  network={network}
+                  onAccountClick={handleOnAccountClick}
+                  onAccountSort={handleOnAccountSort}
+                  onGroupSort={handleOnGroupSort}
+                  onRemoveAccountFromGroupClick={handleOnRemoveFromGroupClick}
+                  systemInfo={systemInfo}
+                />
+                <Divider />
+              </>
+            )}
+
+            {/*accounts*/}
+            <SideBarAccountList
+              accounts={accounts}
+              activeAccountID={activeAccount?.id || null}
+              isShortForm={!isOpen}
+              network={network}
+              onAccountClick={handleOnAccountClick}
+              onAddToGroupClick={handleOnAddToGroupClick}
+              onSort={handleOnAccountSort}
+              systemInfo={systemInfo}
+            />
+          </>
+        )}
       </ScrollableContainer>
 
       <Divider />
@@ -279,6 +346,14 @@ const SideBar: FC = () => {
         isShortForm={!isOpen}
         label={t<string>('labels.addAccount')}
         onClick={handleAddAccountClick}
+      />
+
+      {/*manage groups*/}
+      <SideBarActionItem
+        icon={IoFolderOutline}
+        isShortForm={!isOpen}
+        label={t<string>('labels.manageGroups')}
+        onClick={handleOnManageGroupsClick}
       />
 
       {/*settings*/}

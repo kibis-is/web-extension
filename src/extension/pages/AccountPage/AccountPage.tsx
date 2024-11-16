@@ -16,6 +16,7 @@ import {
 import BigNumber from 'bignumber.js';
 import React, { type FC } from 'react';
 import { useTranslation } from 'react-i18next';
+import { BsFolderMinus, BsFolderPlus } from 'react-icons/bs';
 import {
   IoAdd,
   IoCloudOfflineOutline,
@@ -58,16 +59,16 @@ import { AccountTabEnum } from '@extension/enums';
 
 // features
 import {
+  removeFromGroupThunk,
   removeAccountByIdThunk,
   saveActiveAccountDetails,
   updateAccountsThunk,
 } from '@extension/features/accounts';
-import { setConfirmModal, setWhatsNewModal } from '@extension/features/layout';
+import { openConfirmModal, setWhatsNewModal } from '@extension/features/layout';
+import { openModal as openMoveGroupModal } from '@extension/features/move-group-modal';
+import { create as createNotification } from '@extension/features/notifications';
 import { updateTransactionParamsForSelectedNetworkThunk } from '@extension/features/networks';
-import {
-  setAccountAndType as setReKeyAccount,
-  TReKeyType,
-} from '@extension/features/re-key-account';
+import { setAccountAndType as setReKeyAccount } from '@extension/features/re-key-account';
 import { saveToStorageThunk as saveSettingsToStorageThunk } from '@extension/features/settings';
 import { savePolisAccountIDThunk } from '@extension/features/system';
 
@@ -75,6 +76,9 @@ import { savePolisAccountIDThunk } from '@extension/features/system';
 import useDefaultTextColor from '@extension/hooks/useDefaultTextColor';
 import usePrimaryColorScheme from '@extension/hooks/usePrimaryColorScheme';
 import useSubTextColor from '@extension/hooks/useSubTextColor';
+
+// icons
+import BsFolderMove from '@extension/icons/BsFolderMove';
 
 // modals
 import EditAccountModal from '@extension/modals/EditAccountModal';
@@ -88,6 +92,7 @@ import {
   useSelectAccounts,
   useSelectActiveAccount,
   useSelectActiveAccountDetails,
+  useSelectActiveAccountGroup,
   useSelectActiveAccountInformation,
   useSelectActiveAccountTransactions,
   useSelectAccountsFetching,
@@ -101,7 +106,9 @@ import {
 } from '@extension/selectors';
 
 // types
+import type { TReKeyType } from '@extension/features/re-key-account';
 import type {
+  IAccountWithExtendedProps,
   IAppThunkDispatch,
   IMainRootState,
   INetwork,
@@ -111,6 +118,8 @@ import type {
 import convertPublicKeyToAVMAddress from '@extension/utils/convertPublicKeyToAVMAddress';
 import ellipseAddress from '@extension/utils/ellipseAddress';
 import isReKeyedAuthAccountAvailable from '@extension/utils/isReKeyedAuthAccountAvailable';
+import { HiSave } from 'react-icons/hi';
+import GroupBadge from '@extension/components/GroupBadge';
 
 const AccountPage: FC = () => {
   const { t } = useTranslation();
@@ -134,6 +143,7 @@ const AccountPage: FC = () => {
   const activeAccountDetails = useSelectActiveAccountDetails();
   const fetchingAccounts = useSelectAccountsFetching();
   const fetchingSettings = useSelectSettingsFetching();
+  const group = useSelectActiveAccountGroup();
   const online = useSelectIsOnline();
   const network = useSelectSettingsSelectedNetwork();
   const networks = useSelectNetworks();
@@ -189,6 +199,29 @@ const AccountPage: FC = () => {
       })
     );
   };
+  const handleOnMoveGroupClick = () =>
+    account && dispatch(openMoveGroupModal(account.id));
+  const handleOnRemoveGroupClick = async () => {
+    let _account: IAccountWithExtendedProps | null;
+
+    if (!account || !group) {
+      return;
+    }
+
+    _account = await dispatch(removeFromGroupThunk(account.id)).unwrap();
+
+    if (!_account) {
+      return;
+    }
+
+    dispatch(
+      createNotification({
+        ephemeral: true,
+        title: t<string>('headings.removedGroup'),
+        type: 'info',
+      })
+    );
+  };
   const handleNetworkSelect = async (value: INetwork) => {
     await dispatch(
       saveSettingsToStorageThunk({
@@ -219,7 +252,7 @@ const AccountPage: FC = () => {
   const handleRemoveAccountClick = () => {
     if (account) {
       dispatch(
-        setConfirmModal({
+        openConfirmModal({
           description: t<string>('captions.removeAccount', {
             address: ellipseAddress(
               convertPublicKeyToAVMAddress(
@@ -306,7 +339,7 @@ const AccountPage: FC = () => {
               {/*what's new*/}
               <Tooltip label={t<string>('labels.whatsNew')}>
                 <IconButton
-                  aria-label={t<string>('labels.whatsNew')}
+                  aria-label={t<string>('ariaLabels.plusIcon')}
                   icon={IoGiftOutline}
                   onClick={handleOnWhatsNewClick}
                   size="sm"
@@ -433,6 +466,29 @@ const AccountPage: FC = () => {
                         },
                       ]
                     : []),
+                  // add/remove to group
+                  ...(group
+                    ? [
+                        {
+                          icon: BsFolderMove,
+                          label: t<string>('labels.moveGroup'),
+                          onSelect: handleOnMoveGroupClick,
+                        },
+                        {
+                          icon: BsFolderMinus,
+                          label: t<string>('labels.removeFromGroup', {
+                            name: group.name,
+                          }),
+                          onSelect: handleOnRemoveGroupClick,
+                        },
+                      ]
+                    : [
+                        {
+                          icon: BsFolderPlus,
+                          label: t<string>('labels.addToGroup'),
+                          onSelect: handleOnMoveGroupClick,
+                        },
+                      ]),
                   // re-key
                   ...(canReKeyAccount()
                     ? [
@@ -482,12 +538,22 @@ const AccountPage: FC = () => {
                     <PolisAccountBadge />
                   )}
 
-                {/*watch account badge*/}
-                {renderWatchAccountBadge()}
+                {/*group badge*/}
+                {group && <GroupBadge group={group} />}
               </HStack>
 
-              {/*re-keyed badge*/}
-              {renderReKeyedAccountBadge()}
+              <HStack
+                alignItems="center"
+                spacing={DEFAULT_GAP / 3}
+                justifyContent="flex-end"
+                w="full"
+              >
+                {/*watch account badge*/}
+                {renderWatchAccountBadge()}
+
+                {/*re-keyed badge*/}
+                {renderReKeyedAccountBadge()}
+              </HStack>
             </VStack>
           </VStack>
 

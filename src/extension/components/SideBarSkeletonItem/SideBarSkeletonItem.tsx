@@ -19,7 +19,7 @@ import useDefaultTextColor from '@extension/hooks/useDefaultTextColor';
 // utils
 import ellipseAddress from '@extension/utils/ellipseAddress';
 
-const SkeletonItem: FC = () => {
+const SideBarSkeletonItem: FC = () => {
   // hooks
   const buttonHoverBackgroundColor = useButtonHoverBackgroundColor();
   const defaultTextColor = useDefaultTextColor();
@@ -55,4 +55,4 @@ const SkeletonItem: FC = () => {
   );
 };
 
-export default SkeletonItem;
+export default SideBarSkeletonItem;

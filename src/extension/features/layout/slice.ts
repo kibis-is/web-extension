@@ -13,7 +13,7 @@ const slice = createSlice({
   initialState: getInitialState(),
   name: StoreNameEnum.Layout,
   reducers: {
-    setConfirmModal: (
+    openConfirmModal: (
       state: Draft<IState>,
       action: PayloadAction<IConfirmModal | null>
     ) => {
@@ -39,7 +39,7 @@ const slice = createSlice({
 
 export const reducer: Reducer = slice.reducer;
 export const {
-  setConfirmModal,
+  openConfirmModal,
   setScanQRCodeModal,
   setSideBar,
   setWhatsNewModal,

@@ -15,7 +15,9 @@ import { reducer as arc200AssetsReducer } from '@extension/features/arc0200-asse
 import { reducer as credentialLockReducer } from '@extension/features/credential-lock';
 import { reducer as eventsReducer } from '@extension/features/events';
 import { reducer as layoutReducer } from '@extension/features/layout';
+import { reducer as manageGroupsModalReducer } from '@extension/features/manage-groups-modal';
 import { reducer as messagesReducer } from '@extension/features/messages';
+import { reducer as moveGroupModalReducer } from '@extension/features/move-group-modal';
 import { reducer as networksReducer } from '@extension/features/networks';
 import { reducer as notificationsReducer } from '@extension/features/notifications';
 import { reducer as passkeysReducer } from '@extension/features/passkeys';
@@ -51,7 +53,9 @@ const App: FC<IAppProps> = ({
       credentialLock: credentialLockReducer,
       events: eventsReducer,
       layout: layoutReducer,
+      manageGroupsModal: manageGroupsModalReducer,
       messages: messagesReducer,
+      moveGroupModal: moveGroupModalReducer,
       networks: networksReducer,
       notifications: notificationsReducer,
       passkeys: passkeysReducer,

@@ -5,17 +5,14 @@ import type {
   ISystemInfo,
 } from '@extension/types';
 
-/**
- * @property {boolean} isShortForm - Whether the full item is being shown or just the avatar.
- */
 interface IProps {
   accounts: IAccountWithExtendedProps[];
-  activeAccount: IAccountWithExtendedProps | null;
-  isLoading: boolean;
+  activeAccountID: string | null;
   isShortForm: boolean;
-  network: INetworkWithTransactionParams | null;
-  onClick: (id: string) => void;
-  onSort: (accounts: IAccountWithExtendedProps[]) => void;
+  network: INetworkWithTransactionParams;
+  onAccountClick: (id: string) => void;
+  onAddToGroupClick: (accountID: string) => void;
+  onSort: (items: IAccountWithExtendedProps[]) => void;
   systemInfo: ISystemInfo | null;
 }
 

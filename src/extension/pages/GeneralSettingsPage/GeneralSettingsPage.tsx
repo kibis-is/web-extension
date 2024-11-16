@@ -13,7 +13,7 @@ import SettingsSubHeading from '@extension/components/SettingsSubHeading';
 import { DEFAULT_GAP } from '@extension/constants';
 
 // features
-import { setConfirmModal } from '@extension/features/layout';
+import { openConfirmModal } from '@extension/features/layout';
 import { sendFactoryResetThunk } from '@extension/features/messages';
 import { saveToStorageThunk as saveSettingsToStorageThunk } from '@extension/features/settings';
 
@@ -59,7 +59,7 @@ const GeneralSettingsPage: FC = () => {
   // handlers
   const handleClearAllDataClick = () =>
     dispatch(
-      setConfirmModal({
+      openConfirmModal({
         description: t<string>('captions.factoryResetModal'),
         onConfirm: () => dispatch(sendFactoryResetThunk()), // dispatch an event to the background
         title: t<string>('headings.factoryReset'),

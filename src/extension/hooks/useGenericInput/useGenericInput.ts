@@ -31,7 +31,7 @@ export default function useGenericInput<
     let byteLength: number;
 
     // update the characters remaining
-    if (characterLimit) {
+    if (typeof characterLimit === 'number') {
       byteLength = new TextEncoder().encode(event.target.value).byteLength;
 
       setCharactersRemaining(characterLimit - byteLength);
@@ -72,7 +72,7 @@ export default function useGenericInput<
     setValue,
     validate: _validate,
     value,
-    ...(charactersRemaining && {
+    ...(typeof charactersRemaining === 'number' && {
       charactersRemaining,
     }),
   };

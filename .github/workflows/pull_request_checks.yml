@@ -18,12 +18,40 @@ jobs:
         uses: ./.github/actions/use-dependencies
 
   ##
+  # validation
+  ##
+
+  validate_pr_title:
+    name: "Validate PR Title"
+    needs: install
+    runs-on: ubuntu-latest
+    steps:
+      - name: "🛎 Checkout"
+        uses: actions/checkout@v4
+      - name: "🔧 Setup"
+        uses: ./.github/actions/use-dependencies
+      - name: "📥 Get PR Title"
+        id: get_pr_title
+        uses: actions/github-script@v7
+        with:
+          result-encoding: string
+          script: |
+            const { data } = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.payload.pull_request.number
+            });
+            return data.title;
+      - name: "✅ Validate"
+        run: echo "${{ steps.get_pr_title.outputs.result }}" | yarn commitlint
+
+  ##
   # lint, type-check, build and test
   ##
 
   lint:
     name: "Lint"
-    needs: install
+    needs: [install, validate_pr_title]
     runs-on: ubuntu-latest
     steps:
       - name: "🛎 Checkout"
@@ -35,7 +63,7 @@ jobs:
 
   type_check:
     name: "Type Check"
-    needs: install
+    needs: [install, validate_pr_title]
     runs-on: ubuntu-latest
     steps:
       - name: "🛎 Checkout"
@@ -43,7 +71,7 @@ jobs:
       - name: "🔧 Setup"
         uses: ./.github/actions/use-dependencies
       - name: "🔍 Type Check"
-        run: yarn types:check
+        run: yarn check:types
 
   test:
     name: "Test"
@@ -63,7 +91,7 @@ jobs:
 
   build_chrome:
     name: "Build Chrome"
-    needs: [install, type_check]
+    needs: [install, validate_pr_title, type_check]
     runs-on: ubuntu-latest
     environment: development
     steps:
@@ -80,7 +108,7 @@ jobs:
 
   build_edge:
     name: "Build Edge"
-    needs: [install, type_check]
+    needs: [install, validate_pr_title, type_check]
     runs-on: ubuntu-latest
     environment: development
     steps:
@@ -97,7 +125,7 @@ jobs:
 
   build_firefox:
     name: "Build Firefox"
-    needs: [install, type_check]
+    needs: [install, validate_pr_title, type_check]
     runs-on: ubuntu-latest
     environment: development
     steps:

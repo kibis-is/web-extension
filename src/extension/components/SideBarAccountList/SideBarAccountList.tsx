@@ -1,7 +1,7 @@
 import {
+  closestCenter,
   DndContext,
   type DragEndEvent,
-  closestCenter,
   KeyboardSensor,
   PointerSensor,
   useSensor,
@@ -13,23 +13,25 @@ import {
   sortableKeyboardCoordinates,
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
-import React, { type FC, useEffect, useState } from 'react';
+import React, { type FC, useEffect, useMemo, useState } from 'react';
 
 // components
-import Item from './Item';
-import SkeletonItem from './SkeletonItem';
+import SideBarAccountItem from '@extension/components/SideBarAccountItem';
 
 // types
 import type { IAccountWithExtendedProps } from '@extension/types';
 import type { IProps } from './types';
 
+// utils
+import sortByIndex from '@extension/utils/sortByIndex';
+
 const SideBarAccountList: FC<IProps> = ({
   accounts,
-  activeAccount,
-  isLoading,
+  activeAccountID,
   isShortForm,
   network,
-  onClick,
+  onAccountClick,
+  onAddToGroupClick,
   onSort,
   systemInfo,
 }) => {
@@ -39,67 +41,71 @@ const SideBarAccountList: FC<IProps> = ({
       coordinateGetter: sortableKeyboardCoordinates,
     })
   );
+  // memos
+  const accountsWithoutGroup = useMemo(
+    () => sortByIndex(accounts.filter(({ groupID }) => !groupID)),
+    [accounts]
+  );
   // states
   const [_accounts, setAccounts] =
-    useState<IAccountWithExtendedProps[]>(accounts);
+    useState<IAccountWithExtendedProps[]>(accountsWithoutGroup); // a local state fixes the delay between the ui and redux updates
   // handlers
-  const handleOnClick = async (id: string) => onClick(id);
+  const handleOnAccountClick = async (id: string) => onAccountClick(id);
   const handleOnDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
     let previousIndex: number;
     let nextIndex: number;
-    let updatedAccounts: IAccountWithExtendedProps[];
+    let updatedItems: IAccountWithExtendedProps[];
 
-    if (active.id !== over?.id) {
-      previousIndex = _accounts.findIndex(({ id }) => id === active.id);
-      nextIndex = _accounts.findIndex(({ id }) => id === over?.id);
-
-      setAccounts((prevState) => {
-        updatedAccounts = arrayMove(prevState, previousIndex, nextIndex);
-
-        // update the external account state
-        onSort(updatedAccounts);
-
-        return updatedAccounts;
-      });
+    if (!over || active.id === over.id) {
+      return;
     }
+
+    previousIndex = _accounts.findIndex(({ id }) => id === active.id);
+    nextIndex = _accounts.findIndex(({ id }) => id === over.id);
+
+    setAccounts((prevState) => {
+      updatedItems = arrayMove(prevState, previousIndex, nextIndex).map(
+        (value, index) => ({
+          ...value,
+          index,
+        })
+      );
+
+      // update the external state
+      onSort(updatedItems);
+
+      return updatedItems;
+    });
   };
 
-  // update the internal accounts state with the incoming state
-  useEffect(() => setAccounts(accounts), [accounts]);
+  useEffect(() => setAccounts(accountsWithoutGroup), [accountsWithoutGroup]);
 
   return (
-    <>
-      {isLoading || !network ? (
-        Array.from({ length: 3 }, (_, index) => (
-          <SkeletonItem key={`sidebar-fetching-item-${index}`} />
-        ))
-      ) : (
-        <DndContext
-          sensors={sensors}
-          collisionDetection={closestCenter}
-          onDragEnd={handleOnDragEnd}
-        >
-          <SortableContext
-            items={_accounts}
-            strategy={verticalListSortingStrategy}
-          >
-            {_accounts.map((value) => (
-              <Item
-                account={value}
-                accounts={_accounts}
-                active={activeAccount ? value.id === activeAccount.id : false}
-                isShortForm={isShortForm}
-                key={value.id}
-                network={network}
-                onClick={handleOnClick}
-                systemInfo={systemInfo}
-              />
-            ))}
-          </SortableContext>
-        </DndContext>
-      )}
-    </>
+    <DndContext
+      sensors={sensors}
+      collisionDetection={closestCenter}
+      onDragEnd={handleOnDragEnd}
+    >
+      <SortableContext
+        items={accountsWithoutGroup}
+        strategy={verticalListSortingStrategy}
+      >
+        {accountsWithoutGroup.map((value) => (
+          <SideBarAccountItem
+            account={value}
+            accounts={accounts}
+            active={activeAccountID ? value.id === activeAccountID : false}
+            isShortForm={isShortForm}
+            key={value.id}
+            network={network}
+            onAddToGroupClick={onAddToGroupClick}
+            onClick={handleOnAccountClick}
+            systemInfo={systemInfo}
+          />
+        ))}
+      </SortableContext>
+    </DndContext>
   );
 };
 
