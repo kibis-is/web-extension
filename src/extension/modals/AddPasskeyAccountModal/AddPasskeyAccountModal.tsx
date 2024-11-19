@@ -333,7 +333,7 @@ const AddPasskeyAccountModal: FC<IProps> = ({ isOpen, onClose }) => {
       >
         <ModalHeader justifyContent="center" px={DEFAULT_GAP}>
           <Heading color={defaultTextColor} size="md" textAlign="center">
-            {t<string>('headings.importAccountViaPasskey')}
+            {t<string>('headings.importAccount')}
           </Heading>
         </ModalHeader>
 
