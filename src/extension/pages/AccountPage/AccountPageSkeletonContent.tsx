@@ -7,7 +7,7 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import { faker } from '@faker-js/faker';
-import React, { type FC } from 'react';
+import React, { type FC, useMemo } from 'react';
 
 // components
 import { NetworkSelectSkeleton } from '@extension/components/NetworkSelect';
@@ -16,7 +16,19 @@ import { NativeBalanceSkeleton } from '@extension/components/NativeBalance';
 // hooks
 import useDefaultTextColor from '@extension/hooks/useDefaultTextColor';
 
+// utils
+import ellipseAddress from '@extension/utils/ellipseAddress';
+
 const AccountPageSkeletonContent: FC<StackProps> = (props) => {
+  // memos
+  const fakeAccount = useMemo(
+    () =>
+      ellipseAddress(faker.random.alphaNumeric(58).toUpperCase(), {
+        end: 10,
+        start: 10,
+      }),
+    []
+  );
   // hooks
   const defaultTextColor: string = useDefaultTextColor();
 
@@ -28,7 +40,7 @@ const AccountPageSkeletonContent: FC<StackProps> = (props) => {
         {/*name/address*/}
         <Skeleton>
           <Heading color={defaultTextColor} size="md" textAlign="left">
-            {faker.random.alphaNumeric(12).toUpperCase()}
+            {fakeAccount}
           </Heading>
         </Skeleton>
 
