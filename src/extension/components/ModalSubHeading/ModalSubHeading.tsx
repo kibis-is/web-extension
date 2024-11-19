@@ -19,7 +19,7 @@ const ModalSubHeading: FC<IProps> = ({ color, text }: IProps) => {
       as="b"
       color={color || subTextColor}
       fontSize="md"
-      pb={DEFAULT_GAP / 3}
+      pt={DEFAULT_GAP / 3}
       textAlign="left"
       w="full"
     >

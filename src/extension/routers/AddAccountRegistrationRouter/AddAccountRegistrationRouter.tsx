@@ -1,4 +1,5 @@
-import React, { FC } from 'react';
+import { useDisclosure } from '@chakra-ui/react';
+import React, { type FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { Route, Routes, useNavigate } from 'react-router-dom';
@@ -22,6 +23,7 @@ import {
 } from '@extension/features/registration';
 
 // modals
+import AddPasskeyAccountModal from '@extension/modals/AddPasskeyAccountModal';
 import RegistrationImportAccountViaQRCodeModal from '@extension/modals/RegistrationImportAccountViaQRCodeModal';
 
 // pages
@@ -46,6 +48,11 @@ const AddAccountRegistrationRouter: FC = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch<IAppThunkDispatch<IRegistrationRootState>>();
   const navigate = useNavigate();
+  const {
+    isOpen: isAddPasskeyAccountModalOpen,
+    onClose: onAddPasskeyAccountModalClose,
+    onOpen: onAddPasskeyAccountModalOpen,
+  } = useDisclosure();
   // selectors
   const importAccountViaQRCodeOpen =
     useSelectRegistrationImportAccountViaQRCodeOpen();
@@ -81,6 +88,8 @@ const AddAccountRegistrationRouter: FC = () => {
     }
   };
   // handlers
+  const handleOnImportAccountViaPasskeyClick = () =>
+    onAddPasskeyAccountModalOpen();
   const handleOnImportAccountViaQRCodeComplete = async (
     accounts: INewAccount[]
   ) => await saveNewAccount(accounts);
@@ -99,6 +108,10 @@ const AddAccountRegistrationRouter: FC = () => {
         onComplete={handleOnImportAccountViaQRCodeComplete}
         saving={saving}
       />
+      <AddPasskeyAccountModal
+        isOpen={isAddPasskeyAccountModalOpen}
+        onClose={onAddPasskeyAccountModalClose}
+      />
 
       <Routes>
         {/*add account type page*/}
@@ -106,6 +119,9 @@ const AddAccountRegistrationRouter: FC = () => {
           element={
             <AddAccountTypePage
               allowAddWatchAccount={false}
+              onImportAccountViaPasskeyClick={
+                handleOnImportAccountViaPasskeyClick
+              }
               onImportAccountViaQRCodeClick={handleOnImportAccountViaQRCodeOpen}
             />
           }

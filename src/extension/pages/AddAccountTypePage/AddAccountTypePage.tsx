@@ -1,5 +1,6 @@
 import { Grid, GridItem } from '@chakra-ui/react';
-import React, { type FC } from 'react';
+import { randomString } from '@stablelib/random';
+import React, { type FC, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { IoEyeOutline, IoQrCodeOutline } from 'react-icons/io5';
 import { useNavigate } from 'react-router-dom';
@@ -22,14 +23,18 @@ import {
 // enums
 import { AddAccountTypeEnum } from './enums';
 
+// icons
+import KbPasskey from '@extension/icons/KbPasskey';
+
 // types
 import type { IItemProps, IProps } from './types';
 
 const AddAccountTypePage: FC<IProps> = ({
   allowAddWatchAccount,
+  onImportAccountViaPasskeyClick,
   onImportAccountViaQRCodeClick,
 }) => {
-  const _context = 'account-type-page';
+  const _context = useMemo(() => randomString(8), []);
   const { t } = useTranslation();
   const navigate = useNavigate();
   // handlers
@@ -37,19 +42,18 @@ const AddAccountTypePage: FC<IProps> = ({
     switch (type) {
       case AddAccountTypeEnum.AddWatch:
         navigate(`${ADD_ACCOUNT_ROUTE}${ADD_WATCH_ACCOUNT_ROUTE}`);
-
         break;
       case AddAccountTypeEnum.CreateNew:
         navigate(`${ADD_ACCOUNT_ROUTE}${CREATE_NEW_ACCOUNT_ROUTE}`);
-
+        break;
+      case AddAccountTypeEnum.ImportViaPasskey:
+        onImportAccountViaPasskeyClick();
         break;
       case AddAccountTypeEnum.ImportViaQRCode:
         onImportAccountViaQRCodeClick();
-
         break;
       case AddAccountTypeEnum.ImportViaSeedPhrase:
         navigate(`${ADD_ACCOUNT_ROUTE}${IMPORT_ACCOUNT_VIA_SEED_PHRASE_ROUTE}`);
-
         break;
       default:
         break;
@@ -85,6 +89,12 @@ const AddAccountTypePage: FC<IProps> = ({
         icon: IoQrCodeOutline,
         onClick: handleAccountTypeClick(AddAccountTypeEnum.ImportViaQRCode),
         title: t<string>('headings.importAccountViaQRCode'),
+      },
+      {
+        description: t<string>('captions.importAccountViaPasskey'),
+        icon: KbPasskey,
+        onClick: handleAccountTypeClick(AddAccountTypeEnum.ImportViaPasskey),
+        title: t<string>('headings.importAccountViaPasskey'),
       },
     ];
 
