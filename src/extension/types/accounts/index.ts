@@ -6,6 +6,7 @@ export type { default as IAccountTransactions } from './IAccountTransactions';
 export type { default as IAccountWithExtendedProps } from './IAccountWithExtendedProps';
 export type { default as IActiveAccountDetails } from './IActiveAccountDetails';
 export type { default as IInitializeAccountOptions } from './IInitializeAccountOptions';
-export type { default as INewAccount } from './INewAccount';
+export type { default as INewAccountWithKeyPair } from './INewAccountWithKeyPair';
+export type { default as INewAccountWithPasskey } from './INewAccountWithPasskey';
 export type { default as TAccountColors } from './TAccountColors';
 export type { default as TAccountIcons } from './TAccountIcons';

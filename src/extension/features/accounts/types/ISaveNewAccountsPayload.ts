@@ -1,12 +1,12 @@
 // types
 import type {
-  INewAccount,
+  INewAccountWithKeyPair,
   IPasskeyEncryptionCredentials,
   IPasswordEncryptionCredentials,
 } from '@extension/types';
 
 interface ISaveNewAccountsPayloadFragment {
-  accounts: INewAccount[];
+  accounts: INewAccountWithKeyPair[];
 }
 
 type TSaveNewAccountsPayload = ISaveNewAccountsPayloadFragment &

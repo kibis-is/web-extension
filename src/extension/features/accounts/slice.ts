@@ -19,6 +19,7 @@ import {
   saveAccountsThunk,
   saveActiveAccountDetails,
   saveNewAccountsThunk,
+  saveNewPasskeyAccountThunk,
   saveNewWatchAccountThunk,
   startPollingForAccountsThunk,
   stopPollingForAccountsThunk,
@@ -338,6 +339,26 @@ const slice = createSlice({
       state.saving = true;
     });
     builder.addCase(saveNewAccountsThunk.rejected, (state: IState) => {
+      state.saving = false;
+    });
+    /** save new passkey account **/
+    builder.addCase(
+      saveNewPasskeyAccountThunk.fulfilled,
+      (state: IState, action) => {
+        if (action.payload) {
+          state.items = upsertItemsById<IAccountWithExtendedProps>(
+            state.items,
+            [action.payload]
+          );
+        }
+
+        state.saving = false;
+      }
+    );
+    builder.addCase(saveNewPasskeyAccountThunk.pending, (state: IState) => {
+      state.saving = true;
+    });
+    builder.addCase(saveNewPasskeyAccountThunk.rejected, (state: IState) => {
       state.saving = false;
     });
     /** save new watch account **/

@@ -1,10 +1,10 @@
 // types
-import type { INewAccount } from '@extension/types';
+import type { INewAccountWithKeyPair } from '@extension/types';
 
 interface IProps {
   isOpen: boolean;
   onClose: () => void;
-  onComplete: (accounts: INewAccount[]) => Promise<void>;
+  onComplete: (accounts: INewAccountWithKeyPair[]) => Promise<void>;
   saving: boolean;
 }
 

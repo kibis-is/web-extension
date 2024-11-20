@@ -13,6 +13,7 @@ enum ThunkEnum {
   SaveAccounts = 'accounts/saveAccounts',
   SaveActiveAccountDetails = 'accounts/saveActiveAccountDetails',
   SaveNewAccounts = 'accounts/saveNewAccounts',
+  SaveNewPasskeyAccount = 'accounts/saveNewPasskeyAccount',
   SaveNewWatchAccount = 'accounts/saveNewWatchAccount',
   StartPollingForAccounts = 'accounts/startPollingForAccounts',
   StopPollingForAccounts = 'accounts/stopPollingForAccounts',

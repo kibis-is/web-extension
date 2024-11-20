@@ -12,7 +12,7 @@ import {
   useDisclosure,
   VStack,
 } from '@chakra-ui/react';
-import React, { type FC, useEffect } from 'react';
+import React, { type FC, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { BsUsbSymbol } from 'react-icons/bs';
 import { IoArrowBackOutline, IoDownloadOutline } from 'react-icons/io5';
@@ -38,11 +38,16 @@ import {
   MODAL_ITEM_HEIGHT,
 } from '@extension/constants';
 
+// enums
+import { DelimiterEnum } from '@extension/enums';
+
+// errors
+import { BaseExtensionError } from '@extension/errors';
+
 // features
 import { create as createNotification } from '@extension/features/notifications';
 
 // hooks
-import useAddPasskeyAccount from './hooks/useAddPasskeyAccount';
 import useDefaultTextColor from '@extension/hooks/useDefaultTextColor';
 import useGenericInput from '@extension/hooks/useGenericInput';
 import useSubTextColor from '@extension/hooks/useSubTextColor';
@@ -50,14 +55,27 @@ import useSubTextColor from '@extension/hooks/useSubTextColor';
 // icons
 import KbPasskey from '@extension/icons/KbPasskey';
 
+// types
+import type { ICreatePasskeyResult } from '@extension/managers/PasskeyAccountManager';
+// managers
+import PasskeyAccountManager from '@extension/managers/PasskeyAccountManager';
+
 // selectors
-import { useSelectAccountsSaving } from '@extension/selectors';
+import {
+  useSelectAccountsSaving,
+  useSelectLogger,
+  useSelectSystemInfo,
+} from '@extension/selectors';
 
 // theme
 import { theme } from '@extension/theme';
 
 // types
-import type { IAppThunkDispatch, IMainRootState } from '@extension/types';
+import type {
+  IAccountWithExtendedProps,
+  IAppThunkDispatch,
+  IMainRootState,
+} from '@extension/types';
 import type { IProps } from './types';
 
 // utils
@@ -65,7 +83,11 @@ import calculateIconSize from '@extension/utils/calculateIconSize';
 import convertPublicKeyToAVMAddress from '@extension/utils/convertPublicKeyToAVMAddress';
 import ellipseAddress from '@extension/utils/ellipseAddress';
 
-const AddPasskeyAccountModal: FC<IProps> = ({ isOpen, onClose }) => {
+const AddPasskeyAccountModal: FC<IProps> = ({
+  isOpen,
+  onClose,
+  onComplete,
+}) => {
   const { t } = useTranslation();
   const dispatch = useDispatch<IAppThunkDispatch<IMainRootState>>();
   const {
@@ -74,15 +96,10 @@ const AddPasskeyAccountModal: FC<IProps> = ({ isOpen, onClose }) => {
     onClose: onMoreInformationClose,
   } = useDisclosure();
   // selectors
+  const logger = useSelectLogger();
   const saving = useSelectAccountsSaving();
+  const systemInfo = useSelectSystemInfo();
   // hooks
-  const {
-    addPasskeyAccountAction,
-    error,
-    passkey,
-    requesting,
-    resetAction: resetAddPasskeyAccountAction,
-  } = useAddPasskeyAccount();
   const defaultTextColor = useDefaultTextColor();
   const {
     charactersRemaining: nameCharactersRemaining,
@@ -92,7 +109,6 @@ const AddPasskeyAccountModal: FC<IProps> = ({ isOpen, onClose }) => {
     onChange: nameOnChange,
     required: isNameRequired,
     reset: resetName,
-    setValue: setNameValue,
     value: nameValue,
     validate: validateName,
   } = useGenericInput({
@@ -100,10 +116,17 @@ const AddPasskeyAccountModal: FC<IProps> = ({ isOpen, onClose }) => {
     label: t<string>('labels.name'),
   });
   const subTextColor = useSubTextColor();
+  // states
+  const [passkeyResult, setPasskeyResult] =
+    useState<ICreatePasskeyResult | null>(null);
+  const [error, setError] = useState<BaseExtensionError | null>(null);
+  const [requesting, setRequesting] = useState<boolean>(false);
   // misc
   const reset = () => {
     resetName();
-    resetAddPasskeyAccountAction();
+    setError(null);
+    setPasskeyResult(null);
+    setRequesting(false);
   };
   // handlers
   const handleClose = () => {
@@ -112,17 +135,64 @@ const AddPasskeyAccountModal: FC<IProps> = ({ isOpen, onClose }) => {
     reset();
   };
   const handleOnCancelClick = async () => handleClose();
-  const handleOnCreateClick = () => addPasskeyAccountAction();
-  const handleOnImportClick = () => {
+  const handleOnCreateClick = async () => {
+    const _functionName = 'handleOnGetPasskeyClick';
+    let result: ICreatePasskeyResult;
+
+    if (!systemInfo?.deviceID) {
+      return;
+    }
+
+    // reset the previous values
+    setPasskeyResult(null);
+    setError(null);
+
+    setRequesting(true);
+
+    logger.debug(
+      `${AddPasskeyAccountModal.name}#${_functionName}: requesting passkey details`
+    );
+
+    try {
+      // get the passkey
+      result = await PasskeyAccountManager.createPasskeyAccount({
+        logger,
+        deviceID: systemInfo.deviceID,
+      });
+    } catch (error) {
+      logger?.debug(`${AddPasskeyAccountModal.name}#${_functionName}:`, error);
+
+      setRequesting(false);
+      setError(error);
+
+      return;
+    }
+
+    // create a new account
+    setPasskeyResult(result);
+    setRequesting(false);
+  };
+  const handleOnImportClick = async () => {
+    let account: IAccountWithExtendedProps;
+
     if (
-      !passkey ||
+      !passkeyResult ||
       !!nameError ||
       [validateName(nameValue)].some((value) => !!value)
     ) {
       return;
     }
+
+    onComplete({
+      __delimiter: DelimiterEnum.Passkey,
+      name: nameValue.length > 0 ? nameValue : null,
+      passkey: passkeyResult.passkey,
+      publicKey: passkeyResult.publicKey,
+    });
+
+    handleClose();
   };
-  const handleOnPreviousClick = () => resetAddPasskeyAccountAction();
+  const handleOnPreviousClick = () => reset();
   const handleMoreInformationToggle = (value: boolean) =>
     value ? onMoreInformationOpen() : onMoreInformationClose();
   // renders
@@ -130,7 +200,7 @@ const AddPasskeyAccountModal: FC<IProps> = ({ isOpen, onClose }) => {
     const iconSize = calculateIconSize('xl');
     let address: string;
 
-    if (!passkey) {
+    if (!passkeyResult?.passkey) {
       return (
         <VStack
           alignItems="center"
@@ -184,7 +254,7 @@ const AddPasskeyAccountModal: FC<IProps> = ({ isOpen, onClose }) => {
       );
     }
 
-    address = convertPublicKeyToAVMAddress(passkey.publicKey);
+    address = convertPublicKeyToAVMAddress(passkeyResult.publicKey);
 
     return (
       <VStack
@@ -217,7 +287,11 @@ const AddPasskeyAccountModal: FC<IProps> = ({ isOpen, onClose }) => {
             <ModalItem
               fontSize="xs"
               label={`${t<string>('labels.capabilities')}:`}
-              value={<PasskeyCapabilities capabilities={passkey.transports} />}
+              value={
+                <PasskeyCapabilities
+                  capabilities={passkeyResult.passkey.transports}
+                />
+              }
             />
 
             <MoreInformationAccordion
@@ -240,14 +314,14 @@ const AddPasskeyAccountModal: FC<IProps> = ({ isOpen, onClose }) => {
                         fontSize="xs"
                         wordBreak="break-word"
                       >
-                        {passkey.id}
+                        {passkeyResult.passkey.credentialID}
                       </Code>
 
                       {/*copy credential id button*/}
                       <CopyIconButton
                         ariaLabel={t<string>('labels.copyCredentialID')}
                         tooltipLabel={t<string>('labels.copyCredentialID')}
-                        value={passkey.id}
+                        value={passkeyResult.passkey.credentialID}
                       />
                     </HStack>
                   }
@@ -265,14 +339,14 @@ const AddPasskeyAccountModal: FC<IProps> = ({ isOpen, onClose }) => {
                         fontSize="xs"
                         wordBreak="break-word"
                       >
-                        {passkey.userID}
+                        {passkeyResult.passkey.userID}
                       </Code>
 
                       {/*copy user id button*/}
                       <CopyIconButton
                         ariaLabel={t<string>('labels.copyUserID')}
                         tooltipLabel={t<string>('labels.copyUserID')}
-                        value={passkey.userID}
+                        value={passkeyResult.passkey.userID}
                       />
                     </HStack>
                   }
@@ -343,7 +417,7 @@ const AddPasskeyAccountModal: FC<IProps> = ({ isOpen, onClose }) => {
 
         <ModalFooter p={DEFAULT_GAP}>
           <HStack spacing={DEFAULT_GAP - 2} w="full">
-            {!passkey ? (
+            {!passkeyResult ? (
               <>
                 {/*cancel*/}
                 <Button

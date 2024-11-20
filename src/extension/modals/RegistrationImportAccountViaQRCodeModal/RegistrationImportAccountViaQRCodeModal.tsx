@@ -41,7 +41,7 @@ import { theme } from '@extension/theme';
 import type {
   IARC0300AccountImportSchema,
   IARC0300BaseSchema,
-  INewAccount,
+  INewAccountWithKeyPair,
 } from '@extension/types';
 import type { IProps } from './types';
 
@@ -83,7 +83,7 @@ const RegistrationImportAccountViaQRCodeModal: FC<IProps> = ({
     reset();
     onClose();
   };
-  const handleImportClick = (accounts: INewAccount[]) => () =>
+  const handleImportClick = (accounts: INewAccountWithKeyPair[]) => () =>
     onComplete(accounts);
   const handleOnURI = (uri: string) => {
     const index = uris.findIndex((value) => value === uri);
@@ -99,7 +99,7 @@ const RegistrationImportAccountViaQRCodeModal: FC<IProps> = ({
   const handleScanViaTabClick = () => setScanViaTab(true);
   // renders
   const renderContent = () => {
-    let accounts: INewAccount[];
+    let accounts: INewAccountWithKeyPair[];
     let pagination: [number, number] | null = null;
     let primeSchema: IARC0300BaseSchema | null;
     let schemas: IARC0300BaseSchema[];

@@ -79,6 +79,7 @@ export default class AccountRepository extends BaseRepository {
     createdAt,
     id,
     name,
+    passkey,
     publicKey,
   }: IInitializeAccountOptions): IAccount {
     const createdAtOrNow: number = createdAt || new Date().getTime();
@@ -111,6 +112,7 @@ export default class AccountRepository extends BaseRepository {
         {}
       ),
       index: null,
+      passkey: passkey || null,
       publicKey,
       updatedAt: createdAtOrNow,
     };
@@ -220,6 +222,7 @@ export default class AccountRepository extends BaseRepository {
         {}
       ),
       index: typeof account.index === 'number' ? account.index : null, // if 0, this is "falsy" in the js world, so let's be specific
+      passkey: account.passkey,
       publicKey: account.publicKey,
       updatedAt: account.updatedAt,
     };

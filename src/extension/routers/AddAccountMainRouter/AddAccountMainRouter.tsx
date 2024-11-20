@@ -17,6 +17,7 @@ import {
   AccountTabEnum,
   ARC0300AuthorityEnum,
   ARC0300PathEnum,
+  DelimiterEnum,
   EncryptionMethodEnum,
 } from '@extension/enums';
 
@@ -27,6 +28,7 @@ import { BaseExtensionError, MalformedDataError } from '@extension/errors';
 import {
   saveActiveAccountDetails,
   saveNewAccountsThunk,
+  saveNewPasskeyAccountThunk,
   saveNewWatchAccountThunk,
   updateAccountsThunk,
 } from '@extension/features/accounts';
@@ -46,21 +48,22 @@ import AddWatchAccountPage from '@extension/pages/AddWatchAccountPage';
 import CreateNewAccountPage from '@extension/pages/CreateNewAccountPage';
 import ImportAccountViaSeedPhrasePage from '@extension/pages/ImportAccountViaSeedPhrasePage';
 
+// types
+import type { IAddWatchAccountCompleteResult } from '@extension/pages/AddWatchAccountPage';
+
 // selectors
 import {
   useSelectAccounts,
+  useSelectAccountsSaving,
   useSelectActiveAccountDetails,
   useSelectLogger,
-  useSelectAccountsSaving,
 } from '@extension/selectors';
-
-// types
-import type { IAddWatchAccountCompleteResult } from '@extension/pages/AddWatchAccountPage';
 import type {
   IAccountWithExtendedProps,
   IAppThunkDispatch,
   IMainRootState,
-  INewAccount,
+  INewAccountWithKeyPair,
+  INewAccountWithPasskey,
   TEncryptionCredentials,
 } from '@extension/types';
 
@@ -122,7 +125,10 @@ const AddAccountMainRouter: FC = () => {
         allowedParams: [ARC0300PathEnum.Import],
       })
     );
-  const handleOnAddAccountComplete = async ({ name, keyPair }: INewAccount) => {
+  const handleOnAddAccountComplete = async ({
+    name,
+    keyPair,
+  }: INewAccountWithKeyPair) => {
     const account =
       accounts.find(
         ({ publicKey }) =>
@@ -154,6 +160,70 @@ const AddAccountMainRouter: FC = () => {
     onAuthenticationModalOpen();
   };
   const handleOnAuthenticationModalClose = () => onAuthenticationModalClose();
+  const handleOnAddPasskeyAccountComplete = async ({
+    name,
+    passkey,
+    publicKey,
+  }: INewAccountWithPasskey) => {
+    const _functionName = 'handleOnAddPasskeyAccountComplete';
+    const account =
+      accounts.find(
+        ({ publicKey }) =>
+          convertPublicKeyToAVMAddress(publicKey) ===
+          convertPublicKeyToAVMAddress(publicKey)
+      ) || null;
+    let _account: IAccountWithExtendedProps;
+
+    // if the account is already added
+    if (account) {
+      dispatch(
+        createNotification({
+          ephemeral: true,
+          description: t<string>('captions.accountAlreadyAdded', {
+            address: ellipseAddress(
+              convertPublicKeyToAVMAddress(account.publicKey)
+            ),
+          }),
+          title: t<string>('headings.accountAlreadyAdded'),
+          type: 'info',
+        })
+      );
+
+      return;
+    }
+
+    try {
+      _account = await dispatch(
+        saveNewPasskeyAccountThunk({
+          passkey,
+          publicKey,
+          name,
+        })
+      ).unwrap();
+    } catch (error) {
+      logger.error(`${AddAccountMainRouter.name}#${_functionName}:`, error);
+
+      handleOnError(error);
+
+      return;
+    }
+
+    dispatch(
+      createNotification({
+        ephemeral: true,
+        description: t<string>('captions.addedAccount', {
+          address: ellipseAddress(
+            convertPublicKeyToAVMAddress(_account.publicKey)
+          ),
+        }),
+        title: t<string>('headings.addedAccount'),
+        type: 'success',
+      })
+    );
+
+    updateAccounts(_account.id);
+    reset();
+  };
   const handleOnAddWatchAccountComplete = async ({
     address,
     name,
@@ -235,6 +305,7 @@ const AddAccountMainRouter: FC = () => {
         saveNewAccountsThunk({
           accounts: [
             {
+              __delimiter: DelimiterEnum.KeyPair,
               keyPair,
               name,
             },
@@ -291,6 +362,7 @@ const AddAccountMainRouter: FC = () => {
       <AddPasskeyAccountModal
         isOpen={isAddPasskeyAccountModalOpen}
         onClose={onAddPasskeyAccountModalClose}
+        onComplete={handleOnAddPasskeyAccountComplete}
       />
 
       <Routes>

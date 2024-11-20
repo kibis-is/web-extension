@@ -12,6 +12,7 @@ export { default as saveAccountGroupsThunk } from './saveAccountGroupsThunk';
 export { default as saveAccountsThunk } from './saveAccountsThunk';
 export { default as saveActiveAccountDetails } from './saveActiveAccountDetails';
 export { default as saveNewAccountsThunk } from './saveNewAccountsThunk';
+export { default as saveNewPasskeyAccountThunk } from './saveNewPasskeyAccountThunk';
 export { default as saveNewWatchAccountThunk } from './saveNewWatchAccountThunk';
 export { default as startPollingForAccountsThunk } from './startPollingForAccountsThunk';
 export { default as stopPollingForAccountsThunk } from './stopPollingForAccountsThunk';

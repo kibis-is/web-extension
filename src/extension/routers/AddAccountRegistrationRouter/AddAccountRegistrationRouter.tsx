@@ -40,7 +40,8 @@ import {
 // types
 import type {
   IAppThunkDispatch,
-  INewAccount,
+  INewAccountWithKeyPair,
+  INewAccountWithPasskey,
   IRegistrationRootState,
 } from '@extension/types';
 
@@ -58,7 +59,9 @@ const AddAccountRegistrationRouter: FC = () => {
     useSelectRegistrationImportAccountViaQRCodeOpen();
   const saving = useSelectRegistrationSaving();
   // misc
-  const saveNewAccount = async (accounts: INewAccount[]) => {
+  const saveNewAccount = async (
+    accounts: (INewAccountWithKeyPair | INewAccountWithPasskey)[]
+  ) => {
     try {
       await dispatch(saveCredentialsThunk(accounts)).unwrap();
 
@@ -91,10 +94,13 @@ const AddAccountRegistrationRouter: FC = () => {
   const handleOnImportAccountViaPasskeyClick = () =>
     onAddPasskeyAccountModalOpen();
   const handleOnImportAccountViaQRCodeComplete = async (
-    accounts: INewAccount[]
+    accounts: INewAccountWithKeyPair[]
   ) => await saveNewAccount(accounts);
-  const handleOnAddAccountComplete = async (account: INewAccount) =>
+  const handleOnAddAccountComplete = async (account: INewAccountWithKeyPair) =>
     await saveNewAccount([account]);
+  const handleOnAddPasskeyAccountComplete = async (
+    result: INewAccountWithPasskey
+  ) => await saveNewAccount([result]);
   const handleOnImportAccountViaQRCodeClose = () =>
     dispatch(setImportAccountViaQRCodeOpen(false));
   const handleOnImportAccountViaQRCodeOpen = () =>
@@ -111,6 +117,7 @@ const AddAccountRegistrationRouter: FC = () => {
       <AddPasskeyAccountModal
         isOpen={isAddPasskeyAccountModalOpen}
         onClose={onAddPasskeyAccountModalClose}
+        onComplete={handleOnAddPasskeyAccountComplete}
       />
 
       <Routes>

@@ -28,6 +28,7 @@ import Steps from '@extension/components/Steps';
 import { ACCOUNT_NAME_BYTE_LIMIT, DEFAULT_GAP } from '@extension/constants';
 
 // enums
+import { DelimiterEnum } from '@extension/enums';
 import { StepsEnum } from './enums';
 
 // hooks
@@ -130,6 +131,7 @@ const CreateNewAccountPage: FC<IAddAccountPageProps> = ({
     }
 
     await onComplete({
+      __delimiter: DelimiterEnum.KeyPair,
       keyPair,
       name: nameValue.length > 0 ? nameValue : null,
     });

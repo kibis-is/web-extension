@@ -10,13 +10,17 @@ import { useNavigate } from 'react-router-dom';
 import Button from '@extension/components/Button';
 import GenericInput from '@extension/components/GenericInput';
 import PageHeader from '@extension/components/PageHeader';
-import SeedPhraseInput from '@extension/components/SeedPhraseInput';
+// utils
+import SeedPhraseInput, {
+  validate,
+} from '@extension/components/SeedPhraseInput';
 import Steps from '@extension/components/Steps';
 
 // constants
 import { ACCOUNT_NAME_BYTE_LIMIT, DEFAULT_GAP } from '@extension/constants';
 
 // enums
+import { DelimiterEnum } from '@extension/enums';
 import { StepsEnum } from './enums';
 
 // features
@@ -41,9 +45,6 @@ import type {
   IMainRootState,
   IRegistrationRootState,
 } from '@extension/types';
-
-// utils
-import { validate } from '@extension/components/SeedPhraseInput';
 import convertPublicKeyToAVMAddress from '@extension/utils/convertPublicKeyToAVMAddress';
 import convertSeedPhraseToPrivateKey from '@extension/utils/convertSeedPhraseToPrivateKey';
 
@@ -121,6 +122,7 @@ const ImportAccountViaSeedPhrasePage: FC<IAddAccountPageProps> = ({
     );
 
     await onComplete({
+      __delimiter: DelimiterEnum.KeyPair,
       keyPair,
       name: nameValue.length > 0 ? nameValue : null,
     });

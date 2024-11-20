@@ -10,8 +10,7 @@ import {
 import AccountRepository from '@extension/repositories/AccountRepository';
 
 // types
-import type { IAccountPasskey } from '@extension/types';
-import type { ICreatePasskeyOptions } from './types';
+import type { ICreatePasskeyOptions, ICreatePasskeyResult } from './types';
 
 export default class PasskeyManager {
   /**
@@ -23,8 +22,8 @@ export default class PasskeyManager {
    * create an account.
    *
    * **NOTE:** This requires the key to support the Ed25519 algorithm.
-   * @param {ICreatePasskeyOptions} options - the device ID and an optional logger.
-   * @returns {Promise<IAccountPasskey>} a promise that resolves to a created passkey credential.
+   * @param {ICreatePasskeyOptions} options - The device ID and an optional logger.
+   * @returns {Promise<ICreatePasskeyResult>} A promise that resolves to a created passkey account and public key.
    * @throws {PasskeyCreationError} if the public key credentials failed to be created on the authenticator.
    * @throws {PasskeyNotSupportedError} if the browser does not support WebAuthn or the authenticator does not support
    * the PRF extension.
@@ -35,7 +34,7 @@ export default class PasskeyManager {
     deviceID,
     name,
     logger,
-  }: ICreatePasskeyOptions): Promise<IAccountPasskey> {
+  }: ICreatePasskeyOptions): Promise<ICreatePasskeyResult> {
     const _functionName = 'createPasskeyAccount';
     const _name = name && name.length > 0 ? name : 'Kibisis Web Extension';
     let _error: string;
@@ -104,14 +103,18 @@ export default class PasskeyManager {
     }
 
     return {
-      algorithm,
-      id: AccountRepository.encode(new Uint8Array(credential.rawId)),
-      name: _name,
-      publicKey: AccountRepository.encode(new Uint8Array(publicKey)),
-      transports: (
-        credential.response as AuthenticatorAttestationResponse
-      ).getTransports() as AuthenticatorTransport[],
-      userID: deviceID,
+      passkey: {
+        algorithm,
+        credentialID: AccountRepository.encode(
+          new Uint8Array(credential.rawId)
+        ),
+        credentialName: _name,
+        transports: (
+          credential.response as AuthenticatorAttestationResponse
+        ).getTransports() as AuthenticatorTransport[],
+        userID: deviceID,
+      },
+      publicKey: new Uint8Array(publicKey),
     };
   }
 

@@ -3,7 +3,7 @@ import { encode as encodeUtf8 } from '@stablelib/utf8';
 import browser from 'webextension-polyfill';
 
 // enums
-import { EncryptionMethodEnum } from '@extension/enums';
+import { DelimiterEnum, EncryptionMethodEnum } from '@extension/enums';
 import { ThunkEnum } from '../enums';
 
 // errors
@@ -21,7 +21,8 @@ import PrivateKeyRepository from '@extension/repositories/PrivateKeyRepository';
 import type {
   IAccount,
   IAsyncThunkConfigWithRejectValue,
-  INewAccount,
+  INewAccountWithKeyPair,
+  INewAccountWithPasskey,
   IPasswordTag,
   IPrivateKey,
   IRegistrationRootState,
@@ -29,11 +30,11 @@ import type {
 
 const saveCredentialsThunk: AsyncThunk<
   IAccount[], // return
-  INewAccount[], // args
+  (INewAccountWithKeyPair | INewAccountWithPasskey)[], // args
   IAsyncThunkConfigWithRejectValue<IRegistrationRootState>
 > = createAsyncThunk<
   IAccount[],
-  INewAccount[],
+  (INewAccountWithKeyPair | INewAccountWithPasskey)[],
   IAsyncThunkConfigWithRejectValue<IRegistrationRootState>
 >(
   ThunkEnum.SaveCredentials,
@@ -87,28 +88,42 @@ const saveCredentialsThunk: AsyncThunk<
 
     logger.debug(`${ThunkEnum.SaveCredentials}: saved password tag to storage`);
 
-    for (const { keyPair, name } of accounts) {
-      privateKeyItem = PrivateKeyRepository.create({
-        encryptedPrivateKey: await PasswordManager.encryptBytes({
-          bytes: keyPair.privateKey,
-          logger,
-          password,
-        }),
-        encryptionID: passwordTagItem.id,
-        encryptionMethod: EncryptionMethodEnum.Password,
-        publicKey: keyPair.publicKey,
-      });
+    for (const account of accounts) {
+      if (account.__delimiter === DelimiterEnum.Passkey) {
+        _accounts.push(
+          AccountRepository.initializeDefaultAccount({
+            passkey: account.passkey,
+            publicKey: AccountRepository.encode(account.publicKey),
+            ...(account.name && {
+              name: account.name,
+            }),
+          })
+        );
+      }
 
-      privateKeyItems.push(privateKeyItem);
-      _accounts.push(
-        AccountRepository.initializeDefaultAccount({
-          createdAt: privateKeyItem.createdAt,
-          publicKey: privateKeyItem.publicKey,
-          ...(name && {
-            name,
+      if (account.__delimiter === DelimiterEnum.KeyPair) {
+        privateKeyItem = PrivateKeyRepository.create({
+          encryptedPrivateKey: await PasswordManager.encryptBytes({
+            bytes: account.keyPair.privateKey,
+            logger,
+            password,
           }),
-        })
-      );
+          encryptionID: passwordTagItem.id,
+          encryptionMethod: EncryptionMethodEnum.Password,
+          publicKey: account.keyPair.publicKey,
+        });
+
+        privateKeyItems.push(privateKeyItem);
+        _accounts.push(
+          AccountRepository.initializeDefaultAccount({
+            createdAt: privateKeyItem.createdAt,
+            publicKey: privateKeyItem.publicKey,
+            ...(account.name && {
+              name: account.name,
+            }),
+          })
+        );
+      }
     }
 
     // save the private keys to storage

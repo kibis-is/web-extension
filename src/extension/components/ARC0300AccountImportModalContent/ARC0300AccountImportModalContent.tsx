@@ -64,7 +64,7 @@ import type {
   IARC0300AccountImportSchema,
   IARC0300ModalContentProps,
   IMainRootState,
-  INewAccount,
+  INewAccountWithKeyPair,
   TEncryptionCredentials,
 } from '@extension/types';
 
@@ -97,7 +97,7 @@ const ARC0300AccountImportModalContent: FC<
   // hooks
   const defaultTextColor = useDefaultTextColor();
   // states
-  const [items, setItems] = useState<INewAccount[]>([]);
+  const [items, setItems] = useState<INewAccountWithKeyPair[]>([]);
   const [saving, setSaving] = useState<boolean>(false);
   // misc
   const reset = () => {
