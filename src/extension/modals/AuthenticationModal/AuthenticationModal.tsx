@@ -39,7 +39,6 @@ import PasskeyManager from '@extension/managers/PasskeyManager';
 import PasswordManager from '@extension/managers/PasswordManager';
 
 // hooks
-import useColorModeValue from '@extension/hooks/useColorModeValue';
 import useGenericInput from '@extension/hooks/useGenericInput';
 import useSubTextColor from '@extension/hooks/useSubTextColor';
 
@@ -71,10 +70,6 @@ const AuthenticationModal: FC<IProps> = ({
   const logger = useSelectLogger();
   const passkey = useSelectPasskeysPasskey();
   // hooks
-  const primaryColorCode = useColorModeValue(
-    theme.colors.primaryLight['500'],
-    theme.colors.primaryDark['500']
-  );
   const {
     error: passwordError,
     label: passwordLabel,

@@ -25,7 +25,6 @@ const MoreInformationAccordion: FC<IProps> = ({
   fontSize,
   isOpen,
   label,
-  minButtonHeight,
   onChange,
 }) => {
   const { t } = useTranslation();

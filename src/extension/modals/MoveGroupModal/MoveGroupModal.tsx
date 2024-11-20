@@ -1,6 +1,5 @@
 import {
   Heading,
-  HStack,
   Modal,
   ModalBody,
   ModalContent,

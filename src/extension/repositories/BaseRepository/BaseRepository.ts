@@ -1,9 +1,8 @@
 import { decode as decodeHex, encode as encodeHex } from '@stablelib/hex';
-import browser, { Menus } from 'webextension-polyfill';
+import browser from 'webextension-polyfill';
 
 // types
 import type { TStorageItemTypes } from '@extension/types';
-import ItemType = Menus.ItemType;
 
 export default class BaseRepository {
   /**

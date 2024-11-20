@@ -11,7 +11,7 @@ import {
   useDisclosure,
   VStack,
 } from '@chakra-ui/react';
-import React, { FC, useEffect } from 'react';
+import React, { type FC, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { IoTrashOutline } from 'react-icons/io5';
 import { GoShieldSlash } from 'react-icons/go';
@@ -29,7 +29,6 @@ import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@extension/constants';
 import { create as createNotification } from '@extension/features/notifications';
 
 // hooks
-import useColorModeValue from '@extension/hooks/useColorModeValue';
 import useDefaultTextColor from '@extension/hooks/useDefaultTextColor';
 import useSubTextColor from '@extension/hooks/useSubTextColor';
 import useRemovePasskey from './hooks/useRemovePasskey';
@@ -73,10 +72,6 @@ const RemovePasskeyModal: FC<IProps> = ({ onClose, removePasskey }) => {
     resetAction: resetRemovePasskeyAction,
   } = useRemovePasskey();
   const defaultTextColor = useDefaultTextColor();
-  const primaryColorCode = useColorModeValue(
-    theme.colors.primaryLight['500'],
-    theme.colors.primaryDark['500']
-  );
   const subTextColor = useSubTextColor();
   // misc
   const isLoading = encrypting || requesting || saving;
