@@ -18,7 +18,6 @@ import React, {
 } from 'react';
 import { useTranslation } from 'react-i18next';
 import { IoCheckmarkOutline, IoLockClosedOutline } from 'react-icons/io5';
-import { Radio } from 'react-loader-spinner';
 import browser from 'webextension-polyfill';
 
 // components
@@ -31,6 +30,9 @@ import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@extension/constants';
 
 // enums
 import { EncryptionMethodEnum } from '@extension/enums';
+
+// icons
+import KbPasskey from '@extension/icons/KbPasskey';
 
 // managers
 import PasskeyManager from '@extension/managers/PasskeyManager';
@@ -179,11 +181,7 @@ const AuthenticationModal: FC<IProps> = ({
           w="full"
         >
           {/*passkey loader*/}
-          <Radio
-            colors={[primaryColorCode, primaryColorCode, primaryColorCode]}
-            height="80"
-            width="80"
-          />
+          <CircularProgressWithIcon icon={KbPasskey} />
 
           {/*caption*/}
           <Text color={subTextColor} fontSize="sm" textAlign="center" w="full">
