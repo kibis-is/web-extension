@@ -73,11 +73,7 @@ const PageHeader: FC<IProps> = ({
           <>
             {/*title*/}
             <Tooltip label={title}>
-              <Heading
-                color={defaultTextColor}
-                fontSize="md"
-                textAlign="center"
-              >
+              <Heading color={defaultTextColor} size="md" textAlign="center">
                 {title}
               </Heading>
             </Tooltip>
