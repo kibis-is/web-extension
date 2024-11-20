@@ -15,11 +15,11 @@ import React, { FC, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { IoTrashOutline } from 'react-icons/io5';
 import { GoShieldSlash } from 'react-icons/go';
-import { Radio } from 'react-loader-spinner';
 import { useDispatch } from 'react-redux';
 
 // components
 import Button from '@extension/components/Button';
+import CircularProgressWithIcon from '@extension/components/CircularProgressWithIcon';
 import ReEncryptKeysLoadingContent from '@extension/components/ReEncryptKeysLoadingContent';
 
 // constants
@@ -33,6 +33,9 @@ import useColorModeValue from '@extension/hooks/useColorModeValue';
 import useDefaultTextColor from '@extension/hooks/useDefaultTextColor';
 import useSubTextColor from '@extension/hooks/useSubTextColor';
 import useRemovePasskey from './hooks/useRemovePasskey';
+
+// icons
+import KbPasskey from '@extension/icons/KbPasskey';
 
 // modals
 import ConfirmPasswordModal from '@extension/modals/ConfirmPasswordModal';
@@ -148,12 +151,8 @@ const RemovePasskeyModal: FC<IProps> = ({ onClose, removePasskey }) => {
           spacing={DEFAULT_GAP}
           w="full"
         >
-          {/*loader*/}
-          <Radio
-            colors={[primaryColorCode, primaryColorCode, primaryColorCode]}
-            height="80"
-            width="80"
-          />
+          {/*passkey loader*/}
+          <CircularProgressWithIcon icon={KbPasskey} />
 
           {/*caption*/}
           <Text color={subTextColor} fontSize="sm" textAlign="justify" w="full">

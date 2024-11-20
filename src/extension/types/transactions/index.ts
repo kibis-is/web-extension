@@ -14,5 +14,6 @@ export type { default as IBaseTransaction } from './IBaseTransaction';
 export type { default as IKeyRegistrationOfflineTransaction } from './IKeyRegistrationOfflineTransaction';
 export type { default as IKeyRegistrationOnlineTransaction } from './IKeyRegistrationOnlineTransaction';
 export type { default as IPaymentTransaction } from './IPaymentTransaction';
+export type { default as ISignTransactionState } from './ISignTransactionState';
 export type { default as ITransactions } from './ITransactions';
 export type { default as IUnknownTransaction } from './IUnknownTransaction';

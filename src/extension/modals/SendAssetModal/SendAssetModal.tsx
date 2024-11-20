@@ -11,7 +11,7 @@ import {
 } from '@chakra-ui/react';
 import { type Transaction } from 'algosdk';
 import BigNumber from 'bignumber.js';
-import React, { type FC, useEffect, useState } from 'react';
+import React, { type FC, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   IoArrowBackOutline,
@@ -52,7 +52,8 @@ import {
   reset as resetSendAssets,
   setAsset,
   setSender,
-  submitTransactionThunk,
+  signTransactionsThunk,
+  submitTransactionsThunk,
 } from '@extension/features/send-assets';
 
 // hooks
@@ -63,6 +64,7 @@ import useGenericInput from '@extension/hooks/useGenericInput';
 
 // modals
 import AuthenticationModal from '@extension/modals/AuthenticationModal';
+import SignTransactionsWithPasskeyLoadingModal from '@extension/modals/SignTransactionsWithPasskeyLoadingModal';
 
 // selectors
 import {
@@ -96,6 +98,8 @@ import type {
 // utils
 import calculateMaxTransactionAmount from '@extension/utils/calculateMaxTransactionAmount';
 import convertPublicKeyToAVMAddress from '@extension/utils/convertPublicKeyToAVMAddress';
+import useSignTransactionsWithPasskey from '@extension/hooks/useSignTransactionsWithPasskey';
+import { randomString } from '@stablelib/random';
 
 const SendAssetModal: FC<IModalProps> = ({ onClose }) => {
   const { t } = useTranslation();
@@ -161,12 +165,18 @@ const SendAssetModal: FC<IModalProps> = ({ onClose }) => {
     label: t<string>('labels.to'),
     required: true,
   });
+  const {
+    reset: resetSignTransactionsWithPasskey,
+    signTransactionsWithPasskeyAction,
+    signTransactionStates,
+  } = useSignTransactionsWithPasskey();
+  // memos
+  const _context = useMemo(() => randomString(8), []);
   // state
   const [maximumAmountInAtomicUnits, setMaximumAmountInAtomicUnits] =
     useState<string>('0');
   const [transactions, setTransactions] = useState<Transaction[] | null>(null);
   // misc
-  const _context = 'send-asset-modal';
   const allAssets: (IAssetTypes | INativeCurrency)[] = [
     ...arc200Assets,
     ...standardAssets,
@@ -182,10 +192,33 @@ const SendAssetModal: FC<IModalProps> = ({ onClose }) => {
   // handlers
   const handleOnAssetSelect = (value: IAssetTypes | INativeCurrency) =>
     dispatch(setAsset(value));
-  const handleOnSenderAccountSelect = (value: IAccountWithExtendedProps) =>
-    dispatch(setSender(value));
-  const handleCancelClick = () => handleClose();
-  const handleClose = () => {
+  const handleOnAuthenticationModalConfirm = async (
+    result: TEncryptionCredentials
+  ) => {
+    let signedTransactions: Uint8Array[];
+
+    if (!sender || !transactions || transactions.length <= 0) {
+      return;
+    }
+
+    try {
+      signedTransactions = await dispatch(
+        signTransactionsThunk({
+          transactions,
+          ...result,
+        })
+      ).unwrap();
+    } catch (error) {
+      handleOnError(error);
+
+      return;
+    }
+
+    // submit the transactions
+    await submitTransactions(signedTransactions);
+  };
+  const handleOnCancelClick = () => handleOnClose();
+  const handleOnClose = () => {
     // reset modal store - should close modal
     dispatch(resetSendAssets());
 
@@ -197,7 +230,33 @@ const SendAssetModal: FC<IModalProps> = ({ onClose }) => {
 
     onClose && onClose();
   };
-  const handleNextClick = async () => {
+  const handleOnError = (error: BaseExtensionError) => {
+    switch (error.code) {
+      case ErrorCodeEnum.OfflineError:
+        dispatch(
+          createNotification({
+            ephemeral: true,
+            title: t<string>('headings.offline'),
+            type: 'error',
+          })
+        );
+        break;
+      default:
+        dispatch(
+          createNotification({
+            description: t<string>('errors.descriptions.code', {
+              code: error.code,
+              context: error.code,
+            }),
+            ephemeral: true,
+            title: t<string>('errors.titles.code', { context: error.code }),
+            type: 'error',
+          })
+        );
+        break;
+    }
+  };
+  const handleOnNextClick = async () => {
     const _functionName = 'handleNextClick';
     let _transactions: Transaction[];
 
@@ -244,29 +303,55 @@ const SendAssetModal: FC<IModalProps> = ({ onClose }) => {
       return;
     }
   };
-  const handleOnAuthenticationModalConfirm = async (
-    result: TEncryptionCredentials
-  ) => {
-    const _functionName = 'handleOnAuthenticationModalConfirm';
+  const handleOnPreviousClick = () => setTransactions(null);
+  const handleOnSendClick = async () => {
+    let signedTransactions: Uint8Array[];
+
+    if (!sender || !transactions || transactions.length <= 0) {
+      return;
+    }
+
+    // if this is not a passkey account attempt to authenticate
+    if (!sender.passkey) {
+      onAuthenticationModalOpen();
+
+      return;
+    }
+
+    resetSignTransactionsWithPasskey();
+
+    try {
+      signedTransactions = await signTransactionsWithPasskeyAction({
+        signer: sender,
+        transactions,
+      });
+    } catch (error) {
+      resetSignTransactionsWithPasskey();
+      handleOnError(error);
+
+      return;
+    }
+
+    resetSignTransactionsWithPasskey();
+
+    await submitTransactions(signedTransactions);
+  };
+  const handleOnSenderAccountSelect = (value: IAccountWithExtendedProps) =>
+    dispatch(setSender(value));
+  const submitTransactions = async (signedTransactions: Uint8Array[]) => {
+    const _functionName = 'handleOnSubmitTransactions';
     let receiverAccount: IAccount | null;
     let transactionIds: string[];
 
-    if (
-      !asset ||
-      !network ||
-      receiverAddressValue.length <= 0 ||
-      !sender ||
-      !transactions ||
-      transactions.length <= 0
-    ) {
+    if (!sender || !transactions || transactions.length <= 0) {
       return;
     }
 
     try {
       transactionIds = await dispatch(
-        submitTransactionThunk({
+        submitTransactionsThunk({
+          signedTransactions,
           transactions,
-          ...result,
         })
       ).unwrap();
 
@@ -308,42 +393,11 @@ const SendAssetModal: FC<IModalProps> = ({ onClose }) => {
       );
 
       // clean up
-      handleClose();
+      handleOnClose();
     } catch (error) {
       handleOnError(error);
-
-      return;
     }
   };
-  const handleOnError = (error: BaseExtensionError) => {
-    switch (error.code) {
-      case ErrorCodeEnum.OfflineError:
-        dispatch(
-          createNotification({
-            ephemeral: true,
-            title: t<string>('headings.offline'),
-            type: 'error',
-          })
-        );
-        break;
-      default:
-        dispatch(
-          createNotification({
-            description: t<string>('errors.descriptions.code', {
-              code: error.code,
-              context: error.code,
-            }),
-            ephemeral: true,
-            title: t<string>('errors.titles.code', { context: error.code }),
-            type: 'error',
-          })
-        );
-        break;
-    }
-  };
-  const handlePreviousClick = () => setTransactions(null);
-  const handleSendClick = () => onAuthenticationModalOpen();
-
   // renders
   const renderContent = () => {
     if (!asset || !network || !sender) {
@@ -462,7 +516,7 @@ const SendAssetModal: FC<IModalProps> = ({ onClose }) => {
         <HStack spacing={DEFAULT_GAP - 2} w="full">
           <Button
             leftIcon={<IoArrowBackOutline />}
-            onClick={handlePreviousClick}
+            onClick={handleOnPreviousClick}
             size="lg"
             variant="outline"
             w="full"
@@ -471,7 +525,7 @@ const SendAssetModal: FC<IModalProps> = ({ onClose }) => {
           </Button>
 
           <Button
-            onClick={handleSendClick}
+            onClick={handleOnSendClick}
             rightIcon={<IoArrowUpOutline />}
             size="lg"
             variant="solid"
@@ -486,7 +540,7 @@ const SendAssetModal: FC<IModalProps> = ({ onClose }) => {
     return (
       <HStack spacing={DEFAULT_GAP - 2} w="full">
         <Button
-          onClick={handleCancelClick}
+          onClick={handleOnCancelClick}
           size="lg"
           variant="outline"
           w="full"
@@ -496,7 +550,7 @@ const SendAssetModal: FC<IModalProps> = ({ onClose }) => {
 
         <Button
           isLoading={creating}
-          onClick={handleNextClick}
+          onClick={handleOnNextClick}
           rightIcon={<IoArrowForwardOutline />}
           size="lg"
           variant="solid"
@@ -572,11 +626,14 @@ const SendAssetModal: FC<IModalProps> = ({ onClose }) => {
         onError={handleOnError}
         passwordHint={t<string>('captions.mustEnterPasswordToSendTransaction')}
       />
+      <SignTransactionsWithPasskeyLoadingModal
+        signedTransactionStates={signTransactionStates}
+      />
 
       <Modal
         isOpen={isOpen}
         motionPreset="slideInBottom"
-        onClose={handleClose}
+        onClose={handleOnClose}
         size="full"
         scrollBehavior="inside"
       >

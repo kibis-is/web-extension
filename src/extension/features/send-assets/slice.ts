@@ -6,7 +6,7 @@ import { StoreNameEnum } from '@extension/enums';
 // thunks
 import {
   createUnsignedTransactionsThunk,
-  submitTransactionThunk,
+  submitTransactionsThunk,
 } from './thunks';
 
 // types
@@ -42,13 +42,13 @@ const slice = createSlice({
       }
     );
     /** submit transaction **/
-    builder.addCase(submitTransactionThunk.fulfilled, (state: IState) => {
+    builder.addCase(submitTransactionsThunk.fulfilled, (state: IState) => {
       state.confirming = false;
     });
-    builder.addCase(submitTransactionThunk.pending, (state: IState) => {
+    builder.addCase(submitTransactionsThunk.pending, (state: IState) => {
       state.confirming = true;
     });
-    builder.addCase(submitTransactionThunk.rejected, (state: IState) => {
+    builder.addCase(submitTransactionsThunk.rejected, (state: IState) => {
       state.confirming = false;
     });
   },

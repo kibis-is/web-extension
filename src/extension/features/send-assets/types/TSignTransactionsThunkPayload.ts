@@ -3,11 +3,10 @@ import type { Transaction } from 'algosdk';
 // types
 import type { TEncryptionCredentials } from '@extension/types';
 
-interface ISubmitTransactionsThunkPayload {
+interface ISignTransactionsThunkPayload {
   transactions: Transaction[];
 }
-
-type TSubmitTransactionsThunkPayload = ISubmitTransactionsThunkPayload &
+type TSignTransactionsThunkPayload = ISignTransactionsThunkPayload &
   TEncryptionCredentials;
 
-export default TSubmitTransactionsThunkPayload;
+export default TSignTransactionsThunkPayload;

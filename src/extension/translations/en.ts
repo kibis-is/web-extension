@@ -296,6 +296,7 @@ const translation: IResourceLanguage = {
     securityTokenExpired: 'This token has expired',
     signJwtRequest: 'An application is requesting to sign a security token.',
     signMessageRequest: 'An application is requesting to sign a message.',
+    signTransactionsProgress: 'Signing {{count}} of {{total}} transactions.',
     signTransactionRequest:
       'An application is requesting to sign a transaction.',
     signTransactionsRequest:

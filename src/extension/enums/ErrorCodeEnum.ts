@@ -21,6 +21,7 @@ enum ErrorCodeEnum {
   FailedToSendTransactionError = 4000,
   NotEnoughMinimumBalanceError = 4001,
   NotAZeroBalanceError = 4002,
+  TransactionSigningError = 4003,
 
   // contract (application)
   InvalidABIContractError = 5000,
@@ -40,6 +41,9 @@ enum ErrorCodeEnum {
   PasskeyNotSupportedError = 8000,
   PasskeyCreationError = 8001,
   UnableToFetchPasskeyError = 8002,
+
+  // accounts
+  InvalidAccountTypeError = 9000,
 }
 
 export default ErrorCodeEnum;

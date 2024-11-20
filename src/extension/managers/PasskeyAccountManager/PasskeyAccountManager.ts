@@ -1,10 +1,15 @@
 import { decode as decodeCBOR } from '@stablelib/cbor';
+import { type EncodedSignedTransaction } from 'algosdk';
+import { Buffer } from 'buffer';
+import { encode as encodeMsgpack } from 'msgpack-lite';
 import { randomBytes } from 'tweetnacl';
 
 // errors
 import {
+  InvalidAccountTypeError,
   PasskeyCreationError,
   PasskeyNotSupportedError,
+  UnableToFetchPasskeyError,
 } from '@extension/errors';
 
 // repositories
@@ -13,7 +18,14 @@ import AccountRepository from '@extension/repositories/AccountRepository';
 // types
 import type { IBaseOptions } from '@common/types';
 import type { IAttestationCBORObject } from '@extension/types';
-import type { ICreatePasskeyOptions, ICreatePasskeyResult } from './types';
+import type {
+  ICreatePasskeyOptions,
+  ICreatePasskeyResult,
+  ISignTransactionOptions,
+} from './types';
+
+// utils
+import convertPublicKeyToAVMAddress from '@extension/utils/convertPublicKeyToAVMAddress';
 
 export default class PasskeyAccountManager {
   /**
@@ -97,7 +109,7 @@ export default class PasskeyAccountManager {
         publicKey: {
           authenticatorSelection: {
             residentKey: 'required', // make passkey discoverable on the device
-            userVerification: 'discouraged',
+            userVerification: 'preferred',
           },
           challenge: randomBytes(32),
           pubKeyCredParams: [
@@ -109,7 +121,7 @@ export default class PasskeyAccountManager {
           user: {
             id: new TextEncoder().encode(deviceID),
             name: deviceID,
-            displayName: deviceID,
+            displayName: 'Kibisis Web Extension',
           },
         },
       })) as PublicKeyCredential | null;
@@ -182,5 +194,81 @@ export default class PasskeyAccountManager {
    */
   public static isSupported(): boolean {
     return !!window?.PublicKeyCredential;
+  }
+
+  public static async signTransaction({
+    logger,
+    signer,
+    transaction,
+  }: ISignTransactionOptions): Promise<Uint8Array> {
+    const _functionName = 'signTransaction';
+    let _error: string;
+    let credentail: PublicKeyCredential | null;
+    let signedTransaction: EncodedSignedTransaction;
+
+    if (!signer.passkey) {
+      _error = `the account "${convertPublicKeyToAVMAddress(
+        signer.publicKey
+      )}" does not have a passkey`;
+
+      logger?.error(
+        `${PasskeyAccountManager.name}#${_functionName}: ${_error}`
+      );
+
+      throw new InvalidAccountTypeError(_error);
+    }
+
+    try {
+      credentail = (await navigator.credentials.get({
+        publicKey: {
+          allowCredentials: [
+            {
+              id: AccountRepository.decode(signer.passkey.credentialID),
+              transports: signer.passkey.transports,
+              type: 'public-key',
+            },
+          ],
+          challenge: transaction.bytesToSign(),
+          userVerification: 'preferred',
+        },
+      })) as PublicKeyCredential | null;
+    } catch (error) {
+      logger?.error(`${PasskeyAccountManager.name}#${_functionName}:`, error);
+
+      throw new UnableToFetchPasskeyError(
+        signer.passkey.credentialID,
+        error.message
+      );
+    }
+
+    if (!credentail) {
+      _error = `failed to fetch passkey "${signer.passkey.credentialID}"`;
+
+      logger?.error(
+        `${PasskeyAccountManager.name}#${_functionName}: ${_error}`
+      );
+
+      throw new UnableToFetchPasskeyError(signer.passkey.credentialID, _error);
+    }
+
+    signedTransaction = {
+      sig: Buffer.from(
+        (credentail.response as AuthenticatorAssertionResponse).signature
+      ),
+      txn: transaction.get_obj_for_encoding(),
+    };
+
+    // add the `auth-address` if the signer account is not the account sending the transaction
+    if (
+      convertPublicKeyToAVMAddress(signer.publicKey) !==
+      convertPublicKeyToAVMAddress(transaction.from.publicKey)
+    ) {
+      signedTransaction.sgnr = Buffer.from(
+        AccountRepository.decode(signer.publicKey)
+      );
+    }
+
+    // encode the msgpack
+    return new Uint8Array(encodeMsgpack(signedTransaction));
   }
 }

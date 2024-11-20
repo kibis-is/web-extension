@@ -1,7 +1,7 @@
 import { type AsyncThunk, createAsyncThunk } from '@reduxjs/toolkit';
 
 // enums
-import { SendAssetsThunkEnum } from '@extension/enums';
+import { ThunkEnum } from '../enums';
 
 // errors
 import {
@@ -22,28 +22,26 @@ import type {
   IMainRootState,
   INetworkWithTransactionParams,
 } from '@extension/types';
-import type { TSubmitTransactionsThunkPayload } from '../types';
+import type { ISubmitTransactionsPayload } from '../types';
 
 // utils
 import convertPublicKeyToAVMAddress from '@extension/utils/convertPublicKeyToAVMAddress';
 import doesAccountFallBelowMinimumBalanceRequirementForTransactions from '@extension/utils/doesAccountFallBelowMinimumBalanceRequirementForTransactions';
-import isAccountKnown from '@extension/utils/isAccountKnown';
 import selectNodeIDByGenesisHashFromSettings from '@extension/utils/selectNodeIDByGenesisHashFromSettings/selectNodeIDByGenesisHashFromSettings';
-import signTransaction from '@extension/utils/signTransaction';
 import uniqueGenesisHashesFromTransactions from '@extension/utils/uniqueGenesisHashesFromTransactions';
 
-const submitTransactionThunk: AsyncThunk<
+const submitTransactionsThunk: AsyncThunk<
   string[], // return
-  TSubmitTransactionsThunkPayload, // args
+  ISubmitTransactionsPayload, // args
   IAsyncThunkConfigWithRejectValue<IMainRootState>
 > = createAsyncThunk<
   string[],
-  TSubmitTransactionsThunkPayload,
+  ISubmitTransactionsPayload,
   IAsyncThunkConfigWithRejectValue<IMainRootState>
 >(
-  SendAssetsThunkEnum.SubmitTransaction,
+  ThunkEnum.SubmitTransactions,
   async (
-    { transactions, ...encryptionOptions },
+    { signedTransactions, transactions },
     { getState, rejectWithValue }
   ) => {
     const accounts = getState().accounts.items;
@@ -56,22 +54,17 @@ const submitTransactionThunk: AsyncThunk<
     const settings = getState().settings;
     let _error: string;
     let network: INetworkWithTransactionParams | null;
-    let networkClient: NetworkClient;
-    let senderAddress: string;
-    let signedTransactions: Uint8Array[];
 
     if (!sender) {
       _error = `sender not assigned`;
 
-      logger.debug(`${SendAssetsThunkEnum.SubmitTransaction}: ${_error}`);
+      logger.debug(`${ThunkEnum.SubmitTransactions}: ${_error}`);
 
       return rejectWithValue(new MalformedDataError(_error));
     }
 
     if (!online) {
-      logger.debug(
-        `${SendAssetsThunkEnum.SubmitTransaction}: extension offline`
-      );
+      logger.debug(`${ThunkEnum.SubmitTransactions}: extension offline`);
 
       return rejectWithValue(
         new OfflineError('attempted to send transaction, but extension offline')
@@ -80,7 +73,7 @@ const submitTransactionThunk: AsyncThunk<
 
     if (!genesisHash) {
       logger.debug(
-        `${SendAssetsThunkEnum.SubmitTransaction}: failed to get the genesis hash from the transactions`
+        `${ThunkEnum.SubmitTransactions}: failed to get the genesis hash from the transactions`
       );
 
       return rejectWithValue(
@@ -96,23 +89,12 @@ const submitTransactionThunk: AsyncThunk<
     if (!network) {
       _error = `no network configuration found for "${genesisHash}"`;
 
-      logger.debug(`${SendAssetsThunkEnum.SubmitTransaction}: ${_error}`);
+      logger.debug(`${ThunkEnum.SubmitTransactions}: ${_error}`);
 
       return rejectWithValue(new NetworkNotSelectedError(_error));
     }
 
-    senderAddress = convertPublicKeyToAVMAddress(sender.publicKey);
-
-    // check if we actually have the account
-    if (!isAccountKnown(accounts, senderAddress)) {
-      _error = `no account data found for "${senderAddress}" in wallet`;
-
-      logger.debug(`${SendAssetsThunkEnum.SubmitTransaction}: ${_error}`);
-
-      return rejectWithValue(new MalformedDataError(_error));
-    }
-
-    // ensure the transaction does not fall below the minimum balance requirement
+    // ensure the transactions do not cause the balance to fall below the minimum balance requirement
     if (
       doesAccountFallBelowMinimumBalanceRequirementForTransactions({
         account: sender,
@@ -121,29 +103,17 @@ const submitTransactionThunk: AsyncThunk<
         transactions,
       })
     ) {
-      _error = `total transaction cost will bring the account "${senderAddress}" balance below the minimum balance requirement`;
+      _error = `total transaction cost will bring the account "${convertPublicKeyToAVMAddress(
+        sender.publicKey
+      )}" balance below the minimum balance requirement`;
 
-      logger.debug(`${SendAssetsThunkEnum.SubmitTransaction}: ${_error}`);
+      logger.debug(`${ThunkEnum.SubmitTransactions}: ${_error}`);
 
       return rejectWithValue(new NotEnoughMinimumBalanceError(_error));
     }
 
     try {
-      signedTransactions = await Promise.all(
-        transactions.map((value) =>
-          signTransaction({
-            accounts,
-            authAccounts: accounts,
-            logger,
-            networks,
-            unsignedTransaction: value,
-            ...encryptionOptions,
-          })
-        )
-      );
-
-      networkClient = new NetworkClient({ logger, network });
-      await networkClient.sendTransactions({
+      await new NetworkClient({ logger, network }).sendTransactions({
         nodeID: selectNodeIDByGenesisHashFromSettings({
           genesisHash: network.genesisHash,
           settings,
@@ -153,7 +123,7 @@ const submitTransactionThunk: AsyncThunk<
 
       return transactions.map((value) => value.txID());
     } catch (error) {
-      logger.error(`${SendAssetsThunkEnum.SubmitTransaction}:`, error);
+      logger.error(`${ThunkEnum.SubmitTransactions}:`, error);
 
       if ((error as BaseExtensionError).code) {
         return rejectWithValue(error);
@@ -164,4 +134,4 @@ const submitTransactionThunk: AsyncThunk<
   }
 );
 
-export default submitTransactionThunk;
+export default submitTransactionsThunk;
