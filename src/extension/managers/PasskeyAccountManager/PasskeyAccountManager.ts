@@ -1,4 +1,5 @@
 import { decode as decodeCBOR } from '@stablelib/cbor';
+import { encode as encodeUT8 } from '@stablelib/utf8';
 import { type EncodedSignedTransaction } from 'algosdk';
 import { Buffer } from 'buffer';
 import { encode as encodeMsgpack } from 'msgpack-lite';
@@ -121,7 +122,7 @@ export default class PasskeyAccountManager {
           user: {
             id: new TextEncoder().encode(deviceID),
             name: deviceID,
-            displayName: 'Kibisis Web Extension',
+            displayName: deviceID,
           },
         },
       })) as PublicKeyCredential | null;
@@ -161,7 +162,7 @@ export default class PasskeyAccountManager {
 
     // if it is not an ed25519 algorithm it is not supported
     if (algorithm != -8) {
-      _error = `failed to create a passkey, expected the an ed25519 algorithm "8" but received "${algorithm}"`;
+      _error = `failed to create a passkey, expected the an ed25519 algorithm "-8" but received "${algorithm}"`;
 
       logger?.error(
         `${PasskeyAccountManager.name}#${_functionName}: ${_error}`
@@ -203,7 +204,7 @@ export default class PasskeyAccountManager {
   }: ISignTransactionOptions): Promise<Uint8Array> {
     const _functionName = 'signTransaction';
     let _error: string;
-    let credentail: PublicKeyCredential | null;
+    let credential: PublicKeyCredential | null;
     let signedTransaction: EncodedSignedTransaction;
 
     if (!signer.passkey) {
@@ -219,7 +220,7 @@ export default class PasskeyAccountManager {
     }
 
     try {
-      credentail = (await navigator.credentials.get({
+      credential = (await navigator.credentials.get({
         publicKey: {
           allowCredentials: [
             {
@@ -241,7 +242,7 @@ export default class PasskeyAccountManager {
       );
     }
 
-    if (!credentail) {
+    if (!credential) {
       _error = `failed to fetch passkey "${signer.passkey.credentialID}"`;
 
       logger?.error(
@@ -251,9 +252,12 @@ export default class PasskeyAccountManager {
       throw new UnableToFetchPasskeyError(signer.passkey.credentialID, _error);
     }
 
+    // TODO: the returned signature is the signed data of the concatenation of: response.authenticatorData + sha256(response.clientDataJSON)
     signedTransaction = {
       sig: Buffer.from(
-        (credentail.response as AuthenticatorAssertionResponse).signature
+        new Uint8Array(
+          (credential.response as AuthenticatorAssertionResponse).signature
+        )
       ),
       txn: transaction.get_obj_for_encoding(),
     };
