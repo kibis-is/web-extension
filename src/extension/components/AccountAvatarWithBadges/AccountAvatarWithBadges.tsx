@@ -9,6 +9,9 @@ import {
 // components
 import AccountAvatar from '../AccountAvatar';
 
+// icons
+import KbPasskey from '@extension/icons/KbPasskey';
+
 // repositories
 import AccountRepository from '@extension/repositories/AccountRepository';
 
@@ -81,6 +84,19 @@ const AccountAvatarWithBadges: FC<IProps> = ({
 
       {/*watch badge*/}
       {renderWatchAccountBadge()}
+
+      {/*passkey badge*/}
+      {account.passkey && (
+        <AvatarBadge
+          bg="teal.500"
+          borderWidth={0}
+          boxSize="1.25em"
+          p={1}
+          placement="bottom-start"
+        >
+          <Icon as={KbPasskey} boxSize={2.5} color="white" />
+        </AvatarBadge>
+      )}
 
       {/*re-key badge*/}
       {accountInformation && accountInformation.authAddress && (

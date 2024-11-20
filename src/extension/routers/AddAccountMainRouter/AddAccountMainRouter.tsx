@@ -160,17 +160,15 @@ const AddAccountMainRouter: FC = () => {
     onAuthenticationModalOpen();
   };
   const handleOnAuthenticationModalClose = () => onAuthenticationModalClose();
-  const handleOnAddPasskeyAccountComplete = async ({
-    name,
-    passkey,
-    publicKey,
-  }: INewAccountWithPasskey) => {
+  const handleOnAddPasskeyAccountComplete = async (
+    newAccount: INewAccountWithPasskey
+  ) => {
     const _functionName = 'handleOnAddPasskeyAccountComplete';
     const account =
       accounts.find(
         ({ publicKey }) =>
           convertPublicKeyToAVMAddress(publicKey) ===
-          convertPublicKeyToAVMAddress(publicKey)
+          convertPublicKeyToAVMAddress(newAccount.publicKey)
       ) || null;
     let _account: IAccountWithExtendedProps;
 
@@ -194,11 +192,7 @@ const AddAccountMainRouter: FC = () => {
 
     try {
       _account = await dispatch(
-        saveNewPasskeyAccountThunk({
-          passkey,
-          publicKey,
-          name,
-        })
+        saveNewPasskeyAccountThunk(newAccount)
       ).unwrap();
     } catch (error) {
       logger.error(`${AddAccountMainRouter.name}#${_functionName}:`, error);

@@ -232,6 +232,7 @@ const translation: IResourceLanguage = {
     optOutFee:
       'Standard assets require an "opt-out" fee. This is a transaction of the asset with a "0" amount sent to yourself.',
     passkeyAdded: 'Passkey {{name}} added!',
+    passkeyBadgeTooltip: 'This account is stored on a passkey',
     passkeyRemoved: 'Passkey {{name}} removed.',
     passkeyNotSupported1:
       'Unfortunately your browser does not support passkeys.',
@@ -617,6 +618,7 @@ const translation: IResourceLanguage = {
     notSupported: 'Not Supported',
     openSelectModal: 'Open select modal',
     optional: '(optional)',
+    passkey: 'Passkey',
     passkeyName: 'Passkey name',
     password: 'Password',
     port: 'Port',

@@ -42,6 +42,7 @@ import OverflowMenu from '@extension/components/OverflowMenu';
 import NativeBalance from '@extension/components/NativeBalance';
 import NetworkSelect from '@extension/components/NetworkSelect';
 import NFTsTab from '@extension/components/NFTsTab';
+import PasskeyAccountBadge from '@extension/components/PasskeyAccountBadge';
 import PolisAccountBadge from '@extension/components/PolisAccountBadge';
 import ReKeyedAccountBadge from '@extension/components/RekeyedAccountBadge';
 import WatchAccountBadge from '@extension/components/WatchAccountBadge';
@@ -548,6 +549,13 @@ const AccountPage: FC = () => {
                 justifyContent="flex-end"
                 w="full"
               >
+                {/*passkey account badge*/}
+                {account.passkey && (
+                  <PasskeyAccountBadge
+                    tooltipLabel={t<string>('captions.passkeyBadgeTooltip')}
+                  />
+                )}
+
                 {/*watch account badge*/}
                 {renderWatchAccountBadge()}
 

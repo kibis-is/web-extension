@@ -1,3 +1,4 @@
+import { decode as decodeCBOR } from '@stablelib/cbor';
 import { randomBytes } from 'tweetnacl';
 
 // errors
@@ -10,9 +11,58 @@ import {
 import AccountRepository from '@extension/repositories/AccountRepository';
 
 // types
+import type { IBaseOptions } from '@common/types';
+import type { IAttestationCBORObject } from '@extension/types';
 import type { ICreatePasskeyOptions, ICreatePasskeyResult } from './types';
 
-export default class PasskeyManager {
+export default class PasskeyAccountManager {
+  /**
+   * Extracts the public key from an authenticator attestation response.
+   *
+   * @param {AuthenticatorAttestationResponse} response - The response object containing the attested credentials.
+   * @param {IBaseOptions} options - Options including a logger.
+   * @return {Uint8Array | null} The extracted public key as a Uint8Array, or null if extraction fails.
+   * @private
+   * @static
+   */
+  private static _extractPublicKeyFromAttestationResponse(
+    response: AuthenticatorAttestationResponse,
+    options?: IBaseOptions
+  ): Uint8Array | null {
+    const _functionName = '_extractPublicKeyFromAttestationResponse';
+    let decodedAttestationCBORObject: IAttestationCBORObject;
+    let publicKey: Uint8Array;
+
+    try {
+      decodedAttestationCBORObject = decodeCBOR(
+        new Uint8Array(response.attestationObject)
+      );
+    } catch (error) {
+      options &&
+        options.logger?.debug(
+          `${PasskeyAccountManager.name}#${_functionName}:`,
+          error
+        );
+
+      return null;
+    }
+
+    // extract the key from the attested credential data which is at authData[64:] and is 32 bytes long
+    publicKey = decodedAttestationCBORObject.authData.slice(64, 96);
+
+    // ensure the public key is 32 bytes
+    if (publicKey.length !== 32) {
+      options &&
+        options.logger?.debug(
+          `${PasskeyAccountManager.name}#${_functionName}: the decoded public key must be 32 bytes but the extracted key is "${publicKey.length}" bytes`
+        );
+
+      return null;
+    }
+
+    return publicKey;
+  }
+
   /**
    * public static functions
    */
@@ -64,7 +114,7 @@ export default class PasskeyManager {
         },
       })) as PublicKeyCredential | null;
     } catch (error) {
-      logger?.error(`${PasskeyManager.name}#${_functionName}:`, error);
+      logger?.error(`${PasskeyAccountManager.name}#${_functionName}:`, error);
 
       throw new PasskeyCreationError(error.message);
     }
@@ -72,19 +122,23 @@ export default class PasskeyManager {
     if (!credential) {
       _error = 'failed to create a passkey';
 
-      logger?.error(`${PasskeyManager.name}#${_functionName}: ${_error}`);
+      logger?.error(
+        `${PasskeyAccountManager.name}#${_functionName}: ${_error}`
+      );
 
       throw new PasskeyCreationError(_error);
     }
 
-    publicKey = (
+    publicKey = PasskeyAccountManager._extractPublicKeyFromAttestationResponse(
       credential.response as AuthenticatorAttestationResponse
-    ).getPublicKey();
+    );
 
     if (!publicKey) {
       _error = 'failed to create a passkey - no public key returned';
 
-      logger?.error(`${PasskeyManager.name}#${_functionName}: ${_error}`);
+      logger?.error(
+        `${PasskeyAccountManager.name}#${_functionName}: ${_error}`
+      );
 
       throw new PasskeyCreationError(_error);
     }
@@ -97,7 +151,9 @@ export default class PasskeyManager {
     if (algorithm != -8) {
       _error = `failed to create a passkey, expected the an ed25519 algorithm "8" but received "${algorithm}"`;
 
-      logger?.error(`${PasskeyManager.name}#${_functionName}: ${_error}`);
+      logger?.error(
+        `${PasskeyAccountManager.name}#${_functionName}: ${_error}`
+      );
 
       throw new PasskeyNotSupportedError(_error);
     }

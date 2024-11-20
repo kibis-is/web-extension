@@ -277,10 +277,7 @@ const AddPasskeyAccountModal: FC<IProps> = ({
               copyButtonLabel={t<string>('labels.copyAddress')}
               label={`${t<string>('labels.address')}:`}
               tooltipLabel={address}
-              value={ellipseAddress(address, {
-                end: 10,
-                start: 10,
-              })}
+              value={address}
             />
 
             {/*capabilities*/}

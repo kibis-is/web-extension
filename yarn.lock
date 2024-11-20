@@ -2760,10 +2760,37 @@
   dependencies:
     "@stablelib/int" "^1.0.1"
 
+"@stablelib/bytereader@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@stablelib/bytereader/-/bytereader-1.0.1.tgz#0dff4f702709a2f08dbb9ea5ef1b4736c9580616"
+  integrity sha512-/vu7E8SqxfL3mAF9DrSvPpLUr6UVgM+VpZyJCSAvwwcbgnmEx3tizgEPLWCSKAFeU2lUaG2mtCmpVyswyT6YEg==
+  dependencies:
+    "@stablelib/binary" "^1.0.1"
+
 "@stablelib/bytes@^1.0.1":
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@stablelib/bytes/-/bytes-1.0.1.tgz#0f4aa7b03df3080b878c7dea927d01f42d6a20d8"
   integrity sha512-Kre4Y4kdwuqL8BR2E9hV/R5sOrUj6NanZaZis0V6lX5yzqC3hBuVSDXUIBqQv/sCpmuWRiHLwqiT1pqqjuBXoQ==
+
+"@stablelib/bytewriter@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@stablelib/bytewriter/-/bytewriter-1.0.1.tgz#f244a4d96c2541ffca4090893a364a9ad79be859"
+  integrity sha512-7seAmm0Nvd8VBP1nINHEVzHRl9dXLXcHHuv9yf2r/Em0xFYF/1pHYtYlit33AeHTdu5yBLo3u6CpN1qCDx3eNw==
+  dependencies:
+    "@stablelib/binary" "^1.0.1"
+    "@stablelib/int" "^1.0.1"
+    "@stablelib/wipe" "^1.0.1"
+
+"@stablelib/cbor@^1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@stablelib/cbor/-/cbor-1.0.2.tgz#8aeccdc631dd747ef8d75712f220ebe786412dcc"
+  integrity sha512-PGY/V2RuX2Nz14Il9jC7jBH7eU/m/YnZT7unVQ3us3ajJhtXu32Y85pu5tWX7uoBSa1D2UmOTePVUNYGYe8yCw==
+  dependencies:
+    "@stablelib/bytereader" "^1.0.1"
+    "@stablelib/bytewriter" "^1.0.1"
+    "@stablelib/float" "^1.0.1"
+    "@stablelib/int" "^1.0.1"
+    "@stablelib/utf8" "^1.0.2"
 
 "@stablelib/chacha20poly1305@1.0.1":
   version "1.0.1"
@@ -2798,6 +2825,11 @@
     "@stablelib/random" "^1.0.2"
     "@stablelib/sha512" "^1.0.1"
     "@stablelib/wipe" "^1.0.1"
+
+"@stablelib/float@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@stablelib/float/-/float-1.0.1.tgz#16de99c9bf257f8f64c4e4b121e2c8b11de3789b"
+  integrity sha512-Z6sQY0qagV168T3ykJ382oIMcnNho58sN59lak9CiXtLc/iNYzS8gSCz4Gp61mP5T8AV0aLCj5Oo2Q8pUoEYjA==
 
 "@stablelib/hash@^1.0.1":
   version "1.0.1"
@@ -2877,6 +2909,11 @@
   version "1.0.1"
   resolved "https://registry.npmjs.org/@stablelib/utf8/-/utf8-1.0.1.tgz"
   integrity sha512-FrYD1xadah/TtAP6VJ04lDD5h9rdDj/d8wH/jMYTtHqZBv9z2btdvEU8vTxdjdkFmo1b/BH+t3R1wi/mYhCCNg==
+
+"@stablelib/utf8@^1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@stablelib/utf8/-/utf8-1.0.2.tgz#737974c235b12542356c6c2c062e6985d6139b11"
+  integrity sha512-sDL1aB2U8FIpj7SjQJMxbOFIFkKvDKQGPHSrYejHZhtLNSK3qHe6ZIfa0woWkOiaJsdYslFzrc0VWXJZHmSIQQ==
 
 "@stablelib/wipe@^1.0.1":
   version "1.0.1"
