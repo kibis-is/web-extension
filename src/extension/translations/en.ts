@@ -252,6 +252,8 @@ const translation: IResourceLanguage = {
     removeAccount: 'Are you sure you want to remove account "{{address}}"?',
     removeAccountWarning:
       'To add this account back you will need the seed phrase',
+    removeAccountWithPasskeyWarning:
+      'To add this account you will need the passkey credential ID',
     removeAsset:
       'Are you sure you want to remove {{symbol}}? You will have to opt-in to this asset again.',
     [`removeAsset_${AssetTypeEnum.ARC0200}`]:

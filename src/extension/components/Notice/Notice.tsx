@@ -13,7 +13,7 @@ const Notice: FC<IProps> = ({ message, size = 'md', type = 'info' }) => {
   const backgroundColor = useMemo(() => {
     switch (type) {
       case 'warning':
-        return 'orange.300';
+        return 'orange.100';
       case 'info':
       default:
         return 'blue.100';
@@ -58,7 +58,7 @@ const Notice: FC<IProps> = ({ message, size = 'md', type = 'info' }) => {
       borderRadius="md"
       borderStyle="solid"
       borderWidth={1}
-      px={2}
+      px={DEFAULT_GAP / 3}
       py={1}
       spacing={DEFAULT_GAP / 3}
     >

@@ -268,7 +268,11 @@ const AccountPage: FC = () => {
           onConfirm: () => dispatch(removeAccountByIdThunk(account.id)),
           title: t<string>('headings.removeAccount'),
           ...(!account.watchAccount && {
-            warningText: t<string>('captions.removeAccountWarning'),
+            warningText: t<string>(
+              !account.passkey
+                ? 'captions.removeAccountWarning'
+                : 'captions.removeAccountWithPasskeyWarning'
+            ),
           }),
         })
       );

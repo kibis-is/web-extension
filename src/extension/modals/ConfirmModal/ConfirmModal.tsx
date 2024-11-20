@@ -16,7 +16,7 @@ import { IoCheckmarkOutline } from 'react-icons/io5';
 
 // components
 import Button from '@extension/components/Button';
-import Warning from '@extension/components/Warning';
+import Notice from '@extension/components/Notice';
 
 // constants
 import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@extension/constants';
@@ -95,7 +95,7 @@ const ConfirmModal: FC<IModalProps> = ({ onClose }) => {
 
             {/*warning text*/}
             {confirm?.warningText && (
-              <Warning message={confirm.warningText} size="sm" />
+              <Notice message={confirm.warningText} size="sm" type="warning" />
             )}
           </VStack>
         </ModalBody>
