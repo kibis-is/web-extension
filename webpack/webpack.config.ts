@@ -252,7 +252,14 @@ const configs: (
       devtool,
       entry: {
         ['background']: resolve(SRC_PATH, 'background.ts'),
-        ['content-script']: resolve(SRC_PATH, 'content-script.ts'),
+        ['middleware']: resolve(SRC_PATH, 'middleware.ts'),
+        ['webauthn-listener']: resolve(
+          SRC_PATH,
+          'external',
+          'sources',
+          'webauthn-listener',
+          'index.ts'
+        ),
         ['algorand-provider']: resolve(SRC_PATH, 'algorand-provider.ts'),
       },
       mode: environment,

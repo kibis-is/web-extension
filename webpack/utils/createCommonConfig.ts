@@ -39,6 +39,14 @@ export default function createCommonConfig(): Configuration {
         ['@extension/icons']: resolve(extensionPath, 'icons'),
         ['@extension/images']: resolve(extensionPath, 'images'),
         ['@extension/managers']: resolve(extensionPath, 'managers'),
+        ['@extension/message-brokers']: resolve(
+          extensionPath,
+          'message-brokers'
+        ),
+        ['@extension/message-handlers']: resolve(
+          extensionPath,
+          'message-handlers'
+        ),
         ['@extension/modals']: resolve(extensionPath, 'modals'),
         ['@extension/models']: resolve(extensionPath, 'models'),
         ['@extension/pages']: resolve(extensionPath, 'pages'),
@@ -53,9 +61,9 @@ export default function createCommonConfig(): Configuration {
         ['@extension/utils']: resolve(extensionPath, 'utils'),
         // external
         ['@external/constants']: resolve(externalPath, 'constants'),
+        ['@external/managers']: resolve(externalPath, 'managers'),
         ['@external/services']: resolve(externalPath, 'services'),
         ['@external/types']: resolve(externalPath, 'types'),
-        ['@external/utils']: resolve(externalPath, 'utils'),
       },
       extensions: ['.css', '.js', '.ts', '.tsx'],
     },
