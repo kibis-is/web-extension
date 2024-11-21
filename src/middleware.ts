@@ -1,11 +1,10 @@
-import { AVMWebProvider } from '@agoralabs-sh/avm-web-provider';
 import browser from 'webextension-polyfill';
 
 // message brokers
+import AVMWebProviderMessageBroker from '@extension/message-brokers/AVMWebProviderMessageBroker';
 import WebAuthnMessageBroker from '@extension/message-brokers/WebAuthnMessageBroker';
 
 // services
-import ClientMessageBroker from '@external/services/ClientMessageBroker';
 import LegacyUseWalletMessageBroker from '@external/services/LegacyUseWalletMessageBroker';
 
 // types
@@ -13,15 +12,13 @@ import type { ILogger } from '@common/types';
 
 // utils
 import createLogger from '@common/utils/createLogger';
-import injectScript from '@external/utils/injectScript';
+import injectScript from '@common/utils/injectScript';
 
 (() => {
   const debug: boolean = __ENV__ === 'development';
-  const avmWebProvider: AVMWebProvider = AVMWebProvider.init(__PROVIDER_ID__, {
-    debug,
-  });
   const logger: ILogger = createLogger(debug ? 'debug' : 'error');
-  const clientMessageBroker: ClientMessageBroker = new ClientMessageBroker({
+  const avmWebProviderMessageBroker = new AVMWebProviderMessageBroker({
+    debug,
     logger,
   });
   const webAuthnMessageBroker = new WebAuthnMessageBroker({
@@ -29,30 +26,8 @@ import injectScript from '@external/utils/injectScript';
   });
 
   // start listening to messages from client and provider
+  avmWebProviderMessageBroker.startListening();
   webAuthnMessageBroker.startListening();
-
-  // handle requests from the webpage
-  avmWebProvider.onDisable(
-    clientMessageBroker.onRequestMessage.bind(clientMessageBroker)
-  );
-  avmWebProvider.onDiscover(
-    clientMessageBroker.onRequestMessage.bind(clientMessageBroker)
-  );
-  avmWebProvider.onEnable(
-    clientMessageBroker.onRequestMessage.bind(clientMessageBroker)
-  );
-  avmWebProvider.onPostTransactions(
-    clientMessageBroker.onRequestMessage.bind(clientMessageBroker)
-  );
-  avmWebProvider.onSignAndPostTransactions(
-    clientMessageBroker.onRequestMessage.bind(clientMessageBroker)
-  );
-  avmWebProvider.onSignMessage(
-    clientMessageBroker.onRequestMessage.bind(clientMessageBroker)
-  );
-  avmWebProvider.onSignTransactions(
-    clientMessageBroker.onRequestMessage.bind(clientMessageBroker)
-  );
 
   // inject the webauthn manager to intercept webauthn requests
   injectScript(browser.runtime.getURL('webauthn-listener.js'));

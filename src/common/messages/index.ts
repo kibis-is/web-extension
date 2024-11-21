@@ -6,3 +6,7 @@ export { default as ProviderEventAddedMessage } from './ProviderEventAddedMessag
 export { default as ProviderFactoryResetMessage } from './ProviderFactoryResetMessage';
 export { default as ProviderRegistrationCompletedMessage } from './ProviderRegistrationCompletedMessage';
 export { default as ProviderSessionsUpdatedMessage } from './ProviderSessionsUpdatedMessage';
+export { default as WebAuthnCreateRequestMessage } from './WebAuthnCreateRequestMessage';
+export { default as WebAuthnCreateResponseMessage } from './WebAuthnCreateResponseMessage';
+export { default as WebAuthnGetRequestMessage } from './WebAuthnGetRequestMessage';
+export { default as WebAuthnGetResponseMessage } from './WebAuthnGetResponseMessage';

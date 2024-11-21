@@ -25,7 +25,7 @@ import {
 } from './types';
 
 // utils
-import createClientInformation from '@external/utils/createClientInformation';
+import createClientInformation from '@common/utils/createClientInformation';
 
 /**
  * @deprecated will be phased out in favour of the avm-web-provider
