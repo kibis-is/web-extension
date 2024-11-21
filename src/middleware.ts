@@ -1,6 +1,9 @@
 import { AVMWebProvider } from '@agoralabs-sh/avm-web-provider';
 import browser from 'webextension-polyfill';
 
+// message brokers
+import WebAuthnMessageBroker from '@extension/message-brokers/WebAuthnMessageBroker';
+
 // services
 import ClientMessageBroker from '@external/services/ClientMessageBroker';
 import LegacyUseWalletMessageBroker from '@external/services/LegacyUseWalletMessageBroker';
@@ -21,6 +24,12 @@ import injectScript from '@external/utils/injectScript';
   const clientMessageBroker: ClientMessageBroker = new ClientMessageBroker({
     logger,
   });
+  const webAuthnMessageBroker = new WebAuthnMessageBroker({
+    logger,
+  });
+
+  // start listening to messages from client and provider
+  webAuthnMessageBroker.startListening();
 
   // handle requests from the webpage
   avmWebProvider.onDisable(
@@ -44,6 +53,9 @@ import injectScript from '@external/utils/injectScript';
   avmWebProvider.onSignTransactions(
     clientMessageBroker.onRequestMessage.bind(clientMessageBroker)
   );
+
+  // inject the webauthn manager to intercept webauthn requests
+  injectScript(browser.runtime.getURL('webauthn-listener.js'));
 
   /**
    * deprecated - older versions of use-wallet will still use broadcastchannel messages

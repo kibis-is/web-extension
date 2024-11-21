@@ -2,6 +2,7 @@ import {
   ARC0027MethodNotSupportedError,
   ARC0027MethodTimedOutError,
   ARC0027UnknownError,
+  AVMWebProvider,
   IAVMWebProviderCallbackOptions,
   DEFAULT_REQUEST_TIMEOUT,
   TResponseResults,
@@ -11,26 +12,52 @@ import browser from 'webextension-polyfill';
 // constants
 import { SUPPORTED_METHODS } from '@common/constants';
 
+// message-brokers
+import BaseMessageBroker from '@extension/message-brokers/BaseMessageBroker';
+
 // messages
 import { ClientRequestMessage, ClientResponseMessage } from '@common/messages';
 
 // types
-import type { IBaseOptions, ILogger } from '@common/types';
+import type { INewOptions } from './types';
 
 // utils
-import createClientInformation from '@external/utils/createClientInformation';
+import createClientInformation from '@common/utils/createClientInformation';
 
-export default class ClientMessageBroker {
+export default class AVMWebProviderMessageBroker extends BaseMessageBroker {
   // private variables
-  private readonly _logger: ILogger | null;
+  private readonly _avmWebProvider: AVMWebProvider;
 
-  constructor({ logger }: IBaseOptions) {
-    this._logger = logger || null;
+  constructor({ debug, ...baseOptions }: INewOptions) {
+    super(baseOptions);
+
+    this._avmWebProvider = AVMWebProvider.init(__PROVIDER_ID__, {
+      debug,
+    });
   }
 
   /**
    * private functions
    */
+
+  public async _onMessage(
+    message: IAVMWebProviderCallbackOptions
+  ): Promise<TResponseResults | void> {
+    const _functionName = '_onMessage';
+
+    this._logger?.debug(
+      `${AVMWebProviderMessageBroker.name}#${_functionName} "${message.method}" request received`
+    );
+
+    if (!SUPPORTED_METHODS.includes(message.method)) {
+      throw new ARC0027MethodNotSupportedError({
+        method: message.method,
+        providerId: __PROVIDER_ID__,
+      });
+    }
+
+    return await this._sendRequestToExtensionWithTimeout(message);
+  }
 
   private async _sendRequestToExtensionWithTimeout(
     requestMessage: IAVMWebProviderCallbackOptions
@@ -96,22 +123,15 @@ export default class ClientMessageBroker {
    * public functions
    */
 
-  public async onRequestMessage(
-    message: IAVMWebProviderCallbackOptions
-  ): Promise<TResponseResults | void> {
-    const _functionName = 'onRequestMessage';
-
-    this._logger?.debug(
-      `${ClientMessageBroker.name}#${_functionName} "${message.method}" request received`
-    );
-
-    if (!SUPPORTED_METHODS.includes(message.method)) {
-      throw new ARC0027MethodNotSupportedError({
-        method: message.method,
-        providerId: __PROVIDER_ID__,
-      });
-    }
-
-    return await this._sendRequestToExtensionWithTimeout(message);
+  public startListening(): void {
+    this._avmWebProvider.onDisable(this._onMessage.bind(this));
+    this._avmWebProvider.onDiscover(this._onMessage.bind(this));
+    this._avmWebProvider.onEnable(this._onMessage.bind(this));
+    this._avmWebProvider.onPostTransactions(this._onMessage.bind(this));
+    this._avmWebProvider.onSignAndPostTransactions(this._onMessage.bind(this));
+    this._avmWebProvider.onSignMessage(this._onMessage.bind(this));
+    this._avmWebProvider.onSignTransactions(this._onMessage.bind(this));
   }
+
+  public stopListening() {}
 }
