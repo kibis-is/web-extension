@@ -6,7 +6,7 @@ import {
 // types
 import type { IClientResponseMessage } from '@common/types';
 
-export default class ClientResponseMessage<Result>
+export default class AVMWebProviderResponseMessage<Result>
   implements IClientResponseMessage<Result>
 {
   public readonly error: BaseARC0027Error | undefined;

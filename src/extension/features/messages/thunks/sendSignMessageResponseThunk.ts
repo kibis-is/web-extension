@@ -10,7 +10,7 @@ import browser from 'webextension-polyfill';
 import { MessagesThunkEnum } from '@extension/enums';
 
 // messages
-import { ClientResponseMessage } from '@common/messages';
+import { AVMWebProviderResponseMessage } from '@common/messages';
 
 // types
 import type {
@@ -41,7 +41,7 @@ const sendSignMessageResponseThunk: AsyncThunk<
     if (error) {
       await browser.tabs.sendMessage(
         event.payload.originTabId,
-        new ClientResponseMessage<ISignMessageResult>({
+        new AVMWebProviderResponseMessage<ISignMessageResult>({
           error,
           id: uuid(),
           method: event.payload.message.method,
@@ -56,7 +56,7 @@ const sendSignMessageResponseThunk: AsyncThunk<
     if (signature && signer) {
       await browser.tabs.sendMessage(
         event.payload.originTabId,
-        new ClientResponseMessage<ISignMessageResult>({
+        new AVMWebProviderResponseMessage<ISignMessageResult>({
           id: uuid(),
           method: event.payload.message.method,
           requestId: event.payload.message.id,

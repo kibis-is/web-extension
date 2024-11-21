@@ -3,7 +3,7 @@ import { ARC0027MethodEnum } from '@agoralabs-sh/avm-web-provider';
 // types
 import type { IClientInformation, IClientRequestMessage } from '@common/types';
 
-export default class ClientRequestMessage<Params>
+export default class AVMWebProviderRequestMessage<Params>
   implements IClientRequestMessage<Params>
 {
   public readonly clientInfo: IClientInformation;

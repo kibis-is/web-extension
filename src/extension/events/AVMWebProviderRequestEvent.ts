@@ -8,26 +8,26 @@ import BaseEvent from './BaseEvent';
 
 // types
 import type {
-  IClientRequestEvent,
-  IClientRequestEventPayload,
+  IAVMWebProviderRequestEvent,
+  IAVMWebProviderRequestEventPayload,
 } from '@extension/types';
 
 export interface INewOptions<Params extends TRequestParams> {
   id: string;
-  payload: IClientRequestEventPayload<Params>;
+  payload: IAVMWebProviderRequestEventPayload<Params>;
 }
 
-export default class ClientRequestEvent<Params extends TRequestParams>
-  extends BaseEvent<IClientRequestEventPayload<Params>>
-  implements IClientRequestEvent<Params>
+export default class AVMWebProviderRequestEvent<Params extends TRequestParams>
+  extends BaseEvent<IAVMWebProviderRequestEventPayload<Params>>
+  implements IAVMWebProviderRequestEvent<Params>
 {
-  public type: EventTypeEnum.ClientRequest;
+  public type: EventTypeEnum.AVMWebProviderRequest;
 
   constructor({ id, payload }: INewOptions<Params>) {
     super();
 
     this.id = id;
     this.payload = payload;
-    this.type = EventTypeEnum.ClientRequest;
+    this.type = EventTypeEnum.AVMWebProviderRequest;
   }
 }

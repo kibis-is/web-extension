@@ -13,7 +13,7 @@ import { MessagesThunkEnum } from '@extension/enums';
 import { removeEventByIdThunk } from '@extension/features/events';
 
 // messages
-import { ClientResponseMessage } from '@common/messages';
+import { AVMWebProviderResponseMessage } from '@common/messages';
 
 // types
 import type {
@@ -44,7 +44,7 @@ const sendSignTransactionsResponseThunk: AsyncThunk<
     if (error) {
       await browser.tabs.sendMessage(
         event.payload.originTabId,
-        new ClientResponseMessage<ISignTransactionsResult>({
+        new AVMWebProviderResponseMessage<ISignTransactionsResult>({
           error,
           id: uuid(),
           method: event.payload.message.method,
@@ -62,7 +62,7 @@ const sendSignTransactionsResponseThunk: AsyncThunk<
     if (stxns) {
       await browser.tabs.sendMessage(
         event.payload.originTabId,
-        new ClientResponseMessage<ISignTransactionsResult>({
+        new AVMWebProviderResponseMessage<ISignTransactionsResult>({
           id: uuid(),
           method: event.payload.message.method,
           requestId: event.payload.message.id,

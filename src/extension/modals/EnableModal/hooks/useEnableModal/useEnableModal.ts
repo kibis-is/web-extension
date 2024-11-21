@@ -18,7 +18,7 @@ import {
 // types
 import type {
   IAccountWithExtendedProps,
-  IClientRequestEvent,
+  IAVMWebProviderRequestEvent,
   INetworkWithTransactionParams,
 } from '@extension/types';
 import type { IUseEnableModalState } from './types';
@@ -38,9 +38,8 @@ export default function useEnableModal(): IUseEnableModalState {
   const [availableAccounts, setAvailableAccounts] = useState<
     IAccountWithExtendedProps[] | null
   >(null);
-  const [event, setEvent] = useState<IClientRequestEvent<IEnableParams> | null>(
-    null
-  );
+  const [event, setEvent] =
+    useState<IAVMWebProviderRequestEvent<IEnableParams> | null>(null);
   const [network, setNetwork] = useState<INetworkWithTransactionParams | null>(
     null
   );
@@ -49,9 +48,9 @@ export default function useEnableModal(): IUseEnableModalState {
     setEvent(
       (events.find(
         (value) =>
-          value.type === EventTypeEnum.ClientRequest &&
+          value.type === EventTypeEnum.AVMWebProviderRequest &&
           value.payload.message.method === ARC0027MethodEnum.Enable
-      ) as IClientRequestEvent<IEnableParams>) || null
+      ) as IAVMWebProviderRequestEvent<IEnableParams>) || null
     );
   }, [events]);
   // get the available accounts

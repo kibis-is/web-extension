@@ -7,19 +7,19 @@ import { AppTypeEnum } from '@extension/enums';
 // managers
 import AppWindowManager from '@extension/managers/AppWindowManager';
 
-// message handlers
-import BaseMessageHandler from '@extension/message-handlers/BaseMessageHandler';
-
 // messages
 import { BaseProviderMessage } from '@common/messages';
 
 // repositories
 import AppWindowRepository from '@extension/repositories/AppWindowRepository';
 
+// services
+import BaseListener from '@common/services/BaseListener';
+
 // types
 import type { IBaseOptions } from '@common/types';
 
-export default class ProviderMessageHandler extends BaseMessageHandler {
+export default class ProviderMessageHandler extends BaseListener {
   // private variables
   private readonly _appWindowRepository: AppWindowRepository;
 

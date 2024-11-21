@@ -4,11 +4,11 @@ import {
 } from '@agoralabs-sh/avm-web-provider';
 
 // events
-import type { IClientRequestEvent } from '@extension/types';
+import type { IAVMWebProviderRequestEvent } from '@extension/types';
 
 interface IBaseResponseThunkPayload<RequestParams extends TRequestParams> {
   error: BaseARC0027Error | null;
-  event: IClientRequestEvent<RequestParams>;
+  event: IAVMWebProviderRequestEvent<RequestParams>;
 }
 
 export default IBaseResponseThunkPayload;

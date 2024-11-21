@@ -1,41 +1,51 @@
+import { v4 as uuid } from 'uuid';
 import browser, { type Runtime } from 'webextension-polyfill';
 
 // enums
-import { WebAuthnMessageReferenceEnum } from '@common/enums';
+import { EventTypeEnum } from '@extension/enums';
+
+// events
+import { WebAuthnRequestEvent } from '@extension/events';
 
 // messages
 import {
   WebAuthnCreateRequestMessage,
-  WebAuthnCreateResponseMessage,
   WebAuthnGetRequestMessage,
-  WebAuthnGetResponseMessage,
 } from '@common/messages';
 
 // repository
 import EventQueueRepository from '@extension/repositories/EventQueueRepository';
 
-// types
-import type { IBaseOptions, ILogger } from '@common/types';
+// services
+import BaseListener from '@common/services/BaseListener';
 
-export default class WebAuthnMessageHandler {
+// types
+import type { IBaseOptions } from '@common/types';
+
+// utils
+import sendExtensionEvent from '@extension/utils/sendExtensionEvent';
+
+export default class WebAuthnMessageHandler extends BaseListener {
   // private variables
   private readonly _eventQueueRepository: EventQueueRepository;
-  private readonly _logger: ILogger | null;
 
-  constructor({ logger }: IBaseOptions) {
+  constructor(options: IBaseOptions) {
+    super(options);
+
     this._eventQueueRepository = new EventQueueRepository();
-    this._logger = logger || null;
   }
 
   /**
    * private methods
    */
 
-  private _onMessage(
+  private async _onMessage(
     message: WebAuthnCreateRequestMessage | WebAuthnGetRequestMessage,
     sender: Runtime.MessageSender
-  ): void {
+  ): Promise<void> {
     const _functionName = '_onMessage';
+    let event: WebAuthnRequestEvent;
+    let events: WebAuthnRequestEvent[];
 
     this._logger?.debug(
       `${WebAuthnMessageHandler.name}#${_functionName}: received client message "${message.reference}" with id "${message.id}"`
@@ -48,6 +58,37 @@ export default class WebAuthnMessageHandler {
 
       return;
     }
+
+    events = await this._eventQueueRepository.fetchByType<WebAuthnRequestEvent>(
+      EventTypeEnum.WebAuthnRequest
+    );
+
+    // if the client request already exists, ignore it
+    if (
+      events.find(
+        (value) => value.payload.message.id === event.payload.message.id
+      )
+    ) {
+      this._logger?.debug(
+        `${WebAuthnMessageHandler.name}#${_functionName}: webauthn request "${message.id}" already exists, ignoring`
+      );
+
+      return;
+    }
+
+    return await sendExtensionEvent({
+      event: new WebAuthnRequestEvent({
+        id: uuid(),
+        payload: {
+          message,
+          originTabId: sender.tab.id,
+        },
+      }),
+      eventQueueRepository: this._eventQueueRepository,
+      ...(this._logger && {
+        logger: this._logger,
+      }),
+    });
   }
 
   /**
@@ -55,12 +96,10 @@ export default class WebAuthnMessageHandler {
    */
 
   public startListening(): void {
-    // listen to messages from the webauthn broker (content-script)
     browser.runtime.onMessage.addListener(this._onMessage.bind(this));
   }
 
   public stopListening(): void {
-    // remove listeners
     browser.runtime.onMessage.removeListener(this._onMessage.bind(this));
   }
 }

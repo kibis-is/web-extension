@@ -14,7 +14,7 @@ import { MessagesThunkEnum } from '@extension/enums';
 import { removeEventByIdThunk } from '@extension/features/events';
 
 // messages
-import { ClientResponseMessage } from '@common/messages';
+import { AVMWebProviderResponseMessage } from '@common/messages';
 
 // types
 import type {
@@ -49,7 +49,7 @@ const sendEnableResponseThunk: AsyncThunk<
     if (error) {
       await browser.tabs.sendMessage(
         event.payload.originTabId,
-        new ClientResponseMessage<IEnableResult>({
+        new AVMWebProviderResponseMessage<IEnableResult>({
           error,
           id: uuid(),
           method: event.payload.message.method,
@@ -67,7 +67,7 @@ const sendEnableResponseThunk: AsyncThunk<
     if (session) {
       await browser.tabs.sendMessage(
         event.payload.originTabId,
-        new ClientResponseMessage<IEnableResult>({
+        new AVMWebProviderResponseMessage<IEnableResult>({
           id: uuid(),
           method: event.payload.message.method,
           requestId: event.payload.message.id,

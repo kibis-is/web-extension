@@ -4,20 +4,20 @@ import { ISignTransactionsParams } from '@agoralabs-sh/avm-web-provider';
 import type { IBaseOptions } from '@common/types';
 import type {
   IAccountWithExtendedProps,
-  IClientRequestEvent,
+  IAVMWebProviderRequestEvent,
   INetwork,
   ISession,
 } from '@extension/types';
 
 /**
  * @property {IAccountWithExtendedProps[]} accounts - the accounts.
- * @property {IClientRequestEvent<ISignTransactionsParams>} event - a sign transaction event.
+ * @property {IAVMWebProviderRequestEvent<ISignTransactionsParams>} event - a sign transaction event.
  * @property {INetwork[]} networks - the available network.
  * @property {ISession[]} networks - the saved sessions.
  */
 interface IOptions extends IBaseOptions {
   accounts: IAccountWithExtendedProps[];
-  event: IClientRequestEvent<ISignTransactionsParams>;
+  event: IAVMWebProviderRequestEvent<ISignTransactionsParams>;
   networks: INetwork[];
   sessions: ISession[];
 }

@@ -3,9 +3,6 @@ import browser from 'webextension-polyfill';
 // enums
 import { WebAuthnMessageReferenceEnum } from '@common/enums';
 
-// message-brokers
-import BaseMessageBroker from '@extension/message-brokers/BaseMessageBroker';
-
 // messages
 import {
   WebAuthnCreateRequestMessage,
@@ -14,11 +11,14 @@ import {
   WebAuthnGetResponseMessage,
 } from '@common/messages';
 
+// services
+import BaseListener from '@common/services/BaseListener';
+
 /**
  * The WebAuthn message broker listens to messages the client (the `WebAuthnManager` that is injected in the webpage via
  * `webauthn-manager.js`) and the provider (background script/popup) and transfers the messages between the two.
  */
-export default class WebAuthnMessageBroker extends BaseMessageBroker {
+export default class WebAuthnMessageBroker extends BaseListener {
   /**
    * private methods
    */

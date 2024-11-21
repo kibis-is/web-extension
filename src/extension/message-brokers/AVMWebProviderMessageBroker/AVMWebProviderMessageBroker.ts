@@ -12,11 +12,14 @@ import browser from 'webextension-polyfill';
 // constants
 import { SUPPORTED_METHODS } from '@common/constants';
 
-// message-brokers
-import BaseMessageBroker from '@extension/message-brokers/BaseMessageBroker';
-
 // messages
-import { ClientRequestMessage, ClientResponseMessage } from '@common/messages';
+import {
+  AVMWebProviderRequestMessage,
+  AVMWebProviderResponseMessage,
+} from '@common/messages';
+
+// services
+import BaseListener from '@common/services/BaseListener';
 
 // types
 import type { INewOptions } from './types';
@@ -24,7 +27,7 @@ import type { INewOptions } from './types';
 // utils
 import createClientInformation from '@common/utils/createClientInformation';
 
-export default class AVMWebProviderMessageBroker extends BaseMessageBroker {
+export default class AVMWebProviderMessageBroker extends BaseListener {
   // private variables
   private readonly _avmWebProvider: AVMWebProvider;
 
@@ -63,7 +66,9 @@ export default class AVMWebProviderMessageBroker extends BaseMessageBroker {
     requestMessage: IAVMWebProviderCallbackOptions
   ): Promise<TResponseResults> {
     return new Promise<TResponseResults>((resolve, reject) => {
-      const listener = (message: ClientResponseMessage<TResponseResults>) => {
+      const listener = (
+        message: AVMWebProviderResponseMessage<TResponseResults>
+      ) => {
         // if the response's request id does not match the intended request, just ignore
         if (message.requestId !== requestMessage.id) {
           return;
@@ -109,7 +114,7 @@ export default class AVMWebProviderMessageBroker extends BaseMessageBroker {
 
       // send the message to the background script/popups
       browser.runtime.sendMessage(
-        new ClientRequestMessage({
+        new AVMWebProviderRequestMessage({
           clientInfo: createClientInformation(),
           id: requestMessage.id,
           method: requestMessage.method,

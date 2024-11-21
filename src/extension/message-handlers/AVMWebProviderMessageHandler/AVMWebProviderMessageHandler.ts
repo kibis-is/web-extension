@@ -36,15 +36,12 @@ import { HOST, ICON_URI } from '@common/constants';
 import { EventTypeEnum } from '@extension/enums';
 
 // events
-import { ClientRequestEvent } from '@extension/events';
-
-// message handlers
-import BaseMessageHandler from '@extension/message-handlers/BaseMessageHandler';
+import { AVMWebProviderRequestEvent } from '@extension/events';
 
 // messages
 import {
-  ClientRequestMessage,
-  ClientResponseMessage,
+  AVMWebProviderRequestMessage,
+  AVMWebProviderResponseMessage,
   ProviderSessionsUpdatedMessage,
 } from '@common/messages';
 
@@ -54,12 +51,15 @@ import EventQueueRepository from '@extension/repositories/EventQueueRepository';
 import SessionRepository from '@extension/repositories/SessionRepository';
 import SettingsRepository from '@extension/repositories/SettingsRepository';
 
+// services
+import BaseListener from '@common/services/BaseListener';
+
 // types
-import type { IBaseOptions, ILogger } from '@common/types';
+import type { IBaseOptions } from '@common/types';
 import type {
   IAccount,
   IAccountWithExtendedProps,
-  IClientRequestEvent,
+  IAVMWebProviderRequestEvent,
   INetwork,
   ISession,
 } from '@extension/types';
@@ -76,7 +76,7 @@ import supportedNetworksFromSettings from '@extension/utils/supportedNetworksFro
 import verifyTransactionGroups from '@extension/utils/verifyTransactionGroups';
 import uniqueGenesisHashesFromTransactions from '@extension/utils/uniqueGenesisHashesFromTransactions';
 
-export default class AVMWebProviderMessageHandler extends BaseMessageHandler {
+export default class AVMWebProviderMessageHandler extends BaseListener {
   // private variables
   private readonly _accountRepository: AccountRepository;
   private readonly _eventQueueRepository: EventQueueRepository;
@@ -138,7 +138,7 @@ export default class AVMWebProviderMessageHandler extends BaseMessageHandler {
   }
 
   private async _handleDisableRequestMessage(
-    message: ClientRequestMessage<IDisableParams>,
+    message: AVMWebProviderRequestMessage<IDisableParams>,
     originTabId: number
   ): Promise<void> {
     const _functionName = 'handleDisableRequestMessage';
@@ -148,7 +148,7 @@ export default class AVMWebProviderMessageHandler extends BaseMessageHandler {
 
     if (!message.params) {
       return await this._sendResponse(
-        new ClientResponseMessage<IDisableResult>({
+        new AVMWebProviderResponseMessage<IDisableResult>({
           error: new ARC0027InvalidInputError({
             message: `no parameters supplied`,
             providerId: __PROVIDER_ID__,
@@ -178,7 +178,7 @@ export default class AVMWebProviderMessageHandler extends BaseMessageHandler {
 
       // send the response to the web page (via the content script)
       return await this._sendResponse(
-        new ClientResponseMessage<IDisableResult>({
+        new AVMWebProviderResponseMessage<IDisableResult>({
           error: new ARC0027NetworkNotSupportedError({
             genesisHashes: message.params?.genesisHash
               ? [message.params.genesisHash]
@@ -224,7 +224,7 @@ export default class AVMWebProviderMessageHandler extends BaseMessageHandler {
 
     // send the response to the web page (via the content script)
     await this._sendResponse(
-      new ClientResponseMessage<IDisableResult>({
+      new AVMWebProviderResponseMessage<IDisableResult>({
         id: uuid(),
         method: message.method,
         requestId: message.id,
@@ -245,7 +245,7 @@ export default class AVMWebProviderMessageHandler extends BaseMessageHandler {
   }
 
   private async _handleDiscoverRequestMessage(
-    message: ClientRequestMessage<IDiscoverParams>,
+    message: AVMWebProviderRequestMessage<IDiscoverParams>,
     originTabId: number
   ): Promise<void> {
     const supportedNetworks = supportedNetworksFromSettings({
@@ -254,7 +254,7 @@ export default class AVMWebProviderMessageHandler extends BaseMessageHandler {
     });
 
     return await this._sendResponse(
-      new ClientResponseMessage<IDiscoverResult>({
+      new AVMWebProviderResponseMessage<IDiscoverResult>({
         id: uuid(),
         method: message.method,
         requestId: message.id,
@@ -277,7 +277,7 @@ export default class AVMWebProviderMessageHandler extends BaseMessageHandler {
   }
 
   private async _handleEnableRequestMessage(
-    message: ClientRequestMessage<IEnableParams>,
+    message: AVMWebProviderRequestMessage<IEnableParams>,
     originTabId: number
   ): Promise<void> {
     const _functionName = 'handleEnableRequestMessage';
@@ -302,7 +302,7 @@ export default class AVMWebProviderMessageHandler extends BaseMessageHandler {
 
         // send the response to the web page (via the content script)
         return await this._sendResponse(
-          new ClientResponseMessage<IEnableResult>({
+          new AVMWebProviderResponseMessage<IEnableResult>({
             error: new ARC0027NetworkNotSupportedError({
               genesisHashes: [message.params.genesisHash],
               message: `no parameters supplied`,
@@ -347,7 +347,7 @@ export default class AVMWebProviderMessageHandler extends BaseMessageHandler {
 
         // send the response to the web page (via the content script)
         return await this._sendResponse(
-          new ClientResponseMessage<IEnableResult>({
+          new AVMWebProviderResponseMessage<IEnableResult>({
             id: uuid(),
             method: message.method,
             requestId: message.id,
@@ -385,7 +385,7 @@ export default class AVMWebProviderMessageHandler extends BaseMessageHandler {
     }
 
     return await this._sendClientMessageEvent(
-      new ClientRequestEvent({
+      new AVMWebProviderRequestEvent({
         id: uuid(),
         payload: {
           message,
@@ -396,7 +396,7 @@ export default class AVMWebProviderMessageHandler extends BaseMessageHandler {
   }
 
   private async _handleSignMessageRequestMessage(
-    message: ClientRequestMessage<ISignMessageParams>,
+    message: AVMWebProviderRequestMessage<ISignMessageParams>,
     originTabId: number
   ): Promise<void> {
     const _functionName = 'handleSignMessageRequestMessage';
@@ -409,7 +409,7 @@ export default class AVMWebProviderMessageHandler extends BaseMessageHandler {
 
     if (!message.params) {
       return await this._sendResponse(
-        new ClientResponseMessage<ISignMessageResult>({
+        new AVMWebProviderResponseMessage<ISignMessageResult>({
           error: new ARC0027InvalidInputError({
             message: `no message or signer supplied`,
             providerId: __PROVIDER_ID__,
@@ -430,7 +430,7 @@ export default class AVMWebProviderMessageHandler extends BaseMessageHandler {
 
       // send the response to the web page (via the content script)
       return await this._sendResponse(
-        new ClientResponseMessage<ISignMessageResult>({
+        new AVMWebProviderResponseMessage<ISignMessageResult>({
           error: new ARC0027UnauthorizedSignerError({
             message: `"${message.clientInfo.appName}" has not been authorized`,
             providerId: __PROVIDER_ID__,
@@ -473,7 +473,7 @@ export default class AVMWebProviderMessageHandler extends BaseMessageHandler {
 
         // send the response to the web page (via the content script)
         return await this._sendResponse(
-          new ClientResponseMessage<ISignMessageResult>({
+          new AVMWebProviderResponseMessage<ISignMessageResult>({
             error: new ARC0027UnauthorizedSignerError({
               message: _error,
               providerId: __PROVIDER_ID__,
@@ -489,7 +489,7 @@ export default class AVMWebProviderMessageHandler extends BaseMessageHandler {
     }
 
     return await this._sendClientMessageEvent(
-      new ClientRequestEvent({
+      new AVMWebProviderRequestEvent({
         id: uuid(),
         payload: {
           message,
@@ -500,7 +500,7 @@ export default class AVMWebProviderMessageHandler extends BaseMessageHandler {
   }
 
   private async _handleSignTransactionsRequestMessage(
-    message: ClientRequestMessage<ISignTransactionsParams>,
+    message: AVMWebProviderRequestMessage<ISignTransactionsParams>,
     originTabId: number
   ): Promise<void> {
     const _functionName: string = 'handleSignTransactionsRequestMessage';
@@ -513,7 +513,7 @@ export default class AVMWebProviderMessageHandler extends BaseMessageHandler {
 
     if (!message.params) {
       return await this._sendResponse(
-        new ClientResponseMessage<ISignTransactionsResult>({
+        new AVMWebProviderResponseMessage<ISignTransactionsResult>({
           error: new ARC0027InvalidInputError({
             message: `no transactions supplied`,
             providerId: __PROVIDER_ID__,
@@ -540,7 +540,7 @@ export default class AVMWebProviderMessageHandler extends BaseMessageHandler {
 
       // send the response to the web page (via the content script)
       return await this._sendResponse(
-        new ClientResponseMessage<ISignTransactionsResult>({
+        new AVMWebProviderResponseMessage<ISignTransactionsResult>({
           error: new ARC0027InvalidInputError({
             message: errorMessage,
             providerId: __PROVIDER_ID__,
@@ -563,7 +563,7 @@ export default class AVMWebProviderMessageHandler extends BaseMessageHandler {
 
       // send the response to the web page (via the content script)
       return await this._sendResponse(
-        new ClientResponseMessage<ISignTransactionsResult>({
+        new AVMWebProviderResponseMessage<ISignTransactionsResult>({
           error: new ARC0027InvalidGroupIdError({
             message: errorMessage,
             providerId: __PROVIDER_ID__,
@@ -599,7 +599,7 @@ export default class AVMWebProviderMessageHandler extends BaseMessageHandler {
 
       // send the response to the web page (via the content script)
       return await this._sendResponse(
-        new ClientResponseMessage<ISignTransactionsResult>({
+        new AVMWebProviderResponseMessage<ISignTransactionsResult>({
           error: new ARC0027NetworkNotSupportedError({
             genesisHashes: uniqueGenesisHashesFromTransactions(
               unsupportedTransactionsByNetwork
@@ -631,7 +631,7 @@ export default class AVMWebProviderMessageHandler extends BaseMessageHandler {
 
       // send the response to the web page
       return await this._sendResponse(
-        new ClientResponseMessage<ISignTransactionsResult>({
+        new AVMWebProviderResponseMessage<ISignTransactionsResult>({
           error: new ARC0027UnauthorizedSignerError({
             message: `client "${message.clientInfo.appName}" has not been authorized`,
             providerId: __PROVIDER_ID__,
@@ -645,7 +645,7 @@ export default class AVMWebProviderMessageHandler extends BaseMessageHandler {
     }
 
     return await this._sendClientMessageEvent(
-      new ClientRequestEvent({
+      new AVMWebProviderRequestEvent({
         id: uuid(),
         payload: {
           message,
@@ -656,7 +656,7 @@ export default class AVMWebProviderMessageHandler extends BaseMessageHandler {
   }
 
   private async _onMessage(
-    message: ClientRequestMessage<TRequestParams>,
+    message: AVMWebProviderRequestMessage<TRequestParams>,
     sender: Runtime.MessageSender
   ): Promise<void> {
     const _functionName: string = 'onMessage';
@@ -676,27 +676,27 @@ export default class AVMWebProviderMessageHandler extends BaseMessageHandler {
     switch (message.method) {
       case ARC0027MethodEnum.Disable:
         return await this._handleDisableRequestMessage(
-          message as ClientRequestMessage<IDisableParams>,
+          message as AVMWebProviderRequestMessage<IDisableParams>,
           sender.tab.id
         );
       case ARC0027MethodEnum.Discover:
         return await this._handleDiscoverRequestMessage(
-          message as ClientRequestMessage<IDiscoverParams>,
+          message as AVMWebProviderRequestMessage<IDiscoverParams>,
           sender.tab.id
         );
       case ARC0027MethodEnum.Enable:
         return await this._handleEnableRequestMessage(
-          message as ClientRequestMessage<IEnableParams>,
+          message as AVMWebProviderRequestMessage<IEnableParams>,
           sender.tab.id
         );
       case ARC0027MethodEnum.SignMessage:
         return await this._handleSignMessageRequestMessage(
-          message as ClientRequestMessage<ISignMessageParams>,
+          message as AVMWebProviderRequestMessage<ISignMessageParams>,
           sender.tab.id
         );
       case ARC0027MethodEnum.SignTransactions:
         return await this._handleSignTransactionsRequestMessage(
-          message as ClientRequestMessage<ISignTransactionsParams>,
+          message as AVMWebProviderRequestMessage<ISignTransactionsParams>,
           sender.tab.id
         );
       default:
@@ -705,12 +705,12 @@ export default class AVMWebProviderMessageHandler extends BaseMessageHandler {
   }
 
   private async _sendClientMessageEvent<Params extends TRequestParams>(
-    event: IClientRequestEvent<Params>
+    event: IAVMWebProviderRequestEvent<Params>
   ): Promise<void> {
     const _functionName = 'sendClientMessageEvent';
     const events = await this._eventQueueRepository.fetchByType<
-      IClientRequestEvent<TRequestParams>
-    >(EventTypeEnum.ClientRequest);
+      IAVMWebProviderRequestEvent<TRequestParams>
+    >(EventTypeEnum.AVMWebProviderRequest);
 
     // if the client request already exists, ignore it
     if (
@@ -735,7 +735,7 @@ export default class AVMWebProviderMessageHandler extends BaseMessageHandler {
   }
 
   private async _sendResponse(
-    message: ClientResponseMessage<TResponseResults>,
+    message: AVMWebProviderResponseMessage<TResponseResults>,
     originTabId: number
   ): Promise<void> {
     const _functionName: string = 'sendResponse';

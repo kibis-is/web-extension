@@ -17,7 +17,7 @@ import {
 // types
 import type {
   IAccountWithExtendedProps,
-  IClientRequestEvent,
+  IAVMWebProviderRequestEvent,
 } from '@extension/types';
 import type { IUseSignMessageModalState } from './types';
 
@@ -35,16 +35,16 @@ export default function useSignMessageModal(): IUseSignMessageModalState {
     IAccountWithExtendedProps[] | null
   >(null);
   const [event, setEvent] =
-    useState<IClientRequestEvent<ISignMessageParams> | null>(null);
+    useState<IAVMWebProviderRequestEvent<ISignMessageParams> | null>(null);
   const [signer, setSigner] = useState<IAccountWithExtendedProps | null>(null);
 
   useEffect(() => {
     setEvent(
       (events.find(
         (value) =>
-          value.type === EventTypeEnum.ClientRequest &&
+          value.type === EventTypeEnum.AVMWebProviderRequest &&
           value.payload.message.method === ARC0027MethodEnum.SignMessage
-      ) as IClientRequestEvent<ISignMessageParams>) || null
+      ) as IAVMWebProviderRequestEvent<ISignMessageParams>) || null
     );
   }, [events]);
   // when we have accounts, sessions and the event, update the authorized accounts

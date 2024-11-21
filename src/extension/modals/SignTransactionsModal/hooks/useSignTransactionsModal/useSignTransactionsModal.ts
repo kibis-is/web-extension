@@ -28,7 +28,7 @@ import {
 import type {
   IAppThunkDispatch,
   IBackgroundRootState,
-  IClientRequestEvent,
+  IAVMWebProviderRequestEvent,
   IMainRootState,
   INetwork,
 } from '@extension/types';
@@ -50,15 +50,15 @@ export default function useSignTransactionsModal(): IState {
   const standardAssets = useSelectStandardAssets();
   // state
   const [event, setEvent] =
-    useState<IClientRequestEvent<ISignTransactionsParams> | null>(null);
+    useState<IAVMWebProviderRequestEvent<ISignTransactionsParams> | null>(null);
 
   useEffect(() => {
     setEvent(
       (events.find(
         (value) =>
-          value.type === EventTypeEnum.ClientRequest &&
+          value.type === EventTypeEnum.AVMWebProviderRequest &&
           value.payload.message.method === ARC0027MethodEnum.SignTransactions
-      ) as IClientRequestEvent<ISignTransactionsParams>) || null
+      ) as IAVMWebProviderRequestEvent<ISignTransactionsParams>) || null
     );
   }, [events]);
   // check for any unknown standard assets and fetch the asset information
