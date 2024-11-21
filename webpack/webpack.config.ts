@@ -253,14 +253,12 @@ const configs: (
       entry: {
         ['background']: resolve(SRC_PATH, 'background.ts'),
         ['middleware']: resolve(SRC_PATH, 'middleware.ts'),
-        ['webauthn-listener']: resolve(
+        ['webauthn-manager']: resolve(
           SRC_PATH,
           'external',
           'sources',
-          'webauthn-listener',
-          'index.ts'
+          'webauthn-manager.ts'
         ),
-        ['algorand-provider']: resolve(SRC_PATH, 'algorand-provider.ts'),
       },
       mode: environment,
       module: {

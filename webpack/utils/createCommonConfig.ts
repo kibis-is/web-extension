@@ -60,10 +60,7 @@ export default function createCommonConfig(): Configuration {
         ['@extension/types']: resolve(extensionPath, 'types'),
         ['@extension/utils']: resolve(extensionPath, 'utils'),
         // external
-        ['@external/constants']: resolve(externalPath, 'constants'),
         ['@external/managers']: resolve(externalPath, 'managers'),
-        ['@external/services']: resolve(externalPath, 'services'),
-        ['@external/types']: resolve(externalPath, 'types'),
       },
       extensions: ['.css', '.js', '.ts', '.tsx'],
     },

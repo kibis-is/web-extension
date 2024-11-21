@@ -1,5 +1,8 @@
 import browser from 'webextension-polyfill';
 
+// message-handlers
+import WebAuthnMessageHandler from '@extension/message-handlers/WebAuthnMessageHandler';
+
 // repositories
 import SettingsRepository from '@extension/repositories/SettingsRepository';
 
@@ -20,6 +23,7 @@ import createLogger from '@common/utils/createLogger';
   let heartbeatService: HeartbeatService;
   let providerActionListener: ProviderActionListener;
   let providerMessageHandler: ProviderMessageHandler;
+  let webAuthnMessageHandler: WebAuthnMessageHandler;
 
   // if the debug logging is enabled, re-create the logger with debug logging enabled
   if (settings.advanced.debugLogging) {
@@ -36,6 +40,12 @@ import createLogger from '@common/utils/createLogger';
   providerMessageHandler = new ProviderMessageHandler({
     logger,
   });
+  webAuthnMessageHandler = new WebAuthnMessageHandler({
+    logger,
+  });
+
+  // listen to messages from the client (via the content scripts)
+  webAuthnMessageHandler.startListening();
 
   // create an alarm to "tick" that will keep the extension from going idle
   await heartbeatService.createOrGetAlarm();

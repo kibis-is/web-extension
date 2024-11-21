@@ -52,10 +52,7 @@
       "@extension/translations": ["src/extension/translations"],
       "@extension/types": ["src/extension/types"],
       "@extension/utils/*": ["src/extension/utils/*"],
-      "@external/constants": ["src/external/constants"],
       "@external/managers/*": ["src/external/managers/*"],
-      "@external/services/*": ["src/external/services/*"],
-      "@external/types": ["src/external/types"],
       "@test/utils/*": ["test/utils/*"]
     },
     "removeComments": false,

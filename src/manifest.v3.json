@@ -10,7 +10,7 @@
   "web_accessible_resources": [
     {
       "matches": ["*://*/*"],
-      "resources": ["algorand-provider.js"]
+      "resources": ["webauthn-manager.js"]
     }
   ]
 }
