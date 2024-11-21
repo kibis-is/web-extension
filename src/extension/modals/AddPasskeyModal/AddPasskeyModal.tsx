@@ -16,11 +16,11 @@ import React, { FC, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { GoShieldLock } from 'react-icons/go';
 import { IoKeyOutline } from 'react-icons/io5';
-import { Radio } from 'react-loader-spinner';
 import { useDispatch } from 'react-redux';
 
 // components
 import Button from '@extension/components/Button';
+import CircularProgressWithIcon from '@extension/components/CircularProgressWithIcon';
 import CopyIconButton from '@extension/components/CopyIconButton';
 import COSEAlgorithmBadge from '@extension/components/COSEAlgorithmBadge';
 import ModalItem from '@extension/components/ModalItem';
@@ -40,10 +40,12 @@ import {
 import { create as createNotification } from '@extension/features/notifications';
 
 // hooks
-import useColorModeValue from '@extension/hooks/useColorModeValue';
 import useDefaultTextColor from '@extension/hooks/useDefaultTextColor';
 import useSubTextColor from '@extension/hooks/useSubTextColor';
 import useAddPasskey from './hooks/useAddPasskey';
+
+// icons
+import KbPasskey from '@extension/icons/KbPasskey';
 
 // modals
 import ConfirmPasswordModal from '@extension/modals/ConfirmPasswordModal';
@@ -87,10 +89,6 @@ const AddPasskeyModal: FC<IProps> = ({ addPasskey, onClose }) => {
     resetAction: resetAddPasskeyAction,
   } = useAddPasskey();
   const defaultTextColor = useDefaultTextColor();
-  const primaryColorCode = useColorModeValue(
-    theme.colors.primaryLight['500'],
-    theme.colors.primaryDark['500']
-  );
   const subTextColor = useSubTextColor();
   // misc
   const isLoading = encrypting || requesting || saving;
@@ -167,12 +165,8 @@ const AddPasskeyModal: FC<IProps> = ({ addPasskey, onClose }) => {
           spacing={DEFAULT_GAP}
           w="full"
         >
-          {/*loader*/}
-          <Radio
-            colors={[primaryColorCode, primaryColorCode, primaryColorCode]}
-            height="80"
-            width="80"
-          />
+          {/*passkey loader*/}
+          <CircularProgressWithIcon icon={KbPasskey} />
 
           {/*caption*/}
           <Text color={subTextColor} fontSize="sm" textAlign="justify" w="full">

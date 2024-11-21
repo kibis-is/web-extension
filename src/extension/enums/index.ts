@@ -16,7 +16,6 @@ export { default as EventsThunkEnum } from './EventsThunkEnum';
 export { default as MessagesThunkEnum } from './MessagesThunkEnum';
 export { default as NetworkTypeEnum } from './NetworkTypeEnum';
 export { default as ScanModeEnum } from './ScanModeEnum';
-export { default as SendAssetsThunkEnum } from './SendAssetsThunkEnum';
 export { default as StandardAssetsThunkEnum } from './StandardAssetsThunkEnum';
 export { default as StoreNameEnum } from './StoreNameEnum';
 export { default as TransactionTypeEnum } from './TransactionTypeEnum';

@@ -10,9 +10,10 @@ import React, { type FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
 // constants
-import { DEFAULT_GAP } from '@extension/constants';
+import { DEFAULT_GAP, INPUT_HEIGHT } from '@extension/constants';
 
 // hooks
+import useBorderColor from '@extension/hooks/useBorderColor';
 import useDefaultTextColor from '@extension/hooks/useDefaultTextColor';
 
 // types
@@ -24,11 +25,11 @@ const MoreInformationAccordion: FC<IProps> = ({
   fontSize,
   isOpen,
   label,
-  minButtonHeight,
   onChange,
 }) => {
   const { t } = useTranslation();
   // hooks
+  const borderColor = useBorderColor();
   const defaultTextColor = useDefaultTextColor();
   // handlers
   const handleOnChange = (value: number) => onChange(value > -1);
@@ -41,7 +42,14 @@ const MoreInformationAccordion: FC<IProps> = ({
       w="full"
     >
       <AccordionItem border="none" w="full">
-        <AccordionButton minH={minButtonHeight} p={0}>
+        <AccordionButton
+          borderColor={borderColor}
+          borderRadius="full"
+          borderStyle="solid"
+          borderWidth="1px"
+          h={INPUT_HEIGHT}
+          px={DEFAULT_GAP - 2}
+        >
           <Text
             color={color || defaultTextColor}
             fontSize={fontSize}
@@ -51,7 +59,7 @@ const MoreInformationAccordion: FC<IProps> = ({
             {label || t<string>('labels.moreInformation')}
           </Text>
 
-          <AccordionIcon />
+          <AccordionIcon color={color || defaultTextColor} />
         </AccordionButton>
 
         <AccordionPanel pb={0} pt={DEFAULT_GAP / 3} px={0}>

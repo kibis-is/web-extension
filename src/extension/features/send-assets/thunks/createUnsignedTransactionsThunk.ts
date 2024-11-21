@@ -3,7 +3,8 @@ import { type Transaction } from 'algosdk';
 import BigNumber from 'bignumber.js';
 
 // enums
-import { AssetTypeEnum, SendAssetsThunkEnum } from '@extension/enums';
+import { AssetTypeEnum } from '@extension/enums';
+import { ThunkEnum } from '../enums';
 
 // errors
 import {
@@ -43,7 +44,7 @@ const createUnsignedTransactionsThunk: AsyncThunk<
   ICreateUnsignedTransactionsPayload,
   IAsyncThunkConfigWithRejectValue<IMainRootState>
 >(
-  SendAssetsThunkEnum.CreateUnsignedTransactions,
+  ThunkEnum.CreateUnsignedTransactions,
   async (
     { amountInStandardUnits, note, receiverAddress },
     { getState, rejectWithValue }
@@ -64,16 +65,14 @@ const createUnsignedTransactionsThunk: AsyncThunk<
     if (!asset || !sender) {
       _error = 'required fields not completed';
 
-      logger.debug(
-        `${SendAssetsThunkEnum.CreateUnsignedTransactions}: ${_error}`
-      );
+      logger.debug(`${ThunkEnum.CreateUnsignedTransactions}: ${_error}`);
 
       return rejectWithValue(new MalformedDataError(_error));
     }
 
     if (!online) {
       logger.debug(
-        `${SendAssetsThunkEnum.CreateUnsignedTransactions}: extension offline`
+        `${ThunkEnum.CreateUnsignedTransactions}: extension offline`
       );
 
       return rejectWithValue(
@@ -88,7 +87,7 @@ const createUnsignedTransactionsThunk: AsyncThunk<
 
     if (!network) {
       logger.debug(
-        `${SendAssetsThunkEnum.CreateUnsignedTransactions}: no network selected`
+        `${ThunkEnum.CreateUnsignedTransactions}: no network selected`
       );
 
       return rejectWithValue(
@@ -105,9 +104,7 @@ const createUnsignedTransactionsThunk: AsyncThunk<
     if (!senderAccountInformation) {
       _error = `no account information found for "${senderAddress}" on network "${network.genesisId}"`;
 
-      logger.debug(
-        `${SendAssetsThunkEnum.CreateUnsignedTransactions}: ${_error}`
-      );
+      logger.debug(`${ThunkEnum.CreateUnsignedTransactions}: ${_error}`);
 
       return rejectWithValue(new MalformedDataError(_error));
     }
@@ -161,10 +158,7 @@ const createUnsignedTransactionsThunk: AsyncThunk<
           throw new Error('unknown asset');
       }
     } catch (error) {
-      logger.debug(
-        `${SendAssetsThunkEnum.CreateUnsignedTransactions}: `,
-        error
-      );
+      logger.debug(`${ThunkEnum.CreateUnsignedTransactions}: `, error);
 
       return rejectWithValue(new FailedToSendTransactionError(error.message));
     }
