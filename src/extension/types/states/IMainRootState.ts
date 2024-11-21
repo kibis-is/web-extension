@@ -15,6 +15,7 @@ import type { IState as ISendAssetsState } from '@extension/features/send-assets
 import type { IState as ISessionsState } from '@extension/features/sessions';
 import type { IState as ISettingsState } from '@extension/features/settings';
 import type { IState as IStandardAssetsState } from '@extension/features/standard-assets';
+import type { IState as IWebAuthnState } from '@extension/features/webauthn';
 
 // types
 import IBaseRootState from './IBaseRootState';
@@ -36,6 +37,7 @@ interface IMainRootState extends IBaseRootState {
   sessions: ISessionsState;
   settings: ISettingsState;
   standardAssets: IStandardAssetsState;
+  webauthn: IWebAuthnState;
 }
 
 export default IMainRootState;

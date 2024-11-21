@@ -12,7 +12,7 @@ interface IProps extends IPropsWithContext {
   onSelect: (account: IAccountWithExtendedProps) => void;
   required?: boolean;
   selectModalTitle?: string;
-  value: IAccountWithExtendedProps;
+  value: IAccountWithExtendedProps | null;
 }
 
 export default IProps;

@@ -2,6 +2,7 @@ import {
   Button as ChakraButton,
   Icon,
   Stack,
+  Text,
   useDisclosure,
   VStack,
 } from '@chakra-ui/react';
@@ -20,6 +21,7 @@ import { DEFAULT_GAP, INPUT_HEIGHT } from '@extension/constants';
 import useBorderColor from '@extension/hooks/useBorderColor';
 import useButtonHoverBackgroundColor from '@extension/hooks/useButtonHoverBackgroundColor';
 import useColorModeValue from '@extension/hooks/useColorModeValue';
+import useDefaultTextColor from '@extension/hooks/useDefaultTextColor';
 import usePrimaryColor from '@extension/hooks/usePrimaryColor';
 import useSubTextColor from '@extension/hooks/useSubTextColor';
 
@@ -54,6 +56,7 @@ const AccountSelect: FC<IProps> = ({
     theme.colors.primaryLight['500'],
     theme.colors.primaryDark['500']
   );
+  const defaultTextColor = useDefaultTextColor();
   const primaryColor = usePrimaryColor();
   const subTextColor = useSubTextColor();
   const {
@@ -116,7 +119,18 @@ const AccountSelect: FC<IProps> = ({
           w="full"
         >
           <Stack flexGrow={1} justifyContent="center" w="full">
-            <AccountItem account={value} />
+            {value ? (
+              <AccountItem account={value} />
+            ) : (
+              <Text
+                color={defaultTextColor}
+                flexGrow={1}
+                fontSize="sm"
+                textAlign="left"
+              >
+                {t<string>('placeholders.selectAnAccount')}
+              </Text>
+            )}
           </Stack>
         </ChakraButton>
       </VStack>

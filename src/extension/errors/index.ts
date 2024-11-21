@@ -1,3 +1,4 @@
+export { default as AuthRequestCanceledError } from './AuthRequestCanceledError';
 export { default as BaseExtensionError } from './BaseExtensionError';
 export { default as CameraError } from './CameraError';
 export { default as CameraNotAllowedError } from './CameraNotAllowedError';

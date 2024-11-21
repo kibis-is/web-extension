@@ -7,7 +7,7 @@ import { v4 as uuid } from 'uuid';
 import browser from 'webextension-polyfill';
 
 // enums
-import { MessagesThunkEnum } from '@extension/enums';
+import { ThunkEnum } from '../enums';
 
 // features
 import { removeEventByIdThunk } from '@extension/features/events';
@@ -32,12 +32,12 @@ const sendSignTransactionsResponseThunk: AsyncThunk<
   ISignTransactionsResponseThunkPayload,
   IBaseAsyncThunkConfig<IBackgroundRootState | IMainRootState>
 >(
-  MessagesThunkEnum.SendSignTransactionsResponse,
+  ThunkEnum.SendSignTransactionsResponse,
   async ({ error, event, stxns }, { dispatch, getState }) => {
     const logger = getState().system.logger;
 
     logger.debug(
-      `${MessagesThunkEnum.SendSignTransactionsResponse}: sending "${ARC0027MethodEnum.SignTransactions}" message to content script`
+      `${ThunkEnum.SendSignTransactionsResponse}: sending "${ARC0027MethodEnum.SignTransactions}" message to content script`
     );
 
     // send the error the webpage (via the content script)

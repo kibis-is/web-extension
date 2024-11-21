@@ -7,7 +7,7 @@ import { v4 as uuid } from 'uuid';
 import browser from 'webextension-polyfill';
 
 // enums
-import { MessagesThunkEnum } from '@extension/enums';
+import { ThunkEnum } from '../enums';
 
 // messages
 import { AVMWebProviderResponseMessage } from '@common/messages';
@@ -29,12 +29,12 @@ const sendSignMessageResponseThunk: AsyncThunk<
   ISignMessageResponseThunkPayload,
   IBaseAsyncThunkConfig<IBackgroundRootState | IMainRootState>
 >(
-  MessagesThunkEnum.SendSignMessageResponse,
+  ThunkEnum.SendSignMessageResponse,
   async ({ error, event, signature, signer }, { getState }) => {
     const logger = getState().system.logger;
 
     logger.debug(
-      `${MessagesThunkEnum.SendSignMessageResponse}: sending "${ARC0027MethodEnum.SignMessage}" message to content script`
+      `${ThunkEnum.SendSignMessageResponse}: sending "${ARC0027MethodEnum.SignMessage}" message to content script`
     );
 
     // send the error the webpage (via the content script)

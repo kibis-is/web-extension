@@ -8,7 +8,7 @@ import { v4 as uuid } from 'uuid';
 import browser from 'webextension-polyfill';
 
 // enums
-import { MessagesThunkEnum } from '@extension/enums';
+import { ThunkEnum } from '../enums';
 
 // features
 import { removeEventByIdThunk } from '@extension/features/events';
@@ -36,13 +36,13 @@ const sendEnableResponseThunk: AsyncThunk<
   IEnableResponseThunkPayload,
   IBaseAsyncThunkConfig<IMainRootState>
 >(
-  MessagesThunkEnum.SendEnableResponse,
+  ThunkEnum.SendEnableResponse,
   async ({ error, event, session }, { dispatch, getState }) => {
     const accounts = getState().accounts.items;
     const logger = getState().system.logger;
 
     logger.debug(
-      `${MessagesThunkEnum.SendEnableResponse}: sending "${ARC0027MethodEnum.Enable}" message to the content script`
+      `${ThunkEnum.SendEnableResponse}: sending "${ARC0027MethodEnum.Enable}" message to the content script`
     );
 
     // send the error the webpage (via the content script)
