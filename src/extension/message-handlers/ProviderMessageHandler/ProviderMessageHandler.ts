@@ -7,6 +7,9 @@ import { AppTypeEnum } from '@extension/enums';
 // managers
 import AppWindowManager from '@extension/managers/AppWindowManager';
 
+// message handlers
+import BaseMessageHandler from '@extension/message-handlers/BaseMessageHandler';
+
 // messages
 import { BaseProviderMessage } from '@common/messages';
 
@@ -14,16 +17,16 @@ import { BaseProviderMessage } from '@common/messages';
 import AppWindowRepository from '@extension/repositories/AppWindowRepository';
 
 // types
-import type { IBaseOptions, ILogger } from '@common/types';
+import type { IBaseOptions } from '@common/types';
 
-export default class ProviderMessageHandler {
+export default class ProviderMessageHandler extends BaseMessageHandler {
   // private variables
   private readonly _appWindowRepository: AppWindowRepository;
-  private readonly _logger: ILogger | null;
 
-  constructor({ logger }: IBaseOptions) {
+  constructor(options: IBaseOptions) {
+    super(options);
+
     this._appWindowRepository = new AppWindowRepository();
-    this._logger = logger || null;
   }
 
   /**
@@ -94,11 +97,7 @@ export default class ProviderMessageHandler {
     }
   }
 
-  /**
-   * public functions
-   */
-
-  public async onMessage(message: BaseProviderMessage): Promise<void> {
+  private async _onMessage(message: BaseProviderMessage): Promise<void> {
     const _functionName = 'onMessage';
 
     this._logger?.debug(
@@ -113,5 +112,17 @@ export default class ProviderMessageHandler {
       default:
         break;
     }
+  }
+
+  /**
+   * public functions
+   */
+
+  public startListening() {
+    browser.runtime.onMessage.addListener(this._onMessage.bind(this));
+  }
+
+  public stopListening() {
+    browser.runtime.onMessage.removeListener(this._onMessage.bind(this));
   }
 }

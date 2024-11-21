@@ -31,6 +31,7 @@ import SettingsRepository from '@extension/repositories/SettingsRepository';
 import SystemInfoRepository from '@extension/repositories/SystemInfoRepository';
 
 // services
+import BaseListener from '@common/services/BaseListener';
 import CredentialLockService from '../CredentialLockService';
 
 // types
@@ -50,31 +51,31 @@ import parseURIToARC0300Schema from '@extension/utils/parseURIToARC0300Schema';
 import sendExtensionEvent from '@extension/utils/sendExtensionEvent';
 import supportedNetworksFromSettings from '@extension/utils/supportedNetworksFromSettings';
 
-export default class ProviderActionListener {
+export default class ProviderActionListener extends BaseListener {
   // private variables
   private readonly _appWindowManager: AppWindowManager;
   private readonly _appWindowRepository: AppWindowRepository;
   private readonly _credentialLockService: CredentialLockService;
   private _isClearingCredentialLockAlarm: boolean;
   private _isRestartingCredentialLockAlarm: boolean;
-  private readonly _logger: ILogger | null;
   private readonly _privateKeyRepository: PrivateKeyRepository;
   private readonly _settingsRepository: SettingsRepository;
   private readonly _systemInfoRepository: SystemInfoRepository;
 
-  constructor({ logger }: IBaseOptions) {
+  constructor(options: IBaseOptions) {
     const appWindowRepository = new AppWindowRepository();
+
+    super(options);
 
     this._appWindowManager = new AppWindowManager({
       appWindowRepository,
-      logger,
+      logger: options.logger,
     });
     this._appWindowRepository = appWindowRepository;
     this._isClearingCredentialLockAlarm = false;
     this._isRestartingCredentialLockAlarm = false;
-    this._logger = logger || null;
     this._credentialLockService = new CredentialLockService({
-      logger,
+      logger: options.logger,
     });
     this._privateKeyRepository = new PrivateKeyRepository();
     this._settingsRepository = new SettingsRepository();
@@ -148,32 +149,7 @@ export default class ProviderActionListener {
     );
   }
 
-  private async _restartCredentialLockAlarm(): Promise<void> {
-    let alarm = await this._credentialLockService.getAlarm();
-    let settings: ISettings = await this._settingsRepository.fetch();
-
-    // restart the alarm if the credential lock is not active, is enabled and the duration is not set to 0 ("never")
-    if (
-      !this._isRestartingCredentialLockAlarm &&
-      !alarm &&
-      settings.security.enableCredentialLock &&
-      settings.security.credentialLockTimeoutDuration > 0
-    ) {
-      this._isRestartingCredentialLockAlarm = true;
-
-      await this._credentialLockService.restartAlarm(
-        settings.security.credentialLockTimeoutDuration
-      );
-
-      this._isRestartingCredentialLockAlarm = false;
-    }
-  }
-
-  /**
-   * public functions
-   */
-
-  public async onAlarm(alarm: Alarms.Alarm): Promise<void> {
+  private async _onAlarm(alarm: Alarms.Alarm): Promise<void> {
     const _functionName = 'onAlarm';
 
     this._logger?.debug(
@@ -190,7 +166,7 @@ export default class ProviderActionListener {
     }
   }
 
-  public async onExtensionClick(): Promise<void> {
+  private async _onExtensionClick(): Promise<void> {
     const _functionName = 'onExtensionClick';
     const isInitialized = await isExtensionInitialized();
     let mainAppWindows: IAppWindow[];
@@ -264,8 +240,8 @@ export default class ProviderActionListener {
     await this._clearCredentialLockAlarm();
   }
 
-  public async onFocusChanged(windowId: number): Promise<void> {
-    const _functionName = 'onFocusChanged';
+  private async _onFocusChanged(windowId: number): Promise<void> {
+    const _functionName = '_onFocusChanged';
     const mainWindow = await this._getMainWindow();
 
     if (mainWindow) {
@@ -287,8 +263,8 @@ export default class ProviderActionListener {
     }
   }
 
-  public async onInstalled(): Promise<void> {
-    const _functionName = 'onInstalled';
+  private async _onInstalled(): Promise<void> {
+    const _functionName = '_onInstalled';
     let systemInfo = await this._systemInfoRepository.fetch();
 
     // if there is no system info, initialize the default
@@ -303,8 +279,8 @@ export default class ProviderActionListener {
     }
   }
 
-  public async onOmniboxInputEntered(text: string): Promise<void> {
-    const _functionName = 'onOmniboxInputEntered';
+  private async _onOmniboxInputEntered(text: string): Promise<void> {
+    const _functionName = '_onOmniboxInputEntered';
     let arc0300Schema: IARC0300BaseSchema | null;
 
     this._logger?.debug(
@@ -354,8 +330,8 @@ export default class ProviderActionListener {
     }
   }
 
-  public async onWindowRemove(windowId: number): Promise<void> {
-    const _functionName = 'onWindowRemove';
+  private async _onWindowRemove(windowId: number): Promise<void> {
+    const _functionName = '_onWindowRemove';
     const appWindow = await this._appWindowRepository.fetchById(windowId);
 
     // remove the app window from storage
@@ -370,5 +346,58 @@ export default class ProviderActionListener {
 
       await this._appWindowRepository.removeByIds([windowId]);
     }
+  }
+
+  private async _restartCredentialLockAlarm(): Promise<void> {
+    let alarm = await this._credentialLockService.getAlarm();
+    let settings: ISettings = await this._settingsRepository.fetch();
+
+    // restart the alarm if the credential lock is not active, is enabled and the duration is not set to 0 ("never")
+    if (
+      !this._isRestartingCredentialLockAlarm &&
+      !alarm &&
+      settings.security.enableCredentialLock &&
+      settings.security.credentialLockTimeoutDuration > 0
+    ) {
+      this._isRestartingCredentialLockAlarm = true;
+
+      await this._credentialLockService.restartAlarm(
+        settings.security.credentialLockTimeoutDuration
+      );
+
+      this._isRestartingCredentialLockAlarm = false;
+    }
+  }
+
+  /**
+   * public functions
+   */
+
+  public startListening(): void {
+    const browserAction = browser.action || browser.browserAction; // TODO: use browser.action for v3
+
+    browser.alarms.onAlarm.addListener(this._onAlarm.bind(this));
+    browserAction.onClicked.addListener(this._onExtensionClick.bind(this));
+    browser.omnibox.onInputEntered.addListener(
+      this._onOmniboxInputEntered.bind(this)
+    );
+    browser.runtime.onInstalled.addListener(this._onInstalled.bind(this));
+    browser.windows.onFocusChanged.addListener(this._onFocusChanged.bind(this));
+    browser.windows.onRemoved.addListener(this._onWindowRemove.bind(this));
+  }
+
+  public stopListening() {
+    const browserAction = browser.action || browser.browserAction; // TODO: use browser.action for v3
+
+    browser.alarms.onAlarm.removeListener(this._onAlarm.bind(this));
+    browserAction.onClicked.removeListener(this._onExtensionClick.bind(this));
+    browser.omnibox.onInputEntered.removeListener(
+      this._onOmniboxInputEntered.bind(this)
+    );
+    browser.runtime.onInstalled.removeListener(this._onInstalled.bind(this));
+    browser.windows.onFocusChanged.removeListener(
+      this._onFocusChanged.bind(this)
+    );
+    browser.windows.onRemoved.removeListener(this._onWindowRemove.bind(this));
   }
 }

@@ -1,7 +1,7 @@
 // types
 import type { IBaseOptions, ILogger } from '@common/types';
 
-export default abstract class BaseMessageBroker {
+export default abstract class BaseListener {
   // protected variables
   protected readonly _logger: ILogger | null;
 

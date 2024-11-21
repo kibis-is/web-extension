@@ -22,6 +22,7 @@
       "@common/enums": ["src/common/enums"],
       "@common/errors": ["src/common/errors"],
       "@common/messages": ["src/common/messages"],
+      "@common/services/*": ["src/common/services/*"],
       "@common/types": ["src/common/types"],
       "@common/utils/*": ["src/common/utils/*"],
       "@docs/*": ["src/docs/*"],
