@@ -1,3 +1,10 @@
+# [2.5.0-beta.1](https://github.com/kibis-is/web-extension/compare/v2.4.0...v2.5.0-beta.1) (2024-11-21)
+
+
+### Features
+
+* add new loading icons ([#345](https://github.com/kibis-is/web-extension/issues/345)) ([f52ca54](https://github.com/kibis-is/web-extension/commit/f52ca5468acc988e26b3dde2b68370662aff109f))
+
 # [2.4.0](https://github.com/kibis-is/web-extension/compare/v2.3.2...v2.4.0) (2024-11-16)
 
 

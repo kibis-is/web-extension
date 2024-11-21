@@ -1,7 +1,7 @@
 import { type AsyncThunk, createAsyncThunk } from '@reduxjs/toolkit';
 
 // enums
-import { SendAssetsThunkEnum } from '@extension/enums';
+import { ThunkEnum } from '../enums';
 
 // errors
 import {
@@ -41,7 +41,7 @@ const submitTransactionThunk: AsyncThunk<
   TSubmitTransactionsThunkPayload,
   IAsyncThunkConfigWithRejectValue<IMainRootState>
 >(
-  SendAssetsThunkEnum.SubmitTransaction,
+  ThunkEnum.SubmitTransactions,
   async (
     { transactions, ...encryptionOptions },
     { getState, rejectWithValue }
@@ -63,15 +63,13 @@ const submitTransactionThunk: AsyncThunk<
     if (!sender) {
       _error = `sender not assigned`;
 
-      logger.debug(`${SendAssetsThunkEnum.SubmitTransaction}: ${_error}`);
+      logger.debug(`${ThunkEnum.SubmitTransactions}: ${_error}`);
 
       return rejectWithValue(new MalformedDataError(_error));
     }
 
     if (!online) {
-      logger.debug(
-        `${SendAssetsThunkEnum.SubmitTransaction}: extension offline`
-      );
+      logger.debug(`${ThunkEnum.SubmitTransactions}: extension offline`);
 
       return rejectWithValue(
         new OfflineError('attempted to send transaction, but extension offline')
@@ -80,7 +78,7 @@ const submitTransactionThunk: AsyncThunk<
 
     if (!genesisHash) {
       logger.debug(
-        `${SendAssetsThunkEnum.SubmitTransaction}: failed to get the genesis hash from the transactions`
+        `${ThunkEnum.SubmitTransactions}: failed to get the genesis hash from the transactions`
       );
 
       return rejectWithValue(
@@ -96,7 +94,7 @@ const submitTransactionThunk: AsyncThunk<
     if (!network) {
       _error = `no network configuration found for "${genesisHash}"`;
 
-      logger.debug(`${SendAssetsThunkEnum.SubmitTransaction}: ${_error}`);
+      logger.debug(`${ThunkEnum.SubmitTransactions}: ${_error}`);
 
       return rejectWithValue(new NetworkNotSelectedError(_error));
     }
@@ -107,7 +105,7 @@ const submitTransactionThunk: AsyncThunk<
     if (!isAccountKnown(accounts, senderAddress)) {
       _error = `no account data found for "${senderAddress}" in wallet`;
 
-      logger.debug(`${SendAssetsThunkEnum.SubmitTransaction}: ${_error}`);
+      logger.debug(`${ThunkEnum.SubmitTransactions}: ${_error}`);
 
       return rejectWithValue(new MalformedDataError(_error));
     }
@@ -123,7 +121,7 @@ const submitTransactionThunk: AsyncThunk<
     ) {
       _error = `total transaction cost will bring the account "${senderAddress}" balance below the minimum balance requirement`;
 
-      logger.debug(`${SendAssetsThunkEnum.SubmitTransaction}: ${_error}`);
+      logger.debug(`${ThunkEnum.SubmitTransactions}: ${_error}`);
 
       return rejectWithValue(new NotEnoughMinimumBalanceError(_error));
     }
@@ -153,7 +151,7 @@ const submitTransactionThunk: AsyncThunk<
 
       return transactions.map((value) => value.txID());
     } catch (error) {
-      logger.error(`${SendAssetsThunkEnum.SubmitTransaction}:`, error);
+      logger.error(`${ThunkEnum.SubmitTransactions}:`, error);
 
       if ((error as BaseExtensionError).code) {
         return rejectWithValue(error);

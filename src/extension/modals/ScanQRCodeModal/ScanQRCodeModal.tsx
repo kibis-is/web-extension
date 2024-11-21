@@ -1,6 +1,7 @@
 import { Modal } from '@chakra-ui/react';
+import { randomString } from '@stablelib/random';
 import { TransactionType } from 'algosdk';
-import React, { type FC, useState } from 'react';
+import React, { type FC, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { IoArrowBackOutline } from 'react-icons/io5';
 
@@ -53,7 +54,7 @@ const ScanQRCodeModal: FC<IModalProps> = ({ onClose }) => {
   const [scanViaTab, setScanViaTab] = useState<boolean>(false);
   const [uris, setURIs] = useState<string[]>([]);
   // misc
-  const _context = 'scan-qr-code-modal';
+  const _context = useMemo(() => randomString(8), []);
   const reset = () => {
     setURIs([]);
     setScanViaCamera(false);
