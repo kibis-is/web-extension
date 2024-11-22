@@ -51,7 +51,7 @@ export default class WebAuthnMessageBroker extends BaseListener {
     // dispatch message to the client
     window.dispatchEvent(
       new CustomEvent(message.reference, {
-        detail: message,
+        detail: JSON.stringify(message), // the message needs to be serialized
       })
     );
   }

@@ -251,6 +251,7 @@ const MoveGroupModal: FC<IModalProps> = ({ onClose }) => {
         <ModalBody display="flex" px={DEFAULT_GAP}>
           <VStack flexGrow={1} spacing={DEFAULT_GAP - 2} w="full">
             <ModalSubHeading text={t<string>('headings.addGroup')} />
+
             {/*add group*/}
             <GenericInput
               charactersRemaining={nameCharactersRemaining}

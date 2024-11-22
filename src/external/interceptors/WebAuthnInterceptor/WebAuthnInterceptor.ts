@@ -20,11 +20,11 @@ import {
 
 // types
 import type {
+  IBaseOptions,
   ILogger,
   ISerializedPublicKeyCredentialCreationOptions,
   ISerializedPublicKeyCredentialRequestOptions,
 } from '@common/types';
-import type { INewOptions } from './types';
 
 // utils
 import bufferSourceToUint8Array from '@common/utils/bufferSourceToUint8Array';
@@ -32,11 +32,9 @@ import createClientInformation from '@common/utils/createClientInformation';
 
 export default class WebAuthnInterceptor {
   // private variables
-  private readonly _credentialsContainer: CredentialsContainer;
   private readonly _logger: ILogger | null;
 
-  constructor({ credentialsContainer, logger }: INewOptions) {
-    this._credentialsContainer = credentialsContainer;
+  constructor({ logger }: IBaseOptions) {
     this._logger = logger || null;
   }
 
@@ -179,14 +177,12 @@ export default class WebAuthnInterceptor {
    */
 
   public async get(
-    originalFn: typeof navigator.credentials.get,
     options?: CredentialRequestOptions
   ): Promise<Credential | null> {
-    return originalFn.call(this._credentialsContainer, options);
+    return null;
   }
 
   public async create(
-    originalFn: typeof navigator.credentials.create,
     options?: CredentialCreationOptions
   ): Promise<PublicKeyCredential | null> {
     const _functionName = 'create';
@@ -198,26 +194,28 @@ export default class WebAuthnInterceptor {
         `${WebAuthnInterceptor.name}#${_functionName}: found ed25519 public key request`
       );
 
-      try {
-        return await this._dispatchMessageWithTimeout(
-          new WebAuthnCreateRequestMessage({
-            clientInfo: createClientInformation(),
-            id: uuid(),
-            options: WebAuthnInterceptor._serializePublicKeyCreationOptions(
-              options.publicKey
-            ),
-          }),
-          WebAuthnMessageReferenceEnum.CreateResponse
-        );
-      } catch (error) {
-        this._logger?.error(
-          `${WebAuthnInterceptor.name}#${_functionName}:`,
-          error
-        );
-      }
+      // try {
+      return await this._dispatchMessageWithTimeout(
+        new WebAuthnCreateRequestMessage({
+          clientInfo: createClientInformation(),
+          id: uuid(),
+          options: WebAuthnInterceptor._serializePublicKeyCreationOptions(
+            options.publicKey
+          ),
+        }),
+        WebAuthnMessageReferenceEnum.CreateResponse
+      );
+      // } catch (error) {
+      //   this._logger?.error(
+      //     `${WebAuthnInterceptor.name}#${_functionName}:`,
+      //     error
+      //   );
+      // }
     }
 
+    return null;
+
     // call the original function
-    return originalFn.call(this._credentialsContainer, options);
+    // return originalFn.call(this._credentialsContainer, options);
   }
 }

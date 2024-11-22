@@ -44,6 +44,7 @@ const translation: IResourceLanguage = {
     previous: 'Previous',
     receive: 'Receive',
     refresh: 'Refresh',
+    register: 'Register',
     reKey: 'Re-Key',
     remove: 'Remove',
     removePasskey: 'Remove Passkey',
@@ -309,6 +310,10 @@ const translation: IResourceLanguage = {
     updatingTransactions: 'Updating transactions',
     viewSeedPhrase1: 'Select an account to view the seed phrase.',
     viewSeedPhrase2: 'You will be prompted to enter your password.',
+    webAuthnCreateDescription1:
+      'An app is requesting to register a new passkey.',
+    webAuthnCreateDescription2:
+      'Select what account you would like to use to register the passkey.',
   },
   errors: {
     descriptions: {
@@ -417,6 +422,7 @@ const translation: IResourceLanguage = {
     passkeyAdded: 'Passkey Added!',
     passkeyRemoved: 'Passkey Removed',
     passwordChanged: 'Password Changed!',
+    registerPasskey: 'Register Passkey',
     reKeyAccount: 'Re-key Account 🔒',
     reKeyAccountSuccessful: 'Successfully Re-Keyed Account!',
     removeAccount: 'Remove Account',
