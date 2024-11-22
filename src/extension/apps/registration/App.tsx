@@ -17,7 +17,8 @@ import { reducer as systemReducer } from '@extension/features/system';
 import ThemeProvider from '@extension/components/ThemeProvider';
 
 // types
-import type { IAppProps, IRegistrationRootState } from '@extension/types';
+import type { IAppProps } from '@common/types';
+import type { IRegistrationRootState } from '@extension/types';
 
 // utils
 import makeStore from '@extension/utils/makeStore';

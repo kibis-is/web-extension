@@ -1,4 +1,4 @@
-import '@extension/styles/fonts.css';
+import '@common/styles/fonts.css';
 
 // components
 import App from './App';

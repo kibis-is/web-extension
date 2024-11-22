@@ -8,4 +8,5 @@ export type { default as IWebAuthnRequestMessage } from './IWebAuthnRequestMessa
 export type { default as IWebAuthnResponseMessage } from './IWebAuthnResponseMessage';
 export type { default as TPartialExcept } from './TPartialExcept';
 export type { default as TProviderMessages } from './TProviderMessages';
+export * from './ui';
 export * from './webauthn';

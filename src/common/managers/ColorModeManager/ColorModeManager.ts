@@ -1,5 +1,5 @@
 import { StorageManager as ChakraStorageManager } from '@chakra-ui/color-mode/dist/storage-manager';
-import { ColorMode } from '@chakra-ui/react';
+import type { ColorMode } from '@chakra-ui/react';
 
 export default class ColorModeManager implements ChakraStorageManager {
   // private variables

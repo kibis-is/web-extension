@@ -23,7 +23,8 @@ import { reducer as systemReducer } from '@extension/features/system';
 import { reducer as webauthnReducer } from '@extension/features/webauthn';
 
 // types
-import type { IAppProps, IBackgroundRootState } from '@extension/types';
+import type { IAppProps } from '@common/types';
+import type { IBackgroundRootState } from '@extension/types';
 
 // utils
 import makeStore from '@extension/utils/makeStore';

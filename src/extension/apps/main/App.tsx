@@ -34,7 +34,8 @@ import { reducer as webauthnReducer } from '@extension/features/webauthn';
 import SplashPage from '@extension/pages/SplashPage';
 
 // types
-import type { IAppProps, IMainRootState } from '@extension/types';
+import type { IAppProps } from '@common/types';
+import type { IMainRootState } from '@extension/types';
 
 // utils
 import makeStore from '@extension/utils/makeStore';

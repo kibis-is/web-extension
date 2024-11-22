@@ -262,7 +262,14 @@ const configs: (
       },
       mode: environment,
       module: {
-        rules: [tsLoaderRule],
+        rules: [
+          {
+            test: /\.(svg?.+|ttf?.+|woff?.+|woff2?.+)$/,
+            type: 'asset/inline',
+          },
+          stylesLoaderRule,
+          tsLoaderRule,
+        ],
       },
       name: ConfigNameEnum.ExtensionScripts,
       optimization: {

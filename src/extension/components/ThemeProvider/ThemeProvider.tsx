@@ -2,11 +2,11 @@ import { ChakraProvider, type ColorMode } from '@chakra-ui/react';
 import * as CSS from 'csstype';
 import React, { type FC, useEffect, useState } from 'react';
 
+// managers
+import ColorModeManager from '@common/managers/ColorModeManager';
+
 // selectors
 import { useSelectSettings } from '@extension/selectors';
-
-// services
-import ColorModeManager from '@extension/services/ColorModeManager';
 
 // theme
 import { theme } from '@extension/theme';
