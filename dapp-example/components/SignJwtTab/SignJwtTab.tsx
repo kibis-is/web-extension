@@ -36,7 +36,6 @@ import useSubTextColor from '../../hooks/useSubTextColor';
 import { theme } from '@extension/theme';
 
 // types
-import { IWindow } from '@external/types';
 import { IAccountInformation } from '../../types';
 
 // utils
@@ -84,7 +83,7 @@ const SignJwtTab: FC<IProps> = ({ account }: IProps) => {
     setSignedData(null);
   };
   const handleSignJwtClick = (withSigner: boolean) => async () => {
-    const algorand: AlgorandProvider | undefined = (window as IWindow).algorand;
+    const algorand: AlgorandProvider | undefined = (window as Window).algorand;
     let result: IBaseResult & ISignBytesResult;
 
     if (!account) {

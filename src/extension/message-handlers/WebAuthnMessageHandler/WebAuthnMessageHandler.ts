@@ -2,6 +2,7 @@ import { v4 as uuid } from 'uuid';
 import browser, { type Runtime } from 'webextension-polyfill';
 
 // enums
+import { WebAuthnMessageReferenceEnum } from '@common/enums';
 import { EventTypeEnum } from '@extension/enums';
 
 // events
@@ -47,10 +48,6 @@ export default class WebAuthnMessageHandler extends BaseListener {
     let event: WebAuthnRequestEvent;
     let events: WebAuthnRequestEvent[];
 
-    this._logger?.debug(
-      `${WebAuthnMessageHandler.name}#${_functionName}: received client message "${message.reference}" with id "${message.id}"`
-    );
-
     if (!sender.tab?.id) {
       this._logger?.debug(
         `${WebAuthnMessageHandler.name}#${_functionName}: unknown sender for "${message.reference}" message, ignoring`
@@ -59,36 +56,49 @@ export default class WebAuthnMessageHandler extends BaseListener {
       return;
     }
 
-    events = await this._eventQueueRepository.fetchByType<WebAuthnRequestEvent>(
-      EventTypeEnum.WebAuthnRequest
-    );
+    switch (message.reference) {
+      case WebAuthnMessageReferenceEnum.CreateRequest:
+      case WebAuthnMessageReferenceEnum.GetRequest:
+        this._logger?.debug(
+          `${WebAuthnMessageHandler.name}#${_functionName}: received client message "${message.reference}" with id "${message.id}"`
+        );
 
-    // if the client request already exists, ignore it
-    if (
-      events.find(
-        (value) => value.payload.message.id === event.payload.message.id
-      )
-    ) {
-      this._logger?.debug(
-        `${WebAuthnMessageHandler.name}#${_functionName}: webauthn request "${message.id}" already exists, ignoring`
-      );
+        events =
+          await this._eventQueueRepository.fetchByType<WebAuthnRequestEvent>(
+            EventTypeEnum.WebAuthnRequest
+          );
 
-      return;
+        event = new WebAuthnRequestEvent({
+          id: uuid(),
+          payload: {
+            message,
+            originTabId: sender.tab.id,
+          },
+        });
+
+        // if the client request already exists, ignore it
+        if (
+          events.find(
+            (value) => value.payload.message.id === event.payload.message.id
+          )
+        ) {
+          this._logger?.debug(
+            `${WebAuthnMessageHandler.name}#${_functionName}: webauthn request "${message.id}" already exists, ignoring`
+          );
+
+          return;
+        }
+
+        return await sendExtensionEvent({
+          event,
+          eventQueueRepository: this._eventQueueRepository,
+          ...(this._logger && {
+            logger: this._logger,
+          }),
+        });
+      default:
+        break;
     }
-
-    return await sendExtensionEvent({
-      event: new WebAuthnRequestEvent({
-        id: uuid(),
-        payload: {
-          message,
-          originTabId: sender.tab.id,
-        },
-      }),
-      eventQueueRepository: this._eventQueueRepository,
-      ...(this._logger && {
-        logger: this._logger,
-      }),
-    });
   }
 
   /**

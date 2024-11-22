@@ -36,7 +36,7 @@ export default class WebAuthnMessageBroker extends BaseListener {
     );
 
     // send message to provider
-    browser.runtime.sendMessage(message);
+    browser.runtime.sendMessage(message.detail);
   }
 
   private _onProviderMessage(

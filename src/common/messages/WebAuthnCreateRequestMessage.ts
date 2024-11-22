@@ -5,21 +5,23 @@ import { WebAuthnMessageReferenceEnum } from '@common/enums';
 import type {
   IClientInformation,
   IWebAuthnRequestMessage,
+  ISerializedPublicKeyCredentialCreationOptions,
 } from '@common/types';
 
 export default class WebAuthnCreateRequestMessage
-  implements IWebAuthnRequestMessage<CredentialCreationOptions>
+  implements
+    IWebAuthnRequestMessage<ISerializedPublicKeyCredentialCreationOptions>
 {
   public readonly clientInfo: IClientInformation;
   public readonly id: string;
-  public readonly options: CredentialCreationOptions;
+  public readonly options: ISerializedPublicKeyCredentialCreationOptions;
   public readonly reference: WebAuthnMessageReferenceEnum.CreateRequest;
 
   constructor({
     clientInfo,
     id,
     options,
-  }: IWebAuthnRequestMessage<CredentialCreationOptions>) {
+  }: IWebAuthnRequestMessage<ISerializedPublicKeyCredentialCreationOptions>) {
     this.clientInfo = clientInfo;
     this.id = id;
     this.options = options;

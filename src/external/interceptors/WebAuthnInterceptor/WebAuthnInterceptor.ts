@@ -1,3 +1,4 @@
+import { encode as encodeBase64 } from '@stablelib/base64';
 import { v4 as uuid } from 'uuid';
 
 // constants
@@ -18,13 +19,18 @@ import {
 } from '@common/messages';
 
 // types
-import type { ILogger } from '@common/types';
+import type {
+  ILogger,
+  ISerializedPublicKeyCredentialCreationOptions,
+  ISerializedPublicKeyCredentialRequestOptions,
+} from '@common/types';
 import type { INewOptions } from './types';
 
 // utils
+import bufferSourceToUint8Array from '@common/utils/bufferSourceToUint8Array';
 import createClientInformation from '@common/utils/createClientInformation';
 
-export default class WebAuthnManager {
+export default class WebAuthnInterceptor {
   // private variables
   private readonly _credentialsContainer: CredentialsContainer;
   private readonly _logger: ILogger | null;
@@ -53,7 +59,7 @@ export default class WebAuthnManager {
           detail = JSON.parse(event.detail); // the event.detail should be a stringified object
         } catch (error) {
           this._logger?.debug(
-            `${WebAuthnManager.name}#${_functionName}:`,
+            `${WebAuthnInterceptor.name}#${_functionName}:`,
             error
           );
 
@@ -82,7 +88,7 @@ export default class WebAuthnManager {
         }
 
         this._logger?.debug(
-          `${WebAuthnManager.name}#${_functionName}: received response "${detail.reference}" for request "${detail.requestID}"`
+          `${WebAuthnInterceptor.name}#${_functionName}: received response "${detail.reference}" for request "${detail.requestID}"`
         );
 
         // return the result
@@ -106,9 +112,66 @@ export default class WebAuthnManager {
       );
 
       this._logger?.debug(
-        `${WebAuthnManager.name}#${_functionName}: posted webauthn request message "${message.reference}" with id "${message.id}"`
+        `${WebAuthnInterceptor.name}#${_functionName}: posted webauthn request message "${message.reference}" with id "${message.id}"`
       );
     });
+  }
+
+  /**
+   * Convenience function that serializes the public key creation credentials, converting any raw bytes to base64
+   * encoded strings to allow to posting to the extension.
+   * @param {PublicKeyCredentialCreationOptions} options - The public key creation options to serialize.
+   * @returns {ISerializedPublicKeyCredentialCreationOptions} The serialized public key creation options.
+   * @private
+   */
+  private static _serializePublicKeyCreationOptions({
+    challenge,
+    excludeCredentials,
+    user,
+    ...otherOptions
+  }: PublicKeyCredentialCreationOptions): ISerializedPublicKeyCredentialCreationOptions {
+    return {
+      ...otherOptions,
+      challenge: encodeBase64(bufferSourceToUint8Array(challenge)),
+      user: {
+        ...user,
+        id: encodeBase64(bufferSourceToUint8Array(user.id)),
+      },
+      ...(excludeCredentials && {
+        excludeCredentials: excludeCredentials.map(
+          ({ id, ...otherExcludeCredentialProps }) => ({
+            ...otherExcludeCredentialProps,
+            id: encodeBase64(bufferSourceToUint8Array(id)),
+          })
+        ),
+      }),
+    };
+  }
+
+  /**
+   * Convenience function that serializes the public key request credentials, converting any raw bytes to base64
+   * encoded strings to allow to posting to the extension.
+   * @param {PublicKeyCredentialCreationOptions} options - The public key request options to serialize.
+   * @returns {ISerializedPublicKeyCredentialRequestOptions} The serialized public key creation options.
+   * @private
+   */
+  private static _serializePublicKeyRequestOptions({
+    allowCredentials,
+    challenge,
+    ...otherOptions
+  }: PublicKeyCredentialRequestOptions): ISerializedPublicKeyCredentialRequestOptions {
+    return {
+      ...otherOptions,
+      challenge: encodeBase64(bufferSourceToUint8Array(challenge)),
+      ...(allowCredentials && {
+        allowCredentials: allowCredentials.map(
+          ({ id, ...otherAllowCredentialProps }) => ({
+            ...otherAllowCredentialProps,
+            id: encodeBase64(bufferSourceToUint8Array(id)),
+          })
+        ),
+      }),
+    };
   }
 
   /**
@@ -129,9 +192,10 @@ export default class WebAuthnManager {
     const _functionName = 'create';
 
     // if the credentials contain a request for an ed25519 public key, invoke kibisis
-    if (!!options?.publicKey?.pubKeyCredParams.find(({ alg }) => alg === -8)) {
+    // if (!!options?.publicKey?.pubKeyCredParams.find(({ alg }) => alg === -8)) {
+    if (options?.publicKey) {
       this._logger?.debug(
-        `${WebAuthnManager.name}#${_functionName}: found ed25519 public key request`
+        `${WebAuthnInterceptor.name}#${_functionName}: found ed25519 public key request`
       );
 
       try {
@@ -139,12 +203,17 @@ export default class WebAuthnManager {
           new WebAuthnCreateRequestMessage({
             clientInfo: createClientInformation(),
             id: uuid(),
-            options,
+            options: WebAuthnInterceptor._serializePublicKeyCreationOptions(
+              options.publicKey
+            ),
           }),
           WebAuthnMessageReferenceEnum.CreateResponse
         );
       } catch (error) {
-        this._logger?.error(`${WebAuthnManager.name}#${_functionName}:`, error);
+        this._logger?.error(
+          `${WebAuthnInterceptor.name}#${_functionName}:`,
+          error
+        );
       }
     }
 

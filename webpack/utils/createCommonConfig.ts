@@ -22,6 +22,7 @@ export default function createCommonConfig(): Configuration {
         ['@common/enums']: resolve(commonPath, 'enums'),
         ['@common/errors']: resolve(commonPath, 'errors'),
         ['@common/messages']: resolve(commonPath, 'messages'),
+        ['@common/services']: resolve(commonPath, 'services'),
         ['@common/types']: resolve(commonPath, 'types'),
         ['@common/utils']: resolve(commonPath, 'utils'),
         ['@docs']: resolve(SRC_PATH, 'docs'),
@@ -60,7 +61,7 @@ export default function createCommonConfig(): Configuration {
         ['@extension/types']: resolve(extensionPath, 'types'),
         ['@extension/utils']: resolve(extensionPath, 'utils'),
         // external
-        ['@external/managers']: resolve(externalPath, 'managers'),
+        ['@external/interceptors']: resolve(externalPath, 'interceptors'),
       },
       extensions: ['.css', '.js', '.ts', '.tsx'],
     },

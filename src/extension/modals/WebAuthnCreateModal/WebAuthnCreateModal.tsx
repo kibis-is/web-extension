@@ -41,8 +41,8 @@ import useDefaultTextColor from '@extension/hooks/useDefaultTextColor';
 import usePrimaryColorScheme from '@extension/hooks/usePrimaryColorScheme';
 import useSubTextColor from '@extension/hooks/useSubTextColor';
 
-// // icons
-// import KbPasskey from '@extension/icons/K'
+// icons
+import KbPasskey from '@extension/icons/KbPasskey';
 
 // selectors
 import {
@@ -105,11 +105,7 @@ const WebAuthnCreateModal: FC<IModalProps> = ({ onClose }) => {
 
     handleClose();
   };
-  const handleClose = () => {
-    setEvent(null);
-
-    onClose && onClose();
-  };
+  const handleClose = () => onClose && onClose();
   const handleOnSignInClick = async () => {
     if (!event || !account) {
       return;
@@ -188,6 +184,7 @@ const WebAuthnCreateModal: FC<IModalProps> = ({ onClose }) => {
             <Button
               isLoading={saving}
               onClick={handleOnSignInClick}
+              rightIcon={<KbPasskey />}
               size="lg"
               variant="solid"
               w="full"

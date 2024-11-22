@@ -53,7 +53,7 @@
       "@extension/translations": ["src/extension/translations"],
       "@extension/types": ["src/extension/types"],
       "@extension/utils/*": ["src/extension/utils/*"],
-      "@external/managers/*": ["src/external/managers/*"],
+      "@external/interceptors/*": ["src/external/interceptors/*"],
       "@test/utils/*": ["test/utils/*"]
     },
     "removeComments": false,
