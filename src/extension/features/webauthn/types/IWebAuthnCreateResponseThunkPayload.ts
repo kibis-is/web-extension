@@ -1,5 +1,5 @@
 // errors
-import { BaseExtensionError } from '@extension/errors';
+import { BaseExtensionError } from '@common/errors';
 
 // types
 import type { IWebAuthnRequestEvent } from '@extension/types';

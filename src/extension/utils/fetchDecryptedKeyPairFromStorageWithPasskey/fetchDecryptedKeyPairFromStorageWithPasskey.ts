@@ -2,7 +2,7 @@
 import { EncryptionMethodEnum } from '@extension/enums';
 
 // errors
-import { MalformedDataError } from '@extension/errors';
+import { MalformedDataError } from '@common/errors';
 
 // models
 import Ed21559KeyPair from '@extension/models/Ed21559KeyPair';

@@ -1,7 +1,7 @@
 import browser, { Runtime } from 'webextension-polyfill';
 
 // errors
-import { BaseExtensionError } from '@extension/errors';
+import { BaseExtensionError } from '@common/errors';
 
 // services
 import BaseListener from '@common/services/BaseListener';

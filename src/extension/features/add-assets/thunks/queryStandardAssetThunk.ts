@@ -10,7 +10,7 @@ import {
 import { AddAssetThunkEnum } from '@extension/enums';
 
 // errors
-import { NetworkNotSelectedError, OfflineError } from '@extension/errors';
+import { NetworkNotSelectedError, OfflineError } from '@common/errors';
 
 // models
 import NetworkClient from '@extension/models/NetworkClient';

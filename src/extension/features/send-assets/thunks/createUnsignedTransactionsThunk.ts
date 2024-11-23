@@ -12,7 +12,7 @@ import {
   MalformedDataError,
   NetworkNotSelectedError,
   OfflineError,
-} from '@extension/errors';
+} from '@common/errors';
 
 // repositories
 import AccountRepository from '@extension/repositories/AccountRepository';

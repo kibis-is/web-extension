@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { EncryptionMethodEnum } from '@extension/enums';
 
 // errors
-import { DecryptionError } from '@extension/errors';
+import { DecryptionError } from '@common/errors';
 
 // models
 import Ed21559KeyPair from '@extension/models/Ed21559KeyPair';

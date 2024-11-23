@@ -1,5 +1,5 @@
 // enums
-import { ErrorCodeEnum } from '../enums';
+import { ErrorCodeEnum } from '@common/enums';
 
 export default abstract class BaseExtensionError extends Error {
   public readonly code: ErrorCodeEnum;

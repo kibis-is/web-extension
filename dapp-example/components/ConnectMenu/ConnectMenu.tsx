@@ -86,7 +86,6 @@ const ConnectMenu: FC<IProps> = ({ onConnect, onDisconnect, toast }) => {
 
       <MenuList>
         {[
-          ConnectionTypeEnum.AlgorandProvider,
           ConnectionTypeEnum.AVMWebProvider,
           ConnectionTypeEnum.UseWallet,
           ConnectionTypeEnum.WalletConnect,

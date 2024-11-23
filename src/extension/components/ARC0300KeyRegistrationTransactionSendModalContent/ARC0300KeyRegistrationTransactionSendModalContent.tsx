@@ -38,7 +38,7 @@ import {
 import {
   BaseExtensionError,
   NotEnoughMinimumBalanceError,
-} from '@extension/errors';
+} from '@common/errors';
 
 // features
 import { updateAccountsThunk } from '@extension/features/accounts';

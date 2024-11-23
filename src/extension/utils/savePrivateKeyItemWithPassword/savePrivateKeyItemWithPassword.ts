@@ -4,7 +4,7 @@ import browser from 'webextension-polyfill';
 import { EncryptionMethodEnum } from '@extension/enums';
 
 // errors
-import { InvalidPasswordError, MalformedDataError } from '@extension/errors';
+import { InvalidPasswordError, MalformedDataError } from '@common/errors';
 
 // managers
 import PasswordManager from '@extension/managers/PasswordManager';

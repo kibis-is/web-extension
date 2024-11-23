@@ -7,7 +7,7 @@ import {
   BaseExtensionError,
   InvalidPasswordError,
   MalformedDataError,
-} from '@extension/errors';
+} from '@common/errors';
 
 // managers
 import PasswordManager from '@extension/managers/PasswordManager';

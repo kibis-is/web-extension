@@ -7,7 +7,7 @@ import { NODE_REQUEST_DELAY } from '@extension/constants';
 import { ThunkEnum } from '../enums';
 
 // errors
-import { MalformedDataError, NetworkNotSelectedError } from '@extension/errors';
+import { MalformedDataError, NetworkNotSelectedError } from '@common/errors';
 
 // repositories
 import AccountRepository from '@extension/repositories/AccountRepository';

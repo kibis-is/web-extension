@@ -36,7 +36,7 @@ import {
 import { EncryptionMethodEnum } from '@extension/enums';
 
 // errors
-import { BaseExtensionError, MalformedDataError } from '@extension/errors';
+import { BaseExtensionError, MalformedDataError } from '@common/errors';
 
 // features
 import {

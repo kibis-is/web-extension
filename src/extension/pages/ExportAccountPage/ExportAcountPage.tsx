@@ -29,7 +29,7 @@ import {
 import { EncryptionMethodEnum } from '@extension/enums';
 
 // errors
-import { BaseExtensionError, DecryptionError } from '@extension/errors';
+import { BaseExtensionError, DecryptionError } from '@common/errors';
 
 // features
 import { create as createNotification } from '@extension/features/notifications';

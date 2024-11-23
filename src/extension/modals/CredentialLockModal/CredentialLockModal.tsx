@@ -27,7 +27,7 @@ import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@common/constants';
 import { EncryptionMethodEnum } from '@extension/enums';
 
 // errors
-import { BaseExtensionError, MalformedDataError } from '@extension/errors';
+import { BaseExtensionError, MalformedDataError } from '@common/errors';
 
 // features
 import { deactivateThunk as deactivateCredentialLockThunk } from '@extension/features/credential-lock';

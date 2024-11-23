@@ -34,7 +34,7 @@ import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@common/constants';
 import { ErrorCodeEnum } from '@extension/enums';
 
 // errors
-import { BaseExtensionError } from '@extension/errors';
+import { BaseExtensionError } from '@common/errors';
 
 // features
 import { updateAccountsThunk } from '@extension/features/accounts';

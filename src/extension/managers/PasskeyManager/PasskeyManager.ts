@@ -17,7 +17,7 @@ import {
   PasskeyCreationError,
   PasskeyNotSupportedError,
   UnableToFetchPasskeyError,
-} from '@extension/errors';
+} from '@common/errors';
 
 // repositories
 import PasskeyCredentialRepository from '@extension/repositories/PasskeyCredentialRepository';

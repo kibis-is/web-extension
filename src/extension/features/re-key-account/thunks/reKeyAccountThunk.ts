@@ -10,7 +10,7 @@ import {
   FailedToSendTransactionError,
   MalformedDataError,
   NotEnoughMinimumBalanceError,
-} from '@extension/errors';
+} from '@common/errors';
 
 // models
 import NetworkClient from '@extension/models/NetworkClient';

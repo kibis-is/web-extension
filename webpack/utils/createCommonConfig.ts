@@ -28,17 +28,19 @@ export default function createCommonConfig(): Configuration {
         ['@common/messages']: resolve(commonPath, 'messages'),
         ['@common/services']: resolve(commonPath, 'services'),
         ['@common/styles']: resolve(commonPath, 'styles'),
+        ['@common/theme']: resolve(commonPath, 'theme'),
         ['@common/types']: resolve(commonPath, 'types'),
         ['@common/utils']: resolve(commonPath, 'utils'),
+
         // docs
         ['@docs']: resolve(SRC_PATH, 'docs'),
+
         // extension
         ['@extension/components']: resolve(extensionPath, 'components'),
         ['@extension/config']: resolve(extensionPath, 'config'),
         ['@extension/constants']: resolve(extensionPath, 'constants'),
         ['@extension/contracts']: resolve(extensionPath, 'contracts'),
         ['@extension/enums']: resolve(extensionPath, 'enums'),
-        ['@extension/errors']: resolve(extensionPath, 'errors'),
         ['@extension/events']: resolve(extensionPath, 'events'),
         ['@extension/features']: resolve(extensionPath, 'features'),
         ['@extension/hooks']: resolve(extensionPath, 'hooks'),
@@ -60,7 +62,6 @@ export default function createCommonConfig(): Configuration {
         ['@extension/routers']: resolve(extensionPath, 'routers'),
         ['@extension/selectors']: resolve(extensionPath, 'selectors'),
         ['@extension/services']: resolve(extensionPath, 'services'),
-        ['@extension/theme']: resolve(extensionPath, 'theme'),
         ['@extension/translations']: resolve(extensionPath, 'translations'),
         ['@extension/types']: resolve(extensionPath, 'types'),
         ['@extension/utils']: resolve(extensionPath, 'utils'),

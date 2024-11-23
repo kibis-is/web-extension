@@ -19,10 +19,7 @@ import BaseContract from '../BaseContract';
 import { ARC0200MethodEnum } from './enums';
 
 // errors
-import {
-  InvalidABIContractError,
-  ReadABIContractError,
-} from '@extension/errors';
+import { InvalidABIContractError, ReadABIContractError } from '@common/errors';
 
 // types
 import type { IARC0200AssetInformation } from '@extension/types';

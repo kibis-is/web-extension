@@ -7,7 +7,7 @@ import { EncryptionMethodEnum } from '@extension/enums';
 import { ThunkEnum } from '../enums';
 
 // errors
-import { InvalidPasswordError } from '@extension/errors';
+import { InvalidPasswordError } from '@common/errors';
 
 // managers
 import PasswordManager from '@extension/managers/PasswordManager';

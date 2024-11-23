@@ -1,7 +1,7 @@
 import { mnemonicFromSeed } from 'algosdk';
 
 // errors
-import { EncodingError } from '@extension/errors';
+import { EncodingError } from '@common/errors';
 
 // types
 import type { IOptions } from './types';

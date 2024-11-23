@@ -5,7 +5,7 @@ import {
 import { Transaction } from 'algosdk';
 
 // errors
-import { MalformedDataError } from '@extension/errors';
+import { MalformedDataError } from '@common/errors';
 
 // repositories
 import AccountRepository from '@extension/repositories/AccountRepository';

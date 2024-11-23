@@ -6,7 +6,7 @@ import {
   ScreenCaptureError,
   ScreenCaptureNotAllowedError,
   ScreenCaptureNotFoundError,
-} from '@extension/errors';
+} from '@common/errors';
 
 // selectors
 import { useSelectLogger } from '@extension/selectors';

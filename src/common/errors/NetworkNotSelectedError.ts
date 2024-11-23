@@ -1,5 +1,5 @@
 // enums
-import { ErrorCodeEnum } from '../enums';
+import { ErrorCodeEnum } from '@common/enums';
 
 // errors
 import BaseExtensionError from './BaseExtensionError';

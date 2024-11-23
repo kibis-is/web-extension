@@ -33,7 +33,7 @@ import SignMessageContentSkeleton from './SignMessageContentSkeleton';
 import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@common/constants';
 
 // errors
-import { BaseExtensionError } from '@extension/errors';
+import { BaseExtensionError } from '@common/errors';
 
 // features
 import { removeEventByIdThunk } from '@extension/features/events';

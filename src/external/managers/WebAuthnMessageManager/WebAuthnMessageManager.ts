@@ -1,7 +1,7 @@
 import { v4 as uuid } from 'uuid';
 
 // errors
-import { UnknownError } from '@extension/errors';
+import { UnknownError } from '@common/errors';
 
 // enums
 import { WebAuthnMessageReferenceEnum } from '@common/enums';

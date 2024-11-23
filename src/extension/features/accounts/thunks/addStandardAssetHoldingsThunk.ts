@@ -20,7 +20,7 @@ import {
   NetworkNotSelectedError,
   NotEnoughMinimumBalanceError,
   OfflineError,
-} from '@extension/errors';
+} from '@common/errors';
 
 // models
 import NetworkClient from '@extension/models/NetworkClient';

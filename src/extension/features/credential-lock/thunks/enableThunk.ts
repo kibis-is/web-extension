@@ -5,7 +5,7 @@ import { EncryptionMethodEnum } from '@extension/enums';
 import { ThunkEnum } from '../enums';
 
 // errors
-import { DecryptionError } from '@extension/errors';
+import { DecryptionError } from '@common/errors';
 
 // managers
 import PasskeyManager from '@extension/managers/PasskeyManager';

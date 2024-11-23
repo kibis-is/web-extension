@@ -11,7 +11,7 @@ import browser from 'webextension-polyfill';
 import { ThunkEnum } from '../enums';
 
 // errors
-import { UnknownError } from '@extension/errors';
+import { UnknownError } from '@common/errors';
 
 // features
 import { removeEventByIdThunk } from '@extension/features/events';

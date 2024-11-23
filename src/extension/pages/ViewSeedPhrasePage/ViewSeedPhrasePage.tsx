@@ -24,7 +24,7 @@ import { DEFAULT_GAP } from '@common/constants';
 import { ACCOUNT_SELECT_ITEM_MINIMUM_HEIGHT } from '@extension/constants';
 
 // errors
-import { BaseExtensionError } from '@extension/errors';
+import { BaseExtensionError } from '@common/errors';
 
 // features
 import { create as createNotification } from '@extension/features/notifications';

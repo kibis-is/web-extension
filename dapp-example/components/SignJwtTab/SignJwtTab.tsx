@@ -69,7 +69,6 @@ const SignJwtTab: FC<IProps> = ({ account }: IProps) => {
   // hooks
   const defaultTextColor = useDefaultTextColor();
   const primaryColorScheme = usePrimaryColorScheme();
-  const subTextColor = useSubTextColor();
   // states
   const [header, setHeader] = useState<string | null>(null);
   const [payload, setPayload] = useState<string | null>(null);
@@ -83,18 +82,7 @@ const SignJwtTab: FC<IProps> = ({ account }: IProps) => {
     setSignedData(null);
   };
   const handleSignJwtClick = (withSigner: boolean) => async () => {
-    const algorand: AlgorandProvider | undefined = (window as Window).algorand;
     let result: IBaseResult & ISignBytesResult;
-
-    if (!account) {
-      toast({
-        description: 'You must first enable the dApp with the wallet.',
-        status: 'error',
-        title: 'No Account Not Found!',
-      });
-
-      return;
-    }
 
     if (!header || !payload) {
       toast({
@@ -115,39 +103,39 @@ const SignJwtTab: FC<IProps> = ({ account }: IProps) => {
       return;
     }
 
-    if (!algorand) {
-      toast({
-        description:
-          'Algorand Provider has been intialized; there is no supported wallet.',
-        status: 'error',
-        title: 'window.algorand Not Found!',
-      });
-
-      return;
-    }
-
-    try {
-      result = await algorand.signBytes({
-        data: createSignatureToSign(header, payload),
-        ...(withSigner && {
-          signer: account?.address || undefined,
-        }),
-      });
-
-      toast({
-        description: `Successfully signed JWT for wallet "${result.id}".`,
-        status: 'success',
-        title: 'JWT Signed!',
-      });
-
-      setSignedData(result.signature);
-    } catch (error) {
-      toast({
-        description: (error as BaseError).message,
-        status: 'error',
-        title: `${(error as BaseError).code}: ${(error as BaseError).name}`,
-      });
-    }
+    // if (!algorand) {
+    //   toast({
+    //     description:
+    //       'Algorand Provider has been intialized; there is no supported wallet.',
+    //     status: 'error',
+    //     title: 'window.algorand Not Found!',
+    //   });
+    //
+    //   return;
+    // }
+    //
+    // try {
+    //   result = await algorand.signBytes({
+    //     data: createSignatureToSign(header, payload),
+    //     ...(withSigner && {
+    //       signer: account?.address || undefined,
+    //     }),
+    //   });
+    //
+    //   toast({
+    //     description: `Successfully signed JWT for wallet "${result.id}".`,
+    //     status: 'success',
+    //     title: 'JWT Signed!',
+    //   });
+    //
+    //   setSignedData(result.signature);
+    // } catch (error) {
+    //   toast({
+    //     description: (error as BaseError).message,
+    //     status: 'error',
+    //     title: `${(error as BaseError).code}: ${(error as BaseError).name}`,
+    //   });
+    // }
   };
   const handleHeaderTextareaChange = (
     event: ChangeEvent<HTMLTextAreaElement>

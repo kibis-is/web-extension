@@ -37,7 +37,7 @@ import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@common/constants';
 import { MultipleTransactionsContext } from './contexts';
 
 // errors
-import { BaseExtensionError } from '@extension/errors';
+import { BaseExtensionError } from '@common/errors';
 
 // features
 import { removeEventByIdThunk } from '@extension/features/events';

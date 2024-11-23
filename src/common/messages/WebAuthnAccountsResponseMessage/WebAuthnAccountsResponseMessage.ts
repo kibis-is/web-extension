@@ -2,7 +2,7 @@
 import { WebAuthnMessageReferenceEnum } from '@common/enums';
 
 // errors
-import { BaseExtensionError } from '@extension/errors';
+import { BaseExtensionError } from '@common/errors';
 
 // types
 import type { IBaseResponseMessage } from '@common/types';

@@ -2,7 +2,7 @@
 import { EncryptionMethodEnum } from '@extension/enums';
 
 // errors
-import { MalformedDataError } from '@extension/errors';
+import { MalformedDataError } from '@common/errors';
 
 // managers
 import PasskeyManager from '@extension/managers/PasskeyManager';

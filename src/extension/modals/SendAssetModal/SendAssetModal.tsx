@@ -39,7 +39,7 @@ import { TRANSACTION_NOTE_BYTE_LIMIT } from '@extension/constants';
 import { AssetTypeEnum, ErrorCodeEnum } from '@extension/enums';
 
 // errors
-import { BaseExtensionError } from '@extension/errors';
+import { BaseExtensionError } from '@common/errors';
 
 // features
 import { updateAccountsThunk } from '@extension/features/accounts';

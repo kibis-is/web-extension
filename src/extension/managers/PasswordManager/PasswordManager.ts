@@ -11,7 +11,7 @@ import {
   EncryptionError,
   InvalidPasswordError,
   MalformedDataError,
-} from '@extension/errors';
+} from '@common/errors';
 
 // repositories
 import PasswordTagRepository from '@extension/repositories/PasswordTagRepository';

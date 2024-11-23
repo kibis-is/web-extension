@@ -2,7 +2,7 @@ import { type AsyncThunk, createAsyncThunk } from '@reduxjs/toolkit';
 import { isValidAddress } from 'algosdk';
 
 // errors
-import { MalformedDataError } from '@extension/errors';
+import { MalformedDataError } from '@common/errors';
 
 // enums
 import { ThunkEnum } from '../enums';

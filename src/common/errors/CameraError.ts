@@ -1,13 +1,13 @@
 // enums
-import { ErrorCodeEnum } from '../enums';
+import { ErrorCodeEnum } from '@common/enums';
 
 // errors
 import BaseExtensionError from './BaseExtensionError';
 
-export default class ScreenCaptureError extends BaseExtensionError {
-  public readonly code: ErrorCodeEnum = ErrorCodeEnum.ScreenCaptureError;
+export default class CameraError extends BaseExtensionError {
+  public readonly code: ErrorCodeEnum = ErrorCodeEnum.CameraError;
   public readonly domExceptionType: string;
-  public readonly name: string = 'ScreenCaptureError';
+  public readonly name: string = 'CameraError';
 
   constructor(domExceptionType: string, message: string) {
     super(message);

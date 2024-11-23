@@ -8,7 +8,7 @@ import { PRIVATE_KEY_ITEM_KEY_PREFIX } from '@extension/constants';
 import { EncryptionMethodEnum } from '@extension/enums';
 
 // errors
-import { MalformedDataError } from '@extension/errors';
+import { MalformedDataError } from '@common/errors';
 
 // managers
 import PasskeyManager from '@extension/managers/PasskeyManager';

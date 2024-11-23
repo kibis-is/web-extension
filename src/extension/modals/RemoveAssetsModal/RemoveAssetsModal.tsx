@@ -37,7 +37,7 @@ import { ACCOUNTS_ROUTE } from '@extension/constants';
 import { AssetTypeEnum, ErrorCodeEnum } from '@extension/enums';
 
 // errors
-import { BaseExtensionError } from '@extension/errors';
+import { BaseExtensionError } from '@common/errors';
 
 // features
 import {

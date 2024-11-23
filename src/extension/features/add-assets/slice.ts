@@ -10,7 +10,7 @@ import {
 import { StoreNameEnum } from '@extension/enums';
 
 // errors
-import { BaseExtensionError } from '@extension/errors';
+import { BaseExtensionError } from '@common/errors';
 
 // thunks
 import { queryARC0200AssetThunk, queryStandardAssetThunk } from './thunks';

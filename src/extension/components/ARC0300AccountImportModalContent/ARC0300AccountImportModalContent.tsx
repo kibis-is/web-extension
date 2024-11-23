@@ -29,7 +29,7 @@ import { ACCOUNTS_ROUTE } from '@extension/constants';
 import { AccountTabEnum, EncryptionMethodEnum } from '@extension/enums';
 
 // errors
-import { BaseExtensionError, MalformedDataError } from '@extension/errors';
+import { BaseExtensionError, MalformedDataError } from '@common/errors';
 
 // features
 import {
