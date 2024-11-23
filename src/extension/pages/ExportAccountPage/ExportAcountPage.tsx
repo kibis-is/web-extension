@@ -53,10 +53,12 @@ import {
   useSelectAccounts,
   useSelectLogger,
   useSelectSettingsColorMode,
+  useSelectSettingsSelectedNetwork,
+  useSelectSystemInfo,
 } from '@extension/selectors';
 
 // theme
-import { theme } from '@extension/theme';
+import { theme } from '@common/theme';
 
 // types
 import type {
@@ -92,6 +94,8 @@ const ExportAccountPage: FC = () => {
   const accounts = useSelectAccounts();
   const colorMode = useSelectSettingsColorMode();
   const logger = useSelectLogger();
+  const network = useSelectSettingsSelectedNetwork();
+  const systemInfo = useSelectSystemInfo();
   // hooks
   const defaultTextColor = useDefaultTextColor();
   const subTextColor = useSubTextColor();
@@ -102,7 +106,6 @@ const ExportAccountPage: FC = () => {
   >(null);
   const [svgStrings, setSvgStrings] = useState<string[] | null>(null);
   // misc
-  const _context = 'export-account-page';
   const placeholderIconSize = calculateIconSize('md');
   const qrCodeSize = 300;
   const reset = () => {
@@ -266,13 +269,15 @@ const ExportAccountPage: FC = () => {
 
       {/*account select modal*/}
       <AccountSelectModal
-        _context={_context}
         accounts={accounts}
         allowWatchAccounts={false}
+        colorMode={colorMode}
         isOpen={isAccountSelectModalOpen}
         multiple={true}
+        network={network}
         onClose={onAccountSelectClose}
         onSelect={handleOnAccountSelect}
+        systemInfo={systemInfo}
       />
 
       <PageHeader

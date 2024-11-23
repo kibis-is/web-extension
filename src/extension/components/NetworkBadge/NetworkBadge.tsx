@@ -11,7 +11,7 @@ import { NetworkTypeEnum } from '@extension/enums';
 import useColorModeValue from '@extension/hooks/useColorModeValue';
 
 // theme
-import { theme } from '@extension/theme';
+import { theme } from '@common/theme';
 
 // types
 import type { IProps } from './types';

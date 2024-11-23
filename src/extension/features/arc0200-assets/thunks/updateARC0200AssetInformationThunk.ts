@@ -24,7 +24,7 @@ import type {
 // utils
 import selectNodeIDByGenesisHashFromSettings from '@extension/utils/selectNodeIDByGenesisHashFromSettings';
 import updateARC0200AssetInformationById from '@extension/utils/updateARC0200AssetInformationById';
-import upsertItemsById from '@common/utils/upsertItemsById';
+import upsertItemsById from '@extension/utils/upsertItemsById';
 
 const updateARC0200AssetInformationThunk: AsyncThunk<
   IUpdateARC0200AssetInformationResult, // return

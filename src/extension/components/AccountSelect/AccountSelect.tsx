@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { IoChevronDownOutline } from 'react-icons/io5';
 
 // components
-import AccountItem from '@extension/components/AccountItem';
+import AccountItem from '@common/components/AccountItem';
 import Label from '@common/components/Label';
 
 // constants
@@ -29,7 +29,7 @@ import useSubTextColor from '@extension/hooks/useSubTextColor';
 import AccountSelectModal from './AccountSelectModal';
 
 // theme
-import { theme } from '@extension/theme';
+import { theme } from '@common/theme';
 
 // types
 import type { IAccountWithExtendedProps } from '@extension/types';
@@ -39,13 +39,15 @@ import type { IProps } from './types';
 import calculateIconSize from '@common/utils/calculateIconSize';
 
 const AccountSelect: FC<IProps> = ({
-  _context,
   accounts,
   allowWatchAccounts,
+  colorMode,
   label,
+  network,
   onSelect,
   required = false,
   selectModalTitle,
+  systemInfo,
   value,
 }) => {
   const { t } = useTranslation();
@@ -73,20 +75,27 @@ const AccountSelect: FC<IProps> = ({
     <>
       {/*account select modal*/}
       <AccountSelectModal
-        _context={_context}
         accounts={accounts}
         allowWatchAccounts={allowWatchAccounts}
+        colorMode={colorMode}
         isOpen={isAccountSelectModalOpen}
         multiple={false}
+        network={network}
         onClose={onAccountSelectClose}
         onSelect={handleOnSelect}
+        systemInfo={systemInfo}
         title={selectModalTitle}
       />
 
       <VStack alignItems="flex-start" spacing={DEFAULT_GAP / 3} w="full">
         {/*label*/}
         {label && (
-          <Label label={label} px={DEFAULT_GAP - 2} required={required} />
+          <Label
+            colorMode={colorMode}
+            label={label}
+            px={DEFAULT_GAP - 2}
+            required={required}
+          />
         )}
 
         <ChakraButton
@@ -120,7 +129,7 @@ const AccountSelect: FC<IProps> = ({
         >
           <Stack flexGrow={1} justifyContent="center" w="full">
             {value ? (
-              <AccountItem account={value} />
+              <AccountItem colorMode={colorMode} account={value} />
             ) : (
               <Text
                 color={defaultTextColor}

@@ -22,8 +22,8 @@ import { useDispatch } from 'react-redux';
 
 // components
 import AccountSelect from '@extension/components/AccountSelect';
-import AddressInput from '@common/components/AddressInput';
-import AmountInput from '@common/components/AmountInput';
+import AddressInput from '@extension/components/AddressInput';
+import AmountInput from '@extension/components/AmountInput';
 import AssetSelect from '@extension/components/AssetSelect';
 import Button from '@common/components/Button';
 import GenericTextarea from '@extension/components/GenericTextarea';
@@ -74,10 +74,11 @@ import {
   useSelectSendAssetSender,
   useSelectStandardAssetsBySelectedNetwork,
   useSelectSettingsColorMode,
+  useSelectSystemInfo,
 } from '@extension/selectors';
 
 // theme
-import { theme } from '@extension/theme';
+import { theme } from '@common/theme';
 
 // types
 import type {
@@ -115,6 +116,7 @@ const SendAssetModal: FC<IModalProps> = ({ onClose }) => {
   const network = useSelectSettingsSelectedNetwork();
   const sender = useSelectSendAssetSender();
   const standardAssets = useSelectStandardAssetsBySelectedNetwork();
+  const systemInfo = useSelectSystemInfo();
   // hooks
   const defaultTextColor = useDefaultTextColor();
   const {
@@ -165,7 +167,6 @@ const SendAssetModal: FC<IModalProps> = ({ onClose }) => {
     useState<string>('0');
   const [transactions, setTransactions] = useState<Transaction[] | null>(null);
   // misc
-  const _context = 'send-asset-modal';
   const allAssets: (IAssetTypes | INativeCurrency)[] = [
     ...arc200Assets,
     ...standardAssets,
@@ -408,13 +409,15 @@ const SendAssetModal: FC<IModalProps> = ({ onClose }) => {
 
         {/*from account*/}
         <AccountSelect
-          _context={_context}
           accounts={availableAccounts}
+          colorMode={colorMode}
           disabled={creating}
           label={t<string>('labels.from')}
+          network={network}
           onSelect={handleOnSenderAccountSelect}
           required={true}
           selectModalTitle={t<string>('headings.selectSenderAccount')}
+          systemInfo={systemInfo}
           value={sender}
         />
 
@@ -425,12 +428,14 @@ const SendAssetModal: FC<IModalProps> = ({ onClose }) => {
           error={receiverAddressError}
           isDisabled={creating}
           label={receiverAddressLabel}
+          network={network}
           onBlur={receiverAddressOnBlur}
           onChange={receiverAddressOnChange}
           onSelect={receiverAddressOnSelect}
           required={isReceiverAddressRequired}
           selectButtonLabel={t<string>('buttons.selectReceiverAccount')}
           selectModalTitle={t<string>('headings.selectReceiverAccount')}
+          systemInfo={systemInfo}
           validate={validateReceiverAddress}
           value={receiverAddressValue}
         />

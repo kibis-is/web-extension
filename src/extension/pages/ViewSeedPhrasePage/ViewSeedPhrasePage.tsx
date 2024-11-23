@@ -42,6 +42,8 @@ import {
   useSelectActiveAccount,
   useSelectNonWatchAccounts,
   useSelectSettingsColorMode,
+  useSelectSettingsSelectedNetwork,
+  useSelectSystemInfo,
 } from '@extension/selectors';
 
 // types
@@ -66,6 +68,8 @@ const ViewSeedPhrasePage: FC = () => {
   const accounts = useSelectNonWatchAccounts();
   const activeAccount = useSelectActiveAccount();
   const colorMode = useSelectSettingsColorMode();
+  const network = useSelectSettingsSelectedNetwork();
+  const systemInfo = useSelectSystemInfo();
   // hooks
   const defaultTextColor = useDefaultTextColor();
   const primaryColorScheme = usePrimaryColorScheme();
@@ -209,11 +213,13 @@ const ViewSeedPhrasePage: FC = () => {
             />
           ) : (
             <AccountSelect
-              _context={_context}
               accounts={accounts}
               allowWatchAccounts={false}
+              colorMode={colorMode}
+              network={network}
               onSelect={handleAccountSelect}
               required={true}
+              systemInfo={systemInfo}
               value={value.account}
             />
           )}

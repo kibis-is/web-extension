@@ -13,7 +13,7 @@ import BaseRepository from '@extension/repositories/BaseRepository';
 import type { IAccount, IAccountGroup } from '@extension/types';
 
 // utils
-import upsertItemsById from '@common/utils/upsertItemsById';
+import upsertItemsById from '@extension/utils/upsertItemsById';
 
 export default class AccountGroupRepository extends BaseRepository {
   /**

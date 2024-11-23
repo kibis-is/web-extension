@@ -27,7 +27,7 @@ import useSubTextColor from '@extension/hooks/useSubTextColor';
 import SelectModal from './SelectModal';
 
 // theme
-import { theme } from '@extension/theme';
+import { theme } from '@common/theme';
 
 // types
 import type { IProps } from './types';

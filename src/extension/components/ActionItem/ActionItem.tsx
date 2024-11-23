@@ -11,7 +11,7 @@ import useColorModeValue from '@extension/hooks/useColorModeValue';
 import useSubTextColor from '@extension/hooks/useSubTextColor';
 
 // theme
-import { theme } from '@extension/theme';
+import { theme } from '@common/theme';
 
 // types
 import type { IProps } from './types';

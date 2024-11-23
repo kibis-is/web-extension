@@ -23,7 +23,7 @@ import useTextBackgroundColor from '@common/hooks/useTextBackgroundColor';
 import KbSignIn from '@extension/icons/KbSignIn';
 
 // theme
-import { theme } from '@extension/theme';
+import { theme } from '@common/theme';
 
 // types
 import type { IRootProps } from './types';

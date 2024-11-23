@@ -21,7 +21,7 @@ import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@common/constants';
 import useDefaultTextColor from '@extension/hooks/useDefaultTextColor';
 
 // theme
-import { theme } from '@extension/theme';
+import { theme } from '@common/theme';
 
 // types
 import type { IProps } from './types';

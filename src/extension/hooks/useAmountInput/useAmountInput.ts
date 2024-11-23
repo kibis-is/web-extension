@@ -3,7 +3,7 @@ import numbro from 'numbro';
 import { type FocusEvent, useState } from 'react';
 
 // types
-import type { IOnEventOptions } from '@common/components/AmountInput';
+import type { IOnEventOptions } from '@extension/components/AmountInput';
 import type { IOptions, IState } from './types';
 
 // utils

@@ -8,7 +8,7 @@ import Root from '../Root';
 import SystemContext from '../../contexts/SystemContext';
 
 // theme
-import { theme } from '@extension/theme';
+import { theme } from '@common/theme';
 
 // utils
 import createLogger from '@common/utils/createLogger';

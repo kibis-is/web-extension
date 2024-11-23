@@ -138,5 +138,7 @@ export default class AVMWebProviderMessageBroker extends BaseListener {
     this._avmWebProvider.onSignTransactions(this._onMessage.bind(this));
   }
 
-  public stopListening() {}
+  public stopListening() {
+    this._avmWebProvider.removeAllListeners();
+  }
 }

@@ -34,7 +34,7 @@ import {
 } from '@extension/selectors';
 
 // theme
-import { theme } from '@extension/theme';
+import { theme } from '@common/theme';
 
 // types
 import type { IModalProps } from '@extension/types';

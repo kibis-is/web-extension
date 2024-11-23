@@ -55,10 +55,12 @@ import {
   useSelectAccountsFetching,
   useSelectLogger,
   useSelectSettingsColorMode,
+  useSelectSettingsSelectedNetwork,
+  useSelectSystemInfo,
 } from '@extension/selectors';
 
 // theme
-import { theme } from '@extension/theme';
+import { theme } from '@common/theme';
 
 // types
 import type {
@@ -87,6 +89,8 @@ const SignMessageModal: FC<IModalProps> = ({ onClose }) => {
   const colorMode = useSelectSettingsColorMode();
   const fetching = useSelectAccountsFetching();
   const logger = useSelectLogger();
+  const network = useSelectSettingsSelectedNetwork();
+  const systemInfo = useSelectSystemInfo();
   // hooks
   const {
     authorizedAccounts,
@@ -96,8 +100,6 @@ const SignMessageModal: FC<IModalProps> = ({ onClose }) => {
     setSigner,
   } = useSignMessageModal();
   const subTextColor = useSubTextColor();
-  // misc
-  const _context = 'sign-message-modal';
   // handlers
   const handleAccountSelect = (account: IAccountWithExtendedProps) =>
     setSigner(account);
@@ -231,11 +233,13 @@ const SignMessageModal: FC<IModalProps> = ({ onClose }) => {
               )}:`}</Text>
 
               <AccountSelect
-                _context={_context}
                 accounts={authorizedAccounts}
                 allowWatchAccounts={false}
+                colorMode={colorMode}
+                network={network}
                 onSelect={handleAccountSelect}
                 required={true}
+                systemInfo={systemInfo}
                 value={signer}
               />
             </>

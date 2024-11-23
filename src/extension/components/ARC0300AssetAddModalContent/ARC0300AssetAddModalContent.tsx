@@ -71,10 +71,12 @@ import {
   useSelectLogger,
   useSelectNetworks,
   useSelectSettingsColorMode,
+  useSelectSettingsSelectedNetwork,
+  useSelectSystemInfo,
 } from '@extension/selectors';
 
 // theme
-import { theme } from '@extension/theme';
+import { theme } from '@common/theme';
 
 // types
 import type {
@@ -109,6 +111,7 @@ const ARC0300AssetAddModalContent: FC<
   const colorMode = useSelectSettingsColorMode();
   const logger = useSelectLogger();
   const networks = useSelectNetworks();
+  const systemInfo = useSelectSystemInfo();
   // hooks
   const {
     assets,
@@ -118,25 +121,33 @@ const ARC0300AssetAddModalContent: FC<
   const defaultTextColor = useDefaultTextColor();
   const primaryButtonTextColor = usePrimaryButtonTextColor();
   // memos
-  const _context = useMemo(() => randomString(8), []);
+  const network = useMemo(
+    () =>
+      networks.find(
+        (value) =>
+          value.genesisHash ===
+          encodeBase64(
+            decodeBase63URLSafe(schema.query[ARC0300QueryEnum.GenesisHash])
+          )
+      ) || null,
+    []
+  );
+  const asset = useMemo(() => assets[0] || null, []);
+  const totalSupplyInStandardUnits = useMemo(
+    () =>
+      asset
+        ? convertToStandardUnit(
+            new BigNumber(asset.totalSupply),
+            asset.decimals
+          )
+        : new BigNumber('0'),
+    [asset]
+  );
   // states
   const [account, setAccount] = useState<IAccountWithExtendedProps | null>(
     activeAccount
   );
   const [saving, setSaving] = useState<boolean>(false);
-  // misc
-  const asset = assets[0] || null;
-  const network =
-    networks.find(
-      (value) =>
-        value.genesisHash ===
-        encodeBase64(
-          decodeBase63URLSafe(schema.query[ARC0300QueryEnum.GenesisHash])
-        )
-    ) || null;
-  const totalSupplyInStandardUnits: BigNumber = asset
-    ? convertToStandardUnit(new BigNumber(asset.totalSupply), asset.decimals)
-    : new BigNumber('0');
   // handlers
   const handleAddClick = async () => {
     const _functionName = 'handleAddClick';
@@ -267,12 +278,14 @@ const ARC0300AssetAddModalContent: FC<
                 <ModalSubHeading text={t<string>('headings.selectAccount')} />
 
                 <AccountSelect
-                  _context={_context}
                   accounts={accounts}
                   allowWatchAccounts={true}
+                  colorMode={colorMode}
                   disabled={loading || saving}
+                  network={network}
                   onSelect={handleOnAccountSelect}
                   required={true}
+                  systemInfo={systemInfo}
                   value={account || accounts[0]}
                 />
               </VStack>

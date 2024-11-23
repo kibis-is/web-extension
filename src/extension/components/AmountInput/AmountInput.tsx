@@ -24,12 +24,12 @@ import { DEFAULT_GAP, INPUT_HEIGHT } from '@common/constants';
 import { AssetTypeEnum } from '@extension/enums';
 
 // hooks
-import useButtonHoverBackgroundColor from '@common/hooks/useButtonHoverBackgroundColor';
-import useDefaultTextColor from '@common/hooks/useDefaultTextColor';
-import usePrimaryColor from '@common/hooks/usePrimaryColor';
-import usePrimaryColorScheme from '@common/hooks/usePrimaryColorScheme';
-import useSubTextColor from '@common/hooks/useSubTextColor';
-import useTextBackgroundColor from '@common/hooks/useTextBackgroundColor';
+import useButtonHoverBackgroundColor from '@extension/hooks/useButtonHoverBackgroundColor';
+import useDefaultTextColor from '@extension/hooks/useDefaultTextColor';
+import usePrimaryColor from '@extension/hooks/usePrimaryColor';
+import usePrimaryColorScheme from '@extension/hooks/usePrimaryColorScheme';
+import useSubTextColor from '@extension/hooks/useSubTextColor';
+import useTextBackgroundColor from '@extension/hooks/useTextBackgroundColor';
 
 // theme
 import { theme } from '@common/theme';
@@ -56,12 +56,12 @@ const AmountInput: FC<TProps> = ({
 }) => {
   const { t } = useTranslation();
   // hooks
-  const buttonHoverBackgroundColor = useButtonHoverBackgroundColor(colorMode);
-  const defaultTextColor = useDefaultTextColor(colorMode);
-  const primaryColor = usePrimaryColor(colorMode);
-  const primaryColorScheme = usePrimaryColorScheme(colorMode);
-  const subTextColor = useSubTextColor(colorMode);
-  const textBackgroundColor = useTextBackgroundColor(colorMode);
+  const buttonHoverBackgroundColor = useButtonHoverBackgroundColor();
+  const defaultTextColor = useDefaultTextColor();
+  const primaryColor = usePrimaryColor();
+  const primaryColorScheme = usePrimaryColorScheme();
+  const subTextColor = useSubTextColor();
+  const textBackgroundColor = useTextBackgroundColor();
   // misc
   const balance = new BigNumber(
     account.networkInformation[

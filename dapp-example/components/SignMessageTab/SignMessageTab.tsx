@@ -21,7 +21,7 @@ import useDefaultTextColor from '../../hooks/useDefaultTextColor';
 import usePrimaryColorScheme from '../../hooks/usePrimaryColorScheme';
 
 // theme
-import { theme } from '@extension/theme';
+import { theme } from '@common/theme';
 
 // types
 import type { ISignMessageActionResult } from '../../types';

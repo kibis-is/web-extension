@@ -26,7 +26,7 @@ import useCaptureQRCode from '@extension/hooks/useCaptureQRCode';
 import useDefaultTextColor from '@extension/hooks/useDefaultTextColor';
 
 // theme
-import { theme } from '@extension/theme';
+import { theme } from '@common/theme';
 
 // types
 import type { IScanQRCodeModalContentProps } from '@extension/types';

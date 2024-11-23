@@ -18,7 +18,7 @@ import { useDispatch } from 'react-redux';
 
 // components
 import AddressDisplay from '@extension/components/AddressDisplay';
-import AddressInput from '@common/components/AddressInput';
+import AddressInput from '@extension/components/AddressInput';
 import Button from '@common/components/Button';
 import InfoIconTooltip from '@extension/components/InfoIconTooltip';
 import ModalAssetItem from '@extension/components/ModalAssetItem';
@@ -57,10 +57,11 @@ import AuthenticationModal from '@extension/modals/AuthenticationModal';
 import {
   useSelectAccounts,
   useSelectSettingsColorMode,
+  useSelectSystemInfo,
 } from '@extension/selectors';
 
 // theme
-import { theme } from '@extension/theme';
+import { theme } from '@common/theme';
 
 // types
 import type {
@@ -85,6 +86,7 @@ const ReKeyAccountModal: FC<IModalProps> = ({ onClose }) => {
   // selectors
   const accounts = useSelectAccounts();
   const colorMode = useSelectSettingsColorMode();
+  const systemInfo = useSelectSystemInfo();
   // hooks
   const {
     error: reKeyToAddressError,
@@ -357,10 +359,12 @@ const ReKeyAccountModal: FC<IModalProps> = ({ onClose }) => {
                 colorMode={colorMode}
                 error={reKeyToAddressError}
                 label={reKeyToAddressLabel}
+                network={network}
                 onBlur={reKeyToAddressOnBlur}
                 onChange={reKeyToAddressOnChange}
                 onSelect={reKeyToAddressOnSelect}
                 required={isReKeyToAddressRequired}
+                systemInfo={systemInfo}
                 validate={validateReKeyToAddress}
                 value={reKeyToAddressValue}
               />

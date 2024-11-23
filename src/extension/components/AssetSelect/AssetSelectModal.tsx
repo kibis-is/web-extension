@@ -44,7 +44,7 @@ import usePrimaryColorScheme from '@extension/hooks/usePrimaryColorScheme';
 import { useSelectSettingsSelectedNetwork } from '@extension/selectors';
 
 // theme
-import { theme } from '@extension/theme';
+import { theme } from '@common/theme';
 
 // types
 import type { IAssetTypes, INativeCurrency } from '@extension/types';

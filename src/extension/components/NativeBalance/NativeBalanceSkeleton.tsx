@@ -12,7 +12,7 @@ import { DEFAULT_GAP } from '@common/constants';
 import useDefaultTextColor from '@extension/hooks/useDefaultTextColor';
 
 // theme
-import { theme } from '@extension/theme';
+import { theme } from '@common/theme';
 
 const NativeBalanceSkeleton: FC = () => {
   const { t } = useTranslation();

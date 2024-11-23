@@ -8,7 +8,7 @@ import ReEncryptKeysLoadingContent from '@extension/components/ReEncryptKeysLoad
 import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@common/constants';
 
 // theme
-import { theme } from '@extension/theme';
+import { theme } from '@common/theme';
 
 // types
 import type { IProps } from './types';

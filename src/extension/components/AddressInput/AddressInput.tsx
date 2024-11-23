@@ -23,7 +23,7 @@ import { DEFAULT_GAP, INPUT_HEIGHT } from '@common/constants';
 import usePrimaryColor from '@common/hooks/usePrimaryColor';
 
 // modals
-import { AccountSelectModal } from '@common/components/AccountSelect';
+import { AccountSelectModal } from '@extension/components/AccountSelect';
 
 // types
 import type { IAccountWithExtendedProps } from '@extension/types';
@@ -40,10 +40,12 @@ const AddressInput: FC<TProps> = ({
   id,
   isDisabled,
   label,
+  network,
   onSelect,
   required = false,
   selectButtonLabel,
   selectModalTitle,
+  systemInfo,
   validate,
   ...inputProps
 }) => {
@@ -76,8 +78,10 @@ const AddressInput: FC<TProps> = ({
         colorMode={colorMode}
         isOpen={isAccountSelectModalOpen}
         multiple={false}
+        network={network}
         onClose={onAccountSelectClose}
         onSelect={handleOnSelect}
+        systemInfo={systemInfo}
         title={selectModalTitle}
       />
 

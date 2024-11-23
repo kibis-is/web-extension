@@ -13,7 +13,7 @@ import useAccounts from '@external/hooks/useAccounts';
 import ColorModeManager from '@common/managers/ColorModeManager';
 
 // theme
-import { theme } from '@extension/theme';
+import { theme } from '@common/theme';
 
 // types
 import type { IExternalAccount } from '@common/types';
@@ -33,6 +33,7 @@ const App: FC<IAppProps> = ({
   // hooks
   const { accounts, fetching, fetchAccountsAction } = useAccounts({ logger });
   // states
+  const [account, setAccount] = useState<IExternalAccount | null>(null);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [saving, setSaving] = useState<boolean>(false);
   // handlers
@@ -41,7 +42,7 @@ const App: FC<IAppProps> = ({
     setIsOpen(false);
   };
   const handleOnRegisterClick = () => {};
-  const handleOnSelect = (account: IExternalAccount) => {};
+  const handleOnSelect = (_account: IExternalAccount) => setAccount(_account);
 
   useEffect(() => {
     (async () => {
@@ -78,6 +79,7 @@ const App: FC<IAppProps> = ({
             onRegisterClick={handleOnRegisterClick}
             onSelect={handleOnSelect}
             saving={saving}
+            selectedAccount={account}
           />
         </SlideFade>
       </ChakraProvider>

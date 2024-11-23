@@ -23,7 +23,7 @@ import type {
 // utils
 import fetchVerifiedStandardAssetList from '@extension/utils/fetchVerifiedStandardAssetList';
 import updateStandardAssetInformationById from '@extension/utils/updateStandardAssetInformationById';
-import upsertItemsById from '@common/utils/upsertItemsById';
+import upsertItemsById from '@extension/utils/upsertItemsById';
 import selectNodeIDByGenesisHashFromSettings from '@extension/utils/selectNodeIDByGenesisHashFromSettings';
 
 const updateStandardAssetInformationThunk: AsyncThunk<

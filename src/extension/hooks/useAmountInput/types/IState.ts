@@ -1,7 +1,7 @@
 import type { FocusEvent } from 'react';
 
 // types
-import type { IOnEventOptions } from '@common/components/AmountInput';
+import type { IOnEventOptions } from '@extension/components/AmountInput';
 
 interface IState {
   label?: string;
