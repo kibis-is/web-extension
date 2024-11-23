@@ -1,5 +1,5 @@
 // types
-import type { IExternalAccount } from '@external/types';
+import type { IExternalAccount } from '@common/types';
 
 interface IState {
   accounts: IExternalAccount[];

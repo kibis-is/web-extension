@@ -9,5 +9,6 @@ export type { default as IWebAuthnResponseMessage } from './IWebAuthnResponseMes
 export type { default as TPartialExcept } from './TPartialExcept';
 export type { default as TProviderMessages } from './TProviderMessages';
 export * from './accounts';
+export * from './messages';
 export * from './ui';
 export * from './webauthn';

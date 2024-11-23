@@ -3,20 +3,15 @@ import browser from 'webextension-polyfill';
 // enums
 import { WebAuthnMessageReferenceEnum } from '@common/enums';
 
-// messages
-import {
-  WebAuthnCreateRequestMessage,
-  WebAuthnCreateResponseMessage,
-  WebAuthnGetRequestMessage,
-  WebAuthnGetResponseMessage,
-} from '@common/messages';
-
 // services
 import BaseListener from '@common/services/BaseListener';
 
+// types
+import { IBaseMessage, IBaseResponseMessage } from '@common/types';
+
 /**
- * The WebAuthn message broker listens to messages the client (the `WebAuthnManager` that is injected in the webpage via
- * `webauthn-manager.js`) and the provider (background script/popup) and transfers the messages between the two.
+ * The WebAuthn message broker listens to messages from the client (the `WebAuthnMessageManager` that is injected in the
+ * webpage via `webauthn.js`) and the provider (background script/popup) and transfers the messages between the two.
  */
 export default class WebAuthnMessageBroker extends BaseListener {
   /**
@@ -24,23 +19,23 @@ export default class WebAuthnMessageBroker extends BaseListener {
    */
 
   private _onClientMessage(
-    reference: WebAuthnMessageReferenceEnum,
-    message: CustomEvent<
-      WebAuthnCreateRequestMessage | WebAuthnGetRequestMessage
-    >
+    message: CustomEvent<IBaseMessage<WebAuthnMessageReferenceEnum>>
   ) {
     const _functionName = '_onClientMessage';
 
     this._logger?.debug(
-      `${WebAuthnMessageBroker.name}#${_functionName}: received client message "${reference}" with id "${message.detail.id}"`
+      `${WebAuthnMessageBroker.name}#${_functionName}: received client message "${message.detail.reference}" with id "${message.detail.id}"`
     );
 
-    // send message to provider
+    // proxy message to the provider
     browser.runtime.sendMessage(message.detail);
   }
 
   private _onProviderMessage(
-    message: WebAuthnCreateResponseMessage | WebAuthnGetResponseMessage
+    message: IBaseResponseMessage<
+      IBaseMessage<WebAuthnMessageReferenceEnum>,
+      WebAuthnMessageReferenceEnum
+    >
   ): void {
     const _functionName = '_onProviderMessage';
 
@@ -48,10 +43,10 @@ export default class WebAuthnMessageBroker extends BaseListener {
       `${WebAuthnMessageBroker.name}#${_functionName}: received provider message "${message.reference}" with id "${message.id}"`
     );
 
-    // dispatch message to the client
+    // proxy message to the client
     window.dispatchEvent(
       new CustomEvent(message.reference, {
-        detail: JSON.stringify(message), // the message needs to be serialized
+        detail: JSON.stringify(message), // the message needs to be serialized as webpages do not allow anything but strings
       })
     );
   }
@@ -61,31 +56,19 @@ export default class WebAuthnMessageBroker extends BaseListener {
    */
 
   public startListening(): void {
-    // listen to client messages
-    [
-      WebAuthnMessageReferenceEnum.CreateRequest,
-      WebAuthnMessageReferenceEnum.GetRequest,
-    ].forEach((reference) =>
-      window.addEventListener(
-        reference,
-        this._onClientMessage.bind(this, reference)
-      )
+    // add listeners for client (web page) messages
+    [WebAuthnMessageReferenceEnum.AccountsRequest].forEach((reference) =>
+      window.addEventListener(reference, this._onClientMessage.bind(this))
     );
 
-    // listen to provider messages
+    // listen to provider (extension) messages
     browser.runtime.onMessage.addListener(this._onProviderMessage.bind(this));
   }
 
   public stopListening(): void {
     // remove client listeners
-    [
-      WebAuthnMessageReferenceEnum.CreateRequest,
-      WebAuthnMessageReferenceEnum.GetRequest,
-    ].forEach((reference) =>
-      window.removeEventListener(
-        reference,
-        this._onClientMessage.bind(this, reference)
-      )
+    [WebAuthnMessageReferenceEnum.AccountsRequest].forEach((reference) =>
+      window.removeEventListener(reference, this._onClientMessage.bind(this))
     );
 
     // remove provider listeners

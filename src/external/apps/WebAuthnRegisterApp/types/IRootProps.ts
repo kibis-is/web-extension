@@ -1,8 +1,7 @@
 import type { ColorMode } from '@chakra-ui/react';
 
 // types
-import type { IClientInformation } from '@common/types';
-import type { IExternalAccount } from '@external/types';
+import type { IClientInformation, IExternalAccount } from '@common/types';
 
 interface IRootProps {
   accounts: IExternalAccount[];

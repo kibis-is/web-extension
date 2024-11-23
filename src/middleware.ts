@@ -27,5 +27,5 @@ import injectScript from '@common/utils/injectScript';
   webAuthnMessageBroker.startListening();
 
   // inject the webauthn manager to intercept webauthn requests
-  injectScript(browser.runtime.getURL('webauthn-interceptor.js'));
+  injectScript(browser.runtime.getURL('webauthn.js'));
 })();

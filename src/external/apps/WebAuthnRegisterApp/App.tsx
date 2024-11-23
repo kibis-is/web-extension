@@ -16,7 +16,7 @@ import ColorModeManager from '@common/managers/ColorModeManager';
 import { theme } from '@extension/theme';
 
 // types
-import type { IExternalAccount } from '@external/types';
+import type { IExternalAccount } from '@common/types';
 import type { IAppProps } from './types';
 
 const App: FC<IAppProps> = ({
@@ -24,13 +24,14 @@ const App: FC<IAppProps> = ({
   i18n,
   initialColorMode,
   initialFontFamily,
+  logger,
   navigatorCredentialsCreateFn,
   onClose,
   onResponse,
   options,
 }) => {
   // hooks
-  const { accounts, fetching, fetchAccountsAction } = useAccounts();
+  const { accounts, fetching, fetchAccountsAction } = useAccounts({ logger });
   // states
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [saving, setSaving] = useState<boolean>(false);
@@ -41,7 +42,7 @@ const App: FC<IAppProps> = ({
   };
   const handleOnRegisterClick = () => {};
   const handleOnSelect = (account: IExternalAccount) => {};
-
+  console.log('accounts:', accounts);
   useEffect(() => {
     (async () => {
       await fetchAccountsAction();

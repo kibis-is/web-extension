@@ -10,7 +10,7 @@
   "web_accessible_resources": [
     {
       "matches": ["*://*/*"],
-      "resources": ["webauthn-interceptor.js"]
+      "resources": ["webauthn.js"]
     }
   ]
 }

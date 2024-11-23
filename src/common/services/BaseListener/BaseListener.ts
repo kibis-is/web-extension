@@ -10,7 +10,7 @@ export default abstract class BaseListener {
   }
 
   /**
-   * private functions
+   * public functions
    */
 
   public abstract startListening(): void;

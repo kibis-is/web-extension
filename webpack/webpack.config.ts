@@ -253,12 +253,7 @@ const configs: (
       entry: {
         ['background']: resolve(SRC_PATH, 'background.ts'),
         ['middleware']: resolve(SRC_PATH, 'middleware.ts'),
-        ['webauthn-interceptor']: resolve(
-          SRC_PATH,
-          'external',
-          'sources',
-          'webauthn-interceptor.ts'
-        ),
+        ['webauthn']: resolve(SRC_PATH, 'external', 'sources', 'webauthn.ts'),
       },
       mode: environment,
       module: {

@@ -8,5 +8,5 @@
     "scripts": ["background.js"],
     "persistent": true
   },
-  "web_accessible_resources": ["webauthn-interceptor.js"]
+  "web_accessible_resources": ["webauthn.js"]
 }

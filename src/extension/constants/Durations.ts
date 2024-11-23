@@ -14,4 +14,3 @@ export const NETWORK_TRANSACTION_PARAMS_ANTIQUATED_TIMEOUT = 900000; // 15 minut
 export const NETWORK_CONNECTIVITY_CHECK_INTERVAL = 36000; // 36 seconds in milliseconds
 export const NODE_REQUEST_DELAY = 100; // in milliseconds
 export const QR_CODE_SCAN_INTERVAL = 3000; // 3 seconds in milliseconds
-export const WEB_AUTHN_REQUEST_TIMEOUT = 300000; // 5 minutes in milliseconds

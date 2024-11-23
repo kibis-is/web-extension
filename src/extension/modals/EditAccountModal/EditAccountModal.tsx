@@ -52,12 +52,11 @@ import {
 import { theme } from '@extension/theme';
 
 // types
+import type { TAccountColors, TAccountIcons } from '@common/types';
 import type {
   IAccountWithExtendedProps,
   IAppThunkDispatch,
   IMainRootState,
-  TAccountColors,
-  TAccountIcons,
 } from '@extension/types';
 import type { IProps } from './types';
 

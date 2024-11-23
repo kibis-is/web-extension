@@ -3,50 +3,88 @@ import browser, { type Runtime } from 'webextension-polyfill';
 
 // enums
 import { WebAuthnMessageReferenceEnum } from '@common/enums';
-import { EventTypeEnum } from '@extension/enums';
 
 // events
-import { WebAuthnRequestEvent } from '@extension/events';
 
 // messages
-import {
-  WebAuthnCreateRequestMessage,
-  WebAuthnGetRequestMessage,
-} from '@common/messages';
+import WebAuthnAccountsRequestMessage from '@common/messages/WebAuthnAccountsRequestMessage';
+import WebAuthnAccountsResponseMessage from '@common/messages/WebAuthnAccountsResponseMessage';
 
 // repository
-import EventQueueRepository from '@extension/repositories/EventQueueRepository';
+import AccountRepository from '@extension/repositories/AccountRepository';
 
-// services
-import BaseListener from '@common/services/BaseListener';
+// message handlers
+import BaseMessageHandler from '@extension/message-handlers/BaseMessageHandler';
 
 // types
-import type { IBaseOptions } from '@common/types';
+import type { IBaseOptions, IExternalAccount } from '@common/types';
+import type { IAccount } from '@extension/types';
 
 // utils
-import sendExtensionEvent from '@extension/utils/sendExtensionEvent';
+import isWatchAccount from '@extension/utils/isWatchAccount';
 
-export default class WebAuthnMessageHandler extends BaseListener {
+export default class WebAuthnMessageHandler extends BaseMessageHandler {
   // private variables
-  private readonly _eventQueueRepository: EventQueueRepository;
+  private readonly _accountRepository: AccountRepository;
 
   constructor(options: IBaseOptions) {
     super(options);
 
-    this._eventQueueRepository = new EventQueueRepository();
+    this._accountRepository = new AccountRepository();
   }
 
   /**
    * private methods
    */
 
-  private async _onMessage(
-    message: WebAuthnCreateRequestMessage | WebAuthnGetRequestMessage,
+  private async _handleAccountsRequestMessage(
+    message: WebAuthnAccountsRequestMessage,
+    originTabID: number
+  ): Promise<void> {
+    const _functionName = '_handleAccountsRequestMessage';
+    let _accounts: IAccount[];
+    let accounts: IExternalAccount[] = [];
+
+    this._logger?.debug(
+      `${WebAuthnMessageHandler.name}#${_functionName}: received message "${message.reference}"`
+    );
+
+    _accounts = await this._accountRepository.fetchAll();
+
+    for (const account of _accounts) {
+      accounts.push({
+        color: account.color,
+        icon: account.icon,
+        isWatchAccount: await isWatchAccount(account),
+        name: account.name,
+        publicKey: account.publicKey,
+      });
+    }
+
+    // send a response with all accounts
+    return this._sendResponseToMiddleware(
+      new WebAuthnAccountsResponseMessage({
+        error: null,
+        id: uuid(),
+        reference: WebAuthnMessageReferenceEnum.AccountsResponse,
+        requestID: message.id,
+        result: {
+          accounts,
+        },
+      }),
+      originTabID
+    );
+  }
+
+  /**
+   * protected methods
+   */
+
+  protected async _onMessage(
+    message: WebAuthnAccountsRequestMessage,
     sender: Runtime.MessageSender
   ): Promise<void> {
     const _functionName = '_onMessage';
-    let event: WebAuthnRequestEvent;
-    let events: WebAuthnRequestEvent[];
 
     if (!sender.tab?.id) {
       this._logger?.debug(
@@ -57,45 +95,9 @@ export default class WebAuthnMessageHandler extends BaseListener {
     }
 
     switch (message.reference) {
-      case WebAuthnMessageReferenceEnum.CreateRequest:
-      case WebAuthnMessageReferenceEnum.GetRequest:
-        this._logger?.debug(
-          `${WebAuthnMessageHandler.name}#${_functionName}: received client message "${message.reference}" with id "${message.id}"`
-        );
-
-        events =
-          await this._eventQueueRepository.fetchByType<WebAuthnRequestEvent>(
-            EventTypeEnum.WebAuthnRequest
-          );
-
-        event = new WebAuthnRequestEvent({
-          id: uuid(),
-          payload: {
-            message,
-            originTabId: sender.tab.id,
-          },
-        });
-
-        // if the client request already exists, ignore it
-        if (
-          events.find(
-            (value) => value.payload.message.id === event.payload.message.id
-          )
-        ) {
-          this._logger?.debug(
-            `${WebAuthnMessageHandler.name}#${_functionName}: webauthn request "${message.id}" already exists, ignoring`
-          );
-
-          return;
-        }
-
-        return await sendExtensionEvent({
-          event,
-          eventQueueRepository: this._eventQueueRepository,
-          ...(this._logger && {
-            logger: this._logger,
-          }),
-        });
+      case WebAuthnMessageReferenceEnum.AccountsRequest:
+        await this._handleAccountsRequestMessage(message, sender.tab.id);
+        break;
       default:
         break;
     }

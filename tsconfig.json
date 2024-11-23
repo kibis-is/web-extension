@@ -24,6 +24,7 @@
       "@common/fonts/*": ["src/common/fonts/*"],
       "@common/managers/*": ["src/common/managers/*"],
       "@common/messages": ["src/common/messages"],
+      "@common/messages/*": ["src/common/messages/*"],
       "@common/services/*": ["src/common/services/*"],
       "@common/styles/*": ["src/common/styles/*"],
       "@common/types": ["src/common/types"],
@@ -63,7 +64,6 @@
       "@external/hooks/*": ["src/external/hooks/*"],
       "@external/interceptors/*": ["src/external/interceptors/*"],
       "@external/managers/*": ["src/external/managers/*"],
-      "@external/types": ["src/external/types"],
 
       "@test/utils/*": ["test/utils/*"]
     },

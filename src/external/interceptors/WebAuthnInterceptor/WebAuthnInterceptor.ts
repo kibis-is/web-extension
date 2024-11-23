@@ -1,35 +1,18 @@
 import { encode as encodeBase64 } from '@stablelib/base64';
+import { randomString } from '@stablelib/random';
 import I18next, { type i18n } from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import { createElement } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
 
 // apps
-import App from '@external/apps/WebAuthnCreateApp';
-
-// constants
-import { WEB_AUTHN_REQUEST_TIMEOUT } from '@extension/constants';
-
-// enums
-import { WebAuthnMessageReferenceEnum } from '@common/enums';
-
-// errors
-import { UnknownError } from '@extension/errors';
-
-// messages
-import {
-  WebAuthnCreateRequestMessage,
-  WebAuthnCreateResponseMessage,
-  WebAuthnGetRequestMessage,
-  WebAuthnGetResponseMessage,
-} from '@common/messages';
+import WebAuthnRegisterApp from '@external/apps/WebAuthnRegisterApp';
 
 // translations
 import { en } from '@extension/translations';
 
 // types
 import type {
-  IBaseOptions,
   ILogger,
   ISerializedPublicKeyCredentialCreationOptions,
   ISerializedPublicKeyCredentialRequestOptions,
@@ -39,7 +22,6 @@ import type { INewOptions } from './types';
 // utils
 import bufferSourceToUint8Array from '@common/utils/bufferSourceToUint8Array';
 import createClientInformation from '@common/utils/createClientInformation';
-import { randomString } from '@stablelib/random';
 
 export default class WebAuthnInterceptor {
   // private variables
@@ -57,79 +39,6 @@ export default class WebAuthnInterceptor {
   /**
    * private methods
    */
-
-  private async _dispatchMessageWithTimeout<
-    Message extends WebAuthnCreateRequestMessage | WebAuthnGetRequestMessage
-  >(
-    message: Message,
-    responseReference: WebAuthnMessageReferenceEnum
-  ): Promise<PublicKeyCredential | null> {
-    return new Promise((resolve, reject) => {
-      const _functionName = '_dispatchMessage';
-      const listener = (event: CustomEvent<string>) => {
-        let detail: WebAuthnCreateResponseMessage | WebAuthnGetResponseMessage;
-
-        try {
-          detail = JSON.parse(event.detail); // the event.detail should be a stringified object
-        } catch (error) {
-          this._logger?.debug(
-            `${WebAuthnInterceptor.name}#${_functionName}:`,
-            error
-          );
-
-          // clear the timeout and remove the listener - we failed to parse the message
-          window.clearTimeout(timerId);
-          window.removeEventListener(responseReference, listener);
-
-          return reject(new UnknownError(error.message));
-        }
-
-        // if the request ids or the references do not match ignore - the message may be still coming
-        if (
-          detail.requestID !== message.id ||
-          detail.reference !== responseReference
-        ) {
-          return;
-        }
-
-        // clear the timeout and remove the listener - we can handle it from here
-        window.clearTimeout(timerId);
-        window.removeEventListener(responseReference, listener);
-
-        // if there was an error return it
-        if (detail.error) {
-          return reject(detail.error);
-        }
-
-        this._logger?.debug(
-          `${WebAuthnInterceptor.name}#${_functionName}: received response "${detail.reference}" for request "${detail.requestID}"`
-        );
-
-        // return the result
-        return resolve(detail.result);
-      };
-      const timerId = window.setTimeout(() => {
-        // remove the listener
-        window.removeEventListener(responseReference, listener);
-
-        reject(new UnknownError(`no response from provider`));
-      }, WEB_AUTHN_REQUEST_TIMEOUT);
-
-      // listen for the response
-      window.addEventListener(responseReference, listener);
-
-      // dispatch the request message
-      window.dispatchEvent(
-        new CustomEvent(message.reference, {
-          detail: message,
-        })
-      );
-
-      this._logger?.debug(
-        `${WebAuthnInterceptor.name}#${_functionName}: posted webauthn request message "${message.reference}" with id "${message.id}"`
-      );
-    });
-  }
 
   private async _initializeI18n(): Promise<i18n> {
     if (!this._i18next) {
@@ -237,7 +146,7 @@ export default class WebAuthnInterceptor {
   public async create(
     options?: CredentialCreationOptions
   ): Promise<PublicKeyCredential | null> {
-    return new Promise(async (resolve, reject) => {
+    return new Promise(async (resolve) => {
       const _functionName = 'create';
       let root: Root;
 
@@ -253,7 +162,7 @@ export default class WebAuthnInterceptor {
       root = this._createAppRoot();
 
       root.render(
-        createElement(App, {
+        createElement(WebAuthnRegisterApp, {
           clientInfo: createClientInformation(),
           i18n: await this._initializeI18n(),
           initialColorMode: 'light', // default to light
@@ -263,26 +172,11 @@ export default class WebAuthnInterceptor {
           onResponse: (response: PublicKeyCredential | null) =>
             resolve(response),
           options,
+          ...(this._logger && {
+            logger: this._logger,
+          }),
         })
       );
-
-      // try {
-      // return await this._dispatchMessageWithTimeout(
-      //   new WebAuthnCreateRequestMessage({
-      //     clientInfo: createClientInformation(),
-      //     id: uuid(),
-      //     options: WebAuthnInterceptor._serializePublicKeyCreationOptions(
-      //       options.publicKey
-      //     ),
-      //   }),
-      //   WebAuthnMessageReferenceEnum.CreateResponse
-      // );
-      // } catch (error) {
-      //   this._logger?.error(
-      //     `${WebAuthnInterceptor.name}#${_functionName}:`,
-      //     error
-      //   );
-      // }
     });
   }
 }
