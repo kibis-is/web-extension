@@ -310,10 +310,8 @@ const translation: IResourceLanguage = {
     updatingTransactions: 'Updating transactions',
     viewSeedPhrase1: 'Select an account to view the seed phrase.',
     viewSeedPhrase2: 'You will be prompted to enter your password.',
-    webAuthnCreateDescription1:
+    webAuthnCreateDescription:
       'An app is requesting to register a new passkey.',
-    webAuthnCreateDescription2:
-      'Select what account you would like to use to register the passkey.',
   },
   errors: {
     descriptions: {

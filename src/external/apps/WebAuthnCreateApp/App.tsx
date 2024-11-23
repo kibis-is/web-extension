@@ -1,5 +1,5 @@
 import '@common/styles/fonts.css';
-import { ChakraProvider, SlideFade, useDisclosure } from '@chakra-ui/react';
+import { ChakraProvider, SlideFade } from '@chakra-ui/react';
 import React, { type FC, useEffect, useState } from 'react';
 import { I18nextProvider } from 'react-i18next';
 
@@ -26,12 +26,16 @@ const App: FC<IAppProps> = ({
   options,
 }) => {
   // states
+  const [fetching, setFetching] = useState<boolean>(false);
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [saving, setSaving] = useState<boolean>(false);
   // handlers
-  const handleOnCancel = () => {
+  const handleOnCancelClick = () => {
     onResponse(navigatorCredentialsCreateFn.call(this, options));
     setIsOpen(false);
   };
+  const handleOnRegisterClick = () => {};
+  const handleOnSelect = () => {};
 
   useEffect(() => setIsOpen(true), []);
 
@@ -55,8 +59,12 @@ const App: FC<IAppProps> = ({
           <Root
             clientInfo={clientInfo}
             colorMode={initialColorMode}
+            fetching={fetching}
             fontFamily={initialFontFamily}
-            onCancel={handleOnCancel}
+            onCancelClick={handleOnCancelClick}
+            onRegisterClick={handleOnRegisterClick}
+            onSelect={handleOnSelect}
+            saving={saving}
           />
         </SlideFade>
       </ChakraProvider>
