@@ -69,6 +69,7 @@ export default function createCommonConfig(): Configuration {
         ['@external/hooks']: resolve(externalPath, 'hooks'),
         ['@external/interceptors']: resolve(externalPath, 'interceptors'),
         ['@external/managers']: resolve(externalPath, 'managers'),
+        ['@external/types']: resolve(externalPath, 'types'),
       },
       extensions: ['.css', '.js', '.ts', '.tsx'],
     },

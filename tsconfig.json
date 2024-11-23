@@ -63,6 +63,7 @@
       "@external/hooks/*": ["src/external/hooks/*"],
       "@external/interceptors/*": ["src/external/interceptors/*"],
       "@external/managers/*": ["src/external/managers/*"],
+      "@external/types": ["src/external/types"],
 
       "@test/utils/*": ["test/utils/*"]
     },

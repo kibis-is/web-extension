@@ -2,10 +2,9 @@
 import { DelimiterEnum } from '@extension/enums';
 
 // types
+import type { TAccountColors, TAccountIcons } from '@common/types';
 import type IAccountInformation from './IAccountInformation';
 import type IAccountTransactions from './IAccountTransactions';
-import type TAccountColors from './TAccountColors';
-import type TAccountIcons from './TAccountIcons';
 
 /**
  * @property {TAccountColors | null} color - The background color.

@@ -6,6 +6,9 @@ import { I18nextProvider } from 'react-i18next';
 // containers
 import Root from './Root';
 
+// hooks
+import useAccounts from '@external/hooks/useAccounts';
+
 // managers
 import ColorModeManager from '@common/managers/ColorModeManager';
 
@@ -13,6 +16,7 @@ import ColorModeManager from '@common/managers/ColorModeManager';
 import { theme } from '@extension/theme';
 
 // types
+import type { IExternalAccount } from '@external/types';
 import type { IAppProps } from './types';
 
 const App: FC<IAppProps> = ({
@@ -25,8 +29,9 @@ const App: FC<IAppProps> = ({
   onResponse,
   options,
 }) => {
+  // hooks
+  const { accounts, fetching, fetchAccountsAction } = useAccounts();
   // states
-  const [fetching, setFetching] = useState<boolean>(false);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [saving, setSaving] = useState<boolean>(false);
   // handlers
@@ -35,9 +40,15 @@ const App: FC<IAppProps> = ({
     setIsOpen(false);
   };
   const handleOnRegisterClick = () => {};
-  const handleOnSelect = () => {};
+  const handleOnSelect = (account: IExternalAccount) => {};
 
-  useEffect(() => setIsOpen(true), []);
+  useEffect(() => {
+    (async () => {
+      await fetchAccountsAction();
+
+      setIsOpen(true);
+    })();
+  }, []);
 
   return (
     <I18nextProvider i18n={i18n}>
@@ -57,6 +68,7 @@ const App: FC<IAppProps> = ({
           onAnimationComplete={(type) => type === 'exit' && onClose()}
         >
           <Root
+            accounts={accounts}
             clientInfo={clientInfo}
             colorMode={initialColorMode}
             fetching={fetching}
