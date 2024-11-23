@@ -4,10 +4,9 @@ import { useTranslation } from 'react-i18next';
 import { IoCloseOutline } from 'react-icons/io5';
 
 // components
-// import AccountSelect from '@extension/components/AccountSelect';
 import Button from '@common/components/Button';
+import ExternalAccountSelect from '@external/components/ExternalAccountSelect';
 import IconButton from '@common/components/IconButton';
-// import ModalSubHeading from '@extension/components/ModalSubHeading';
 
 // constants
 import {
@@ -30,13 +29,16 @@ import { theme } from '@extension/theme';
 import type { IRootProps } from './types';
 
 const Root: FC<IRootProps> = ({
+  accounts,
   clientInfo,
   colorMode,
   fetching,
   fontFamily,
   onCancelClick,
   onRegisterClick,
+  onSelect,
   saving,
+  selectedAccount,
 }) => {
   const { t } = useTranslation();
   // hooks
@@ -122,19 +124,16 @@ const Root: FC<IRootProps> = ({
             {t<string>('captions.webAuthnCreateDescription')}
           </Text>
 
-          {/*<ModalSubHeading text={t<string>('headings.selectAccount')} />*/}
-
-          {/*account*/}
-          {/*<AccountSelect*/}
-          {/*  _context={_context}*/}
-          {/*  accounts={accounts}*/}
-          {/*  allowWatchAccounts={false}*/}
-          {/*  disabled={fetching || saving}*/}
-          {/*  label={t<string>('labels.account')}*/}
-          {/*  onSelect={handleOnAccountSelect}*/}
-          {/*  required={true}*/}
-          {/*  value={account}*/}
-          {/*/>*/}
+          {/*account select*/}
+          <ExternalAccountSelect
+            accounts={accounts}
+            colorMode={colorMode}
+            disabled={fetching || saving}
+            label={t<string>('labels.account')}
+            onSelect={onSelect}
+            required={true}
+            value={selectedAccount}
+          />
         </VStack>
 
         {/*footer*/}

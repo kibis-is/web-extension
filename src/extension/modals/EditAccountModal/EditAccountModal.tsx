@@ -13,7 +13,8 @@ import {
   Wrap,
   WrapItem,
 } from '@chakra-ui/react';
-import React, { type FC, useEffect, useState } from 'react';
+import { randomString } from '@stablelib/random';
+import React, { type FC, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { IoSaveOutline } from 'react-icons/io5';
 import { useDispatch } from 'react-redux';
@@ -64,7 +65,6 @@ import ellipseAddress from '@common/utils/ellipseAddress';
 import parseAccountIcon from '@common/utils/parseAccountIcon';
 
 const EditAccountModal: FC<IProps> = ({ isOpen, onClose }) => {
-  const _context = 'account-icon-modal';
   const { t } = useTranslation();
   const dispatch = useDispatch<IAppThunkDispatch<IMainRootState>>();
   // selectors
@@ -94,6 +94,8 @@ const EditAccountModal: FC<IProps> = ({ isOpen, onClose }) => {
   });
   const primaryColor = usePrimaryColor();
   const subTextColor = useSubTextColor();
+  // memos
+  const _context = useMemo(() => randomString(8), []);
   // states
   const [color, setColor] = useState<TAccountColors | null>(
     account?.color || null

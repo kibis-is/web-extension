@@ -26,18 +26,17 @@ import usePrimaryRawColorCode from '@common/hooks/usePrimaryRawColorCode';
 import useSubTextColor from '@common/hooks/useSubTextColor';
 
 // modals
-import AccountSelectModal from './AccountSelectModal';
+import ExternalAccountSelectModal from './ExternalAccountSelectModal';
 
 // types
-import type { IAccountWithExtendedProps } from '@extension/types';
+import type { IExternalAccount } from '@common/types';
 import type { IProps } from './types';
 
 // utils
 import calculateIconSize from '@common/utils/calculateIconSize';
 
-const AccountSelect: FC<IProps> = ({
+const ExternalAccountSelect: FC<IProps> = ({
   accounts,
-  allowWatchAccounts,
   colorMode,
   label,
   onSelect,
@@ -60,18 +59,15 @@ const AccountSelect: FC<IProps> = ({
   } = useDisclosure();
   // handlers
   const handleOnClick = () => onAccountSelectModalOpen();
-  const handleOnSelect = (_value: IAccountWithExtendedProps[]) =>
-    onSelect(_value[0]);
+  const handleOnSelect = (_value: IExternalAccount) => onSelect(_value);
 
   return (
     <>
       {/*account select modal*/}
-      <AccountSelectModal
+      <ExternalAccountSelectModal
         accounts={accounts}
-        allowWatchAccounts={allowWatchAccounts}
         colorMode={colorMode}
         isOpen={isAccountSelectModalOpen}
-        multiple={false}
         onClose={onAccountSelectClose}
         onSelect={handleOnSelect}
         title={selectModalTitle}
@@ -137,4 +133,4 @@ const AccountSelect: FC<IProps> = ({
   );
 };
 
-export default AccountSelect;
+export default ExternalAccountSelect;

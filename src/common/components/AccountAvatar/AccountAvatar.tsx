@@ -49,7 +49,7 @@ const AccountAvatar: FC<TProps> = ({ account, children, colorMode }) => {
           : account.color
       }
       icon={parseAccountIcon({
-        accountIcon: account.icon,
+        accountIcon: account.icon || null,
         color: iconColor,
       })}
       size="sm"

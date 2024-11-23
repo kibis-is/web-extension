@@ -13,6 +13,7 @@ interface IRootProps {
   onRegisterClick: () => void;
   onSelect: (account: IExternalAccount) => void;
   saving: boolean;
+  selectedAccount: IExternalAccount | null;
 }
 
 export default IRootProps;

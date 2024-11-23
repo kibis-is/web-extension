@@ -1,11 +1,11 @@
 import type { PropsWithChildren } from 'react';
 
 // types
+import type { IBaseComponentProps, IExternalAccount } from '@common/types';
 import type { IAccountWithExtendedProps } from '@extension/types';
-import type { IBaseComponentProps } from '@common/types';
 
 interface IProps {
-  account: IAccountWithExtendedProps;
+  account: IAccountWithExtendedProps | IExternalAccount;
 }
 type TProps = IProps & IBaseComponentProps & PropsWithChildren;
 
