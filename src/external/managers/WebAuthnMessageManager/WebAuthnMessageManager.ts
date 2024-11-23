@@ -13,6 +13,7 @@ import { DEFAULT_REQUEST_TIMEOUT } from '@external/constants';
 import WebAuthnAccountsRequestMessage from '@common/messages/WebAuthnAccountsRequestMessage';
 
 // types
+import type { IResult as WebAuthnAccountsResponseMessageResult } from '@common/messages/WebAuthnAccountsResponseMessage';
 import type {
   IBaseMessage,
   IBaseOptions,
@@ -114,8 +115,8 @@ export default class WebAuthnMessageManager {
    */
 
   public async fetchAccounts(): Promise<IExternalAccount[]> {
-    const accounts = await this._dispatchMessageWithTimeout<
-      IExternalAccount[],
+    const result = await this._dispatchMessageWithTimeout<
+      WebAuthnAccountsResponseMessageResult,
       IBaseMessage<WebAuthnMessageReferenceEnum.AccountsRequest>
     >({
       message: new WebAuthnAccountsRequestMessage({
@@ -125,6 +126,6 @@ export default class WebAuthnMessageManager {
       responseReference: WebAuthnMessageReferenceEnum.AccountsResponse,
     });
 
-    return accounts || [];
+    return result?.accounts || [];
   }
 }

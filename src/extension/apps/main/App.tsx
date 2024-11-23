@@ -28,7 +28,6 @@ import { reducer as sessionsReducer } from '@extension/features/sessions';
 import { reducer as settingsReducer } from '@extension/features/settings';
 import { reducer as standardAssetsReducer } from '@extension/features/standard-assets';
 import { reducer as systemReducer } from '@extension/features/system';
-import { reducer as webauthnReducer } from '@extension/features/webauthn';
 
 // pages
 import SplashPage from '@extension/pages/SplashPage';
@@ -68,7 +67,6 @@ const App: FC<IAppProps> = ({
       settings: settingsReducer,
       standardAssets: standardAssetsReducer,
       system: systemReducer,
-      webauthn: webauthnReducer,
     })
   );
 

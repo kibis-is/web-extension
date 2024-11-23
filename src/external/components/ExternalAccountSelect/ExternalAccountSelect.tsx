@@ -4,18 +4,17 @@ import {
   Stack,
   Text,
   useDisclosure,
-  VStack,
 } from '@chakra-ui/react';
 import React, { type FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { IoChevronDownOutline } from 'react-icons/io5';
 
 // components
-import AccountItem from '@common/components/AccountItem';
-import Label from '@common/components/Label';
+import AccountItem from '@external/components/AccountItem';
 
 // constants
-import { DEFAULT_GAP, INPUT_HEIGHT } from '@common/constants';
+import { DEFAULT_GAP } from '@common/constants';
+import { EXTERNAL_INPUT_HEIGHT } from '@external/constants';
 
 // hooks
 import useBorderColor from '@common/hooks/useBorderColor';
@@ -26,7 +25,7 @@ import usePrimaryRawColorCode from '@common/hooks/usePrimaryRawColorCode';
 import useSubTextColor from '@common/hooks/useSubTextColor';
 
 // modals
-import ExternalAccountSelectModal from './ExternalAccountSelectModal';
+import ExternalAccountSelectModal from '@external/components/ExternalAccountSelectModal';
 
 // types
 import type { IExternalAccount } from '@common/types';
@@ -38,9 +37,8 @@ import calculateIconSize from '@common/utils/calculateIconSize';
 const ExternalAccountSelect: FC<IProps> = ({
   accounts,
   colorMode,
-  label,
+  fontFamily,
   onSelect,
-  required = false,
   selectModalTitle,
   value,
 }) => {
@@ -67,68 +65,68 @@ const ExternalAccountSelect: FC<IProps> = ({
       <ExternalAccountSelectModal
         accounts={accounts}
         colorMode={colorMode}
+        fontFamily={fontFamily}
         isOpen={isAccountSelectModalOpen}
         onClose={onAccountSelectClose}
         onSelect={handleOnSelect}
         title={selectModalTitle}
       />
 
-      <VStack alignItems="flex-start" spacing={DEFAULT_GAP / 3} w="full">
-        {/*label*/}
-        {label && (
-          <Label
-            colorMode={colorMode}
-            label={label}
-            px={DEFAULT_GAP - 2}
-            required={required}
+      <ChakraButton
+        _focus={{
+          borderColor: primaryColor,
+          boxShadow: `0 0 0 1px ${primaryColorCode}`,
+        }}
+        _hover={{
+          bg: buttonHoverBackgroundColor,
+          borderColor: borderColor,
+        }}
+        aria-label={t<string>('labels.selectAccount')}
+        alignItems="center"
+        borderStyle="solid"
+        borderWidth="1px"
+        borderRadius="full"
+        fontFamily={fontFamily}
+        justifyContent="space-between"
+        onClick={handleOnClick}
+        px={DEFAULT_GAP - 2}
+        py={1}
+        rightIcon={
+          <Icon
+            as={IoChevronDownOutline}
+            boxSize={calculateIconSize()}
+            color={subTextColor}
           />
-        )}
-
-        <ChakraButton
-          _focus={{
-            borderColor: primaryColor,
-            boxShadow: `0 0 0 1px ${primaryColorCode}`,
-          }}
-          _hover={{
-            bg: buttonHoverBackgroundColor,
-            borderColor: borderColor,
-          }}
-          aria-label={t<string>('labels.selectAccount')}
-          alignItems="center"
-          borderStyle="solid"
-          borderWidth="1px"
-          borderRadius="full"
-          h={INPUT_HEIGHT}
-          justifyContent="space-between"
-          onClick={handleOnClick}
-          px={DEFAULT_GAP - 2}
-          py={0}
-          rightIcon={
-            <Icon
-              as={IoChevronDownOutline}
-              boxSize={calculateIconSize()}
-              color={subTextColor}
-            />
-          }
-          variant="ghost"
+        }
+        variant="ghost"
+        w="full"
+      >
+        <Stack
+          flexGrow={1}
+          h={EXTERNAL_INPUT_HEIGHT}
+          justifyContent="center"
           w="full"
         >
-          <Stack flexGrow={1} justifyContent="center" w="full">
-            {value ? (
-              <AccountItem account={value} colorMode={colorMode} />
-            ) : (
-              <Text
-                color={defaultTextColor}
-                flexGrow={1}
-                fontSize="sm"
-                textAlign="left"
-              >
-                {t<string>('placeholders.selectAnAccount')}
-              </Text>
-            )}
-          </Stack>
-        </ChakraButton>
-      </VStack>
+          {value ? (
+            <AccountItem
+              account={value}
+              colorMode={colorMode}
+              fontFamily={fontFamily}
+            />
+          ) : (
+            <Text
+              color={defaultTextColor}
+              fontFamily={fontFamily}
+              fontSize="xs"
+              m={0}
+              p={0}
+              textAlign="left"
+            >
+              {t<string>('placeholders.selectAnAccount')}
+            </Text>
+          )}
+        </Stack>
+      </ChakraButton>
     </>
   );
 };

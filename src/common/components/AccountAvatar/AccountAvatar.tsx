@@ -11,7 +11,13 @@ import type { TProps } from './types';
 // utils
 import parseAccountIcon from '@common/utils/parseAccountIcon';
 
-const AccountAvatar: FC<TProps> = ({ account, children, colorMode }) => {
+const AccountAvatar: FC<TProps> = ({
+  account,
+  children,
+  colorMode,
+  fontFamily,
+  size = 'sm',
+}) => {
   // hooks
   const primaryButtonTextColor = usePrimaryButtonTextColor(colorMode);
   const primaryColor = usePrimaryColor(colorMode);
@@ -48,11 +54,12 @@ const AccountAvatar: FC<TProps> = ({ account, children, colorMode }) => {
           ? primaryColor
           : account.color
       }
+      fontFamily={fontFamily}
       icon={parseAccountIcon({
         accountIcon: account.icon || null,
         color: iconColor,
       })}
-      size="sm"
+      size={size}
     >
       {children}
     </Avatar>

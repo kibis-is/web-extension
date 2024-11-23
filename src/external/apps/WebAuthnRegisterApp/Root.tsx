@@ -58,6 +58,7 @@ const Root: FC<IRootProps> = ({
         maxH={EXTERNAL_POPUP_MAX_HEIGHT}
         p={DEFAULT_GAP / 2}
         shadow="lg"
+        spacing={DEFAULT_GAP}
         w={EXTERNAL_POPUP_MAX_WIDTH}
       >
         {/*header*/}
@@ -113,22 +114,39 @@ const Root: FC<IRootProps> = ({
         </HStack>
 
         {/*body*/}
-        <VStack flexGrow={1} spacing={DEFAULT_GAP / 3} w="full">
-          <Text
-            {...textProps}
-            color={defaultTextColor}
-            fontSize="xs"
-            textAlign="justify"
-            width="full"
-          >
-            {t<string>('captions.webAuthnCreateDescription')}
-          </Text>
+        <VStack flexGrow={1} spacing={DEFAULT_GAP} w="full">
+          <VStack spacing={DEFAULT_GAP - 2} w="full">
+            <Text
+              {...textProps}
+              color={defaultTextColor}
+              fontFamily={fontFamily}
+              fontSize="xs"
+              p={0}
+              textAlign="center"
+              width="full"
+            >
+              {t<string>('captions.webAuthnCreateDescription1')}
+            </Text>
+
+            <Text
+              {...textProps}
+              color={defaultTextColor}
+              fontFamily={fontFamily}
+              fontSize="xs"
+              p={0}
+              textAlign="center"
+              width="full"
+            >
+              {t<string>('captions.webAuthnCreateDescription2')}
+            </Text>
+          </VStack>
 
           {/*account select*/}
           <ExternalAccountSelect
             accounts={accounts}
             colorMode={colorMode}
             disabled={fetching || saving}
+            fontFamily={fontFamily}
             label={t<string>('labels.account')}
             onSelect={onSelect}
             required={true}

@@ -40,16 +40,17 @@ import { theme } from '@common/theme';
 
 // types
 import type { IExternalAccount } from '@common/types';
-import type { TExternalAccountSelectModalProps } from './types';
+import type { TProps } from './types';
 
 // utils
 import calculateIconSize from '@common/utils/calculateIconSize';
 import convertPublicKeyToAVMAddress from '@common/utils/convertPublicKeyToAVMAddress';
 import ellipseAddress from '@common/utils/ellipseAddress';
 
-const ExternalAccountSelectModal: FC<TExternalAccountSelectModalProps> = ({
+const ExternalAccountSelectModal: FC<TProps> = ({
   accounts,
   colorMode,
+  fontFamily,
   isOpen,
   onClose,
   onSelect,
@@ -81,6 +82,7 @@ const ExternalAccountSelectModal: FC<TExternalAccountSelectModalProps> = ({
           {/*empty state*/}
           <EmptyState
             colorMode={colorMode}
+            fontFamily={fontFamily}
             text={t<string>('headings.noAccountsFound')}
           />
 
@@ -99,6 +101,8 @@ const ExternalAccountSelectModal: FC<TExternalAccountSelectModalProps> = ({
           }}
           borderRadius="full"
           cursor="not-allowed"
+          isDisabled={true}
+          fontFamily={fontFamily}
           fontSize="sm"
           h={TAB_ITEM_HEIGHT}
           justifyContent="start"
@@ -110,11 +114,12 @@ const ExternalAccountSelectModal: FC<TExternalAccountSelectModalProps> = ({
           }}
           variant="ghost"
           w="full"
-          {...(!account.isWatchAccount && {
+          {...(!account.watchAccount && {
             _hover: {
               bg: buttonHoverBackgroundColor,
             },
             cursor: 'pointer',
+            isDisabled: false,
             onClick: handleOnAccountSelect(account),
             sx: {
               opacity: 1,
@@ -131,7 +136,11 @@ const ExternalAccountSelectModal: FC<TExternalAccountSelectModalProps> = ({
         >
           <HStack py={DEFAULT_GAP - 2} spacing={DEFAULT_GAP - 2} w="full">
             {/*account icon*/}
-            <AccountAvatar account={account} colorMode={colorMode} />
+            <AccountAvatar
+              account={account}
+              colorMode={colorMode}
+              fontFamily={fontFamily}
+            />
 
             {/*name/address*/}
             {account.name ? (
@@ -143,17 +152,27 @@ const ExternalAccountSelectModal: FC<TExternalAccountSelectModalProps> = ({
               >
                 <Text
                   color={
-                    !account.isWatchAccount ? defaultTextColor : subTextColor
+                    !account.watchAccount ? defaultTextColor : subTextColor
                   }
+                  fontFamily={fontFamily}
                   fontSize="sm"
                   maxW={400}
                   noOfLines={1}
+                  m={0}
+                  p={0}
                   textAlign="left"
                 >
                   {account.name}
                 </Text>
 
-                <Text color={subTextColor} fontSize="xs" textAlign="left">
+                <Text
+                  color={subTextColor}
+                  fontFamily={fontFamily}
+                  fontSize="xs"
+                  m={0}
+                  p={0}
+                  textAlign="left"
+                >
                   {ellipseAddress(address, {
                     end: 10,
                     start: 10,
@@ -162,11 +181,12 @@ const ExternalAccountSelectModal: FC<TExternalAccountSelectModalProps> = ({
               </VStack>
             ) : (
               <Text
-                color={
-                  !account.isWatchAccount ? defaultTextColor : subTextColor
-                }
+                color={!account.watchAccount ? defaultTextColor : subTextColor}
                 flexGrow={1}
+                fontFamily={fontFamily}
                 fontSize="sm"
+                m={0}
+                p={0}
                 textAlign="left"
               >
                 {ellipseAddress(address, {
@@ -186,7 +206,7 @@ const ExternalAccountSelectModal: FC<TExternalAccountSelectModalProps> = ({
       isOpen={isOpen}
       motionPreset="slideInBottom"
       onClose={handleClose}
-      size="full"
+      size="lg"
       scrollBehavior="inside"
     >
       <ModalOverlay />
@@ -194,16 +214,23 @@ const ExternalAccountSelectModal: FC<TExternalAccountSelectModalProps> = ({
       <ModalContent
         alignSelf="flex-end"
         backgroundColor={BODY_BACKGROUND_COLOR}
-        borderTopRadius={theme.radii['3xl']}
-        borderBottomRadius={0}
+        borderRadius={theme.radii['3xl']}
         minH={0}
       >
         {/*heading*/}
-        <ModalHeader display="flex" justifyContent="center" px={DEFAULT_GAP}>
+        <ModalHeader
+          display="flex"
+          justifyContent="center"
+          m={0}
+          px={DEFAULT_GAP}
+        >
           {/*heading*/}
           <Heading
             color={defaultTextColor}
+            fontFamily={fontFamily}
             size="sm"
+            m={0}
+            p={0}
             textAlign="center"
             w="full"
           >
@@ -212,18 +239,19 @@ const ExternalAccountSelectModal: FC<TExternalAccountSelectModalProps> = ({
         </ModalHeader>
 
         {/*body*/}
-        <ModalBody px={DEFAULT_GAP}>
+        <ModalBody m={0} px={DEFAULT_GAP}>
           <VStack spacing={1} w="full">
             {renderContent()}
           </VStack>
         </ModalBody>
 
         {/*footer*/}
-        <ModalFooter p={DEFAULT_GAP}>
+        <ModalFooter m={0} p={DEFAULT_GAP}>
           <Button
             colorMode={colorMode}
+            fontFamily={fontFamily}
             onClick={handleCancelClick}
-            size="sm"
+            size="lg"
             variant="outline"
             w="full"
           >

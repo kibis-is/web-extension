@@ -37,8 +37,11 @@ const App: FC<IAppProps> = ({
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [saving, setSaving] = useState<boolean>(false);
   // handlers
+  const handleOnAnimationComplete = (definition: string) =>
+    definition === 'exit' && onClose();
   const handleOnCancelClick = () => {
     onResponse(navigatorCredentialsCreateFn.call(this, options));
+    onClose();
     setIsOpen(false);
   };
   const handleOnRegisterClick = () => {};
@@ -64,24 +67,24 @@ const App: FC<IAppProps> = ({
           },
         }}
       >
-        <SlideFade
-          in={isOpen}
-          offsetY="20px"
-          onAnimationComplete={(type) => type === 'exit' && onClose()}
-        >
-          <Root
-            accounts={accounts}
-            clientInfo={clientInfo}
-            colorMode={initialColorMode}
-            fetching={fetching}
-            fontFamily={initialFontFamily}
-            onCancelClick={handleOnCancelClick}
-            onRegisterClick={handleOnRegisterClick}
-            onSelect={handleOnSelect}
-            saving={saving}
-            selectedAccount={account}
-          />
-        </SlideFade>
+        {/*<SlideFade*/}
+        {/*  in={isOpen}*/}
+        {/*  offsetY="20px"*/}
+        {/*  onAnimationComplete={handleOnAnimationComplete}*/}
+        {/*>*/}
+        <Root
+          accounts={accounts}
+          clientInfo={clientInfo}
+          colorMode={initialColorMode}
+          fetching={fetching}
+          fontFamily={initialFontFamily}
+          onCancelClick={handleOnCancelClick}
+          onRegisterClick={handleOnRegisterClick}
+          onSelect={handleOnSelect}
+          saving={saving}
+          selectedAccount={account}
+        />
+        {/*</SlideFade>*/}
       </ChakraProvider>
     </I18nextProvider>
   );

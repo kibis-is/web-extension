@@ -22,7 +22,7 @@ import { useDispatch } from 'react-redux';
 
 // components
 import AccountSelect from '@extension/components/AccountSelect';
-import AccountItem from '@common/components/AccountItem';
+import AccountItem from '@extension/components/AccountItem';
 import Button from '@common/components/Button';
 import ClientHeader, {
   ClientHeaderSkeleton,

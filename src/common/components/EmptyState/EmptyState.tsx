@@ -19,6 +19,7 @@ const EmptyState: FC<TProps> = ({
   button,
   colorMode,
   description,
+  fontFamily,
   text,
   ...stackProps
 }) => {
@@ -31,6 +32,7 @@ const EmptyState: FC<TProps> = ({
 
     if (button) {
       buttonProps = {
+        fontFamily,
         onClick: button.onClick,
         ...(button.colorScheme && {
           colorScheme: button.colorScheme,
@@ -61,12 +63,26 @@ const EmptyState: FC<TProps> = ({
     >
       <EmptyIcon boxSize={20} colorMode={colorMode} />
 
-      <Heading color={defaultTextColor} textAlign="center">
+      <Heading
+        color={defaultTextColor}
+        fontFamily={fontFamily}
+        size="sm"
+        m={0}
+        p={0}
+        textAlign="center"
+      >
         {text}
       </Heading>
 
       {description && (
-        <Text color={subTextColor} fontSize="sm" textAlign="center">
+        <Text
+          color={subTextColor}
+          fontFamily={fontFamily}
+          fontSize="sm"
+          m={0}
+          p={0}
+          textAlign="center"
+        >
           {description}
         </Text>
       )}

@@ -11,6 +11,7 @@ import type { TProps } from './types';
 const Label: FC<TProps> = ({
   colorMode,
   error,
+  fontFamily,
   inputID,
   label,
   required = false,
@@ -33,15 +34,26 @@ const Label: FC<TProps> = ({
           <Text
             as={'label'}
             color={error ? 'red.300' : defaultTextColor}
+            fontFamily={fontFamily}
             fontSize="xs"
             htmlFor={inputID}
+            m={0}
+            p={0}
             textAlign="left"
           >
             {label}
           </Text>
 
           {/*required asterisk*/}
-          <Text as={'span'} color="red.300" fontSize="xs" textAlign="left">
+          <Text
+            as={'span'}
+            color="red.300"
+            fontFamily={fontFamily}
+            fontSize="xs"
+            m={0}
+            p={0}
+            textAlign="left"
+          >
             {`*`}
           </Text>
         </HStack>
@@ -49,8 +61,11 @@ const Label: FC<TProps> = ({
         <Text
           as={'label'}
           color={error ? 'red.300' : defaultTextColor}
+          fontFamily={fontFamily}
           fontSize="xs"
           htmlFor={inputID}
+          m={0}
+          p={0}
           textAlign="left"
         >
           {`${label} ${t<string>('labels.optional')}`}
@@ -59,7 +74,14 @@ const Label: FC<TProps> = ({
 
       {/*error*/}
       {error && (
-        <Text color="red.300" fontSize="xs" textAlign="right">
+        <Text
+          color="red.300"
+          fontFamily={fontFamily}
+          fontSize="xs"
+          m={0}
+          p={0}
+          textAlign="right"
+        >
           {error}
         </Text>
       )}

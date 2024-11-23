@@ -1,6 +1,5 @@
 import type { ResponsiveValue } from '@chakra-ui/react';
 import type { Property } from 'csstype';
-import type { PropsWithChildren } from 'react';
 
 // types
 import type {
@@ -10,11 +9,12 @@ import type {
 } from '@common/types';
 import type { IAccountWithExtendedProps } from '@extension/types';
 
-interface IProps {
+interface IProps extends IBaseComponentProps {
   account: IAccountWithExtendedProps | IExternalAccount;
   fontFamily?: ResponsiveValue<Property.FontFamily>;
   size?: TSizes;
+  subTextColor?: string;
+  textColor?: string;
 }
-type TProps = IProps & IBaseComponentProps & PropsWithChildren;
 
-export default TProps;
+export default IProps;

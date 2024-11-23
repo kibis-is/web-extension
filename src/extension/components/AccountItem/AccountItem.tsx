@@ -34,7 +34,7 @@ const AccountItem: FC<IProps> = ({
     <HStack m={0} p={0} spacing={DEFAULT_GAP / 3} w="full">
       {/*avatar*/}
       <Center>
-        <AccountAvatar colorMode={colorMode} account={account} />
+        <AccountAvatar account={account} colorMode={colorMode} />
       </Center>
 
       {account.name ? (

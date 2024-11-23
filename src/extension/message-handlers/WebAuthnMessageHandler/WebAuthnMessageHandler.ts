@@ -53,7 +53,7 @@ export default class WebAuthnMessageHandler extends BaseMessageHandler {
 
     for (const account of _accounts) {
       accounts.push({
-        isWatchAccount: await isWatchAccount(account),
+        watchAccount: await isWatchAccount(account),
         publicKey: account.publicKey,
         ...(account.color && {
           color: account.color,

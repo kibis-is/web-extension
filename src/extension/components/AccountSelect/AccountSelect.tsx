@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { IoChevronDownOutline } from 'react-icons/io5';
 
 // components
-import AccountItem from '@common/components/AccountItem';
+import AccountItem from '@extension/components/AccountItem';
 import Label from '@common/components/Label';
 
 // constants
