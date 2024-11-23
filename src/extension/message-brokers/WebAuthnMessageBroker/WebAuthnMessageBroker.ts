@@ -14,6 +14,12 @@ import { IBaseMessage, IBaseResponseMessage } from '@common/types';
  * webpage via `webauthn.js`) and the provider (background script/popup) and transfers the messages between the two.
  */
 export default class WebAuthnMessageBroker extends BaseListener {
+  // private variables
+  private readonly _clientRequestReferences: WebAuthnMessageReferenceEnum[] = [
+    WebAuthnMessageReferenceEnum.AccountsRequest,
+    WebAuthnMessageReferenceEnum.ThemeRequest,
+  ];
+
   /**
    * private methods
    */
@@ -57,7 +63,7 @@ export default class WebAuthnMessageBroker extends BaseListener {
 
   public startListening(): void {
     // add listeners for client (web page) messages
-    [WebAuthnMessageReferenceEnum.AccountsRequest].forEach((reference) =>
+    this._clientRequestReferences.forEach((reference) =>
       window.addEventListener(reference, this._onClientMessage.bind(this))
     );
 
@@ -67,7 +73,7 @@ export default class WebAuthnMessageBroker extends BaseListener {
 
   public stopListening(): void {
     // remove client listeners
-    [WebAuthnMessageReferenceEnum.AccountsRequest].forEach((reference) =>
+    this._clientRequestReferences.forEach((reference) =>
       window.removeEventListener(reference, this._onClientMessage.bind(this))
     );
 

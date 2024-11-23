@@ -3,7 +3,7 @@ import React, { type FC } from 'react';
 
 // hooks
 import usePrimaryRawColorCode from '@common/hooks/usePrimaryRawColorCode';
-import useSubTextColor from '@common/hooks/useSubTextColor';
+import useSubTextRawColorCode from '@common/hooks/useSubTextRawColorCode';
 
 // types
 import type { TProps } from './types';
@@ -14,8 +14,8 @@ const EmptyIcon: FC<TProps> = ({
   primaryColor,
   ...iconProps
 }) => {
-  const accentFill: string = accentColor || useSubTextColor(colorMode);
-  const primaryFill: string = primaryColor || usePrimaryRawColorCode(colorMode);
+  const accentFill = accentColor || useSubTextRawColorCode(colorMode);
+  const primaryFill = primaryColor || usePrimaryRawColorCode(colorMode);
 
   return (
     <Icon viewBox="0 0 512 512" {...iconProps}>

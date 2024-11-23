@@ -4,21 +4,22 @@ import browser, { type Runtime } from 'webextension-polyfill';
 // enums
 import { WebAuthnMessageReferenceEnum } from '@common/enums';
 
-// events
-
 // messages
 import WebAuthnAccountsRequestMessage from '@common/messages/WebAuthnAccountsRequestMessage';
 import WebAuthnAccountsResponseMessage from '@common/messages/WebAuthnAccountsResponseMessage';
+import WebAuthnThemeRequestMessage from '@common/messages/WebAuthnThemeRequestMessage';
+import WebAuthnThemeResponseMessage from '@common/messages/WebAuthnThemeResponseMessage';
 
 // repository
 import AccountRepository from '@extension/repositories/AccountRepository';
+import SettingsRepository from '@extension/repositories/SettingsRepository';
 
 // message handlers
 import BaseMessageHandler from '@extension/message-handlers/BaseMessageHandler';
 
 // types
 import type { IBaseOptions, IExternalAccount } from '@common/types';
-import type { IAccount } from '@extension/types';
+import type { IAccount, ISettings } from '@extension/types';
 
 // utils
 import isWatchAccount from '@extension/utils/isWatchAccount';
@@ -26,11 +27,13 @@ import isWatchAccount from '@extension/utils/isWatchAccount';
 export default class WebAuthnMessageHandler extends BaseMessageHandler {
   // private variables
   private readonly _accountRepository: AccountRepository;
+  private readonly _settingsRepository: SettingsRepository;
 
   constructor(options: IBaseOptions) {
     super(options);
 
     this._accountRepository = new AccountRepository();
+    this._settingsRepository = new SettingsRepository();
   }
 
   /**
@@ -82,12 +85,43 @@ export default class WebAuthnMessageHandler extends BaseMessageHandler {
     );
   }
 
+  private async _handleThemeRequestMessage(
+    message: WebAuthnThemeRequestMessage,
+    originTabID: number
+  ): Promise<void> {
+    const _functionName = '_handleThemeRequestMessage';
+    let settings: ISettings;
+
+    this._logger?.debug(
+      `${WebAuthnMessageHandler.name}#${_functionName}: received message "${message.reference}"`
+    );
+
+    settings = await this._settingsRepository.fetch();
+
+    // send a response with all accounts
+    return this._sendResponseToMiddleware(
+      new WebAuthnThemeResponseMessage({
+        error: null,
+        id: uuid(),
+        reference: WebAuthnMessageReferenceEnum.ThemeResponse,
+        requestID: message.id,
+        result: {
+          theme: {
+            colorMode: settings.appearance.theme,
+            font: settings.appearance.font,
+          },
+        },
+      }),
+      originTabID
+    );
+  }
+
   /**
    * protected methods
    */
 
   protected async _onMessage(
-    message: WebAuthnAccountsRequestMessage,
+    message: WebAuthnAccountsRequestMessage | WebAuthnThemeRequestMessage,
     sender: Runtime.MessageSender
   ): Promise<void> {
     const _functionName = '_onMessage';
@@ -103,6 +137,9 @@ export default class WebAuthnMessageHandler extends BaseMessageHandler {
     switch (message.reference) {
       case WebAuthnMessageReferenceEnum.AccountsRequest:
         await this._handleAccountsRequestMessage(message, sender.tab.id);
+        break;
+      case WebAuthnMessageReferenceEnum.ThemeRequest:
+        await this._handleThemeRequestMessage(message, sender.tab.id);
         break;
       default:
         break;

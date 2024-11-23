@@ -1,6 +1,6 @@
 import '@common/styles/fonts.css';
-import { ChakraProvider, SlideFade } from '@chakra-ui/react';
-import React, { type FC, useEffect, useState } from 'react';
+import { ChakraProvider } from '@chakra-ui/react';
+import React, { type FC, useEffect, useMemo, useState } from 'react';
 import { I18nextProvider } from 'react-i18next';
 
 // containers
@@ -8,6 +8,7 @@ import Root from './Root';
 
 // hooks
 import useAccounts from '@external/hooks/useAccounts';
+import useTheme from '@external/hooks/useTheme';
 
 // managers
 import ColorModeManager from '@common/managers/ColorModeManager';
@@ -32,59 +33,55 @@ const App: FC<IAppProps> = ({
 }) => {
   // hooks
   const { accounts, fetching, fetchAccountsAction } = useAccounts({ logger });
+  const { theme: _theme, fetchThemeAction } = useTheme({ logger });
+  // memos
+  const colorMode = useMemo(
+    () => _theme?.colorMode || initialColorMode,
+    [_theme]
+  );
+  const fontFamily = useMemo(() => _theme?.font || initialFontFamily, [_theme]);
   // states
   const [account, setAccount] = useState<IExternalAccount | null>(null);
-  const [isOpen, setIsOpen] = useState<boolean>(false);
   const [saving, setSaving] = useState<boolean>(false);
   // handlers
-  const handleOnAnimationComplete = (definition: string) =>
-    definition === 'exit' && onClose();
   const handleOnCancelClick = () => {
     onResponse(navigatorCredentialsCreateFn.call(this, options));
     onClose();
-    setIsOpen(false);
   };
   const handleOnRegisterClick = () => {};
   const handleOnSelect = (_account: IExternalAccount) => setAccount(_account);
 
   useEffect(() => {
     (async () => {
+      await fetchThemeAction();
       await fetchAccountsAction();
-
-      setIsOpen(true);
     })();
   }, []);
 
   return (
     <I18nextProvider i18n={i18n}>
       <ChakraProvider
-        colorModeManager={new ColorModeManager(initialColorMode)}
+        colorModeManager={new ColorModeManager(colorMode)}
         theme={{
           ...theme,
           fonts: {
             body: initialFontFamily,
-            heading: initialFontFamily,
+            heading: fontFamily,
           },
         }}
       >
-        {/*<SlideFade*/}
-        {/*  in={isOpen}*/}
-        {/*  offsetY="20px"*/}
-        {/*  onAnimationComplete={handleOnAnimationComplete}*/}
-        {/*>*/}
         <Root
           accounts={accounts}
           clientInfo={clientInfo}
-          colorMode={initialColorMode}
+          colorMode={colorMode}
           fetching={fetching}
-          fontFamily={initialFontFamily}
+          fontFamily={fontFamily}
           onCancelClick={handleOnCancelClick}
           onRegisterClick={handleOnRegisterClick}
           onSelect={handleOnSelect}
           saving={saving}
           selectedAccount={account}
         />
-        {/*</SlideFade>*/}
       </ChakraProvider>
     </I18nextProvider>
   );

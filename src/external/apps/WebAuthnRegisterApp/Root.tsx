@@ -147,9 +147,7 @@ const Root: FC<IRootProps> = ({
             colorMode={colorMode}
             disabled={fetching || saving}
             fontFamily={fontFamily}
-            label={t<string>('labels.account')}
             onSelect={onSelect}
-            required={true}
             value={selectedAccount}
           />
         </VStack>

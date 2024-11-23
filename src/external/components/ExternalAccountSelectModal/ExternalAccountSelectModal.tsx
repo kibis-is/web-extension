@@ -34,6 +34,7 @@ import {
 import useButtonHoverBackgroundColor from '@common/hooks/useButtonHoverBackgroundColor';
 import useDefaultTextColor from '@common/hooks/useDefaultTextColor';
 import useSubTextColor from '@common/hooks/useSubTextColor';
+import useTabletAndUp from '@common/hooks/useTabletAndUp';
 
 // theme
 import { theme } from '@common/theme';
@@ -61,6 +62,7 @@ const ExternalAccountSelectModal: FC<TProps> = ({
   const buttonHoverBackgroundColor = useButtonHoverBackgroundColor(colorMode);
   const defaultTextColor = useDefaultTextColor(colorMode);
   const subTextColor = useSubTextColor(colorMode);
+  const tabletAndUp = useTabletAndUp();
   // memos
   const _context = useMemo(() => randomString(8), []);
   // misc
@@ -206,7 +208,7 @@ const ExternalAccountSelectModal: FC<TProps> = ({
       isOpen={isOpen}
       motionPreset="slideInBottom"
       onClose={handleClose}
-      size="lg"
+      size={tabletAndUp ? 'lg' : 'full'}
       scrollBehavior="inside"
     >
       <ModalOverlay />

@@ -11,14 +11,17 @@ import { DEFAULT_REQUEST_TIMEOUT } from '@external/constants';
 
 // messages
 import WebAuthnAccountsRequestMessage from '@common/messages/WebAuthnAccountsRequestMessage';
+import WebAuthnThemeRequestMessage from '@common/messages/WebAuthnThemeRequestMessage';
 
 // types
 import type { IResult as WebAuthnAccountsResponseMessageResult } from '@common/messages/WebAuthnAccountsResponseMessage';
+import type { IResult as WebAuthnThemeResponseMessageResult } from '@common/messages/WebAuthnThemeResponseMessage';
 import type {
   IBaseMessage,
   IBaseOptions,
   IBaseResponseMessage,
   IExternalAccount,
+  IExternalTheme,
   ILogger,
 } from '@common/types';
 import type { IDispatchMessageWithTimeoutOptions } from './types';
@@ -127,5 +130,20 @@ export default class WebAuthnMessageManager {
     });
 
     return result?.accounts || [];
+  }
+
+  public async fetchTheme(): Promise<IExternalTheme | null> {
+    const result = await this._dispatchMessageWithTimeout<
+      WebAuthnThemeResponseMessageResult,
+      IBaseMessage<WebAuthnMessageReferenceEnum.ThemeRequest>
+    >({
+      message: new WebAuthnThemeRequestMessage({
+        id: uuid(),
+        reference: WebAuthnMessageReferenceEnum.ThemeRequest,
+      }),
+      responseReference: WebAuthnMessageReferenceEnum.ThemeResponse,
+    });
+
+    return result?.theme || null;
   }
 }
