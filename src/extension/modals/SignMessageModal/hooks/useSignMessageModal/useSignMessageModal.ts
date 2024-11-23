@@ -23,7 +23,7 @@ import type { IUseSignMessageModalState } from './types';
 
 // utils
 import authorizedAccountsForHost from '@extension/utils/authorizedAccountsForHost';
-import convertPublicKeyToAVMAddress from '@extension/utils/convertPublicKeyToAVMAddress';
+import convertPublicKeyToAVMAddress from '@common/utils/convertPublicKeyToAVMAddress';
 
 export default function useSignMessageModal(): IUseSignMessageModalState {
   // selectors

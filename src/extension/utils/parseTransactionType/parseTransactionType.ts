@@ -11,7 +11,7 @@ import AccountRepository from '@extension/repositories/AccountRepository';
 import { IAccount, IAccountInformation, INetwork } from '@extension/types';
 
 // utils
-import convertPublicKeyToAVMAddress from '@extension/utils/convertPublicKeyToAVMAddress';
+import convertPublicKeyToAVMAddress from '@common/utils/convertPublicKeyToAVMAddress';
 
 interface IOptions {
   network: INetwork | null;

@@ -19,15 +19,12 @@ import {
 } from 'react-icons/io5';
 
 // components
-import Button from '@extension/components/Button';
+import Button from '@common/components/Button';
 import CircularProgressWithIcon from '@extension/components/CircularProgressWithIcon';
 
 // constants
-import {
-  BODY_BACKGROUND_COLOR,
-  DEFAULT_GAP,
-  SUPPORT_MAIL_TO_LINK,
-} from '@extension/constants';
+import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@common/constants';
+import { SUPPORT_MAIL_TO_LINK } from '@extension/constants';
 
 // enums
 import { ErrorCodeEnum, ScanModeEnum } from '@extension/enums';
@@ -46,7 +43,7 @@ import type { IScanQRCodeModalContentProps } from '@extension/types';
 
 const ScanQRCodeViaScreenCaptureModalContent: FC<
   IScanQRCodeModalContentProps
-> = ({ onPreviousClick, onURI, pagination }) => {
+> = ({ colorMode, onPreviousClick, onURI, pagination }) => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const { t } = useTranslation();
   // hooks
@@ -228,6 +225,7 @@ const ScanQRCodeViaScreenCaptureModalContent: FC<
       <ModalFooter p={DEFAULT_GAP} zIndex={1}>
         {/*previous button*/}
         <Button
+          colorMode={colorMode}
           leftIcon={<IoArrowBackOutline />}
           onClick={handlePreviousClick}
           size="lg"

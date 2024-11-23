@@ -3,7 +3,7 @@ import { faker } from '@faker-js/faker';
 import React, { FC } from 'react';
 
 // constants
-import { DEFAULT_GAP } from '@extension/constants';
+import { DEFAULT_GAP } from '@common/constants';
 
 const LoadingTransactionPage: FC = () => (
   <VStack

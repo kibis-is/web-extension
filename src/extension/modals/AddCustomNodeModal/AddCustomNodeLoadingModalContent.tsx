@@ -7,7 +7,7 @@ import { MdOutlineCallReceived } from 'react-icons/md';
 import CircularProgressWithIcon from '@extension/components/CircularProgressWithIcon';
 
 // constants
-import { DEFAULT_GAP } from '@extension/constants';
+import { DEFAULT_GAP } from '@common/constants';
 
 // hooks
 import useDefaultTextColor from '@extension/hooks/useDefaultTextColor';

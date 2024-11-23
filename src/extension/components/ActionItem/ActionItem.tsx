@@ -3,7 +3,7 @@ import React, { type FC } from 'react';
 import { IoChevronForward } from 'react-icons/io5';
 
 // constants
-import { DEFAULT_GAP, TAB_ITEM_HEIGHT } from '@extension/constants';
+import { DEFAULT_GAP, TAB_ITEM_HEIGHT } from '@common/constants';
 
 // hooks
 import useButtonHoverBackgroundColor from '@extension/hooks/useButtonHoverBackgroundColor';
@@ -17,7 +17,7 @@ import { theme } from '@extension/theme';
 import type { IProps } from './types';
 
 // utils
-import calculateIconSize from '@extension/utils/calculateIconSize';
+import calculateIconSize from '@common/utils/calculateIconSize';
 
 const ActionItem: FC<IProps> = ({
   icon,

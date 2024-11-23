@@ -14,7 +14,7 @@ import { ChevronDownIcon } from '@chakra-ui/icons';
 import React, { type FC, Fragment } from 'react';
 
 // constants
-import { DEFAULT_GAP } from '@extension/constants';
+import { DEFAULT_GAP } from '@common/constants';
 import {
   ALGORAND_TEST_NET_GENESIS_HASH,
   VOI_TEST_NET_GENESIS_HASH,

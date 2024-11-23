@@ -5,7 +5,8 @@ import React, { type FC } from 'react';
 import Select from '@extension/components/Select';
 
 // constants
-import { DEFAULT_GAP, SETTINGS_ITEM_HEIGHT } from '@extension/constants';
+import { DEFAULT_GAP } from '@common/constants';
+import { SETTINGS_ITEM_HEIGHT } from '@extension/constants';
 
 // hooks
 import useDefaultTextColor from '@extension/hooks/useDefaultTextColor';
@@ -16,7 +17,7 @@ import type { IOption } from '@extension/components/Select';
 import type { IProps } from './types';
 
 const SettingsSelectItem: FC<IProps> = ({
-  _context,
+  colorMode,
   description,
   disabled,
   emptyOptionLabel,
@@ -62,7 +63,7 @@ const SettingsSelectItem: FC<IProps> = ({
       {/*select*/}
       <Box minW="50%">
         <Select
-          _context={_context}
+          colorMode={colorMode}
           disabled={disabled}
           emptyOptionLabel={emptyOptionLabel}
           onSelect={handleSelect}

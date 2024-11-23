@@ -64,8 +64,8 @@ import type {
 } from '@extension/types';
 
 // utils
-import convertPublicKeyToAVMAddress from '@extension/utils/convertPublicKeyToAVMAddress';
-import ellipseAddress from '@extension/utils/ellipseAddress';
+import convertPublicKeyToAVMAddress from '@common/utils/convertPublicKeyToAVMAddress';
+import ellipseAddress from '@common/utils/ellipseAddress';
 
 const AddAccountMainRouter: FC = () => {
   const { t } = useTranslation();

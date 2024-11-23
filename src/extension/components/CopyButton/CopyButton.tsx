@@ -4,20 +4,20 @@ import { IoCheckmarkOutline, IoCopyOutline } from 'react-icons/io5';
 import { useTranslation } from 'react-i18next';
 
 // components
-import Button from '@extension/components/Button';
+import Button from '@common/components/Button';
 
-interface IProps extends ButtonProps {
-  copiedTooltipLabel?: string;
-  value: string;
-}
+// types
+import type { TProps } from './types';
 
-const CopyButton: FC<IProps> = ({
+const CopyButton: FC<TProps> = ({
+  colorMode,
   copiedTooltipLabel,
   value,
   ...buttonProps
-}: IProps) => {
+}) => {
   const { t } = useTranslation();
   const { hasCopied, onCopy } = useClipboard(value);
+  // handlers
   const handleCopyClick = () => onCopy();
 
   return (
@@ -30,6 +30,7 @@ const CopyButton: FC<IProps> = ({
     >
       <Button
         {...buttonProps}
+        colorMode={colorMode}
         onClick={handleCopyClick}
         rightIcon={
           hasCopied ? (

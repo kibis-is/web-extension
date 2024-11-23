@@ -20,7 +20,7 @@ import { useNavigate } from 'react-router-dom';
 // components
 import AddressDisplay from '@extension/components/AddressDisplay';
 import AssetBadge from '@extension/components/AssetBadge';
-import Button from '@extension/components/Button';
+import Button from '@common/components/Button';
 import CopyIconButton from '@extension/components/CopyIconButton';
 import InfoIconTooltip from '@extension/components/InfoIconTooltip';
 import ModalAssetItem from '@extension/components/ModalAssetItem';
@@ -30,11 +30,8 @@ import OpenTabIconButton from '@extension/components/OpenTabIconButton';
 import RemoveAssetsConfirmingModalContent from './RemoveAssetsConfirmingModalContent';
 
 // constants
-import {
-  ACCOUNTS_ROUTE,
-  BODY_BACKGROUND_COLOR,
-  DEFAULT_GAP,
-} from '@extension/constants';
+import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@common/constants';
+import { ACCOUNTS_ROUTE } from '@extension/constants';
 
 // enums
 import { AssetTypeEnum, ErrorCodeEnum } from '@extension/enums';
@@ -65,6 +62,7 @@ import {
   useSelectRemoveAssetsSelectedAsset,
   useSelectSettingsSelectedNetwork,
   useSelectSettingsPreferredBlockExplorer,
+  useSelectSettingsColorMode,
 } from '@extension/selectors';
 
 // theme
@@ -79,7 +77,7 @@ import type {
 import type { IRemoveAssetsModalProps } from './types';
 
 // utils
-import convertPublicKeyToAVMAddress from '@extension/utils/convertPublicKeyToAVMAddress';
+import convertPublicKeyToAVMAddress from '@common/utils/convertPublicKeyToAVMAddress';
 import createIconFromDataUri from '@extension/utils/createIconFromDataUri';
 
 const RemoveAssetsModal: FC<IRemoveAssetsModalProps> = ({ onClose }) => {
@@ -94,6 +92,7 @@ const RemoveAssetsModal: FC<IRemoveAssetsModalProps> = ({ onClose }) => {
   // selectors
   const account = useSelectRemoveAssetsAccount();
   const accounts = useSelectAccounts();
+  const colorMode = useSelectSettingsColorMode();
   const confirming = useSelectRemoveAssetsConfirming();
   const explorer = useSelectSettingsPreferredBlockExplorer();
   const selectedNetwork = useSelectSettingsSelectedNetwork();
@@ -422,7 +421,13 @@ const RemoveAssetsModal: FC<IRemoveAssetsModalProps> = ({ onClose }) => {
     }
 
     cancelButtonNode = (
-      <Button onClick={handleCancelClick} size="lg" variant="outline" w="full">
+      <Button
+        colorMode={colorMode}
+        onClick={handleCancelClick}
+        size="lg"
+        variant="outline"
+        w="full"
+      >
         {t<string>('buttons.cancel')}
       </Button>
     );
@@ -434,6 +439,7 @@ const RemoveAssetsModal: FC<IRemoveAssetsModalProps> = ({ onClose }) => {
             {cancelButtonNode}
 
             <Button
+              colorMode={colorMode}
               onClick={handleRemoveARC0200AssetClick}
               rightIcon={<IoEyeOffOutline />}
               size="lg"
@@ -452,6 +458,7 @@ const RemoveAssetsModal: FC<IRemoveAssetsModalProps> = ({ onClose }) => {
             {cancelButtonNode}
 
             <Button
+              colorMode={colorMode}
               onClick={handleRemoveStandardAssetClick}
               rightIcon={<IoTrashOutline />}
               size="lg"

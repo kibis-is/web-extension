@@ -17,11 +17,11 @@ import { MdOutlinePassword } from 'react-icons/md';
 import { useDispatch } from 'react-redux';
 
 // components
-import Button from '@extension/components/Button';
+import Button from '@common/components/Button';
 import KibisisIcon from '@extension/components/KibisisIcon';
 
 // constants
-import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@extension/constants';
+import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@common/constants';
 
 // enums
 import { EncryptionMethodEnum } from '@extension/enums';
@@ -48,6 +48,7 @@ import {
   useSelectCredentialLockSaving,
   useSelectPasskeysPasskey,
   useSelectSettings,
+  useSelectSettingsColorMode,
 } from '@extension/selectors';
 
 // theme
@@ -61,7 +62,7 @@ import type {
 } from '@extension/types';
 
 // utils
-import calculateIconSize from '@extension/utils/calculateIconSize';
+import calculateIconSize from '@common/utils/calculateIconSize';
 
 const CredentialLockModal: FC = () => {
   const { t } = useTranslation();
@@ -73,6 +74,7 @@ const CredentialLockModal: FC = () => {
   } = useDisclosure();
   // selectors
   const active = useSelectCredentialLockActive();
+  const colorMode = useSelectSettingsColorMode();
   const logger = useSelectLogger();
   const passkey = useSelectPasskeysPasskey();
   const saving = useSelectCredentialLockSaving();
@@ -200,6 +202,7 @@ const CredentialLockModal: FC = () => {
           <ModalFooter p={DEFAULT_GAP}>
             {/*unlock button*/}
             <Button
+              colorMode={colorMode}
               isLoading={isLoading}
               onClick={handleUnlockClick}
               rightIcon={<IoLockOpenOutline />}

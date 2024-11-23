@@ -6,12 +6,13 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 
 // components
-import Button from '@extension/components/Button';
+import Button from '@common/components/Button';
 import NewPasswordInput from '@extension/components/NewPasswordInput';
 import PageHeader from '@extension/components/PageHeader';
 
 // constants
-import { ADD_ACCOUNT_ROUTE, DEFAULT_GAP } from '@extension/constants';
+import { DEFAULT_GAP } from '@common/constants';
+import { ADD_ACCOUNT_ROUTE } from '@extension/constants';
 
 // features
 import { setPassword } from '@extension/features/registration';
@@ -20,6 +21,9 @@ import { setPassword } from '@extension/features/registration';
 import useDefaultTextColor from '@extension/hooks/useDefaultTextColor';
 import useNewPasswordInput from '@extension/hooks/useNewPasswordInput';
 import useSubTextColor from '@extension/hooks/useSubTextColor';
+
+// selectors
+import { useSelectSettingsColorMode } from '@extension/selectors';
 
 // types
 import type {
@@ -32,6 +36,8 @@ const CreatePasswordPage: FC = () => {
   const dispatch = useDispatch<IAppThunkDispatch<IRegistrationRootState>>();
   const navigate = useNavigate();
   const newPasswordInputRef = useRef<HTMLInputElement | null>(null);
+  // selectors
+  const colorMode = useSelectSettingsColorMode();
   // hooks
   const defaultTextColor = useDefaultTextColor();
   const {
@@ -82,6 +88,7 @@ const CreatePasswordPage: FC = () => {
     <>
       {/*page title*/}
       <PageHeader
+        colorMode={colorMode}
         title={t<string>('titles.page', { context: 'createPassword' })}
       />
 
@@ -111,6 +118,7 @@ const CreatePasswordPage: FC = () => {
 
           {/*create password input*/}
           <NewPasswordInput
+            colorMode={colorMode}
             error={newPasswordError}
             label={newPasswordLabel}
             onBlur={handleOnNewPasswordBlur}
@@ -125,6 +133,7 @@ const CreatePasswordPage: FC = () => {
 
         {/*next button*/}
         <Button
+          colorMode={colorMode}
           onClick={handleNextClick}
           rightIcon={<IoArrowForwardOutline />}
           size="lg"

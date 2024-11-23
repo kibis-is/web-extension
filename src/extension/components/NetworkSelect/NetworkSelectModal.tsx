@@ -20,15 +20,15 @@ import { useTranslation } from 'react-i18next';
 import { IoChevronForward } from 'react-icons/io5';
 
 // components
-import Button from '@extension/components/Button';
-import EmptyState from '@extension/components/EmptyState';
+import Button from '@common/components/Button';
+import EmptyState from '@common/components/EmptyState';
 
 // constants
 import {
   BODY_BACKGROUND_COLOR,
   DEFAULT_GAP,
   TAB_ITEM_HEIGHT,
-} from '@extension/constants';
+} from '@common/constants';
 
 // enums
 import { NetworkTypeEnum } from '@extension/enums';
@@ -39,6 +39,9 @@ import useColorModeValue from '@extension/hooks/useColorModeValue';
 import useDefaultTextColor from '@extension/hooks/useDefaultTextColor';
 import useSubTextColor from '@extension/hooks/useSubTextColor';
 
+// selectors
+import { useSelectSettingsColorMode } from '@extension/selectors';
+
 // theme
 import { theme } from '@extension/theme';
 
@@ -47,7 +50,7 @@ import type { INetwork } from '@extension/types';
 import type { INetworkSelectModalProps } from './types';
 
 // utils
-import calculateIconSize from '@extension/utils/calculateIconSize';
+import calculateIconSize from '@common/utils/calculateIconSize';
 import createIconFromDataUri from '@extension/utils/createIconFromDataUri';
 import containsOnlyStableNetworks from './utils/containsOnlyStableNetworks';
 
@@ -60,10 +63,12 @@ const NetworkSelectModal: FC<INetworkSelectModalProps> = ({
   selectedGenesisHash,
 }) => {
   const { t } = useTranslation();
+  // selectors
+  const colorMode = useSelectSettingsColorMode();
   // hooks
   const buttonHoverBackgroundColor = useButtonHoverBackgroundColor();
   const defaultTextColor = useDefaultTextColor();
-  const primaryButtonTextColor: string = useColorModeValue(
+  const primaryButtonTextColor = useColorModeValue(
     theme.colors.primaryLight['600'],
     theme.colors.primaryDark['600']
   );
@@ -85,7 +90,10 @@ const NetworkSelectModal: FC<INetworkSelectModalProps> = ({
           <Spacer />
 
           {/*empty state*/}
-          <EmptyState text={t<string>('headings.noNetworksFound')} />
+          <EmptyState
+            colorMode={colorMode}
+            text={t<string>('headings.noNetworksFound')}
+          />
 
           <Spacer />
         </>
@@ -235,6 +243,7 @@ const NetworkSelectModal: FC<INetworkSelectModalProps> = ({
         {/*footer*/}
         <ModalFooter p={DEFAULT_GAP}>
           <Button
+            colorMode={colorMode}
             onClick={handleCancelClick}
             size="lg"
             variant="outline"

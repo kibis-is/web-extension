@@ -12,11 +12,11 @@ import { useTranslation } from 'react-i18next';
 import { IoArrowBackOutline } from 'react-icons/io5';
 
 // components
-import Button from '@extension/components/Button';
+import Button from '@common/components/Button';
 import ModalTextItem from '@extension/components/ModalTextItem';
 
 // constants
-import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@extension/constants';
+import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@common/constants';
 
 // hooks
 import useDefaultTextColor from '@extension/hooks/useDefaultTextColor';
@@ -27,7 +27,11 @@ import { theme } from '@extension/theme';
 // types
 import type { IProps } from './types';
 
-const UnknownURIModalContent: FC<IProps> = ({ onPreviousClick, uri }) => {
+const UnknownURIModalContent: FC<IProps> = ({
+  colorMode,
+  onPreviousClick,
+  uri,
+}) => {
   const { t } = useTranslation();
   // hooks
   const defaultTextColor: string = useDefaultTextColor();
@@ -68,6 +72,7 @@ const UnknownURIModalContent: FC<IProps> = ({ onPreviousClick, uri }) => {
       <ModalFooter p={DEFAULT_GAP}>
         {/*previous button*/}
         <Button
+          colorMode={colorMode}
           leftIcon={<IoArrowBackOutline />}
           onClick={handlePreviousClick}
           size="lg"

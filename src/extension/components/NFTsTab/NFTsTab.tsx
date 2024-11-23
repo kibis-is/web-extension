@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 // components
 import AssetTabLoadingItem from '@extension/components/AssetTabLoadingItem';
-import EmptyState from '@extension/components/EmptyState';
+import EmptyState from '@common/components/EmptyState';
 import ScrollableContainer from '@extension/components/ScrollableContainer';
 import NFTsTabARC0072AssetItem from './NFTsTabARC0072AssetItem';
 
@@ -17,6 +17,7 @@ import useAccountInformation from '@extension/hooks/useAccountInformation';
 // selectors
 import {
   useSelectARC0072AssetsFetching,
+  useSelectSettingsColorMode,
   useSelectSettingsSelectedNetwork,
 } from '@extension/selectors';
 
@@ -26,6 +27,7 @@ import type { INFTsTabProps } from './types';
 const NFTsTab: FC<INFTsTabProps> = ({ account }) => {
   const { t } = useTranslation();
   // selectors
+  const colorMode = useSelectSettingsColorMode();
   const fetchingARC0072Assets = useSelectARC0072AssetsFetching();
   const selectedNetwork = useSelectSettingsSelectedNetwork();
   // hooks
@@ -71,6 +73,7 @@ const NFTsTab: FC<INFTsTabProps> = ({ account }) => {
 
         {/*empty state*/}
         <EmptyState
+          colorMode={colorMode}
           description={t<string>('captions.noNFTsFound')}
           text={t<string>('headings.noNFTsFound')}
         />

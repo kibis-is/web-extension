@@ -12,10 +12,10 @@ import { IoArrowBackOutline } from 'react-icons/io5';
 import { NavigateFunction, useNavigate } from 'react-router-dom';
 
 // components
-import IconButton from '@extension/components/IconButton';
+import IconButton from '@common/components/IconButton';
 
 // constants
-import { DEFAULT_GAP } from '@extension/constants';
+import { DEFAULT_GAP } from '@common/constants';
 
 // hooks
 import useDefaultTextColor from '@extension/hooks/useDefaultTextColor';
@@ -25,6 +25,7 @@ import useSubTextColor from '@extension/hooks/useSubTextColor';
 import type { IProps } from './types';
 
 const PageHeader: FC<IProps> = ({
+  colorMode,
   hideBackButton = false,
   loading = false,
   subTitle,
@@ -50,6 +51,7 @@ const PageHeader: FC<IProps> = ({
       {!hideBackButton && (
         <IconButton
           aria-label="Go back"
+          colorMode={colorMode}
           icon={IoArrowBackOutline}
           onClick={handleBackClick}
           variant="ghost"

@@ -29,8 +29,6 @@ export default function useAccounts({ logger }: IOptions = {}): IState {
 
       _accounts = await webAuthnMessageManager.fetchAccounts();
 
-      console.log(_accounts);
-
       setAccounts(_accounts);
       setFetching(false);
     } catch (error) {

@@ -18,12 +18,12 @@ import { GoShieldSlash } from 'react-icons/go';
 import { useDispatch } from 'react-redux';
 
 // components
-import Button from '@extension/components/Button';
+import Button from '@common/components/Button';
 import CircularProgressWithIcon from '@extension/components/CircularProgressWithIcon';
 import ReEncryptKeysLoadingContent from '@extension/components/ReEncryptKeysLoadingContent';
 
 // constants
-import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@extension/constants';
+import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@common/constants';
 
 // features
 import { create as createNotification } from '@extension/features/notifications';
@@ -40,7 +40,10 @@ import KbPasskey from '@extension/icons/KbPasskey';
 import ConfirmPasswordModal from '@extension/modals/ConfirmPasswordModal';
 
 // selectors
-import { useSelectPasskeysSaving } from '@extension/selectors';
+import {
+  useSelectPasskeysSaving,
+  useSelectSettingsColorMode,
+} from '@extension/selectors';
 
 // theme
 import { theme } from '@extension/theme';
@@ -50,7 +53,7 @@ import type { IAppThunkDispatch, IMainRootState } from '@extension/types';
 import type { IProps } from './types';
 
 // utils
-import calculateIconSize from '@extension/utils/calculateIconSize';
+import calculateIconSize from '@common/utils/calculateIconSize';
 
 const RemovePasskeyModal: FC<IProps> = ({ onClose, removePasskey }) => {
   const { t } = useTranslation();
@@ -61,6 +64,7 @@ const RemovePasskeyModal: FC<IProps> = ({ onClose, removePasskey }) => {
     onOpen: onConfirmPasswordModalOpen,
   } = useDisclosure();
   // selectors
+  const colorMode = useSelectSettingsColorMode();
   const saving = useSelectPasskeysSaving();
   // hooks
   const {
@@ -247,6 +251,7 @@ const RemovePasskeyModal: FC<IProps> = ({ onClose, removePasskey }) => {
             <HStack spacing={DEFAULT_GAP - 2} w="full">
               {/*cancel*/}
               <Button
+                colorMode={colorMode}
                 isDisabled={isLoading}
                 onClick={handleCancelClick}
                 size="lg"
@@ -258,6 +263,7 @@ const RemovePasskeyModal: FC<IProps> = ({ onClose, removePasskey }) => {
 
               {/*remove*/}
               <Button
+                colorMode={colorMode}
                 isLoading={isLoading}
                 onClick={handleRemoveClick}
                 rightIcon={<IoTrashOutline />}

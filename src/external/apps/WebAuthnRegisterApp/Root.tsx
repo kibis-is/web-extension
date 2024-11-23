@@ -5,8 +5,8 @@ import { IoCloseOutline } from 'react-icons/io5';
 
 // components
 // import AccountSelect from '@extension/components/AccountSelect';
-import Button from '@external/components/Button';
-import IconButton from '@external/components/IconButton';
+import Button from '@common/components/Button';
+import IconButton from '@common/components/IconButton';
 // import ModalSubHeading from '@extension/components/ModalSubHeading';
 
 // constants
@@ -14,11 +14,11 @@ import {
   EXTERNAL_POPUP_MAX_HEIGHT,
   EXTERNAL_POPUP_MAX_WIDTH,
 } from '@external/constants';
-import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@extension/constants';
+import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@common/constants';
 
 // hooks
-import useDefaultTextColor from '@external/hooks/useDefaultTextColor';
-import useTextBackgroundColor from '@external/hooks/useTextBackgroundColor';
+import useDefaultTextColor from '@common/hooks/useDefaultTextColor';
+import useTextBackgroundColor from '@common/hooks/useTextBackgroundColor';
 
 // icons
 import KbSignIn from '@extension/icons/KbSignIn';

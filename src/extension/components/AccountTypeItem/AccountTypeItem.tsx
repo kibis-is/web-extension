@@ -3,7 +3,7 @@ import React, { FC } from 'react';
 import { IoArrowForwardOutline } from 'react-icons/io5';
 
 // constants
-import { DEFAULT_GAP } from '@extension/constants';
+import { DEFAULT_GAP } from '@common/constants';
 
 // hooks
 import useButtonHoverBackgroundColor from '@extension/hooks/useButtonHoverBackgroundColor';

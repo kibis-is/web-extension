@@ -18,15 +18,18 @@
     "noImplicitReturns": true,
     "noImplicitThis": true,
     "paths": {
+      "@common/components/*": ["src/common/components/*"],
       "@common/constants": ["src/common/constants"],
       "@common/enums": ["src/common/enums"],
       "@common/errors": ["src/common/errors"],
       "@common/fonts/*": ["src/common/fonts/*"],
+      "@common/hooks/*": ["src/common/hooks/*"],
       "@common/managers/*": ["src/common/managers/*"],
       "@common/messages": ["src/common/messages"],
       "@common/messages/*": ["src/common/messages/*"],
       "@common/services/*": ["src/common/services/*"],
       "@common/styles/*": ["src/common/styles/*"],
+      "@common/theme": ["src/common/theme"],
       "@common/types": ["src/common/types"],
       "@common/utils/*": ["src/common/utils/*"],
 

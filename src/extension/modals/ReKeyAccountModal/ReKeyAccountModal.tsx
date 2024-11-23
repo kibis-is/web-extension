@@ -18,8 +18,8 @@ import { useDispatch } from 'react-redux';
 
 // components
 import AddressDisplay from '@extension/components/AddressDisplay';
-import AddressInput from '@extension/components/AddressInput';
-import Button from '@extension/components/Button';
+import AddressInput from '@common/components/AddressInput';
+import Button from '@common/components/Button';
 import InfoIconTooltip from '@extension/components/InfoIconTooltip';
 import ModalAssetItem from '@extension/components/ModalAssetItem';
 import ModalItem from '@extension/components/ModalItem';
@@ -28,7 +28,7 @@ import ReKeyAccountConfirmingModalContent from './ReKeyAccountConfirmingModalCon
 import UndoReKeyAccountModalContent from './UndoReKeyAccountModalContent';
 
 // constants
-import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@extension/constants';
+import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@common/constants';
 
 // enums
 import { ErrorCodeEnum } from '@extension/enums';
@@ -54,7 +54,10 @@ import useSubTextColor from '@extension/hooks/useSubTextColor';
 import AuthenticationModal from '@extension/modals/AuthenticationModal';
 
 // selectors
-import { useSelectAccounts } from '@extension/selectors';
+import {
+  useSelectAccounts,
+  useSelectSettingsColorMode,
+} from '@extension/selectors';
 
 // theme
 import { theme } from '@extension/theme';
@@ -68,7 +71,7 @@ import type {
 } from '@extension/types';
 
 // utils
-import convertPublicKeyToAVMAddress from '@extension/utils/convertPublicKeyToAVMAddress';
+import convertPublicKeyToAVMAddress from '@common/utils/convertPublicKeyToAVMAddress';
 import createIconFromDataUri from '@extension/utils/createIconFromDataUri';
 
 const ReKeyAccountModal: FC<IModalProps> = ({ onClose }) => {
@@ -81,6 +84,7 @@ const ReKeyAccountModal: FC<IModalProps> = ({ onClose }) => {
   } = useDisclosure();
   // selectors
   const accounts = useSelectAccounts();
+  const colorMode = useSelectSettingsColorMode();
   // hooks
   const {
     error: reKeyToAddressError,
@@ -106,7 +110,6 @@ const ReKeyAccountModal: FC<IModalProps> = ({ onClose }) => {
   } = useReKeyAccountModal();
   const subTextColor = useSubTextColor();
   // misc
-  const _context = 're-key-account-modal';
   const isOpen = !!account && !!accountInformation;
   const reKeyAccount = async (result: TEncryptionCredentials) => {
     let transactionId: string | null;
@@ -349,9 +352,9 @@ const ReKeyAccountModal: FC<IModalProps> = ({ onClose }) => {
 
               {/*re-key to*/}
               <AddressInput
-                _context={_context}
                 accounts={accounts}
                 allowWatchAccounts={true}
+                colorMode={colorMode}
                 error={reKeyToAddressError}
                 label={reKeyToAddressLabel}
                 onBlur={reKeyToAddressOnBlur}
@@ -377,7 +380,13 @@ const ReKeyAccountModal: FC<IModalProps> = ({ onClose }) => {
   };
   const renderFooter = () => {
     const cancelButtonNode: ReactNode = (
-      <Button onClick={handleCancelClick} size="lg" variant="outline" w="full">
+      <Button
+        colorMode={colorMode}
+        onClick={handleCancelClick}
+        size="lg"
+        variant="outline"
+        w="full"
+      >
         {t<string>('buttons.cancel')}
       </Button>
     );
@@ -392,6 +401,7 @@ const ReKeyAccountModal: FC<IModalProps> = ({ onClose }) => {
           {cancelButtonNode}
 
           <Button
+            colorMode={colorMode}
             onClick={handleReKeyOrUndoClick}
             rightIcon={
               reKeyType === 'undo' ? (

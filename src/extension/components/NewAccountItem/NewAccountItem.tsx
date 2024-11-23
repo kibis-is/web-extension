@@ -3,7 +3,7 @@ import React, { type FC } from 'react';
 import { IoWalletOutline } from 'react-icons/io5';
 
 // constants
-import { DEFAULT_GAP } from '@extension/constants';
+import { DEFAULT_GAP } from '@common/constants';
 
 // hooks
 import useDefaultTextColor from '@extension/hooks/useDefaultTextColor';
@@ -15,7 +15,7 @@ import useSubTextColor from '@extension/hooks/useSubTextColor';
 import type { IProps } from './types';
 
 // utils
-import ellipseAddress from '@extension/utils/ellipseAddress';
+import ellipseAddress from '@common/utils/ellipseAddress';
 
 const NewAccountItem: FC<IProps> = ({
   address,

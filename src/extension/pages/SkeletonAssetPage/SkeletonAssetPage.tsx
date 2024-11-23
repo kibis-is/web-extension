@@ -12,18 +12,28 @@ import React, { FC } from 'react';
 import PageHeader from '@extension/components/PageHeader';
 
 // constants
-import { DEFAULT_GAP, PAGE_ITEM_HEIGHT } from '@extension/constants';
+import { DEFAULT_GAP } from '@common/constants';
+import { PAGE_ITEM_HEIGHT } from '@extension/constants';
 
 // hooks
 import useDefaultTextColor from '@extension/hooks/useDefaultTextColor';
 
+// selectors
+import { useSelectSettingsColorMode } from '@extension/selectors';
+
 const SkeletonAssetPage: FC = () => {
+  // selectors
+  const colorMode = useSelectSettingsColorMode();
   // hooks
   const defaultTextColor = useDefaultTextColor();
 
   return (
     <>
-      <PageHeader loading={true} title={faker.random.alpha(12)} />
+      <PageHeader
+        colorMode={colorMode}
+        loading={true}
+        title={faker.random.alpha(12)}
+      />
 
       <VStack
         alignItems="center"

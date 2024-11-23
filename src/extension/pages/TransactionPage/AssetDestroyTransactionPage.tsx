@@ -20,14 +20,18 @@ import PageHeader from '@extension/components/PageHeader';
 import PageItem from '@extension/components/PageItem';
 
 // constants
-import { DEFAULT_GAP, PAGE_ITEM_HEIGHT } from '@extension/constants';
+import { DEFAULT_GAP } from '@common/constants';
+import { PAGE_ITEM_HEIGHT } from '@extension/constants';
 
 // hooks
 import useDefaultTextColor from '@extension/hooks/useDefaultTextColor';
 import useSubTextColor from '@extension/hooks/useSubTextColor';
 
 // selectors
-import { useSelectSettingsPreferredBlockExplorer } from '@extension/selectors';
+import {
+  useSelectSettingsColorMode,
+  useSelectSettingsPreferredBlockExplorer,
+} from '@extension/selectors';
 
 // types
 import type { IAssetDestroyTransaction } from '@extension/types';
@@ -35,7 +39,7 @@ import type { IProps } from './types';
 
 // utils
 import createIconFromDataUri from '@extension/utils/createIconFromDataUri';
-import ellipseAddress from '@extension/utils/ellipseAddress';
+import ellipseAddress from '@common/utils/ellipseAddress';
 import isAccountKnown from '@extension/utils/isAccountKnown';
 
 const AssetDestroyTransactionPage: FC<IProps<IAssetDestroyTransaction>> = ({
@@ -46,6 +50,7 @@ const AssetDestroyTransactionPage: FC<IProps<IAssetDestroyTransaction>> = ({
   const { t } = useTranslation();
   const { isOpen, onOpen, onClose } = useDisclosure();
   // selectors
+  const colorMode = useSelectSettingsColorMode();
   const preferredExplorer = useSelectSettingsPreferredBlockExplorer();
   // hooks
   const defaultTextColor = useDefaultTextColor();
@@ -64,6 +69,7 @@ const AssetDestroyTransactionPage: FC<IProps<IAssetDestroyTransaction>> = ({
   return (
     <>
       <PageHeader
+        colorMode={colorMode}
         title={t<string>('headings.transaction', { context: transaction.type })}
       />
 

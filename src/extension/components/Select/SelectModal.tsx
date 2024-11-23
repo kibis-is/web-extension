@@ -11,13 +11,14 @@ import {
   Spacer,
   VStack,
 } from '@chakra-ui/react';
-import React, { type FC } from 'react';
+import { randomString } from '@stablelib/random';
+import React, { type FC, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { IoChevronForward } from 'react-icons/io5';
 
 // components
-import Button from '@extension/components/Button';
-import EmptyState from '@extension/components/EmptyState';
+import Button from '@common/components/Button';
+import EmptyState from '@common/components/EmptyState';
 import SelectOption from './SelectOption';
 
 // constants
@@ -25,7 +26,7 @@ import {
   BODY_BACKGROUND_COLOR,
   DEFAULT_GAP,
   TAB_ITEM_HEIGHT,
-} from '@extension/constants';
+} from '@common/constants';
 
 // hooks
 import useButtonHoverBackgroundColor from '@extension/hooks/useButtonHoverBackgroundColor';
@@ -37,13 +38,13 @@ import useSubTextColor from '@extension/hooks/useSubTextColor';
 import { theme } from '@extension/theme';
 
 // types
-import type { ISelectModalProps } from './types';
+import type { TSelectModalProps } from './types';
 
 // utils
-import calculateIconSize from '@extension/utils/calculateIconSize';
+import calculateIconSize from '@common/utils/calculateIconSize';
 
-const SelectModal: FC<ISelectModalProps> = ({
-  _context,
+const SelectModal: FC<TSelectModalProps> = ({
+  colorMode,
   emptySpaceMessage,
   isOpen,
   onClose,
@@ -61,6 +62,8 @@ const SelectModal: FC<ISelectModalProps> = ({
     theme.colors.primaryDark['600']
   );
   const subTextColor = useSubTextColor();
+  // memos
+  const _context = useMemo(() => randomString(8), []);
   // misc
   const iconSize = calculateIconSize('md');
   // handlers
@@ -79,6 +82,7 @@ const SelectModal: FC<ISelectModalProps> = ({
 
           {/*empty state*/}
           <EmptyState
+            colorMode={colorMode}
             text={emptySpaceMessage || t<string>('headings.noItemsFound')}
           />
 
@@ -161,6 +165,7 @@ const SelectModal: FC<ISelectModalProps> = ({
         {/*footer*/}
         <ModalFooter p={DEFAULT_GAP}>
           <Button
+            colorMode={colorMode}
             onClick={handleCancelClick}
             size="lg"
             variant="outline"

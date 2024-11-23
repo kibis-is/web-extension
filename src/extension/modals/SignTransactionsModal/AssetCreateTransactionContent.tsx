@@ -15,7 +15,7 @@ import MoreInformationAccordion from '@extension/components/MoreInformationAccor
 import OpenTabIconButton from '@extension/components/OpenTabIconButton';
 
 // constants
-import { DEFAULT_GAP } from '@extension/constants';
+import { DEFAULT_GAP } from '@common/constants';
 
 // hooks
 import useDefaultTextColor from '@extension/hooks/useDefaultTextColor';

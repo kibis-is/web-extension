@@ -1,5 +1,5 @@
 // types
-import type { TSizes } from '@extension/types';
+import type { TSizes } from '@common/types';
 
 export default function parseFontSize(size: TSizes): string {
   switch (size) {

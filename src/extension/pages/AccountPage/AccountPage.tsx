@@ -35,8 +35,8 @@ import { useNavigate } from 'react-router-dom';
 import ActivityTab from '@extension/components/ActivityTab';
 import AssetsTab from '@extension/components/AssetsTab';
 import CopyIconButton from '@extension/components/CopyIconButton';
-import EmptyState from '@extension/components/EmptyState';
-import IconButton from '@extension/components/IconButton';
+import EmptyState from '@common/components/EmptyState';
+import IconButton from '@common/components/IconButton';
 import OpenTabIconButton from '@extension/components/OpenTabIconButton';
 import OverflowMenu from '@extension/components/OverflowMenu';
 import NativeBalance from '@extension/components/NativeBalance';
@@ -51,10 +51,10 @@ import AccountPageSkeletonContent from './AccountPageSkeletonContent';
 import GroupBadge from '@extension/components/GroupBadge';
 
 // constants
+import { DEFAULT_GAP } from '@common/constants';
 import {
   ACCOUNT_PAGE_HEADER_ITEM_HEIGHT,
   ADD_ACCOUNT_ROUTE,
-  DEFAULT_GAP,
 } from '@extension/constants';
 
 // enums
@@ -118,8 +118,8 @@ import type {
 } from '@extension/types';
 
 // utils
-import convertPublicKeyToAVMAddress from '@extension/utils/convertPublicKeyToAVMAddress';
-import ellipseAddress from '@extension/utils/ellipseAddress';
+import convertPublicKeyToAVMAddress from '@common/utils/convertPublicKeyToAVMAddress';
+import ellipseAddress from '@common/utils/ellipseAddress';
 import isReKeyedAuthAccountAvailable from '@extension/utils/isReKeyedAuthAccountAvailable';
 
 const AccountPage: FC = () => {
@@ -341,6 +341,7 @@ const AccountPage: FC = () => {
               <Tooltip label={t<string>('labels.whatsNew')}>
                 <IconButton
                   aria-label={t<string>('ariaLabels.plusIcon')}
+                  colorMode={settings.appearance.theme}
                   icon={IoGiftOutline}
                   onClick={handleOnWhatsNewClick}
                   size="sm"
@@ -416,6 +417,7 @@ const AccountPage: FC = () => {
               <Tooltip label={t<string>('labels.editAccount')}>
                 <IconButton
                   aria-label={t<string>('labels.editAccount')}
+                  colorMode={settings.appearance.theme}
                   icon={IoPencil}
                   onClick={handleOnEditAccountClick}
                   size="sm"
@@ -444,6 +446,7 @@ const AccountPage: FC = () => {
               <Tooltip label={t<string>('labels.shareAddress')}>
                 <IconButton
                   aria-label="Show QR code"
+                  colorMode={settings.appearance.theme}
                   icon={IoQrCodeOutline}
                   onClick={onShareAddressModalOpen}
                   size="sm"
@@ -609,6 +612,7 @@ const AccountPage: FC = () => {
             label: t<string>('buttons.addAccount'),
             onClick: handleAddAccountClick,
           }}
+          colorMode={settings.appearance.theme}
           description={t<string>('captions.noAccountsFound')}
           text={t<string>('headings.noAccountsFound')}
         />

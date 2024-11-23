@@ -22,15 +22,15 @@ import { useDispatch } from 'react-redux';
 
 // components
 import AccountAvatarWithBadges from '@extension/components/AccountAvatarWithBadges';
-import Button from '@extension/components/Button';
+import Button from '@common/components/Button';
 import NetworkBadge from '@extension/components/NetworkBadge';
 import ClientHeader, {
   ClientHeaderSkeleton,
 } from '@extension/components/ClientHeader';
-import EmptyState from '@extension/components/EmptyState';
+import EmptyState from '@common/components/EmptyState';
 
 // constants
-import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@extension/constants';
+import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@common/constants';
 
 // features
 import { removeEventByIdThunk } from '@extension/features/events';
@@ -52,6 +52,7 @@ import {
   useSelectAccountsFetching,
   useSelectSessionsSaving,
   useSelectSystemInfo,
+  useSelectSettingsColorMode,
 } from '@extension/selectors';
 
 // theme
@@ -67,8 +68,8 @@ import type {
 } from '@extension/types';
 
 // utils
-import convertPublicKeyToAVMAddress from '@extension/utils/convertPublicKeyToAVMAddress';
-import ellipseAddress from '@extension/utils/ellipseAddress';
+import convertPublicKeyToAVMAddress from '@common/utils/convertPublicKeyToAVMAddress';
+import ellipseAddress from '@common/utils/ellipseAddress';
 import mapSessionFromEnableRequest from '@extension/utils/mapSessionFromEnableRequest';
 
 const EnableModal: FC<IModalProps> = ({ onClose }) => {
@@ -78,6 +79,7 @@ const EnableModal: FC<IModalProps> = ({ onClose }) => {
     useDispatch<IAppThunkDispatch<IBackgroundRootState | IMainRootState>>();
   // selectors
   const activeAccount = useSelectActiveAccount();
+  const colorMode = useSelectSettingsColorMode();
   const fetching = useSelectAccountsFetching();
   const saving = useSelectSessionsSaving();
   const systemInfo = useSelectSystemInfo();
@@ -228,6 +230,7 @@ const EnableModal: FC<IModalProps> = ({ onClose }) => {
             <AccountAvatarWithBadges
               account={account}
               accounts={availableAccounts}
+              colorMode={colorMode}
               network={network}
               systemInfo={systemInfo}
             />
@@ -286,7 +289,10 @@ const EnableModal: FC<IModalProps> = ({ onClose }) => {
         <Spacer />
 
         {/*empty state*/}
-        <EmptyState text={t<string>('headings.noAccountsFound')} />
+        <EmptyState
+          colorMode={colorMode}
+          text={t<string>('headings.noAccountsFound')}
+        />
 
         <Spacer />
       </>
@@ -378,6 +384,7 @@ const EnableModal: FC<IModalProps> = ({ onClose }) => {
         <ModalFooter p={DEFAULT_GAP}>
           <HStack spacing={DEFAULT_GAP - 2} w="full">
             <Button
+              colorMode={colorMode}
               onClick={handleCancelClick}
               size="lg"
               variant="outline"
@@ -386,6 +393,7 @@ const EnableModal: FC<IModalProps> = ({ onClose }) => {
               {t<string>('buttons.cancel')}
             </Button>
             <Button
+              colorMode={colorMode}
               isLoading={saving}
               onClick={handleConnectClick}
               size="lg"

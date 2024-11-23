@@ -11,10 +11,10 @@ import SettingsSubHeading from '@extension/components/SettingsSubHeading';
 import SettingsSwitchItem from '@extension/components/SettingsSwitchItem';
 
 // constants
+import { DEFAULT_GAP } from '@common/constants';
 import {
   ADVANCED_ROUTE,
   CUSTOM_NODES_ROUTE,
-  DEFAULT_GAP,
   SETTINGS_ROUTE,
 } from '@extension/constants';
 
@@ -22,7 +22,10 @@ import {
 import { saveToStorageThunk as saveSettingsToStorageThunk } from '@extension/features/settings';
 
 // selectors
-import { useSelectSettings } from '@extension/selectors';
+import {
+  useSelectSettings,
+  useSelectSettingsColorMode,
+} from '@extension/selectors';
 
 // types
 import type {
@@ -35,6 +38,7 @@ const AdvancedSettingsPage: FC = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch<IAppThunkDispatch<IMainRootState>>();
   // selectors
+  const colorMode = useSelectSettingsColorMode();
   const settings = useSelectSettings();
   // handlers
   const handleOnSwitchChange =
@@ -53,7 +57,11 @@ const AdvancedSettingsPage: FC = () => {
 
   return (
     <>
-      <PageHeader title={t<string>('titles.page', { context: 'advanced' })} />
+      <PageHeader
+        colorMode={colorMode}
+        title={t<string>('titles.page', { context: 'advanced' })}
+      />
+
       <VStack spacing={DEFAULT_GAP - 2} w="full">
         {/*developer*/}
         <VStack w="full">

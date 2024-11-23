@@ -2,7 +2,7 @@ import { HStack, StackProps, Text } from '@chakra-ui/react';
 import React, { type FC } from 'react';
 
 // constants
-import { DEFAULT_GAP } from '@extension/constants';
+import { DEFAULT_GAP } from '@common/constants';
 
 // enums
 import { NetworkTypeEnum } from '@extension/enums';

@@ -21,7 +21,8 @@ import PageHeader from '@extension/components/PageHeader';
 import PageItem from '@extension/components/PageItem';
 
 // constants
-import { ACCOUNTS_ROUTE, DEFAULT_GAP } from '@extension/constants';
+import { DEFAULT_GAP } from '@common/constants';
+import { ACCOUNTS_ROUTE } from '@extension/constants';
 
 // hooks
 import useDefaultTextColor from '@extension/hooks/useDefaultTextColor';
@@ -36,19 +37,21 @@ import SkeletonAssetPage from '@extension/pages/SkeletonAssetPage';
 
 // selectors
 import {
+  useSelectSettingsColorMode,
   useSelectSettingsPreferredBlockExplorer,
   useSelectSettingsPreferredNFTExplorer,
 } from '@extension/selectors';
 
 // utils
-import convertPublicKeyToAVMAddress from '@extension/utils/convertPublicKeyToAVMAddress';
-import ellipseAddress from '@extension/utils/ellipseAddress';
+import convertPublicKeyToAVMAddress from '@common/utils/convertPublicKeyToAVMAddress';
+import ellipseAddress from '@common/utils/ellipseAddress';
 
 const NFTPage: FC = () => {
   const { t } = useTranslation();
   const navigate: NavigateFunction = useNavigate();
   const { appId, tokenId } = useParams();
   // selectors
+  const colorMode = useSelectSettingsColorMode();
   const blockExplorer = useSelectSettingsPreferredBlockExplorer();
   const nftExplorer = useSelectSettingsPreferredNFTExplorer();
   // hooks
@@ -126,6 +129,7 @@ const NFTPage: FC = () => {
   return (
     <>
       <PageHeader
+        colorMode={colorMode}
         subTitle={
           account.name
             ? ellipseAddress(accountAddress, { end: 10, start: 10 })

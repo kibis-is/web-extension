@@ -12,10 +12,10 @@ import { IoChevronDownOutline } from 'react-icons/io5';
 
 // components
 import AccountItem from '@extension/components/AccountItem';
-import Label from '@extension/components/Label';
+import Label from '@common/components/Label';
 
 // constants
-import { DEFAULT_GAP, INPUT_HEIGHT } from '@extension/constants';
+import { DEFAULT_GAP, INPUT_HEIGHT } from '@common/constants';
 
 // hooks
 import useBorderColor from '@extension/hooks/useBorderColor';
@@ -36,7 +36,7 @@ import type { IAccountWithExtendedProps } from '@extension/types';
 import type { IProps } from './types';
 
 // utils
-import calculateIconSize from '@extension/utils/calculateIconSize';
+import calculateIconSize from '@common/utils/calculateIconSize';
 
 const AccountSelect: FC<IProps> = ({
   _context,

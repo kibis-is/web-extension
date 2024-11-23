@@ -9,7 +9,7 @@ import type { ILogger } from '@common/types';
 
 // utils
 import createLogger from '@common/utils/createLogger';
-import injectScript from '@common/utils/injectScript';
+import injectScript from '@extension/utils/injectScript';
 
 (() => {
   const debug: boolean = __ENV__ === 'development';
@@ -26,6 +26,6 @@ import injectScript from '@common/utils/injectScript';
   avmWebProviderMessageBroker.startListening();
   webAuthnMessageBroker.startListening();
 
-  // inject the webauthn manager to intercept webauthn requests
+  // inject the script to intercept webauthn requests
   injectScript(browser.runtime.getURL('webauthn.js'));
 })();

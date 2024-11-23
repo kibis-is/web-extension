@@ -20,12 +20,12 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 
 // components
-import Button from '@extension/components/Button';
+import Button from '@common/components/Button';
 import KeyRegistrationTransactionModalBody from '@extension/components/KeyRegistrationTransactionModalBody';
 import ModalSkeletonItem from '@extension/components/ModalSkeletonItem';
 
 // constants
-import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@extension/constants';
+import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@common/constants';
 
 // enums
 import {
@@ -89,6 +89,7 @@ const ARC0300KeyRegistrationTransactionSendModalContent: FC<
 > = ({
   cancelButtonIcon,
   cancelButtonLabel,
+  colorMode,
   onComplete,
   onCancel,
   schemaOrSchemas: schema,
@@ -399,6 +400,7 @@ const ARC0300KeyRegistrationTransactionSendModalContent: FC<
           <HStack spacing={DEFAULT_GAP - 2} w="full">
             {/*cancel button*/}
             <Button
+              colorMode={colorMode}
               leftIcon={cancelButtonIcon}
               onClick={handleCancelClick}
               size="lg"
@@ -410,6 +412,7 @@ const ARC0300KeyRegistrationTransactionSendModalContent: FC<
 
             {/*send button*/}
             <Button
+              colorMode={colorMode}
               isLoading={sending}
               onClick={handleSendClick}
               rightIcon={<IoArrowUpOutline />}

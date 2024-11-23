@@ -2,7 +2,7 @@ import { Center, Flex, FlexProps } from '@chakra-ui/react';
 import React, { FC, ReactNode } from 'react';
 
 // constants
-import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@extension/constants';
+import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@common/constants';
 
 interface IProps extends FlexProps {
   children: ReactNode;

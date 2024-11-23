@@ -16,7 +16,7 @@ import { IState, IUpdateARC0200AssetInformationResult } from './types';
 // utils
 import { getInitialState } from './utils';
 import convertGenesisHashToHex from '@extension/utils/convertGenesisHashToHex';
-import upsertItemsById from '@extension/utils/upsertItemsById';
+import upsertItemsById from '@common/utils/upsertItemsById';
 
 const slice = createSlice({
   extraReducers: (builder) => {

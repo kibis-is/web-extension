@@ -24,7 +24,8 @@ import PageHeader from '@extension/components/PageHeader';
 import PageItem from '@extension/components/PageItem';
 
 // constants
-import { DEFAULT_GAP, PAGE_ITEM_HEIGHT } from '@extension/constants';
+import { DEFAULT_GAP } from '@common/constants';
+import { PAGE_ITEM_HEIGHT } from '@extension/constants';
 
 // enums
 import { AssetTypeEnum, TransactionTypeEnum } from '@extension/enums';
@@ -42,6 +43,7 @@ import {
   useSelectAccounts,
   useSelectARC0200AssetsBySelectedNetwork,
   useSelectARC0200AssetsUpdating,
+  useSelectSettingsColorMode,
   useSelectSettingsPreferredBlockExplorer,
 } from '@extension/selectors';
 
@@ -53,9 +55,9 @@ import type {
 import type { IProps } from './types';
 
 // utils
-import convertPublicKeyToAVMAddress from '@extension/utils/convertPublicKeyToAVMAddress';
+import convertPublicKeyToAVMAddress from '@common/utils/convertPublicKeyToAVMAddress';
 import createIconFromDataUri from '@extension/utils/createIconFromDataUri';
-import ellipseAddress from '@extension/utils/ellipseAddress';
+import ellipseAddress from '@common/utils/ellipseAddress';
 import isAccountKnown from '@extension/utils/isAccountKnown';
 
 const ARC0200AssetTransferTransactionPage: FC<
@@ -66,6 +68,7 @@ const ARC0200AssetTransferTransactionPage: FC<
   // selectors
   const accounts = useSelectAccounts();
   const assets = useSelectARC0200AssetsBySelectedNetwork();
+  const colorMode = useSelectSettingsColorMode();
   const preferredExplorer = useSelectSettingsPreferredBlockExplorer();
   const updating = useSelectARC0200AssetsUpdating();
   // hooks
@@ -102,6 +105,7 @@ const ARC0200AssetTransferTransactionPage: FC<
   return (
     <>
       <PageHeader
+        colorMode={colorMode}
         title={t<string>('headings.transaction', {
           context: TransactionTypeEnum.ARC0200AssetTransfer,
         })}

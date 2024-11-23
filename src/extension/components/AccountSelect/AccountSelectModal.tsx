@@ -22,8 +22,8 @@ import { IoCheckmarkOutline, IoChevronForward } from 'react-icons/io5';
 
 // components
 import AccountAvatarWithBadges from '@extension/components/AccountAvatarWithBadges';
-import Button from '@extension/components/Button';
-import EmptyState from '@extension/components/EmptyState';
+import Button from '@common/components/Button';
+import EmptyState from '@common/components/EmptyState';
 
 // constants
 import {
@@ -52,11 +52,11 @@ import type { IAccountWithExtendedProps } from '@extension/types';
 import type { TAccountSelectModalProps } from './types';
 
 // utils
-import calculateIconSize from '@extension/utils/calculateIconSize';
-import convertPublicKeyToAVMAddress from '@extension/utils/convertPublicKeyToAVMAddress';
-import ellipseAddress from '@extension/utils/ellipseAddress';
+import calculateIconSize from '@common/utils/calculateIconSize';
+import convertPublicKeyToAVMAddress from '@common/utils/convertPublicKeyToAVMAddress';
+import ellipseAddress from '@common/utils/ellipseAddress';
 import sortAccountsByPolisAccount from '@extension/utils/sortAccountsByPolisAccount';
-import upsertItemsById from '@extension/utils/upsertItemsById';
+import upsertItemsById from '@common/utils/upsertItemsById';
 
 const AccountSelectModal: FC<TAccountSelectModalProps> = ({
   _context,

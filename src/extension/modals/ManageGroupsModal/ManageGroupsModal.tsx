@@ -22,20 +22,20 @@ import {
 import { useDispatch } from 'react-redux';
 
 // components
-import Button from '@extension/components/Button';
+import Button from '@common/components/Button';
 import EditableText from '@extension/components/EditableText';
 import GenericInput from '@extension/components/GenericInput';
-import IconButton from '@extension/components/IconButton';
+import IconButton from '@common/components/IconButton';
 import ModalSubHeading from '@extension/components/ModalSubHeading';
 import ScrollableContainer from '@extension/components/ScrollableContainer';
 
 // constants
 import {
-  ACCOUNT_GROUP_NAME_BYTE_LIMIT,
   BODY_BACKGROUND_COLOR,
   DEFAULT_GAP,
   INPUT_HEIGHT,
-} from '@extension/constants';
+} from '@common/constants';
+import { ACCOUNT_GROUP_NAME_BYTE_LIMIT } from '@extension/constants';
 
 // features
 import {
@@ -58,6 +58,7 @@ import {
   useSelectAccountsSaving,
   useSelectAccountGroups,
   useSelectManageGroupsModalIsOpen,
+  useSelectSettingsColorMode,
 } from '@extension/selectors';
 
 // theme
@@ -71,13 +72,14 @@ import type {
 } from '@extension/types';
 
 // utils
-import calculateIconSize from '@extension/utils/calculateIconSize';
+import calculateIconSize from '@common/utils/calculateIconSize';
 
 const ManageGroupsModal: FC<IModalProps> = ({ onClose }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch<IAppThunkDispatch<IMainRootState>>();
   // selectors
   const accounts = useSelectAccounts();
+  const colorMode = useSelectSettingsColorMode();
   const isOpen = useSelectManageGroupsModalIsOpen();
   const groups = useSelectAccountGroups();
   const saving = useSelectAccountsSaving();
@@ -226,6 +228,7 @@ const ManageGroupsModal: FC<IModalProps> = ({ onClose }) => {
               <EditableText
                 characterLimit={ACCOUNT_GROUP_NAME_BYTE_LIMIT}
                 color={defaultTextColor}
+                colorMode={colorMode}
                 flexGrow={1}
                 isEditing={!!editingGroupID && editingGroupID === value.id}
                 noOfLines={1}
@@ -241,6 +244,7 @@ const ManageGroupsModal: FC<IModalProps> = ({ onClose }) => {
             <Tooltip label={t<string>('labels.editGroup')}>
               <IconButton
                 aria-label={t<string>('ariaLabels.pencilIcon')}
+                colorMode={colorMode}
                 icon={IoPencilOutline}
                 onClick={handleOnEditClick(value.id)}
                 size="sm"
@@ -252,6 +256,7 @@ const ManageGroupsModal: FC<IModalProps> = ({ onClose }) => {
             <Tooltip label={t<string>('labels.remove')}>
               <IconButton
                 aria-label={t<string>('ariaLabels.deleteIcon')}
+                colorMode={colorMode}
                 icon={IoTrashOutline}
                 onClick={handleOnRemoveClick(value.id)}
                 size="sm"
@@ -296,6 +301,7 @@ const ManageGroupsModal: FC<IModalProps> = ({ onClose }) => {
             {/*add group*/}
             <GenericInput
               charactersRemaining={nameCharactersRemaining}
+              colorMode={colorMode}
               error={nameError}
               label={nameLabel}
               isDisabled={saving}
@@ -322,6 +328,7 @@ const ManageGroupsModal: FC<IModalProps> = ({ onClose }) => {
         <ModalFooter p={DEFAULT_GAP}>
           {/*cancel button*/}
           <Button
+            colorMode={colorMode}
             onClick={handleCancelClick}
             size="lg"
             variant="solid"

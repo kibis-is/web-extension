@@ -1,10 +1,10 @@
 import type { TAccountColors, TAccountIcons } from '@common/types';
 
 interface IExternalAccount {
-  color: TAccountColors | null;
-  icon: TAccountIcons | null;
+  color?: TAccountColors;
+  icon?: TAccountIcons;
   isWatchAccount: boolean;
-  name: string | null;
+  name?: string;
   publicKey: string;
 }
 

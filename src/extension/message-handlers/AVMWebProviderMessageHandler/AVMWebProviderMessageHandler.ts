@@ -66,7 +66,7 @@ import type {
 
 // utils
 import authorizedAccountsForHost from '@extension/utils/authorizedAccountsForHost';
-import convertPublicKeyToAVMAddress from '@extension/utils/convertPublicKeyToAVMAddress';
+import convertPublicKeyToAVMAddress from '@common/utils/convertPublicKeyToAVMAddress';
 import decodeUnsignedTransaction from '@extension/utils/decodeUnsignedTransaction';
 import isNetworkSupportedFromSettings from '@extension/utils/isNetworkSupportedFromSettings';
 import isWatchAccount from '@extension/utils/isWatchAccount';

@@ -13,7 +13,7 @@ import { IoAlertCircleOutline, IoLockClosedOutline } from 'react-icons/io5';
 import type { IProps } from './types';
 
 // utils
-import ellipseAddress from '@extension/utils/ellipseAddress';
+import ellipseAddress from '@common/utils/ellipseAddress';
 
 const ReKeyedAccountBadge: FC<IProps> = ({
   authAddress,

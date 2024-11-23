@@ -19,15 +19,15 @@ import { IoArrowBackOutline, IoCloseOutline } from 'react-icons/io5';
 import { useDispatch } from 'react-redux';
 
 // components
-import Button from '@extension/components/Button';
-import IconButton from '@extension/components/IconButton';
+import Button from '@common/components/Button';
+import IconButton from '@common/components/IconButton';
 import AddAssetsARC0200AssetItem from './AddAssetsARC0200AssetItem';
 import AddAssetsARC0200AssetSummaryModalContent from './AddAssetsARC0200AssetSummaryModalContent';
 import AddAssetsConfirmingModalContent from './AddAssetsConfirmingModalContent';
 import Warning from '@extension/components/Warning';
 
 // constants
-import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@extension/constants';
+import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@common/constants';
 
 // enums
 import { AssetTypeEnum, ErrorCodeEnum } from '@extension/enums';
@@ -63,6 +63,7 @@ import {
   useSelectAddAssetsSelectedAsset,
   useSelectSettingsSelectedNetwork,
   useSelectSettingsPreferredBlockExplorer,
+  useSelectSettings,
 } from '@extension/selectors';
 
 // theme
@@ -97,6 +98,7 @@ const AddAssetsForWatchAccountModal: FC<IModalProps> = ({ onClose }) => {
   const fetching = useSelectAddAssetsFetching();
   const selectedNetwork = useSelectSettingsSelectedNetwork();
   const selectedAsset = useSelectAddAssetsSelectedAsset();
+  const { appearance } = useSelectSettings();
   // hooks
   const defaultTextColor = useDefaultTextColor();
   const primaryColor = usePrimaryColor();
@@ -301,6 +303,7 @@ const AddAssetsForWatchAccountModal: FC<IModalProps> = ({ onClose }) => {
               {!fetching && query.length > 0 && (
                 <IconButton
                   aria-label="Clear query"
+                  colorMode={appearance.theme}
                   icon={IoCloseOutline}
                   onClick={handleClearQuery}
                   size="sm"
@@ -347,6 +350,7 @@ const AddAssetsForWatchAccountModal: FC<IModalProps> = ({ onClose }) => {
       return (
         <HStack spacing={DEFAULT_GAP - 2} w="full">
           <Button
+            colorMode={appearance.theme}
             leftIcon={<IoArrowBackOutline />}
             onClick={handlePreviousClick}
             size="lg"
@@ -357,6 +361,7 @@ const AddAssetsForWatchAccountModal: FC<IModalProps> = ({ onClose }) => {
           </Button>
 
           <Button
+            colorMode={appearance.theme}
             onClick={handleAddARC0200AssetClick}
             size="lg"
             variant="solid"
@@ -369,7 +374,13 @@ const AddAssetsForWatchAccountModal: FC<IModalProps> = ({ onClose }) => {
     }
 
     return (
-      <Button onClick={handleCancelClick} size="lg" variant="outline" w="full">
+      <Button
+        colorMode={appearance.theme}
+        onClick={handleCancelClick}
+        size="lg"
+        variant="outline"
+        w="full"
+      >
         {t<string>('buttons.cancel')}
       </Button>
     );

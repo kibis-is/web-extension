@@ -15,11 +15,11 @@ import { useTranslation } from 'react-i18next';
 import { IoCheckmarkOutline } from 'react-icons/io5';
 
 // components
-import Button from '@extension/components/Button';
+import Button from '@common/components/Button';
 import Notice from '@extension/components/Notice';
 
 // constants
-import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@extension/constants';
+import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@common/constants';
 
 // features
 import type { IConfirmModal } from '@extension/features/layout';
@@ -28,7 +28,10 @@ import type { IConfirmModal } from '@extension/features/layout';
 import useDefaultTextColor from '@extension/hooks/useDefaultTextColor';
 
 // selectors
-import { useSelectConfirmModal } from '@extension/selectors';
+import {
+  useSelectConfirmModal,
+  useSelectSettingsColorMode,
+} from '@extension/selectors';
 
 // theme
 import { theme } from '@extension/theme';
@@ -39,10 +42,11 @@ import type { IModalProps } from '@extension/types';
 const ConfirmModal: FC<IModalProps> = ({ onClose }) => {
   const { t } = useTranslation();
   const initialRef = useRef<HTMLButtonElement | null>(null);
+  // selectors
+  const colorMode = useSelectSettingsColorMode();
+  const defaultTextColor: string = useDefaultTextColor();
   // hooks
   const confirm: IConfirmModal | null = useSelectConfirmModal();
-  // selectors
-  const defaultTextColor: string = useDefaultTextColor();
   // handlers
   const handleCancelClick = () => {
     if (confirm?.onCancel) {
@@ -104,6 +108,7 @@ const ConfirmModal: FC<IModalProps> = ({ onClose }) => {
           <HStack spacing={DEFAULT_GAP - 2} w="full">
             {/*cancel*/}
             <Button
+              colorMode={colorMode}
               onClick={handleCancelClick}
               ref={initialRef}
               size="lg"
@@ -115,6 +120,7 @@ const ConfirmModal: FC<IModalProps> = ({ onClose }) => {
 
             {/*confirm*/}
             <Button
+              colorMode={colorMode}
               onClick={handleConfirmClick}
               rightIcon={<IoCheckmarkOutline />}
               size="lg"

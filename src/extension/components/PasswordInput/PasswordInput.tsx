@@ -12,11 +12,11 @@ import { IoEye, IoEyeOff } from 'react-icons/io5';
 import { randomBytes } from 'tweetnacl';
 
 // components
-import IconButton from '@extension/components/IconButton';
-import Label from '@extension/components/Label';
+import IconButton from '@common/components/IconButton';
+import Label from '@common/components/Label';
 
 // constants
-import { DEFAULT_GAP, INPUT_HEIGHT } from '@extension/constants';
+import { DEFAULT_GAP, INPUT_HEIGHT } from '@common/constants';
 
 // hooks
 import usePrimaryColor from '@extension/hooks/usePrimaryColor';
@@ -26,6 +26,7 @@ import useSubTextColor from '@extension/hooks/useSubTextColor';
 import type { IProps } from './types';
 
 const PasswordInput: FC<IProps> = ({
+  colorMode,
   disabled,
   error,
   hint,
@@ -52,6 +53,7 @@ const PasswordInput: FC<IProps> = ({
     <VStack alignItems="flex-start" spacing={DEFAULT_GAP / 3} w="full">
       {/*label*/}
       <Label
+        colorMode={colorMode}
         error={error}
         inputID={_id}
         label={label || t<string>('labels.password')}
@@ -84,6 +86,7 @@ const PasswordInput: FC<IProps> = ({
           <IconButton
             aria-label={t<string>('labels.showHidePassword')}
             borderRadius="full"
+            colorMode={colorMode}
             disabled={disabled}
             icon={show ? IoEye : IoEyeOff}
             mr={DEFAULT_GAP / 3}

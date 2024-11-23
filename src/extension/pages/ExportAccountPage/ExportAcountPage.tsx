@@ -14,13 +14,13 @@ import { IoEyeOffOutline, IoListOutline } from 'react-icons/io5';
 import { useDispatch } from 'react-redux';
 
 // components
-import Button from '@extension/components/Button';
-import EmptyState from '@extension/components/EmptyState';
+import Button from '@common/components/Button';
+import EmptyState from '@common/components/EmptyState';
 import PageHeader from '@extension/components/PageHeader';
 
 // constants
+import { DEFAULT_GAP } from '@common/constants';
 import {
-  DEFAULT_GAP,
   EXPORT_ACCOUNT_PAGE_LIMIT,
   EXPORT_ACCOUNT_QR_CODE_DURATION,
 } from '@extension/constants';
@@ -49,7 +49,11 @@ import AuthenticationModal from '@extension/modals/AuthenticationModal';
 import Ed21559KeyPair from '@extension/models/Ed21559KeyPair';
 
 // selectors
-import { useSelectAccounts, useSelectLogger } from '@extension/selectors';
+import {
+  useSelectAccounts,
+  useSelectLogger,
+  useSelectSettingsColorMode,
+} from '@extension/selectors';
 
 // theme
 import { theme } from '@extension/theme';
@@ -64,8 +68,8 @@ import type {
 import type { IExportAccount } from '@extension/utils/createAccountImportURI';
 
 // utils
-import calculateIconSize from '@extension/utils/calculateIconSize';
-import convertPublicKeyToAVMAddress from '@extension/utils/convertPublicKeyToAVMAddress';
+import calculateIconSize from '@common/utils/calculateIconSize';
+import convertPublicKeyToAVMAddress from '@common/utils/convertPublicKeyToAVMAddress';
 import createAccountImportURI from '@extension/utils/createAccountImportURI';
 import fetchDecryptedKeyPairFromStorageWithPassword from '@extension/utils/fetchDecryptedKeyPairFromStorageWithPassword';
 import fetchDecryptedKeyPairFromStorageWithPasskey from '@extension/utils/fetchDecryptedKeyPairFromStorageWithPasskey';
@@ -86,6 +90,7 @@ const ExportAccountPage: FC = () => {
   } = useDisclosure();
   // selectors
   const accounts = useSelectAccounts();
+  const colorMode = useSelectSettingsColorMode();
   const logger = useSelectLogger();
   // hooks
   const defaultTextColor = useDefaultTextColor();
@@ -271,6 +276,7 @@ const ExportAccountPage: FC = () => {
       />
 
       <PageHeader
+        colorMode={colorMode}
         title={t<string>('titles.page', { context: 'exportAccount' })}
       />
 
@@ -287,7 +293,10 @@ const ExportAccountPage: FC = () => {
               {/*empty state*/}
               <Spacer />
 
-              <EmptyState text={t<string>('headings.noAccountsFound')} />
+              <EmptyState
+                colorMode={colorMode}
+                text={t<string>('headings.noAccountsFound')}
+              />
 
               <Spacer />
             </>
@@ -357,6 +366,7 @@ const ExportAccountPage: FC = () => {
 
         {/*select accounts button*/}
         <Button
+          colorMode={colorMode}
           onClick={handleSelectAccountsClick}
           rightIcon={<IoListOutline />}
           size="lg"

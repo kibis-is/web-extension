@@ -10,7 +10,7 @@ import React, { type FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
 // constants
-import { DEFAULT_GAP, INPUT_HEIGHT } from '@extension/constants';
+import { DEFAULT_GAP, INPUT_HEIGHT } from '@common/constants';
 
 // hooks
 import useBorderColor from '@extension/hooks/useBorderColor';

@@ -22,21 +22,18 @@ import { useDispatch } from 'react-redux';
 
 // components
 import AccountSelect from '@extension/components/AccountSelect';
-import AddressInput from '@extension/components/AddressInput';
-import AmountInput from '@extension/components/AmountInput';
+import AddressInput from '@common/components/AddressInput';
+import AmountInput from '@common/components/AmountInput';
 import AssetSelect from '@extension/components/AssetSelect';
-import Button from '@extension/components/Button';
+import Button from '@common/components/Button';
 import GenericTextarea from '@extension/components/GenericTextarea';
 import SendAssetModalConfirmingContent from './SendAssetModalConfirmingContent';
 import SendAssetModalContentSkeleton from './SendAssetModalContentSkeleton';
 import SendAssetModalSummaryContent from './SendAssetModalSummaryContent';
 
 // constants
-import {
-  BODY_BACKGROUND_COLOR,
-  DEFAULT_GAP,
-  TRANSACTION_NOTE_BYTE_LIMIT,
-} from '@extension/constants';
+import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@common/constants';
+import { TRANSACTION_NOTE_BYTE_LIMIT } from '@extension/constants';
 
 // enums
 import { AssetTypeEnum, ErrorCodeEnum } from '@extension/enums';
@@ -76,6 +73,7 @@ import {
   useSelectSendAssetCreating,
   useSelectSendAssetSender,
   useSelectStandardAssetsBySelectedNetwork,
+  useSelectSettingsColorMode,
 } from '@extension/selectors';
 
 // theme
@@ -95,7 +93,7 @@ import type {
 
 // utils
 import calculateMaxTransactionAmount from '@extension/utils/calculateMaxTransactionAmount';
-import convertPublicKeyToAVMAddress from '@extension/utils/convertPublicKeyToAVMAddress';
+import convertPublicKeyToAVMAddress from '@common/utils/convertPublicKeyToAVMAddress';
 
 const SendAssetModal: FC<IModalProps> = ({ onClose }) => {
   const { t } = useTranslation();
@@ -110,12 +108,13 @@ const SendAssetModal: FC<IModalProps> = ({ onClose }) => {
   const arc200Assets = useSelectARC0200AssetsBySelectedNetwork();
   const asset = useSelectSendAssetAsset();
   const availableAccounts = useSelectAvailableAccountsForSelectedNetwork();
-  const standardAssets = useSelectStandardAssetsBySelectedNetwork();
+  const colorMode = useSelectSettingsColorMode();
   const confirming = useSelectSendAssetConfirming();
   const creating = useSelectSendAssetCreating();
   const logger = useSelectLogger();
   const network = useSelectSettingsSelectedNetwork();
   const sender = useSelectSendAssetSender();
+  const standardAssets = useSelectStandardAssetsBySelectedNetwork();
   // hooks
   const defaultTextColor = useDefaultTextColor();
   const {
@@ -379,6 +378,7 @@ const SendAssetModal: FC<IModalProps> = ({ onClose }) => {
         <AmountInput
           account={sender}
           asset={asset}
+          colorMode={colorMode}
           isDisabled={creating}
           label={amountLabel}
           network={network}
@@ -393,11 +393,11 @@ const SendAssetModal: FC<IModalProps> = ({ onClose }) => {
 
         {/*select asset*/}
         <AssetSelect
-          _context={_context}
           assets={[
             network.nativeCurrency, // add the native currency to the front
             ...allAssets,
           ]}
+          colorMode={colorMode}
           disabled={creating}
           label={t<string>('labels.asset')}
           network={network}
@@ -420,8 +420,8 @@ const SendAssetModal: FC<IModalProps> = ({ onClose }) => {
 
         {/*to address*/}
         <AddressInput
-          _context={_context}
           accounts={accounts}
+          colorMode={colorMode}
           error={receiverAddressError}
           isDisabled={creating}
           label={receiverAddressLabel}
@@ -438,6 +438,7 @@ const SendAssetModal: FC<IModalProps> = ({ onClose }) => {
         {/*note*/}
         <GenericTextarea
           charactersRemaining={noteCharactersRemaining}
+          colorMode={colorMode}
           error={noteError}
           label={noteLabel}
           isDisabled={creating}
@@ -461,6 +462,7 @@ const SendAssetModal: FC<IModalProps> = ({ onClose }) => {
       return (
         <HStack spacing={DEFAULT_GAP - 2} w="full">
           <Button
+            colorMode={colorMode}
             leftIcon={<IoArrowBackOutline />}
             onClick={handlePreviousClick}
             size="lg"
@@ -471,6 +473,7 @@ const SendAssetModal: FC<IModalProps> = ({ onClose }) => {
           </Button>
 
           <Button
+            colorMode={colorMode}
             onClick={handleSendClick}
             rightIcon={<IoArrowUpOutline />}
             size="lg"
@@ -486,6 +489,7 @@ const SendAssetModal: FC<IModalProps> = ({ onClose }) => {
     return (
       <HStack spacing={DEFAULT_GAP - 2} w="full">
         <Button
+          colorMode={colorMode}
           onClick={handleCancelClick}
           size="lg"
           variant="outline"
@@ -495,6 +499,7 @@ const SendAssetModal: FC<IModalProps> = ({ onClose }) => {
         </Button>
 
         <Button
+          colorMode={colorMode}
           isLoading={creating}
           onClick={handleNextClick}
           rightIcon={<IoArrowForwardOutline />}

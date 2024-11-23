@@ -21,10 +21,10 @@ import { useTranslation } from 'react-i18next';
 import { IoCheckmarkOutline, IoCloseOutline } from 'react-icons/io5';
 
 // components
-import IconButton from '@extension/components/IconButton';
+import IconButton from '@common/components/IconButton';
 
 // constants
-import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@extension/constants';
+import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@common/constants';
 
 // hooks
 import useButtonHoverBackgroundColor from '@extension/hooks/useButtonHoverBackgroundColor';
@@ -37,10 +37,11 @@ import useTextBackgroundColor from '@extension/hooks/useTextBackgroundColor';
 import { theme } from '@extension/theme';
 
 // types
-import type { IProps } from './types';
+import type { TProps } from './types';
 
-const EditableText: FC<IProps & Omit<TextProps, 'onSubmit'>> = ({
+const EditableText: FC<TProps> = ({
   characterLimit,
+  colorMode,
   isEditing = false,
   isLoading = false,
   onCancel,
@@ -193,6 +194,7 @@ const EditableText: FC<IProps & Omit<TextProps, 'onSubmit'>> = ({
               _hover={{ backgroundColor: buttonHoverBackgroundColor }}
               aria-label={t<string>('ariaLabels.checkIcon')}
               bg={textBackgroundColor}
+              colorMode={colorMode}
               icon={IoCheckmarkOutline}
               onClick={handleSubmitClick}
               size="sm"
@@ -211,6 +213,7 @@ const EditableText: FC<IProps & Omit<TextProps, 'onSubmit'>> = ({
               _hover={{ backgroundColor: buttonHoverBackgroundColor }}
               aria-label={t<string>('ariaLabels.crossIcon')}
               bg={textBackgroundColor}
+              colorMode={colorMode}
               icon={IoCloseOutline}
               onClick={handleCancelClick}
               size="sm"

@@ -26,7 +26,7 @@ import { theme } from '@extension/theme';
 import type { IAccount, IDecodedJwt } from '@extension/types';
 
 // utils
-import convertPublicKeyToAVMAddress from '@extension/utils/convertPublicKeyToAVMAddress';
+import convertPublicKeyToAVMAddress from '@common/utils/convertPublicKeyToAVMAddress';
 
 interface IProps {
   decodedJwt: IDecodedJwt;

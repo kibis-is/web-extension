@@ -13,7 +13,6 @@ import type { IState as IReKeyAccountState } from '@extension/features/re-key-ac
 import type { IState as IRemoveAssetsState } from '@extension/features/remove-assets';
 import type { IState as ISendAssetsState } from '@extension/features/send-assets';
 import type { IState as ISessionsState } from '@extension/features/sessions';
-import type { IState as ISettingsState } from '@extension/features/settings';
 import type { IState as IStandardAssetsState } from '@extension/features/standard-assets';
 import type { IState as IWebAuthnState } from '@extension/features/webauthn';
 
@@ -35,7 +34,6 @@ interface IMainRootState extends IBaseRootState {
   removeAssets: IRemoveAssetsState;
   sendAssets: ISendAssetsState;
   sessions: ISessionsState;
-  settings: ISettingsState;
   standardAssets: IStandardAssetsState;
   webauthn: IWebAuthnState;
 }

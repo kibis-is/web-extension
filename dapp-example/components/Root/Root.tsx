@@ -31,7 +31,7 @@ import SignPaymentTransactionTab from '../SignPaymentTransactionTab';
 import SignMessageTab from '../SignMessageTab';
 
 // constants
-import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@extension/constants';
+import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@common/constants';
 
 // enums
 import { ConnectionTypeEnum } from '../../enums';

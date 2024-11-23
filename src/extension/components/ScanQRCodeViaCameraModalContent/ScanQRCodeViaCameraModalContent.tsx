@@ -21,16 +21,13 @@ import {
 } from 'react-icons/io5';
 
 // components
-import Button from '@extension/components/Button';
+import Button from '@common/components/Button';
 import CircularProgressWithIcon from '@extension/components/CircularProgressWithIcon';
 import QRCodeFrameIcon from './QRCodeFrameIcon';
 
 // constants
-import {
-  BODY_BACKGROUND_COLOR,
-  DEFAULT_GAP,
-  SUPPORT_MAIL_TO_LINK,
-} from '@extension/constants';
+import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@common/constants';
+import { SUPPORT_MAIL_TO_LINK } from '@extension/constants';
 
 // enums
 import { ErrorCodeEnum, ScanModeEnum } from '@extension/enums';
@@ -46,7 +43,9 @@ import { theme } from '@extension/theme';
 
 // types
 import type { IScanQRCodeModalContentProps } from '@extension/types';
+
 const ScanQRCodeViaCameraModalContent: FC<IScanQRCodeModalContentProps> = ({
+  colorMode,
   onPreviousClick,
   onURI,
   pagination,
@@ -253,6 +252,7 @@ const ScanQRCodeViaCameraModalContent: FC<IScanQRCodeModalContentProps> = ({
       <ModalFooter p={DEFAULT_GAP} zIndex={1}>
         {/*previous button*/}
         <Button
+          colorMode={colorMode}
           leftIcon={<IoArrowBackOutline />}
           onClick={handlePreviousClick}
           size="lg"

@@ -25,11 +25,11 @@ import { useDispatch } from 'react-redux';
 
 // components
 import AccountSelect from '@extension/components/AccountSelect';
-import Button from '@extension/components/Button';
+import Button from '@common/components/Button';
 import ModalSubHeading from '@extension/components/ModalSubHeading';
 
 // constants
-import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@extension/constants';
+import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@common/constants';
 
 // enums
 import { EventTypeEnum } from '@extension/enums';
@@ -56,6 +56,7 @@ import {
   useSelectAccountsFetching,
   useSelectActiveAccount,
   useSelectEvents,
+  useSelectSettingsColorMode,
   useSelectWebAuthnSaving,
 } from '@extension/selectors';
 
@@ -71,8 +72,8 @@ import type {
   IModalProps,
   IWebAuthnRequestEvent,
 } from '@extension/types';
-import convertPublicKeyToAVMAddress from '@extension/utils/convertPublicKeyToAVMAddress';
-import ellipseAddress from '@extension/utils/ellipseAddress';
+import convertPublicKeyToAVMAddress from '@common/utils/convertPublicKeyToAVMAddress';
+import ellipseAddress from '@common/utils/ellipseAddress';
 
 const WebAuthnCreateModal: FC<IModalProps> = ({ onClose }) => {
   const { t } = useTranslation();
@@ -81,13 +82,12 @@ const WebAuthnCreateModal: FC<IModalProps> = ({ onClose }) => {
   // selectors
   const accounts = useSelectAccounts();
   const activeAccount = useSelectActiveAccount();
+  const colorMode = useSelectSettingsColorMode();
   const events = useSelectEvents();
   const fetching = useSelectAccountsFetching();
   const saving = useSelectWebAuthnSaving();
   // hooks
   const defaultTextColor = useDefaultTextColor();
-  const primaryColorScheme = usePrimaryColorScheme();
-  const subTextColor = useSubTextColor();
   const textBackgroundColor = useTextBackgroundColor();
   // memos
   const _context = useMemo(() => randomString(8), []);
@@ -295,6 +295,7 @@ const WebAuthnCreateModal: FC<IModalProps> = ({ onClose }) => {
         <ModalFooter p={DEFAULT_GAP}>
           <HStack spacing={DEFAULT_GAP - 2} w="full">
             <Button
+              colorMode={colorMode}
               onClick={handleOnCancelClick}
               size="lg"
               variant="outline"
@@ -304,6 +305,7 @@ const WebAuthnCreateModal: FC<IModalProps> = ({ onClose }) => {
             </Button>
 
             <Button
+              colorMode={colorMode}
               isLoading={saving}
               onClick={handleOnRegisterClick}
               rightIcon={<KbSignIn />}

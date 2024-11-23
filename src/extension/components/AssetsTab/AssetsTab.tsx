@@ -6,7 +6,7 @@ import { useDispatch } from 'react-redux';
 
 // components
 import AssetTabLoadingItem from '@extension/components/AssetTabLoadingItem';
-import EmptyState from '@extension/components/EmptyState';
+import EmptyState from '@common/components/EmptyState';
 import ScrollableContainer from '@extension/components/ScrollableContainer';
 import TabControlBar from '@extension/components/TabControlBar';
 import AssetTabARC0200AssetItem from './AssetTabARC0200AssetItem';
@@ -30,6 +30,7 @@ import {
   useSelectStandardAssetsBySelectedNetwork,
   useSelectSettingsSelectedNetwork,
   useSelectStandardAssetsUpdating,
+  useSelectSettingsColorMode,
 } from '@extension/selectors';
 
 // types
@@ -46,6 +47,7 @@ const AssetsTab: FC<IProps> = ({ _context, account }) => {
   const dispatch = useDispatch<IAppThunkDispatch<IMainRootState>>();
   // selectors
   const arc0200Assets = useSelectARC0200AssetsBySelectedNetwork();
+  const colorMode = useSelectSettingsColorMode();
   const fetchingARC0200Assets = useSelectARC0200AssetsFetching();
   const fetchingStandardAssets = useSelectStandardAssetsFetching();
   const selectedNetwork = useSelectSettingsSelectedNetwork();
@@ -149,6 +151,7 @@ const AssetsTab: FC<IProps> = ({ _context, account }) => {
 
         {/*empty state*/}
         <EmptyState
+          colorMode={colorMode}
           description={t<string>('captions.noAssetsFound')}
           text={t<string>('headings.noAssetsFound')}
         />
@@ -168,11 +171,11 @@ const AssetsTab: FC<IProps> = ({ _context, account }) => {
     >
       {/*controls*/}
       <TabControlBar
-        _context={`${_context}-asset-tab`}
         buttons={[
           {
             button: {
               ['aria-label']: t<string>('buttons.addAsset'),
+              colorMode,
               icon: IoAddCircleOutline,
               onClick: handleAddAssetClick,
               size: 'sm',
@@ -181,6 +184,7 @@ const AssetsTab: FC<IProps> = ({ _context, account }) => {
             tooltipLabel: t<string>('buttons.addAsset'),
           },
         ]}
+        colorMode={colorMode}
         isLoading={updatingARC0200Assets || updatingStandardAssets}
         loadingTooltipLabel={t<string>('captions.updatingAssetInformation')}
       />

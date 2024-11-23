@@ -22,7 +22,7 @@ import { IoArrowBackOutline, IoCreateOutline } from 'react-icons/io5';
 import { useDispatch } from 'react-redux';
 
 // components
-import Button from '@extension/components/Button';
+import Button from '@common/components/Button';
 import ClientHeader, {
   ClientHeaderSkeleton,
 } from '@extension/components/ClientHeader';
@@ -31,7 +31,7 @@ import GroupOfTransactionsContent from './GroupOfTransactionsContent';
 import SingleTransactionContent from './SingleTransactionContent';
 
 // constants
-import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@extension/constants';
+import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@common/constants';
 
 // contexts
 import { MultipleTransactionsContext } from './contexts';
@@ -57,6 +57,7 @@ import {
   useSelectLogger,
   useSelectNetworks,
   useSelectSessions,
+  useSelectSettingsColorMode,
 } from '@extension/selectors';
 
 // theme
@@ -89,6 +90,7 @@ const SignTransactionsModal: FC<IModalProps> = ({ onClose }) => {
   } = useDisclosure();
   // selectors
   const accounts = useSelectAccounts();
+  const colorMode = useSelectSettingsColorMode();
   const logger = useSelectLogger();
   const networks = useSelectNetworks();
   const sessions = useSelectSessions();
@@ -313,6 +315,7 @@ const SignTransactionsModal: FC<IModalProps> = ({ onClose }) => {
               {moreDetailsTransactions && moreDetailsTransactions.length > 0 ? (
                 // previous button
                 <Button
+                  colorMode={colorMode}
                   leftIcon={<IoArrowBackOutline />}
                   onClick={handlePreviousClick}
                   size="lg"
@@ -324,6 +327,7 @@ const SignTransactionsModal: FC<IModalProps> = ({ onClose }) => {
               ) : (
                 // cancel button
                 <Button
+                  colorMode={colorMode}
                   onClick={handleCancelClick}
                   size="lg"
                   variant="outline"
@@ -335,6 +339,7 @@ const SignTransactionsModal: FC<IModalProps> = ({ onClose }) => {
 
               {/*sign button*/}
               <Button
+                colorMode={colorMode}
                 isLoading={signing}
                 onClick={handleSignClick}
                 rightIcon={<IoCreateOutline />}

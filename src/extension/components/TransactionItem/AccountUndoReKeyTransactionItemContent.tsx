@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import AddressDisplay from '@extension/components/AddressDisplay';
 
 // constants
-import { DEFAULT_GAP } from '@extension/constants';
+import { DEFAULT_GAP } from '@common/constants';
 
 // hooks
 import useDefaultTextColor from '@extension/hooks/useDefaultTextColor';

@@ -19,17 +19,20 @@ import { useTranslation } from 'react-i18next';
 import browser from 'webextension-polyfill';
 
 // components
-import Button from '@extension/components/Button';
+import Button from '@common/components/Button';
 import PasswordInput from '@extension/components/PasswordInput';
 
 // constants
-import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@extension/constants';
+import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@common/constants';
 
 // hooks
 import useGenericInput from '@extension/hooks/useGenericInput';
 
 // selectors
-import { useSelectLogger } from '@extension/selectors';
+import {
+  useSelectLogger,
+  useSelectSettingsColorMode,
+} from '@extension/selectors';
 
 // managers
 import PasswordManager from '@extension/managers/PasswordManager';
@@ -50,6 +53,7 @@ const ConfirmPasswordModal: FC<IProps> = ({
   const { t } = useTranslation();
   const passwordInputRef = useRef<HTMLInputElement | null>(null);
   // selectors
+  const colorMode = useSelectSettingsColorMode();
   const logger = useSelectLogger();
   // hooks
   const {
@@ -149,6 +153,7 @@ const ConfirmPasswordModal: FC<IProps> = ({
         <ModalBody px={DEFAULT_GAP}>
           <VStack w="full">
             <PasswordInput
+              colorMode={colorMode}
               disabled={verifying}
               error={passwordError}
               hint={hint || t<string>('captions.mustEnterPasswordToConfirm')}
@@ -166,6 +171,7 @@ const ConfirmPasswordModal: FC<IProps> = ({
         <ModalFooter p={DEFAULT_GAP}>
           <HStack spacing={DEFAULT_GAP - 2} w="full">
             <Button
+              colorMode={colorMode}
               onClick={handleCancelClick}
               size="lg"
               variant="outline"
@@ -175,6 +181,7 @@ const ConfirmPasswordModal: FC<IProps> = ({
             </Button>
 
             <Button
+              colorMode={colorMode}
               isLoading={verifying}
               onClick={handleConfirmClick}
               rightIcon={<IoCheckmarkOutline />}

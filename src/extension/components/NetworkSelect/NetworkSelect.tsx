@@ -12,7 +12,7 @@ import { IoChevronDownOutline } from 'react-icons/io5';
 import NetworkBadge from '@extension/components/NetworkBadge';
 
 // constants
-import { DEFAULT_GAP } from '@extension/constants';
+import { DEFAULT_GAP } from '@common/constants';
 
 // hooks
 import useBorderColor from '@extension/hooks/useBorderColor';
@@ -27,7 +27,7 @@ import type { INetwork } from '@extension/types';
 import type { IProps } from './types';
 
 // utils
-import calculateIconSize from '@extension/utils/calculateIconSize';
+import calculateIconSize from '@common/utils/calculateIconSize';
 
 const NetworkSelect: FC<IProps> = ({
   _context,

@@ -17,7 +17,7 @@ import type { IAccountAndSeedPhraseValue } from '../../types';
 import type { IDecryptSeedPhraseActionOptions, IState } from './types';
 
 // utils
-import convertPublicKeyToAVMAddress from '@extension/utils/convertPublicKeyToAVMAddress';
+import convertPublicKeyToAVMAddress from '@common/utils/convertPublicKeyToAVMAddress';
 import convertPrivateKeyToSeedPhrase from '@extension/utils/convertPrivateKeyToSeedPhrase';
 import createMaskedSeedPhrase from '@extension/utils/createMaskedSeedPhrase';
 import fetchDecryptedKeyPairFromStorageWithPasskey from '@extension/utils/fetchDecryptedKeyPairFromStorageWithPasskey';

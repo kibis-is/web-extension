@@ -2,10 +2,11 @@ import { Box, HStack, Text, VStack } from '@chakra-ui/react';
 import React, { type FC } from 'react';
 
 // components
-import Button from '@extension/components/Button';
+import Button from '@common/components/Button';
 
 // constants
-import { DEFAULT_GAP, SETTINGS_ITEM_HEIGHT } from '@extension/constants';
+import { DEFAULT_GAP } from '@common/constants';
+import { SETTINGS_ITEM_HEIGHT } from '@extension/constants';
 
 // hooks
 import useDefaultTextColor from '@extension/hooks/useDefaultTextColor';
@@ -16,6 +17,7 @@ import type { IProps } from './types';
 
 const SettingsButtonItem: FC<IProps> = ({
   buttonLabel,
+  colorMode,
   description,
   isWarning = false,
   label,
@@ -54,6 +56,7 @@ const SettingsButtonItem: FC<IProps> = ({
 
         {/*button*/}
         <Button
+          colorMode={colorMode}
           onClick={onClick}
           w="50%"
           {...(isWarning && {

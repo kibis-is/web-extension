@@ -9,13 +9,16 @@ import SettingsSubHeading from '@extension/components/SettingsSubHeading';
 import SettingsSwitchItem from '@extension/components/SettingsSwitchItem';
 
 // constants
-import { DEFAULT_GAP } from '@extension/constants';
+import { DEFAULT_GAP } from '@common/constants';
 
 // features
 import { saveToStorageThunk as saveSettingsToStorageThunk } from '@extension/features/settings';
 
 // selectors
-import { useSelectSettings } from '@extension/selectors';
+import {
+  useSelectSettings,
+  useSelectSettingsColorMode,
+} from '@extension/selectors';
 
 // types
 import type {
@@ -28,6 +31,7 @@ const PrivacySettingsPage: FC = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch<IAppThunkDispatch<IMainRootState>>();
   // selectors
+  const colorMode = useSelectSettingsColorMode();
   const settings = useSelectSettings();
   // handlers
   const handleOnSwitchChange =
@@ -45,7 +49,10 @@ const PrivacySettingsPage: FC = () => {
 
   return (
     <>
-      <PageHeader title={t<string>('titles.page', { context: 'privacy' })} />
+      <PageHeader
+        colorMode={colorMode}
+        title={t<string>('titles.page', { context: 'privacy' })}
+      />
 
       <VStack spacing={DEFAULT_GAP - 2} w="full">
         {/*analytics & tracking*/}

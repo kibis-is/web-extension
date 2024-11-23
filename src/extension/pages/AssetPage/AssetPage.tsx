@@ -25,7 +25,7 @@ import AddressDisplay from '@extension/components/AddressDisplay';
 import AssetAvatar from '@extension/components/AssetAvatar';
 import AssetIcon from '@extension/components/AssetIcon';
 import AssetBadge from '@extension/components/AssetBadge';
-import Button from '@extension/components/Button';
+import Button from '@common/components/Button';
 import CopyIconButton from '@extension/components/CopyIconButton';
 import MoreInformationAccordion from '@extension/components/MoreInformationAccordion';
 import OpenTabIconButton from '@extension/components/OpenTabIconButton';
@@ -33,11 +33,8 @@ import PageHeader from '@extension/components/PageHeader';
 import PageItem from '@extension/components/PageItem';
 
 // constants
-import {
-  ACCOUNTS_ROUTE,
-  DEFAULT_GAP,
-  PAGE_ITEM_HEIGHT,
-} from '@extension/constants';
+import { DEFAULT_GAP } from '@common/constants';
+import { ACCOUNTS_ROUTE, PAGE_ITEM_HEIGHT } from '@extension/constants';
 
 // enums
 import { AssetTypeEnum } from '@extension/enums';
@@ -68,17 +65,18 @@ import {
   useSelectSettingsSelectedNetwork,
   useSelectSettingsPreferredBlockExplorer,
   useSelectStandardAssetsFetching,
+  useSelectSettingsColorMode,
 } from '@extension/selectors';
 
 // types
 import type { IAppThunkDispatch, IMainRootState } from '@extension/types';
 
 // utils
-import calculateIconSize from '@extension/utils/calculateIconSize';
+import calculateIconSize from '@common/utils/calculateIconSize';
 import convertToStandardUnit from '@common/utils/convertToStandardUnit';
 import formatCurrencyUnit from '@common/utils/formatCurrencyUnit';
-import convertPublicKeyToAVMAddress from '@extension/utils/convertPublicKeyToAVMAddress';
-import ellipseAddress from '@extension/utils/ellipseAddress';
+import convertPublicKeyToAVMAddress from '@common/utils/convertPublicKeyToAVMAddress';
+import ellipseAddress from '@common/utils/ellipseAddress';
 import isAccountKnown from '@extension/utils/isAccountKnown';
 
 const AssetPage: FC = () => {
@@ -99,6 +97,7 @@ const AssetPage: FC = () => {
   // selectors
   const accounts = useSelectAccounts();
   const availableAccounts = useSelectAvailableAccountsForSelectedNetwork();
+  const colorMode = useSelectSettingsColorMode();
   const fetchingAssets = useSelectStandardAssetsFetching();
   const blockExplorer = useSelectSettingsPreferredBlockExplorer();
   const selectedNetwork = useSelectSettingsSelectedNetwork();
@@ -181,6 +180,7 @@ const AssetPage: FC = () => {
       )}
 
       <PageHeader
+        colorMode={colorMode}
         subTitle={
           account.name
             ? ellipseAddress(accountAddress, { end: 10, start: 10 })
@@ -590,6 +590,7 @@ const AssetPage: FC = () => {
           {/*only allow sending for available accounts; accounts that are not watch accounts or accounts that are re-keyed and have the auth account present*/}
           {!!availableAccounts.find((value) => value.id === account.id) && (
             <Button
+              colorMode={colorMode}
               onClick={handleSendClick}
               rightIcon={<IoArrowUpOutline />}
               size="md"
@@ -601,6 +602,7 @@ const AssetPage: FC = () => {
           )}
 
           <Button
+            colorMode={colorMode}
             onClick={handleReceiveClick}
             rightIcon={<IoArrowDownOutline />}
             size="md"

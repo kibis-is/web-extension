@@ -14,7 +14,7 @@ import MoreInformationAccordion from '@extension/components/MoreInformationAccor
 import OpenTabIconButton from '@extension/components/OpenTabIconButton';
 
 // constants
-import { DEFAULT_GAP, MODAL_ITEM_HEIGHT } from '@extension/constants';
+import { DEFAULT_GAP, MODAL_ITEM_HEIGHT } from '@common/constants';
 
 // enums
 import { AssetTypeEnum } from '@extension/enums';

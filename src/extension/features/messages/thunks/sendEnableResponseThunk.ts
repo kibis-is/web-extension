@@ -25,7 +25,7 @@ import type {
 import type { IEnableResponseThunkPayload } from '../types';
 
 // utils
-import convertPublicKeyToAVMAddress from '@extension/utils/convertPublicKeyToAVMAddress';
+import convertPublicKeyToAVMAddress from '@common/utils/convertPublicKeyToAVMAddress';
 
 const sendEnableResponseThunk: AsyncThunk<
   void, // return

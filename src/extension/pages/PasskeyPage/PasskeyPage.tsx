@@ -16,7 +16,7 @@ import { GoShield, GoShieldCheck, GoShieldLock } from 'react-icons/go';
 import { useDispatch } from 'react-redux';
 
 // components
-import Button from '@extension/components/Button';
+import Button from '@common/components/Button';
 import CopyIconButton from '@extension/components/CopyIconButton';
 import COSEAlgorithmBadge from '@extension/components/COSEAlgorithmBadge';
 import MoreInformationAccordion from '@extension/components/MoreInformationAccordion';
@@ -26,7 +26,8 @@ import PageItem from '@extension/components/PageItem';
 import PasskeyCapabilities from '@extension/components/PasskeyCapabilities';
 
 // constants
-import { DEFAULT_GAP, PAGE_ITEM_HEIGHT } from '@extension/constants';
+import { DEFAULT_GAP } from '@common/constants';
+import { PAGE_ITEM_HEIGHT } from '@extension/constants';
 
 // features
 import { create as createNotification } from '@extension/features/notifications';
@@ -50,6 +51,7 @@ import {
   useSelectPasskeysFetching,
   useSelectSystemInfo,
   useSelectPasskeysSaving,
+  useSelectSettingsColorMode,
 } from '@extension/selectors';
 
 // types
@@ -60,7 +62,7 @@ import type {
 } from '@extension/types';
 
 // utils
-import calculateIconSize from '@extension/utils/calculateIconSize';
+import calculateIconSize from '@common/utils/calculateIconSize';
 
 const PasskeyPage: FC = () => {
   const { t } = useTranslation();
@@ -71,6 +73,7 @@ const PasskeyPage: FC = () => {
     onClose: onMoreInformationClose,
   } = useDisclosure();
   // selectors
+  const colorMode = useSelectSettingsColorMode();
   const logger = useSelectLogger();
   const passkey = useSelectPasskeysPasskey();
   const fetching = useSelectPasskeysFetching();
@@ -349,6 +352,7 @@ const PasskeyPage: FC = () => {
           </VStack>
 
           <Button
+            colorMode={colorMode}
             isLoading={saving}
             onClick={handleRemovePasskeyClick}
             rightIcon={<IoTrashOutline />}
@@ -430,6 +434,7 @@ const PasskeyPage: FC = () => {
         </VStack>
 
         <Button
+          colorMode={colorMode}
           isLoading={creating}
           onClick={handleAddPasskeyClick}
           size="lg"
@@ -454,7 +459,10 @@ const PasskeyPage: FC = () => {
         removePasskey={removePasskey}
       />
 
-      <PageHeader title={t<string>('titles.page', { context: 'passkey' })} />
+      <PageHeader
+        colorMode={colorMode}
+        title={t<string>('titles.page', { context: 'passkey' })}
+      />
 
       <VStack
         flexGrow={1}

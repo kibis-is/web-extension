@@ -33,7 +33,7 @@ import type {
 import type { IState } from './types';
 
 // utils
-import upsertItemsById from '@extension/utils/upsertItemsById';
+import upsertItemsById from '@common/utils/upsertItemsById';
 import { getInitialState } from './utils';
 
 const slice = createSlice({

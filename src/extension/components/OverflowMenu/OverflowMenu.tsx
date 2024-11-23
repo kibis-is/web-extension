@@ -3,10 +3,10 @@ import React, { type FC } from 'react';
 import { IoEllipsisVerticalOutline } from 'react-icons/io5';
 
 // components
-import IconButton from '@extension/components/IconButton';
+import IconButton from '@common/components/IconButton';
 
 // constants
-import { DEFAULT_GAP } from '@extension/constants';
+import { DEFAULT_GAP } from '@common/constants';
 
 // hooks
 import useDefaultTextColor from '@extension/hooks/useDefaultTextColor';
@@ -15,7 +15,7 @@ import useDefaultTextColor from '@extension/hooks/useDefaultTextColor';
 import type { IProps } from './types';
 
 // utils
-import calculateIconSize from '@extension/utils/calculateIconSize';
+import calculateIconSize from '@common/utils/calculateIconSize';
 
 const OverflowMenu: FC<IProps> = ({ context, items }) => {
   // hooks

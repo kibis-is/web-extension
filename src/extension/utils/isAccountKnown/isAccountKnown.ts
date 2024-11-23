@@ -5,7 +5,7 @@ import AccountRepository from '@extension/repositories/AccountRepository';
 import type { IAccount } from '@extension/types';
 
 // services
-import convertPublicKeyToAVMAddress from '@extension/utils/convertPublicKeyToAVMAddress';
+import convertPublicKeyToAVMAddress from '@common/utils/convertPublicKeyToAVMAddress';
 
 export default function isAccountKnown(
   accounts: IAccount[],

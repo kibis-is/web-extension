@@ -7,7 +7,7 @@ import { IoCubeOutline } from 'react-icons/io5';
 import CircularProgressWithIcon from '@extension/components/CircularProgressWithIcon';
 
 // constants
-import { DEFAULT_GAP } from '@extension/constants';
+import { DEFAULT_GAP } from '@common/constants';
 
 // enums
 import { AssetTypeEnum } from '@extension/enums';

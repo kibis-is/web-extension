@@ -22,15 +22,15 @@ import { useDispatch } from 'react-redux';
 
 // components
 import AccountAvatarWithBadges from '@extension/components/AccountAvatarWithBadges';
-import Button from '@extension/components/Button';
+import Button from '@common/components/Button';
 import NetworkBadge from '@extension/components/NetworkBadge';
 import ClientHeader, {
   ClientHeaderSkeleton,
 } from '@extension/components/ClientHeader';
-import EmptyState from '@extension/components/EmptyState';
+import EmptyState from '@common/components/EmptyState';
 
 // constants
-import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@extension/constants';
+import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@common/constants';
 
 // features
 import {
@@ -49,6 +49,7 @@ import {
   useSelectAccountsFetching,
   useSelectNetworks,
   useSelectSessionsSaving,
+  useSelectSettingsColorMode,
   useSelectSystemInfo,
 } from '@extension/selectors';
 
@@ -65,8 +66,8 @@ import type { IProps } from './types';
 
 // utils
 import availableAccountsForNetwork from '@extension/utils/availableAccountsForNetwork';
-import convertPublicKeyToAVMAddress from '@extension/utils/convertPublicKeyToAVMAddress';
-import ellipseAddress from '@extension/utils/ellipseAddress';
+import convertPublicKeyToAVMAddress from '@common/utils/convertPublicKeyToAVMAddress';
+import ellipseAddress from '@common/utils/ellipseAddress';
 import sortAccountsByPolisAccount from '@extension/utils/sortAccountsByPolisAccount';
 
 const ManageSessionModal: FC<IProps> = ({ onClose, session }) => {
@@ -75,6 +76,7 @@ const ManageSessionModal: FC<IProps> = ({ onClose, session }) => {
   const dispatch = useDispatch<IAppThunkDispatch<IMainRootState>>();
   // selectors
   const accounts = useSelectAccounts();
+  const colorMode = useSelectSettingsColorMode();
   const fetching = useSelectAccountsFetching();
   const networks = useSelectNetworks();
   const saving = useSelectSessionsSaving();
@@ -185,6 +187,7 @@ const ManageSessionModal: FC<IProps> = ({ onClose, session }) => {
           <AccountAvatarWithBadges
             account={account}
             accounts={availableAccounts}
+            colorMode={colorMode}
             network={network}
             systemInfo={systemInfo}
           />
@@ -244,7 +247,10 @@ const ManageSessionModal: FC<IProps> = ({ onClose, session }) => {
         <Spacer />
 
         {/*empty state*/}
-        <EmptyState text={t<string>('headings.noAccountsFound')} />
+        <EmptyState
+          colorMode={colorMode}
+          text={t<string>('headings.noAccountsFound')}
+        />
 
         <Spacer />
       </>
@@ -325,6 +331,7 @@ const ManageSessionModal: FC<IProps> = ({ onClose, session }) => {
         <ModalFooter p={DEFAULT_GAP}>
           <HStack spacing={DEFAULT_GAP - 2} w="full">
             <Button
+              colorMode={colorMode}
               onClick={handleCancelClick}
               size="lg"
               variant="outline"
@@ -334,6 +341,7 @@ const ManageSessionModal: FC<IProps> = ({ onClose, session }) => {
             </Button>
 
             <Button
+              colorMode={colorMode}
               isLoading={saving}
               onClick={handleSaveClick}
               rightIcon={<IoSaveOutline />}

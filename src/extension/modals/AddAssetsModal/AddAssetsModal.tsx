@@ -27,8 +27,8 @@ import { IoArrowBackOutline, IoCloseOutline } from 'react-icons/io5';
 import { useDispatch } from 'react-redux';
 
 // components
-import Button from '@extension/components/Button';
-import IconButton from '@extension/components/IconButton';
+import Button from '@common/components/Button';
+import IconButton from '@common/components/IconButton';
 import AddAssetsARC0200AssetItem from './AddAssetsARC0200AssetItem';
 import AddAssetsARC0200AssetSummaryModalContent from './AddAssetsARC0200AssetSummaryModalContent';
 import AddAssetsConfirmingModalContent from './AddAssetsConfirmingModalContent';
@@ -40,7 +40,7 @@ import {
   BODY_BACKGROUND_COLOR,
   DEFAULT_GAP,
   INPUT_HEIGHT,
-} from '@extension/constants';
+} from '@common/constants';
 
 // enums
 import { AssetTypeEnum, ErrorCodeEnum } from '@extension/enums';
@@ -74,6 +74,9 @@ import usePrimaryColorScheme from '@extension/hooks/usePrimaryColorScheme';
 // modals
 import AuthenticationModal from '@extension/modals/AuthenticationModal';
 
+// repositories
+import AccountRepository from '@extension/repositories/AccountRepository';
+
 // selectors
 import {
   useSelectAccounts,
@@ -83,12 +86,10 @@ import {
   useSelectAddAssetsFetching,
   useSelectAddAssetsSelectedAsset,
   useSelectAddAssetsStandardAssets,
+  useSelectSettingsColorMode,
   useSelectSettingsPreferredBlockExplorer,
   useSelectSettingsSelectedNetwork,
 } from '@extension/selectors';
-
-// repositories
-import AccountRepository from '@extension/repositories/AccountRepository';
 
 // theme
 import { theme } from '@extension/theme';
@@ -124,6 +125,7 @@ const AddAssetsModal: FC<IModalProps> = ({ onClose }) => {
   const account = useSelectAddAssetsAccount();
   const accounts = useSelectAccounts();
   const arc0200Assets = useSelectAddAssetsARC0200Assets();
+  const colorMode = useSelectSettingsColorMode();
   const confirming = useSelectAddAssetsConfirming();
   const explorer = useSelectSettingsPreferredBlockExplorer();
   const fetching = useSelectAddAssetsFetching();
@@ -497,6 +499,7 @@ const AddAssetsModal: FC<IModalProps> = ({ onClose }) => {
                 <IconButton
                   aria-label="Clear query"
                   borderRadius="full"
+                  colorMode={colorMode}
                   icon={IoCloseOutline}
                   onClick={handleClearQuery}
                   size="sm"
@@ -562,6 +565,7 @@ const AddAssetsModal: FC<IModalProps> = ({ onClose }) => {
     if (selectedAsset) {
       previousButtonNode = (
         <Button
+          colorMode={colorMode}
           leftIcon={<IoArrowBackOutline />}
           onClick={handlePreviousClick}
           size="lg"
@@ -579,6 +583,7 @@ const AddAssetsModal: FC<IModalProps> = ({ onClose }) => {
             {previousButtonNode}
 
             <Button
+              colorMode={colorMode}
               onClick={handleAddStandardAssetClick}
               size="lg"
               variant="solid"
@@ -595,6 +600,7 @@ const AddAssetsModal: FC<IModalProps> = ({ onClose }) => {
           {previousButtonNode}
 
           <Button
+            colorMode={colorMode}
             onClick={handleAddARC0200AssetClick}
             size="lg"
             variant="solid"
@@ -607,7 +613,13 @@ const AddAssetsModal: FC<IModalProps> = ({ onClose }) => {
     }
 
     return (
-      <Button onClick={handleCancelClick} size="lg" variant="outline" w="full">
+      <Button
+        colorMode={colorMode}
+        onClick={handleCancelClick}
+        size="lg"
+        variant="outline"
+        w="full"
+      >
         {t<string>('buttons.cancel')}
       </Button>
     );

@@ -12,11 +12,11 @@ import { useTranslation } from 'react-i18next';
 import { IoChevronDownOutline } from 'react-icons/io5';
 
 // components
-import Label from '@extension/components/Label';
+import Label from '@common/components/Label';
 import SelectOption from '@extension/components/Select/SelectOption';
 
 // constants
-import { DEFAULT_GAP, INPUT_HEIGHT } from '@extension/constants';
+import { DEFAULT_GAP, INPUT_HEIGHT } from '@common/constants';
 
 // hooks
 import useButtonHoverBackgroundColor from '@extension/hooks/useButtonHoverBackgroundColor';
@@ -33,11 +33,11 @@ import { theme } from '@extension/theme';
 import type { IProps } from './types';
 
 // utils
-import calculateIconSize from '@extension/utils/calculateIconSize';
+import calculateIconSize from '@common/utils/calculateIconSize';
 
 const Select: FC<IProps> = ({
-  _context,
   buttonTooltipLabel,
+  colorMode,
   disabled = false,
   emptyOptionLabel,
   label,
@@ -91,7 +91,7 @@ const Select: FC<IProps> = ({
     <>
       {/*select modal*/}
       <SelectModal
-        _context={_context}
+        colorMode={colorMode}
         emptySpaceMessage={modalEmptySpaceMessage}
         isOpen={isSelectModalOpen}
         onClose={onSelectClose}
@@ -105,7 +105,9 @@ const Select: FC<IProps> = ({
 
       <VStack alignItems="flex-start" spacing={DEFAULT_GAP / 3} w="full">
         {/*label*/}
-        {label && <Label label={label} required={required} />}
+        {label && (
+          <Label colorMode={colorMode} label={label} required={required} />
+        )}
 
         <Tooltip
           label={t<string>(buttonTooltipLabel || 'labels.openSelectModal')}

@@ -42,7 +42,7 @@ const App: FC<IAppProps> = ({
   };
   const handleOnRegisterClick = () => {};
   const handleOnSelect = (account: IExternalAccount) => {};
-  console.log('accounts:', accounts);
+
   useEffect(() => {
     (async () => {
       await fetchAccountsAction();

@@ -25,6 +25,5 @@ export * from './sessions';
 export * from './settings';
 export * from './states';
 export * from './storage';
-export * from './styles';
 export * from './system';
 export * from './transactions';

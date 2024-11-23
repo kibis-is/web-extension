@@ -19,7 +19,7 @@ import type {
 import type { IOptions } from './types';
 
 // utils
-import convertPublicKeyToAVMAddress from '@extension/utils/convertPublicKeyToAVMAddress';
+import convertPublicKeyToAVMAddress from '@common/utils/convertPublicKeyToAVMAddress';
 import decodeUnsignedTransaction from '@extension/utils/decodeUnsignedTransaction';
 import getAuthorizedAddressesForHost from '@extension/utils/getAuthorizedAddressesForHost';
 

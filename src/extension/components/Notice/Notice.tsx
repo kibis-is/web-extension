@@ -3,7 +3,7 @@ import React, { type FC, useMemo } from 'react';
 import { IoInformationCircleOutline, IoWarningOutline } from 'react-icons/io5';
 
 // constants
-import { DEFAULT_GAP } from '@extension/constants';
+import { DEFAULT_GAP } from '@common/constants';
 
 // types
 import type { IProps } from './types';

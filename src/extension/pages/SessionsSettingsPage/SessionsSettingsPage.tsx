@@ -5,8 +5,8 @@ import { IoUnlinkOutline } from 'react-icons/io5';
 import { useDispatch } from 'react-redux';
 
 // components
-import Button from '@extension/components/Button';
-import EmptyState from '@extension/components/EmptyState';
+import Button from '@common/components/Button';
+import EmptyState from '@common/components/EmptyState';
 import PageHeader from '@extension/components/PageHeader';
 import ScrollableContainer from '@extension/components/ScrollableContainer';
 import SettingsSessionItem, {
@@ -14,7 +14,7 @@ import SettingsSessionItem, {
 } from '@extension/components/SettingsSessionItem';
 
 // components
-import { DEFAULT_GAP } from '@extension/constants';
+import { DEFAULT_GAP } from '@common/constants';
 
 // features
 import { openConfirmModal } from '@extension/features/layout';
@@ -34,6 +34,7 @@ import {
   useSelectNetworks,
   useSelectSessionsFetching,
   useSelectSessions,
+  useSelectSettingsColorMode,
 } from '@extension/selectors';
 
 // types
@@ -47,6 +48,7 @@ const SessionsSettingsPage: FC = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch<IAppThunkDispatch<IMainRootState>>();
   // selectors
+  const colorMode = useSelectSettingsColorMode();
   const fetching = useSelectSessionsFetching();
   const networks = useSelectNetworks();
   const sessions = useSelectSessions();
@@ -122,6 +124,7 @@ const SessionsSettingsPage: FC = () => {
 
         {/*empty state*/}
         <EmptyState
+          colorMode={colorMode}
           description={t<string>('captions.noSessionsFound')}
           text={t<string>('headings.noSessionsFound')}
         />
@@ -138,7 +141,10 @@ const SessionsSettingsPage: FC = () => {
         session={session}
       />
 
-      <PageHeader title={t<string>('titles.page', { context: 'sessions' })} />
+      <PageHeader
+        colorMode={colorMode}
+        title={t<string>('titles.page', { context: 'sessions' })}
+      />
 
       <VStack
         borderBottomColor={borderColor}
@@ -160,6 +166,7 @@ const SessionsSettingsPage: FC = () => {
           {/*disconnect all button*/}
           <Button
             aria-label={t<string>('buttons.disconnectAllSessions')}
+            colorMode={colorMode}
             isDisabled={sessions.length <= 0}
             onClick={handleDisconnectAllSessionsClick}
             rightIcon={<IoUnlinkOutline />}

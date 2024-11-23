@@ -1,12 +1,12 @@
 // types
+import type { IBaseComponentProps } from '@common/types';
 import type {
   IAssetTypes,
   IModalProps,
   INativeCurrency,
-  IPropsWithContext,
 } from '@extension/types';
 
-interface IAssetSelectModalProps extends IModalProps {
+interface IAssetSelectModalProps {
   assets: (IAssetTypes | INativeCurrency)[];
   isOpen: boolean;
   multiple?: boolean;
@@ -14,7 +14,7 @@ interface IAssetSelectModalProps extends IModalProps {
 }
 
 type TAssetSelectModalProps = IAssetSelectModalProps &
-  IModalProps &
-  IPropsWithContext;
+  IBaseComponentProps &
+  IModalProps;
 
 export default TAssetSelectModalProps;

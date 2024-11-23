@@ -14,7 +14,10 @@ import { EventTypeEnum } from '@extension/enums';
 import { removeEventByIdThunk } from '@extension/features/events';
 
 // selectors
-import { useSelectEvents } from '@extension/selectors';
+import {
+  useSelectEvents,
+  useSelectSettingsColorMode,
+} from '@extension/selectors';
 
 // types
 import type {
@@ -29,6 +32,7 @@ const ARC0300KeyRegistrationTransactionSendEventModal: FC<IModalProps> = ({
 }) => {
   const dispatch = useDispatch<IAppThunkDispatch<IMainRootState>>();
   // selectors
+  const colorMode = useSelectSettingsColorMode();
   const events = useSelectEvents();
   // state
   const [event, setEvent] =
@@ -64,7 +68,7 @@ const ARC0300KeyRegistrationTransactionSendEventModal: FC<IModalProps> = ({
     >
       {event ? (
         <ARC0300KeyRegistrationTransactionSendModalContent
-          _context={_context}
+          colorMode={colorMode}
           onComplete={handleClose}
           onCancel={handleClose}
           schemaOrSchemas={event.payload}

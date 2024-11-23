@@ -18,10 +18,12 @@ export default function createCommonConfig(): Configuration {
     resolve: {
       alias: {
         // common
+        ['@common/components']: resolve(commonPath, 'components'),
         ['@common/constants']: resolve(commonPath, 'constants'),
         ['@common/enums']: resolve(commonPath, 'enums'),
         ['@common/errors']: resolve(commonPath, 'errors'),
         ['@common/fonts']: resolve(commonPath, 'fonts'),
+        ['@common/hooks']: resolve(commonPath, 'hooks'),
         ['@common/managers']: resolve(commonPath, 'managers'),
         ['@common/messages']: resolve(commonPath, 'messages'),
         ['@common/services']: resolve(commonPath, 'services'),

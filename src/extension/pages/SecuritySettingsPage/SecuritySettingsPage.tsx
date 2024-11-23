@@ -57,6 +57,7 @@ import {
   useSelectLogger,
   useSelectPasskeysEnabled,
   useSelectSettings,
+  useSelectSettingsColorMode,
 } from '@extension/selectors';
 
 // types
@@ -76,6 +77,7 @@ const SecuritySettingsPage: FC = () => {
     onOpen: onAuthenticationModalOpen,
   } = useDisclosure();
   // selectors
+  const colorMode = useSelectSettingsColorMode();
   const logger = useSelectLogger();
   const passkeyEnabled = useSelectPasskeysEnabled();
   const settings = useSelectSettings();
@@ -221,7 +223,10 @@ const SecuritySettingsPage: FC = () => {
         onError={handleOnError}
       />
 
-      <PageHeader title={t<string>('titles.page', { context: 'security' })} />
+      <PageHeader
+        colorMode={colorMode}
+        title={t<string>('titles.page', { context: 'security' })}
+      />
 
       <VStack w="full">
         {/*authentication*/}
@@ -237,7 +242,7 @@ const SecuritySettingsPage: FC = () => {
 
         {/*credentials lock duration*/}
         <SettingsSelectItem
-          _context={_context}
+          colorMode={colorMode}
           disabled={!settings.security.enableCredentialLock}
           emptyOptionLabel={t<string>('placeholders.pleaseSelect')}
           label={t<string>('labels.credentialsLockTimeout')}

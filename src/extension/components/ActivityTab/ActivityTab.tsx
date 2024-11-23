@@ -3,7 +3,7 @@ import React, { type FC, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
 // components
-import EmptyState from '@extension/components/EmptyState';
+import EmptyState from '@common/components/EmptyState';
 import ScrollableContainer from '@extension/components/ScrollableContainer';
 import TabControlBar from '@extension/components/TabControlBar';
 import TransactionItem, {
@@ -17,7 +17,11 @@ import { ACCOUNT_PAGE_TAB_CONTENT_HEIGHT } from '@extension/constants';
 import AccountRepository from '@extension/repositories/AccountRepository';
 
 // selectors
-import { useSelectActiveAccountTransactionsUpdating } from '@extension/selectors';
+import {
+  useSelectActiveAccountTransactionsUpdating,
+  useSelectSettings,
+  useSelectSettingsColorMode,
+} from '@extension/selectors';
 
 // types
 import type { IProps } from './types';
@@ -33,8 +37,10 @@ const ActivityTab: FC<IProps> = ({
 }) => {
   const { t } = useTranslation();
   // selectors
+  const colorMode = useSelectSettingsColorMode();
   const updatingActiveAccountTransactions =
     useSelectActiveAccountTransactionsUpdating();
+  const { appearance } = useSelectSettings();
   // misc
   const transactions =
     AccountRepository.extractAccountTransactionsForNetwork(account, network)
@@ -88,7 +94,10 @@ const ActivityTab: FC<IProps> = ({
         <Spacer />
 
         {/* empty state */}
-        <EmptyState text={t<string>('headings.noTransactionsFound')} />
+        <EmptyState
+          colorMode={appearance.theme}
+          text={t<string>('headings.noTransactionsFound')}
+        />
 
         <Spacer />
       </VStack>
@@ -105,8 +114,8 @@ const ActivityTab: FC<IProps> = ({
     >
       {/*controls*/}
       <TabControlBar
-        _context={`${_context}-activity-tab`}
         buttons={[]}
+        colorMode={colorMode}
         isLoading={updatingActiveAccountTransactions}
         loadingTooltipLabel={t<string>('captions.updatingTransactions')}
         onRefresh={handleOnRefreshClick}

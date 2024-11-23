@@ -13,7 +13,7 @@ import AtomicTransactionsContent from './AtomicTransactionsContent';
 import SingleTransactionContent from './SingleTransactionContent';
 
 // constants
-import { DEFAULT_GAP } from '@extension/constants';
+import { DEFAULT_GAP } from '@common/constants';
 
 // contexts
 import { MultipleTransactionsContext } from './contexts';

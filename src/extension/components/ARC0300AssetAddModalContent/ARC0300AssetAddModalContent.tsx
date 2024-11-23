@@ -14,8 +14,9 @@ import {
   decodeURLSafe as decodeBase63URLSafe,
   encode as encodeBase64,
 } from '@stablelib/base64';
+import { randomString } from '@stablelib/random';
 import BigNumber from 'bignumber.js';
-import React, { FC, useState } from 'react';
+import React, { FC, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { IoAddOutline } from 'react-icons/io5';
 import { useDispatch } from 'react-redux';
@@ -26,7 +27,7 @@ import AccountSelect from '@extension/components/AccountSelect';
 import AssetAvatar from '@extension/components/AssetAvatar';
 import AssetBadge from '@extension/components/AssetBadge';
 import AssetIcon from '@extension/components/AssetIcon';
-import Button from '@extension/components/Button';
+import Button from '@common/components/Button';
 import NetworkBadge from '@extension/components/NetworkBadge';
 import CopyIconButton from '@extension/components/CopyIconButton';
 import ModalSkeletonItem from '@extension/components/ModalSkeletonItem';
@@ -37,11 +38,11 @@ import MoreInformationAccordion from '@extension/components/MoreInformationAccor
 
 // constants
 import {
-  ACCOUNTS_ROUTE,
   BODY_BACKGROUND_COLOR,
   DEFAULT_GAP,
   MODAL_ITEM_HEIGHT,
-} from '@extension/constants';
+} from '@common/constants';
+import { ACCOUNTS_ROUTE } from '@extension/constants';
 
 // enums
 import {
@@ -69,6 +70,7 @@ import {
   useSelectActiveAccount,
   useSelectLogger,
   useSelectNetworks,
+  useSelectSettingsColorMode,
 } from '@extension/selectors';
 
 // theme
@@ -91,7 +93,6 @@ import isAssetInAccountHoldings from '@extension/utils/isAssetInAccountHoldings'
 const ARC0300AssetAddModalContent: FC<
   IARC0300ModalContentProps<IARC0300AssetAddSchema>
 > = ({
-  _context,
   cancelButtonIcon,
   cancelButtonLabel,
   onComplete,
@@ -105,6 +106,7 @@ const ARC0300AssetAddModalContent: FC<
   // selectors
   const accounts = useSelectAccounts();
   const activeAccount = useSelectActiveAccount();
+  const colorMode = useSelectSettingsColorMode();
   const logger = useSelectLogger();
   const networks = useSelectNetworks();
   // hooks
@@ -115,6 +117,8 @@ const ARC0300AssetAddModalContent: FC<
   } = useUpdateARC0200Assets([schema.paths[1]]);
   const defaultTextColor = useDefaultTextColor();
   const primaryButtonTextColor = usePrimaryButtonTextColor();
+  // memos
+  const _context = useMemo(() => randomString(8), []);
   // states
   const [account, setAccount] = useState<IAccountWithExtendedProps | null>(
     activeAccount
@@ -399,6 +403,7 @@ const ARC0300AssetAddModalContent: FC<
           <HStack spacing={DEFAULT_GAP - 2} w="full">
             {/*cancel button*/}
             <Button
+              colorMode={colorMode}
               leftIcon={cancelButtonIcon}
               onClick={handleCancelClick}
               size="lg"
@@ -410,6 +415,7 @@ const ARC0300AssetAddModalContent: FC<
 
             {/*add button*/}
             <Button
+              colorMode={colorMode}
               isLoading={loading || saving}
               onClick={handleAddClick}
               rightIcon={<IoAddOutline />}

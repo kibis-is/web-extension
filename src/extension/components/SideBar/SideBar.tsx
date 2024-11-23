@@ -20,7 +20,7 @@ import { useNavigate } from 'react-router-dom';
 
 // components
 import Divider from '@extension/components/Divider';
-import IconButton from '@extension/components/IconButton';
+import IconButton from '@common/components/IconButton';
 import KibisisIcon from '@extension/components/KibisisIcon';
 import ScrollableContainer from '@extension/components/ScrollableContainer';
 import SideBarAccountList from '@extension/components/SideBarAccountList';
@@ -29,10 +29,10 @@ import SideBarGroupList from '@extension/components/SideBarGroupList';
 import SideBarSkeletonItem from '@extension/components/SideBarSkeletonItem';
 
 // constants
+import { BODY_BACKGROUND_COLOR } from '@common/constants';
 import {
   ACCOUNTS_ROUTE,
   ADD_ACCOUNT_ROUTE,
-  BODY_BACKGROUND_COLOR,
   SETTINGS_ROUTE,
   SIDEBAR_BORDER_WIDTH,
   SIDEBAR_MAX_WIDTH,
@@ -71,6 +71,7 @@ import {
   useSelectActiveAccount,
   useSelectActiveAccountDetails,
   useSelectAvailableAccountsForSelectedNetwork,
+  useSelectSettingsColorMode,
   useSelectSettingsSelectedNetwork,
   useSelectSystemInfo,
 } from '@extension/selectors';
@@ -84,9 +85,9 @@ import type {
 } from '@extension/types';
 
 // utils
-import calculateIconSize from '@extension/utils/calculateIconSize';
-import ellipseAddress from '@extension/utils/ellipseAddress';
-import convertPublicKeyToAVMAddress from '@extension/utils/convertPublicKeyToAVMAddress';
+import calculateIconSize from '@common/utils/calculateIconSize';
+import ellipseAddress from '@common/utils/ellipseAddress';
+import convertPublicKeyToAVMAddress from '@common/utils/convertPublicKeyToAVMAddress';
 
 const SideBar: FC = () => {
   const { t } = useTranslation();
@@ -97,6 +98,7 @@ const SideBar: FC = () => {
   const activeAccount = useSelectActiveAccount();
   const activeAccountDetails = useSelectActiveAccountDetails();
   const availableAccounts = useSelectAvailableAccountsForSelectedNetwork();
+  const colorMode = useSelectSettingsColorMode();
   const fetchingAccounts = useSelectAccountsFetching();
   const groups = useSelectAccountGroups();
   const network = useSelectSettingsSelectedNetwork();
@@ -259,6 +261,7 @@ const SideBar: FC = () => {
         <IconButton
           aria-label="Open drawer"
           borderRadius={0}
+          colorMode={colorMode}
           colorScheme="gray"
           icon={isOpen ? IoChevronBack : IoChevronForward}
           minW={`${SIDEBAR_MIN_WIDTH}px`}
@@ -290,6 +293,7 @@ const SideBar: FC = () => {
                 <SideBarGroupList
                   accounts={accounts}
                   activeAccountID={activeAccount?.id || null}
+                  colorMode={colorMode}
                   groups={groups}
                   isShortForm={!isOpen}
                   network={network}
@@ -307,6 +311,7 @@ const SideBar: FC = () => {
             <SideBarAccountList
               accounts={accounts}
               activeAccountID={activeAccount?.id || null}
+              colorMode={colorMode}
               isShortForm={!isOpen}
               network={network}
               onAccountClick={handleOnAccountClick}

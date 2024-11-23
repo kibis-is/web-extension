@@ -22,15 +22,15 @@ import { useDispatch } from 'react-redux';
 
 // components
 import AccountSelect from '@extension/components/AccountSelect';
-import AccountItem from '@extension/components/AccountItem';
-import Button from '@extension/components/Button';
+import AccountItem from '@common/components/AccountItem';
+import Button from '@common/components/Button';
 import ClientHeader, {
   ClientHeaderSkeleton,
 } from '@extension/components/ClientHeader';
 import SignMessageContentSkeleton from './SignMessageContentSkeleton';
 
 // constants
-import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@extension/constants';
+import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@common/constants';
 
 // errors
 import { BaseExtensionError } from '@extension/errors';
@@ -54,6 +54,7 @@ import AccountRepository from '@extension/repositories/AccountRepository';
 import {
   useSelectAccountsFetching,
   useSelectLogger,
+  useSelectSettingsColorMode,
 } from '@extension/selectors';
 
 // theme
@@ -70,7 +71,7 @@ import type {
 } from '@extension/types';
 
 // utils
-import convertPublicKeyToAVMAddress from '@extension/utils/convertPublicKeyToAVMAddress';
+import convertPublicKeyToAVMAddress from '@common/utils/convertPublicKeyToAVMAddress';
 import signBytes from '@extension/utils/signBytes';
 
 const SignMessageModal: FC<IModalProps> = ({ onClose }) => {
@@ -83,6 +84,7 @@ const SignMessageModal: FC<IModalProps> = ({ onClose }) => {
     onOpen: onAuthenticationModalOpen,
   } = useDisclosure();
   // selectors
+  const colorMode = useSelectSettingsColorMode();
   const fetching = useSelectAccountsFetching();
   const logger = useSelectLogger();
   // hooks
@@ -220,7 +222,7 @@ const SignMessageModal: FC<IModalProps> = ({ onClose }) => {
                 'labels.addressToSign'
               )}:`}</Text>
 
-              <AccountItem account={signer} />
+              <AccountItem account={signer} colorMode={colorMode} />
             </>
           ) : (
             <>
@@ -305,6 +307,7 @@ const SignMessageModal: FC<IModalProps> = ({ onClose }) => {
           <ModalFooter p={DEFAULT_GAP}>
             <HStack spacing={DEFAULT_GAP / 3} w="full">
               <Button
+                colorMode={colorMode}
                 onClick={handleCancelClick}
                 size="lg"
                 variant="outline"
@@ -314,6 +317,7 @@ const SignMessageModal: FC<IModalProps> = ({ onClose }) => {
               </Button>
 
               <Button
+                colorMode={colorMode}
                 onClick={handleSignClick}
                 rightIcon={<IoCreateOutline />}
                 size="lg"
