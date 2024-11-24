@@ -5,10 +5,10 @@ import { IoAddCircleOutline } from 'react-icons/io5';
 import { useDispatch } from 'react-redux';
 
 // components
-import AssetTabLoadingItem from '@extension/components/AssetTabLoadingItem';
 import EmptyState from '@common/components/EmptyState';
 import ScrollableContainer from '@extension/components/ScrollableContainer';
 import TabControlBar from '@extension/components/TabControlBar';
+import TabLoadingItem from '@extension/components/TabLoadingItem';
 import AssetTabARC0200AssetItem from './AssetTabARC0200AssetItem';
 import AssetTabStandardAssetItem from './AssetTabStandardAssetItem';
 
@@ -79,16 +79,14 @@ const AssetsTab: FC<IProps> = ({ _context, account }) => {
 
     if (fetchingARC0200Assets || fetchingStandardAssets) {
       return Array.from({ length: 3 }, (_, index) => (
-        <AssetTabLoadingItem
-          key={`${_context}-asset-tab-loading-item-${index}`}
-        />
+        <TabLoadingItem key={`${_context}-loading-item-${index}`} />
       ));
     }
 
     if (selectedNetwork && accountInformation && allAssetHoldings.length > 0) {
       assetNodes = allAssetHoldings.reduce<ReactNode[]>(
-        (acc, { amount, id, isARC0200 }, currentIndex) => {
-          const key = `${_context}-asset-tab-item-${currentIndex}`;
+        (acc, { amount, id, isARC0200 }) => {
+          const key = `${_context}-item-${id}`;
           let arc200Asset: IARC0200Asset | null;
           let standardAsset: IStandardAsset | null;
 

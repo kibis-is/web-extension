@@ -3,9 +3,9 @@ import React, { type FC, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
 // components
-import AssetTabLoadingItem from '@extension/components/AssetTabLoadingItem';
 import EmptyState from '@common/components/EmptyState';
 import ScrollableContainer from '@extension/components/ScrollableContainer';
+import TabLoadingItem from '@extension/components/TabLoadingItem';
 import NFTsTabARC0072AssetItem from './NFTsTabARC0072AssetItem';
 
 // constants
@@ -38,7 +38,7 @@ const NFTsTab: FC<INFTsTabProps> = ({ account }) => {
 
     if (fetchingARC0072Assets) {
       return Array.from({ length: 3 }, (_, index) => (
-        <AssetTabLoadingItem key={`nft-tab-loading-item-${index}`} />
+        <TabLoadingItem key={`nft-tab-loading-item-${index}`} />
       ));
     }
 

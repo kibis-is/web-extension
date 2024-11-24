@@ -42,6 +42,7 @@ import OverflowMenu from '@extension/components/OverflowMenu';
 import NativeBalance from '@extension/components/NativeBalance';
 import NetworkSelect from '@extension/components/NetworkSelect';
 import NFTsTab from '@extension/components/NFTsTab';
+import PasskeysTab from '@extension/components/PasskeysTab';
 import PolisAccountBadge from '@extension/components/PolisAccountBadge';
 import ReKeyedAccountBadge from '@extension/components/RekeyedAccountBadge';
 import WatchAccountBadge from '@extension/components/WatchAccountBadge';
@@ -456,7 +457,6 @@ const AccountPage: FC = () => {
 
               {/*overflow menu*/}
               <OverflowMenu
-                context={_context}
                 items={[
                   // make primary
                   ...(!account ||
@@ -579,6 +579,9 @@ const AccountPage: FC = () => {
               <Tab>{t<string>('labels.assets')}</Tab>
               <Tab>{t<string>('labels.nfts')}</Tab>
               <Tab>{t<string>('labels.activity')}</Tab>
+              {!account.watchAccount && (
+                <Tab>{t<string>('labels.passkeys')}</Tab>
+              )}
             </TabList>
 
             <TabPanels sx={{ display: 'flex', flexDirection: 'column' }}>
@@ -595,6 +598,8 @@ const AccountPage: FC = () => {
                 onRefreshClick={handleOnRefreshActivityClick}
                 onScrollEnd={handleActivityScrollEnd}
               />
+
+              {!account.watchAccount && <PasskeysTab account={account} />}
             </TabPanels>
           </Tabs>
         </>

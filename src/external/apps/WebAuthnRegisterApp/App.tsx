@@ -1,4 +1,4 @@
-import '@common/styles/fonts.css';
+import '@external/styles/fonts.css';
 import { ChakraProvider } from '@chakra-ui/react';
 import React, { type FC, useEffect, useMemo, useState } from 'react';
 import { I18nextProvider } from 'react-i18next';

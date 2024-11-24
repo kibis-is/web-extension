@@ -1,4 +1,4 @@
-import '@common/styles/fonts.css';
+import '@extension/styles/fonts.css';
 import { createElement } from 'react';
 import { createRoot, Root } from 'react-dom/client';
 

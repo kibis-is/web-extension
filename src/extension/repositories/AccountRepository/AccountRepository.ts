@@ -111,6 +111,7 @@ export default class AccountRepository extends BaseRepository {
         {}
       ),
       index: null,
+      passkeys: [],
       publicKey,
       updatedAt: createdAtOrNow,
     };
@@ -220,6 +221,7 @@ export default class AccountRepository extends BaseRepository {
         {}
       ),
       index: typeof account.index === 'number' ? account.index : null, // if 0, this is "falsy" in the js world, so let's be specific
+      passkeys: account.passkeys,
       publicKey: account.publicKey,
       updatedAt: account.updatedAt,
     };
@@ -275,6 +277,9 @@ export default class AccountRepository extends BaseRepository {
     );
 
     accounts = accounts.map((account) => ({
+      ...AccountRepository.initializeDefaultAccount({
+        publicKey: account.publicKey,
+      }),
       ...account,
       _delimiter: DelimiterEnum.Account,
       // if there are new networks in the config, create default account information and transactions for these new networks
@@ -354,7 +359,18 @@ export default class AccountRepository extends BaseRepository {
    * @public
    */
   public async fetchById(id: string): Promise<IAccount | null> {
-    return await this._fetchByKey(this._createItemKey(id));
+    const item = await this._fetchByKey<IAccount>(this._createItemKey(id));
+
+    if (!item) {
+      return null;
+    }
+
+    return {
+      ...AccountRepository.initializeDefaultAccount({
+        publicKey: item.publicKey,
+      }),
+      ...item,
+    };
   }
 
   /**

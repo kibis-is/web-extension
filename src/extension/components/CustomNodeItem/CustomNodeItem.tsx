@@ -123,7 +123,6 @@ const CustomNodeItem: FC<IProps> = ({
 
       {/*overflow menu*/}
       <OverflowMenu
-        context={item.id}
         items={[
           // view
           {

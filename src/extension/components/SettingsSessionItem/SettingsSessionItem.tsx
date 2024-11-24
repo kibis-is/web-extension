@@ -115,7 +115,6 @@ const SettingsSessionItem: FC<IProps> = ({
 
       {/*overflow menu*/}
       <OverflowMenu
-        context={item.id}
         items={[
           {
             icon: IoWalletOutline,
