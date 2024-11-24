@@ -1,3 +1,4 @@
+import { encode as encodeBase64 } from '@stablelib/base64';
 import { v4 as uuid } from 'uuid';
 
 // errors
@@ -11,10 +12,12 @@ import { DEFAULT_REQUEST_TIMEOUT } from '@external/constants';
 
 // messages
 import WebAuthnAccountsRequestMessage from '@common/messages/WebAuthnAccountsRequestMessage';
+import WebAuthnRegisterRequestMessage from '@common/messages/WebAuthnRegisterRequestMessage';
 import WebAuthnThemeRequestMessage from '@common/messages/WebAuthnThemeRequestMessage';
 
 // types
 import type { IResult as WebAuthnAccountsResponseMessageResult } from '@common/messages/WebAuthnAccountsResponseMessage';
+import type { IResult as WebAuthnRegisterResponseMessageResult } from '@common/messages/WebAuthnRegisterResponseMessage';
 import type { IResult as WebAuthnThemeResponseMessageResult } from '@common/messages/WebAuthnThemeResponseMessage';
 import type {
   IBaseMessage,
@@ -23,8 +26,15 @@ import type {
   IExternalAccount,
   IExternalTheme,
   ILogger,
+  ISerializedPublicKeyCredentialCreationOptions,
 } from '@common/types';
-import type { IDispatchMessageWithTimeoutOptions } from './types';
+import type {
+  IDispatchMessageWithTimeoutOptions,
+  IRegisterOptions,
+} from './types';
+
+// utils
+import bufferSourceToUint8Array from '@common/utils/bufferSourceToUint8Array';
 
 export default class WebAuthnMessageManager {
   // private variables
@@ -114,6 +124,37 @@ export default class WebAuthnMessageManager {
   }
 
   /**
+   * Convenience function that serializes the public key creation credentials, converting any raw bytes to base64
+   * encoded strings to allow to posting to the extension.
+   * @param {PublicKeyCredentialCreationOptions} options - The public key creation options to serialize.
+   * @returns {ISerializedPublicKeyCredentialCreationOptions} The serialized public key creation options.
+   * @private
+   */
+  private static _serializePublicKeyCreationOptions({
+    challenge,
+    excludeCredentials,
+    user,
+    ...otherOptions
+  }: PublicKeyCredentialCreationOptions): ISerializedPublicKeyCredentialCreationOptions {
+    return {
+      ...otherOptions,
+      challenge: encodeBase64(bufferSourceToUint8Array(challenge)),
+      user: {
+        ...user,
+        id: encodeBase64(bufferSourceToUint8Array(user.id)),
+      },
+      ...(excludeCredentials && {
+        excludeCredentials: excludeCredentials.map(
+          ({ id, ...otherExcludeCredentialProps }) => ({
+            ...otherExcludeCredentialProps,
+            id: encodeBase64(bufferSourceToUint8Array(id)),
+          })
+        ),
+      }),
+    };
+  }
+
+  /**
    * public functions
    */
 
@@ -145,5 +186,33 @@ export default class WebAuthnMessageManager {
     });
 
     return result?.theme || null;
+  }
+
+  public async register({
+    options,
+    publicKey,
+  }: IRegisterOptions): Promise<PublicKeyCredential | null> {
+    const result = await this._dispatchMessageWithTimeout<
+      WebAuthnRegisterResponseMessageResult,
+      IBaseMessage<WebAuthnMessageReferenceEnum.RegisterRequest>
+    >({
+      message: new WebAuthnRegisterRequestMessage({
+        id: uuid(),
+        payload: {
+          options:
+            WebAuthnMessageManager._serializePublicKeyCreationOptions(options),
+          publicKey,
+        },
+        reference: WebAuthnMessageReferenceEnum.RegisterRequest,
+      }),
+      responseReference: WebAuthnMessageReferenceEnum.RegisterResponse,
+    });
+
+    if (!result) {
+      return null;
+    }
+
+    // create the public key credential
+    return new PublicKeyCredential();
   }
 }

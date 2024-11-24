@@ -1,12 +1,22 @@
 // managers
 import WebAuthnInterceptor from '@external/interceptors/WebAuthnInterceptor';
 
+// types
+import type { ILogger } from '@common/types';
+
 // utils
 import createLogger from '@common/utils/createLogger';
 
 (() => {
-  const logger = createLogger(__ENV__ === 'development' ? 'debug' : 'error');
-  const webAuthnInterceptor: WebAuthnInterceptor = new WebAuthnInterceptor({
+  let logger: ILogger;
+  let webAuthnInterceptor: WebAuthnInterceptor;
+
+  if (!window.navigator.credentials) {
+    return;
+  }
+
+  logger = createLogger(__ENV__ === 'development' ? 'debug' : 'error');
+  webAuthnInterceptor = new WebAuthnInterceptor({
     logger,
     navigatorCredentialsCreateFn: window.navigator.credentials.create.bind(
       window.navigator.credentials
@@ -14,6 +24,6 @@ import createLogger from '@common/utils/createLogger';
   });
 
   // intercept the webauthn functions to create/get passkeys
-  navigator.credentials.create =
+  window.navigator.credentials.create =
     webAuthnInterceptor.create.bind(webAuthnInterceptor);
 })();

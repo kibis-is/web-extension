@@ -1,4 +1,3 @@
-import { encode as encodeBase64 } from '@stablelib/base64';
 import { randomString } from '@stablelib/random';
 import I18next, { type i18n } from 'i18next';
 import { initReactI18next } from 'react-i18next';
@@ -12,15 +11,10 @@ import WebAuthnRegisterApp from '@external/apps/WebAuthnRegisterApp';
 import { en } from '@extension/translations';
 
 // types
-import type {
-  ILogger,
-  ISerializedPublicKeyCredentialCreationOptions,
-  ISerializedPublicKeyCredentialRequestOptions,
-} from '@common/types';
+import type { ILogger } from '@common/types';
 import type { INewOptions } from './types';
 
 // utils
-import bufferSourceToUint8Array from '@common/utils/bufferSourceToUint8Array';
 import createClientInformation from '@common/utils/createClientInformation';
 
 export default class WebAuthnInterceptor {
@@ -62,37 +56,6 @@ export default class WebAuthnInterceptor {
     return this._i18next;
   }
 
-  /**
-   * Convenience function that serializes the public key creation credentials, converting any raw bytes to base64
-   * encoded strings to allow to posting to the extension.
-   * @param {PublicKeyCredentialCreationOptions} options - The public key creation options to serialize.
-   * @returns {ISerializedPublicKeyCredentialCreationOptions} The serialized public key creation options.
-   * @private
-   */
-  private static _serializePublicKeyCreationOptions({
-    challenge,
-    excludeCredentials,
-    user,
-    ...otherOptions
-  }: PublicKeyCredentialCreationOptions): ISerializedPublicKeyCredentialCreationOptions {
-    return {
-      ...otherOptions,
-      challenge: encodeBase64(bufferSourceToUint8Array(challenge)),
-      user: {
-        ...user,
-        id: encodeBase64(bufferSourceToUint8Array(user.id)),
-      },
-      ...(excludeCredentials && {
-        excludeCredentials: excludeCredentials.map(
-          ({ id, ...otherExcludeCredentialProps }) => ({
-            ...otherExcludeCredentialProps,
-            id: encodeBase64(bufferSourceToUint8Array(id)),
-          })
-        ),
-      }),
-    };
-  }
-
   private _createAppRoot(): Root {
     let rootElement = document.getElementById(this._rootElementID);
 
@@ -114,32 +77,6 @@ export default class WebAuthnInterceptor {
   }
 
   /**
-   * Convenience function that serializes the public key request credentials, converting any raw bytes to base64
-   * encoded strings to allow to posting to the extension.
-   * @param {PublicKeyCredentialCreationOptions} options - The public key request options to serialize.
-   * @returns {ISerializedPublicKeyCredentialRequestOptions} The serialized public key creation options.
-   * @private
-   */
-  private static _serializePublicKeyRequestOptions({
-    allowCredentials,
-    challenge,
-    ...otherOptions
-  }: PublicKeyCredentialRequestOptions): ISerializedPublicKeyCredentialRequestOptions {
-    return {
-      ...otherOptions,
-      challenge: encodeBase64(bufferSourceToUint8Array(challenge)),
-      ...(allowCredentials && {
-        allowCredentials: allowCredentials.map(
-          ({ id, ...otherAllowCredentialProps }) => ({
-            ...otherAllowCredentialProps,
-            id: encodeBase64(bufferSourceToUint8Array(id)),
-          })
-        ),
-      }),
-    };
-  }
-
-  /**
    * public methods
    */
 
@@ -148,6 +85,18 @@ export default class WebAuthnInterceptor {
   ): Promise<PublicKeyCredential | null> {
     return new Promise(async (resolve) => {
       const _functionName = 'create';
+      const onAbortListener = (_: Event, _root: Root) => {
+        if (_root) {
+          root.unmount();
+        }
+
+        if (options?.signal) {
+          options.signal.removeEventListener(
+            'abort',
+            onAbortListener.bind(this, _root)
+          );
+        }
+      };
       let root: Root;
 
       if (!options?.publicKey) {
@@ -161,6 +110,14 @@ export default class WebAuthnInterceptor {
 
       root = this._createAppRoot();
 
+      // handle abort signal
+      if (options.signal) {
+        options.signal.addEventListener(
+          'abort',
+          onAbortListener.bind(this, root)
+        );
+      }
+
       root.render(
         createElement(WebAuthnRegisterApp, {
           clientInfo: createClientInformation(),
@@ -171,7 +128,7 @@ export default class WebAuthnInterceptor {
           onClose: () => root.unmount(),
           onResponse: (response: PublicKeyCredential | null) =>
             resolve(response),
-          options,
+          options: options.publicKey,
           ...(this._logger && {
             logger: this._logger,
           }),

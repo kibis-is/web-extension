@@ -1,3 +1,4 @@
+export { default as AuthInvalidPublicKeyError } from './AuthInvalidPublicKeyError';
 export { default as AuthRequestCanceledError } from './AuthRequestCanceledError';
 export { default as BaseExtensionError } from './BaseExtensionError';
 export { default as CameraError } from './CameraError';

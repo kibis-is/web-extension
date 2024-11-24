@@ -43,6 +43,7 @@ enum ErrorCodeEnum {
 
   // authentication
   AuthRequestCanceledError = 9000,
+  AuthInvalidPublicKeyError = 9001,
 }
 
 export default ErrorCodeEnum;

@@ -17,6 +17,7 @@ export default class WebAuthnMessageBroker extends BaseListener {
   // private variables
   private readonly _clientRequestReferences: WebAuthnMessageReferenceEnum[] = [
     WebAuthnMessageReferenceEnum.AccountsRequest,
+    WebAuthnMessageReferenceEnum.RegisterRequest,
     WebAuthnMessageReferenceEnum.ThemeRequest,
   ];
 

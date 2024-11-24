@@ -7,6 +7,8 @@ import { WebAuthnMessageReferenceEnum } from '@common/enums';
 // messages
 import WebAuthnAccountsRequestMessage from '@common/messages/WebAuthnAccountsRequestMessage';
 import WebAuthnAccountsResponseMessage from '@common/messages/WebAuthnAccountsResponseMessage';
+import WebAuthnRegisterRequestMessage from '@common/messages/WebAuthnRegisterRequestMessage';
+import WebAuthnRegisterResponseMessage from '@common/messages/WebAuthnRegisterResponseMessage';
 import WebAuthnThemeRequestMessage from '@common/messages/WebAuthnThemeRequestMessage';
 import WebAuthnThemeResponseMessage from '@common/messages/WebAuthnThemeResponseMessage';
 
@@ -23,6 +25,7 @@ import type { IAccount, ISettings } from '@extension/types';
 
 // utils
 import isWatchAccount from '@extension/utils/isWatchAccount';
+import { AuthInvalidPublicKeyError } from '@common/errors';
 
 export default class WebAuthnMessageHandler extends BaseMessageHandler {
   // private variables
@@ -83,6 +86,39 @@ export default class WebAuthnMessageHandler extends BaseMessageHandler {
       }),
       originTabID
     );
+  }
+
+  private async _handleRegisterRequestMessage(
+    message: WebAuthnRegisterRequestMessage,
+    originTabID: number
+  ): Promise<void> {
+    const _functionName = '_handleRegisterRequestMessage';
+    let account: IAccount | null;
+
+    this._logger?.debug(
+      `${WebAuthnMessageHandler.name}#${_functionName}: received message "${message.reference}"`
+    );
+
+    account = await this._accountRepository.fetchByPublicKey(
+      message.payload.publicKey
+    );
+
+    if (!account) {
+      return this._sendResponseToMiddleware(
+        new WebAuthnRegisterResponseMessage({
+          error: new AuthInvalidPublicKeyError(
+            `public key for account not found`
+          ),
+          id: uuid(),
+          reference: WebAuthnMessageReferenceEnum.RegisterResponse,
+          requestID: message.id,
+          result: null,
+        }),
+        originTabID
+      );
+    }
+
+    // TODO: create passkey and send back data
   }
 
   private async _handleThemeRequestMessage(

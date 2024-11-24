@@ -12,6 +12,7 @@ import useTheme from '@external/hooks/useTheme';
 
 // managers
 import ColorModeManager from '@common/managers/ColorModeManager';
+import WebAuthnMessageManager from '@external/managers/WebAuthnMessageManager';
 
 // theme
 import { theme } from '@common/theme';
@@ -48,7 +49,41 @@ const App: FC<IAppProps> = ({
     onResponse(navigatorCredentialsCreateFn.call(this, options));
     onClose();
   };
-  const handleOnRegisterClick = () => {};
+  const handleOnRegisterClick = async () => {
+    const _functionName = 'handleOnRegisterClick';
+    const webAuthnMessageManager = new WebAuthnMessageManager({
+      logger,
+    });
+
+    if (!account) {
+      logger?.debug(
+        `WebAuthnRegisterApp#${_functionName}: no account selected`
+      );
+
+      return;
+    }
+
+    setSaving(true);
+
+    try {
+      onResponse(
+        await webAuthnMessageManager.register({
+          options,
+          publicKey: account.publicKey,
+        })
+      );
+    } catch (error) {
+      logger?.error(
+        `WebAuthnRegisterApp#${_functionName}: received error, using fallback function`,
+        error
+      );
+
+      // if an error occurred, use the fallback function
+      onResponse(navigatorCredentialsCreateFn.call(this, options));
+    }
+
+    setSaving(false);
+  };
   const handleOnSelect = (_account: IExternalAccount) => setAccount(_account);
 
   useEffect(() => {
