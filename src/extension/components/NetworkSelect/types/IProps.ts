@@ -1,8 +1,8 @@
 // types
 import type { TSizes } from '@common/types';
-import type { INetwork, IPropsWithContext } from '@extension/types';
+import type { INetwork } from '@extension/types';
 
-interface IProps extends IPropsWithContext {
+interface IProps {
   networks: INetwork[];
   onSelect: (value: INetwork) => void;
   size?: TSizes;

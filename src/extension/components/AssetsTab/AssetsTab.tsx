@@ -1,5 +1,6 @@
 import { Spacer, TabPanel, VStack } from '@chakra-ui/react';
-import React, { type FC, type ReactNode } from 'react';
+import { randomString } from '@stablelib/random';
+import React, { type FC, type ReactNode, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { IoAddCircleOutline } from 'react-icons/io5';
 import { useDispatch } from 'react-redux';
@@ -40,14 +41,13 @@ import type {
   IAppThunkDispatch,
   IMainRootState,
 } from '@extension/types';
-import type { IProps } from './types';
+import type { IAssetHolding, IProps } from './types';
 
-const AssetsTab: FC<IProps> = ({ _context, account }) => {
+const AssetsTab: FC<IProps> = ({ account, colorMode }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch<IAppThunkDispatch<IMainRootState>>();
   // selectors
   const arc0200Assets = useSelectARC0200AssetsBySelectedNetwork();
-  const colorMode = useSelectSettingsColorMode();
   const fetchingARC0200Assets = useSelectARC0200AssetsFetching();
   const fetchingStandardAssets = useSelectStandardAssetsFetching();
   const selectedNetwork = useSelectSettingsSelectedNetwork();
@@ -56,21 +56,28 @@ const AssetsTab: FC<IProps> = ({ _context, account }) => {
   const updatingStandardAssets = useSelectStandardAssetsUpdating();
   // hooks
   const accountInformation = useAccountInformation(account.id);
-  // misc
-  const allAssetHoldings = accountInformation
-    ? [
-        ...accountInformation.arc200AssetHoldings.map(({ amount, id }) => ({
-          amount,
-          id,
-          isARC0200: true,
-        })),
-        ...accountInformation.standardAssetHoldings.map(({ amount, id }) => ({
-          amount,
-          id,
-          isARC0200: false,
-        })),
-      ]
-    : [];
+  // memos
+  const _context = useMemo(() => randomString(8), []);
+  const assetHoldings = useMemo<IAssetHolding[]>(
+    () =>
+      accountInformation
+        ? [
+            ...accountInformation.arc200AssetHoldings.map(({ amount, id }) => ({
+              amount,
+              id,
+              isARC0200: true,
+            })),
+            ...accountInformation.standardAssetHoldings.map(
+              ({ amount, id }) => ({
+                amount,
+                id,
+                isARC0200: false,
+              })
+            ),
+          ]
+        : [],
+    [accountInformation]
+  );
   // handlers
   const handleAddAssetClick = () => dispatch(setAddAssetAccountId(account.id));
   // renders
@@ -83,8 +90,8 @@ const AssetsTab: FC<IProps> = ({ _context, account }) => {
       ));
     }
 
-    if (selectedNetwork && accountInformation && allAssetHoldings.length > 0) {
-      assetNodes = allAssetHoldings.reduce<ReactNode[]>(
+    if (selectedNetwork && accountInformation && assetHoldings.length > 0) {
+      assetNodes = assetHoldings.reduce<ReactNode[]>(
         (acc, { amount, id, isARC0200 }) => {
           const key = `${_context}-item-${id}`;
           let arc200Asset: IARC0200Asset | null;

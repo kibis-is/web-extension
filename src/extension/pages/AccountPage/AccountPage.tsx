@@ -14,7 +14,7 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import BigNumber from 'bignumber.js';
-import React, { type FC } from 'react';
+import React, { type FC, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { BsFolderMinus, BsFolderPlus } from 'react-icons/bs';
 import {
@@ -99,10 +99,12 @@ import {
   useSelectActiveAccountGroup,
   useSelectActiveAccountInformation,
   useSelectActiveAccountTransactions,
+  useSelectActiveAccountTransactionsUpdating,
   useSelectAccountsFetching,
   useSelectSettingsFetching,
   useSelectIsOnline,
   useSelectNetworks,
+  useSelectSettingsColorMode,
   useSelectSettingsPreferredBlockExplorer,
   useSelectSettingsSelectedNetwork,
   useSelectSettings,
@@ -143,6 +145,7 @@ const AccountPage: FC = () => {
   const accounts = useSelectAccounts();
   const accountTransactions = useSelectActiveAccountTransactions();
   const activeAccountDetails = useSelectActiveAccountDetails();
+  const colorMode = useSelectSettingsColorMode();
   const fetchingAccounts = useSelectAccountsFetching();
   const fetchingSettings = useSelectSettingsFetching();
   const group = useSelectActiveAccountGroup();
@@ -152,12 +155,13 @@ const AccountPage: FC = () => {
   const explorer = useSelectSettingsPreferredBlockExplorer();
   const settings = useSelectSettings();
   const systemInfo = useSelectSystemInfo();
+  const updatingActiveAccountTransactions =
+    useSelectActiveAccountTransactionsUpdating();
   // hooks
   const defaultTextColor = useDefaultTextColor();
   const primaryColorScheme = usePrimaryColorScheme();
   const subTextColor = useSubTextColor();
   // misc
-  const _context = 'account-page';
   const canReKeyAccount = () => {
     if (!account || !accountInformation) {
       return false;
@@ -224,6 +228,8 @@ const AccountPage: FC = () => {
       })
     );
   };
+  const handleOnRemovePasskeyClick = useCallback((id: string) => {}, []);
+  const handleOnViewPasskeyClick = useCallback((id: string) => {}, []);
   const handleNetworkSelect = async (value: INetwork) => {
     await dispatch(
       saveSettingsToStorageThunk({
@@ -342,7 +348,7 @@ const AccountPage: FC = () => {
               <Tooltip label={t<string>('labels.whatsNew')}>
                 <IconButton
                   aria-label={t<string>('ariaLabels.plusIcon')}
-                  colorMode={settings.appearance.theme}
+                  colorMode={colorMode}
                   icon={IoGiftOutline}
                   onClick={handleOnWhatsNewClick}
                   size="sm"
@@ -352,7 +358,6 @@ const AccountPage: FC = () => {
 
               {/*network selection*/}
               <NetworkSelect
-                _context={_context}
                 networks={networks}
                 onSelect={handleNetworkSelect}
                 size="xs"
@@ -418,7 +423,7 @@ const AccountPage: FC = () => {
               <Tooltip label={t<string>('labels.editAccount')}>
                 <IconButton
                   aria-label={t<string>('labels.editAccount')}
-                  colorMode={settings.appearance.theme}
+                  colorMode={colorMode}
                   icon={IoPencil}
                   onClick={handleOnEditAccountClick}
                   size="sm"
@@ -447,7 +452,7 @@ const AccountPage: FC = () => {
               <Tooltip label={t<string>('labels.shareAddress')}>
                 <IconButton
                   aria-label="Show QR code"
-                  colorMode={settings.appearance.theme}
+                  colorMode={colorMode}
                   icon={IoQrCodeOutline}
                   onClick={onShareAddressModalOpen}
                   size="sm"
@@ -579,27 +584,34 @@ const AccountPage: FC = () => {
               <Tab>{t<string>('labels.assets')}</Tab>
               <Tab>{t<string>('labels.nfts')}</Tab>
               <Tab>{t<string>('labels.activity')}</Tab>
-              {!account.watchAccount && (
-                <Tab>{t<string>('labels.passkeys')}</Tab>
-              )}
+              <Tab isDisabled={account.watchAccount}>
+                {t<string>('labels.passkeys')}
+              </Tab>
             </TabList>
 
             <TabPanels sx={{ display: 'flex', flexDirection: 'column' }}>
-              <AssetsTab _context={_context} account={account} />
+              <AssetsTab account={account} colorMode={colorMode} />
 
               <NFTsTab account={account} />
 
               <ActivityTab
-                _context={_context}
                 account={account}
                 accounts={accounts}
+                colorMode={colorMode}
                 fetching={fetchingAccounts}
                 network={network}
                 onRefreshClick={handleOnRefreshActivityClick}
                 onScrollEnd={handleActivityScrollEnd}
+                updating={updatingActiveAccountTransactions}
               />
 
-              {!account.watchAccount && <PasskeysTab account={account} />}
+              <PasskeysTab
+                account={account}
+                colorMode={colorMode}
+                fetching={fetchingAccounts}
+                onRemoveClick={handleOnRemovePasskeyClick}
+                onViewClick={handleOnViewPasskeyClick}
+              />
             </TabPanels>
           </Tabs>
         </>
@@ -617,7 +629,7 @@ const AccountPage: FC = () => {
             label: t<string>('buttons.addAccount'),
             onClick: handleAddAccountClick,
           }}
-          colorMode={settings.appearance.theme}
+          colorMode={colorMode}
           description={t<string>('captions.noAccountsFound')}
           text={t<string>('headings.noAccountsFound')}
         />

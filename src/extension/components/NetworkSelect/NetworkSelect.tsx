@@ -4,7 +4,8 @@ import {
   Tooltip,
   useDisclosure,
 } from '@chakra-ui/react';
-import React, { type FC } from 'react';
+import { randomString } from '@stablelib/random';
+import React, { type FC, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { IoChevronDownOutline } from 'react-icons/io5';
 
@@ -29,13 +30,7 @@ import type { IProps } from './types';
 // utils
 import calculateIconSize from '@common/utils/calculateIconSize';
 
-const NetworkSelect: FC<IProps> = ({
-  _context,
-  networks,
-  onSelect,
-  size,
-  value,
-}) => {
+const NetworkSelect: FC<IProps> = ({ networks, onSelect, size, value }) => {
   const { t } = useTranslation();
   const {
     isOpen: isSelectModalOpen,
@@ -46,6 +41,8 @@ const NetworkSelect: FC<IProps> = ({
   const borderColor = useBorderColor();
   const buttonHoverBackgroundColor = useButtonHoverBackgroundColor();
   const subTextColor = useSubTextColor();
+  // memos
+  const _context = useMemo(() => randomString(8), []);
   // misc
   const iconSize = calculateIconSize('sm');
   // handlers

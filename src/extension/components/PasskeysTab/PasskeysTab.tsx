@@ -2,7 +2,6 @@ import { Spacer, TabPanel, VStack } from '@chakra-ui/react';
 import { randomString } from '@stablelib/random';
 import React, { type FC, type ReactNode, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDispatch } from 'react-redux';
 
 // components
 import EmptyState from '@common/components/EmptyState';
@@ -13,31 +12,31 @@ import TabLoadingItem from '@extension/components/TabLoadingItem';
 // constants
 import { ACCOUNT_PAGE_TAB_CONTENT_HEIGHT } from '@extension/constants';
 
-// selectors
-import {
-  useSelectAccountsFetching,
-  useSelectSettingsColorMode,
-} from '@extension/selectors';
+// icons
+import KbNoPasskey from '@extension/icons/KbNoPasskey';
 
 // types
-import type { IAppThunkDispatch, IMainRootState } from '@extension/types';
 import type { IProps } from './types';
 
-const PasskeysTab: FC<IProps> = ({ account }) => {
+const PasskeysTab: FC<IProps> = ({
+  account,
+  colorMode,
+  fetching,
+  onRemoveClick,
+  onViewClick,
+}) => {
   const { t } = useTranslation();
-  const dispatch = useDispatch<IAppThunkDispatch<IMainRootState>>();
-  // selectors
-  const colorMode = useSelectSettingsColorMode();
-  const fetching = useSelectAccountsFetching();
   // memos
   const _context = useMemo(() => randomString(8), []);
   // handlers
-  const handleOnRemoveClick = useCallback((id: string) => {
-    return () => {};
-  }, []);
-  const handleOnViewClick = useCallback((id: string) => {
-    return () => {};
-  }, []);
+  const handleOnRemoveClick = useCallback(
+    () => onRemoveClick(account.id),
+    [account]
+  );
+  const handleOnViewClick = useCallback(
+    () => onViewClick(account.id),
+    [account]
+  );
   // renders
   const renderContent = () => {
     let nodes: ReactNode[] = [];
@@ -52,8 +51,8 @@ const PasskeysTab: FC<IProps> = ({ account }) => {
       nodes = account.passkeys.map((value) => (
         <Item
           key={`${_context}-${value.id}`}
-          onRemoveClick={handleOnRemoveClick(value.id)}
-          onViewClick={handleOnViewClick(value.id)}
+          onRemoveClick={handleOnRemoveClick}
+          onViewClick={handleOnViewClick}
           passkey={value}
         />
       ));
@@ -79,6 +78,7 @@ const PasskeysTab: FC<IProps> = ({ account }) => {
         {/*empty state*/}
         <EmptyState
           colorMode={colorMode}
+          icon={KbNoPasskey}
           text={t<string>('headings.noPasskeysFound')}
         />
 

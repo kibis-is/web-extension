@@ -1,5 +1,6 @@
 import { Spacer, TabPanel, VStack } from '@chakra-ui/react';
-import React, { type FC, type ReactNode } from 'react';
+import { randomString } from '@stablelib/random';
+import React, { type FC, type ReactNode, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 // components
@@ -16,31 +17,22 @@ import { ACCOUNT_PAGE_TAB_CONTENT_HEIGHT } from '@extension/constants';
 // repositories
 import AccountRepository from '@extension/repositories/AccountRepository';
 
-// selectors
-import {
-  useSelectActiveAccountTransactionsUpdating,
-  useSelectSettings,
-  useSelectSettingsColorMode,
-} from '@extension/selectors';
-
 // types
 import type { IProps } from './types';
 
 const ActivityTab: FC<IProps> = ({
-  _context,
   account,
   accounts,
+  colorMode,
   fetching,
   network,
   onRefreshClick,
   onScrollEnd,
+  updating,
 }) => {
   const { t } = useTranslation();
-  // selectors
-  const colorMode = useSelectSettingsColorMode();
-  const updatingActiveAccountTransactions =
-    useSelectActiveAccountTransactionsUpdating();
-  const { appearance } = useSelectSettings();
+  // memos
+  const _context = useMemo(() => randomString(8), []);
   // misc
   const transactions =
     AccountRepository.extractAccountTransactionsForNetwork(account, network)
@@ -69,7 +61,7 @@ const ActivityTab: FC<IProps> = ({
           ...nodes,
           ...Array.from({ length: 3 }, (_, index) => (
             <TransactionItemSkeleton
-              key={`${_context}-activity-tab-fetching-item-${index}`}
+              key={`${_context}-loading-item-${index}`}
             />
           )),
         ];
@@ -95,7 +87,7 @@ const ActivityTab: FC<IProps> = ({
 
         {/* empty state */}
         <EmptyState
-          colorMode={appearance.theme}
+          colorMode={colorMode}
           text={t<string>('headings.noTransactionsFound')}
         />
 
@@ -116,7 +108,7 @@ const ActivityTab: FC<IProps> = ({
       <TabControlBar
         buttons={[]}
         colorMode={colorMode}
-        isLoading={updatingActiveAccountTransactions}
+        isLoading={updating}
         loadingTooltipLabel={t<string>('captions.updatingTransactions')}
         onRefresh={handleOnRefreshClick}
       />

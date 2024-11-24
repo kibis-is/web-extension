@@ -1,5 +1,5 @@
-import { ButtonProps, Heading, Text, VStack } from '@chakra-ui/react';
-import React, { type FC } from 'react';
+import { ButtonProps, Heading, Icon, Text, VStack } from '@chakra-ui/react';
+import React, { cloneElement, type FC, useMemo } from 'react';
 
 // components
 import Button from '@common/components/Button';
@@ -20,12 +20,15 @@ const EmptyState: FC<TProps> = ({
   colorMode,
   description,
   fontFamily,
+  icon,
   text,
   ...stackProps
 }) => {
   // hooks
   const defaultTextColor = useDefaultTextColor(colorMode);
   const subTextColor = useSubTextColor(colorMode);
+  // memos
+  const iconSize = useMemo(() => 20, []);
   // renders
   const renderButton = () => {
     let buttonProps: ButtonProps;
@@ -57,35 +60,46 @@ const EmptyState: FC<TProps> = ({
       alignItems="center"
       justifyContent="center"
       p={DEFAULT_GAP - 2}
-      spacing={DEFAULT_GAP / 3}
+      spacing={DEFAULT_GAP - 2}
       w="full"
       {...stackProps}
     >
-      <EmptyIcon boxSize={20} colorMode={colorMode} />
+      {icon ? (
+        <Icon as={icon} boxSize={iconSize} color={subTextColor} />
+      ) : (
+        <EmptyIcon boxSize={iconSize} colorMode={colorMode} />
+      )}
 
-      <Heading
-        color={defaultTextColor}
-        fontFamily={fontFamily}
-        size="sm"
-        m={0}
-        p={0}
-        textAlign="center"
+      <VStack
+        alignItems="center"
+        justifyContent="center"
+        spacing={DEFAULT_GAP / 3}
+        w="full"
       >
-        {text}
-      </Heading>
-
-      {description && (
-        <Text
-          color={subTextColor}
+        <Heading
+          color={defaultTextColor}
           fontFamily={fontFamily}
-          fontSize="sm"
+          size="sm"
           m={0}
           p={0}
           textAlign="center"
         >
-          {description}
-        </Text>
-      )}
+          {text}
+        </Heading>
+
+        {description && (
+          <Text
+            color={subTextColor}
+            fontFamily={fontFamily}
+            fontSize="sm"
+            m={0}
+            p={0}
+            textAlign="center"
+          >
+            {description}
+          </Text>
+        )}
+      </VStack>
       {renderButton()}
     </VStack>
   );
