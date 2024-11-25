@@ -86,10 +86,12 @@ export default class WebAuthnInterceptor {
     return new Promise(async (resolve) => {
       const _functionName = 'create';
       const onAbortListener = (_: Event, _root: Root) => {
+        // unmount the app
         if (_root) {
           root.unmount();
         }
 
+        // clean up
         if (options?.signal) {
           options.signal.removeEventListener(
             'abort',
