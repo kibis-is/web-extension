@@ -6,6 +6,7 @@ import type IAccountInformation from './IAccountInformation';
 import type IAccountTransactions from './IAccountTransactions';
 import type TAccountColors from './TAccountColors';
 import type TAccountIcons from './TAccountIcons';
+import { IAccountStakingContract } from './index';
 
 /**
  * @property {TAccountColors | null} color - The background color.
@@ -18,7 +19,9 @@ import type TAccountIcons from './TAccountIcons';
  * @property {string | null} name - A canonical name given to this account.
  * @property {Record<string, IAccountInformation>} networkInformation - Information specific for each network, indexed by
  * their hex encoded genesis hash.
- * @property {Record<string, IAccountTransactions>} networkInformation - Transactions specific for each network, indexed
+ * @property {Record<string, IAccountInformation>} networkStakingContracts - Staking contracts specific for each network, indexed by
+ * their hex encoded genesis hash.
+ * @property {Record<string, IAccountTransactions>} networkTransactions - Transactions specific for each network, indexed
  * by their hex encoded genesis hash.
  * @property {string} publicKey - The hexadecimal encoded public key.
  * @property {number} updatedAt - A timestamp (in milliseconds) for when this account was last saved to storage.
@@ -34,6 +37,7 @@ interface IAccount {
   index: number | null;
   name: string | null;
   networkInformation: Record<string, IAccountInformation>;
+  networkStakingContracts: Record<string, IAccountStakingContract[]>;
   networkTransactions: Record<string, IAccountTransactions>;
   publicKey: string;
   updatedAt: number;

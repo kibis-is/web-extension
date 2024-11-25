@@ -16,6 +16,7 @@ import BaseRepository from '@extension/repositories/BaseRepository';
 import type {
   IAccount,
   IAccountInformation,
+  IAccountStakingContract,
   IAccountTransactions,
   IAccountWithExtendedProps,
   IInitializeAccountOptions,
@@ -97,6 +98,15 @@ export default class AccountRepository extends BaseRepository {
           ...acc,
           [convertGenesisHashToHex(genesisHash)]:
             AccountRepository.initializeDefaultAccountInformation(),
+        }),
+        {}
+      ),
+      networkStakingContracts: networks.reduce<
+        Record<string, IAccountStakingContract[]>
+      >(
+        (acc, { genesisHash }) => ({
+          ...acc,
+          [convertGenesisHashToHex(genesisHash)]: [],
         }),
         {}
       ),
@@ -208,6 +218,7 @@ export default class AccountRepository extends BaseRepository {
         }),
         {}
       ),
+      networkStakingContracts: account.networkStakingContracts,
       networkTransactions: Object.keys(account.networkTransactions).reduce<
         Record<string, IAccountTransactions>
       >(
@@ -275,6 +286,9 @@ export default class AccountRepository extends BaseRepository {
     );
 
     accounts = accounts.map((account) => ({
+      ...AccountRepository.initializeDefaultAccount({
+        publicKey: account.publicKey,
+      }),
       ...account,
       _delimiter: DelimiterEnum.Account,
       // if there are new networks in the config, create default account information and transactions for these new networks
@@ -354,7 +368,18 @@ export default class AccountRepository extends BaseRepository {
    * @public
    */
   public async fetchById(id: string): Promise<IAccount | null> {
-    return await this._fetchByKey(this._createItemKey(id));
+    const item = await this._fetchByKey<IAccount>(this._createItemKey(id));
+
+    if (!item) {
+      return null;
+    }
+
+    return {
+      ...AccountRepository.initializeDefaultAccount({
+        publicKey: item.publicKey,
+      }),
+      ...item,
+    };
   }
 
   /**
