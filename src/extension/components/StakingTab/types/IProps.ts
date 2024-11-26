@@ -1,10 +1,12 @@
-import type { PropsWithChildren } from 'react';
+import type { ColorMode } from '@chakra-ui/react';
 
 // types
 import type { IAccountWithExtendedProps, INetwork } from '@extension/types';
 
-interface IProps extends PropsWithChildren {
+interface IProps {
   account: IAccountWithExtendedProps;
+  colorMode: ColorMode;
+  fetching: boolean;
   network: INetwork;
 }
 

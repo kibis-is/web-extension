@@ -9,6 +9,7 @@ export type { default as IAVMAssetFreezeTransaction } from './IAVMAssetFreezeTra
 export type { default as IAVMAssetHolding } from './IAVMAssetHolding';
 export type { default as IAVMAssetParams } from './IAVMAssetParams';
 export type { default as IAVMAssetTransferTransaction } from './IAVMAssetTransferTransaction';
+export type { default as IAVMBlock } from './IAVMBlock';
 export type { default as IAVMKeyRegistrationTransaction } from './IAVMKeyRegistrationTransaction';
 export type { default as IAVMPaymentTransaction } from './IAVMPaymentTransaction';
 export type { default as IAVMPendingTransactionResponse } from './IAVMPendingTransactionResponse';

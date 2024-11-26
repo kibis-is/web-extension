@@ -1,4 +1,5 @@
 import {
+  ColorMode,
   Heading,
   HStack,
   Icon,
@@ -44,6 +45,7 @@ import NetworkSelect from '@extension/components/NetworkSelect';
 import NFTsTab from '@extension/components/NFTsTab';
 import PolisAccountBadge from '@extension/components/PolisAccountBadge';
 import ReKeyedAccountBadge from '@extension/components/RekeyedAccountBadge';
+import StakingTab from '@extension/components/StakingTab';
 import WatchAccountBadge from '@extension/components/WatchAccountBadge';
 import AccountPageSkeletonContent from './AccountPageSkeletonContent';
 
@@ -106,6 +108,7 @@ import {
   useSelectSettingsSelectedNetwork,
   useSelectSettings,
   useSelectSystemInfo,
+  useSelectSettingsColorMode,
 } from '@extension/selectors';
 
 // types
@@ -142,6 +145,7 @@ const AccountPage: FC = () => {
   const accounts = useSelectAccounts();
   const accountTransactions = useSelectActiveAccountTransactions();
   const activeAccountDetails = useSelectActiveAccountDetails();
+  const colorMode = useSelectSettingsColorMode();
   const fetchingAccounts = useSelectAccountsFetching();
   const fetchingSettings = useSelectSettingsFetching();
   const group = useSelectActiveAccountGroup();
@@ -576,6 +580,7 @@ const AccountPage: FC = () => {
               <Tab>{t<string>('labels.assets')}</Tab>
               <Tab>{t<string>('labels.nfts')}</Tab>
               <Tab>{t<string>('labels.activity')}</Tab>
+              <Tab>{t<string>('labels.staking')}</Tab>
             </TabList>
 
             <TabPanels sx={{ display: 'flex', flexDirection: 'column' }}>
@@ -591,6 +596,12 @@ const AccountPage: FC = () => {
                 network={network}
                 onRefreshClick={handleOnRefreshActivityClick}
                 onScrollEnd={handleActivityScrollEnd}
+              />
+
+              <StakingTab
+                account={account}
+                fetching={fetchingAccounts}
+                network={network}
               />
             </TabPanels>
           </Tabs>

@@ -52,6 +52,9 @@ export default class NetworksRepository extends BaseRepository {
       nftExplorers:
         networks.find((_value) => _value.genesisHash === value.genesisHash)
           ?.nftExplorers || [],
+      scsIndexers:
+        networks.find((_value) => _value.genesisHash === value.genesisHash)
+          ?.scsIndexers || [],
     };
   }
 
@@ -86,6 +89,10 @@ export default class NetworksRepository extends BaseRepository {
         id,
       })),
       nftExplorers: value.nftExplorers.map(({ canonicalName, id }) => ({
+        canonicalName,
+        id,
+      })),
+      scsIndexers: value.scsIndexers.map(({ canonicalName, id }) => ({
         canonicalName,
         id,
       })),

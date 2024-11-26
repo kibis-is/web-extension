@@ -26,6 +26,7 @@ import type {
   IAVMAccountInformation,
   IAVMAccountTransaction,
   IAVMAsset,
+  IAVMBlock,
   IAVMPendingTransactionResponse,
   IAVMSearchApplicationsResult,
   IAVMSearchAssetsResult,
@@ -47,6 +48,7 @@ import {
   ISendRequestWithDelayOptions,
   ISendTransactionOptions,
   ISearchApplicationsWithDelayOptions,
+  IBlockWithDelayOptions,
 } from './types';
 
 // utils
@@ -263,6 +265,31 @@ export default class NetworkClient {
 
           throw error;
         }
+      },
+    });
+  }
+
+  /**
+   * Returns the block info for a given round.
+   * @param {IBlockWithDelayOptions} options - The round, an optional delay and a specific node ID.
+   * @returns {Promise<IAVMBlock>} A promise that resolves to the block information for a specific round.
+   * @public
+   */
+  public async block({
+    delay = 0,
+    nodeID,
+    round,
+  }: IBlockWithDelayOptions): Promise<IAVMBlock> {
+    const indexer = this.indexerByID(nodeID);
+
+    return await this._sendRequestWithDelay({
+      delay,
+      request: async () => {
+        const requestBuilder = indexer.lookupBlock(parseInt(round));
+
+        return (await requestBuilder
+          .setIntDecoding(IntDecoding.BIGINT)
+          .do()) as IAVMBlock;
       },
     });
   }
