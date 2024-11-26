@@ -8,7 +8,11 @@ import { NETWORKS_ITEM_KEY } from '@extension/constants';
 import BaseRepository from '@extension/repositories/BaseRepository';
 
 // types
-import type { INetwork, INetworkWithTransactionParams } from '@extension/types';
+import type {
+  INetwork,
+  INetworkWithTransactionParams,
+  ITransactionParams,
+} from '@extension/types';
 import type { ISerializableNetworkWithTransactionParams } from './types';
 
 export default class NetworksRepository extends BaseRepository {
@@ -16,14 +20,22 @@ export default class NetworksRepository extends BaseRepository {
    * public static functions
    */
 
+  public static initializeDefaultTransactionParams(): ITransactionParams {
+    return {
+      currentBlockTime: '-1',
+      fee: '0',
+      lastSeenBlock: '-1',
+      minFee: '0',
+      updatedAt: 0,
+    };
+  }
+
   public static mapWithDefaultTransactionParams(
     value: INetwork
   ): INetworkWithTransactionParams {
     return {
+      ...NetworksRepository.initializeDefaultTransactionParams(),
       ...value,
-      fee: '0',
-      minFee: '0',
-      updatedAt: 0,
     };
   }
 
@@ -111,7 +123,15 @@ export default class NetworksRepository extends BaseRepository {
   public async fetchAll(): Promise<INetworkWithTransactionParams[]> {
     const items = await this._fetchSerializedFromStorage();
 
-    return items.map(this._deserialize);
+    return items.map((value) =>
+      this._deserialize({
+        ...networks.find(
+          ({ genesisHash }) => genesisHash === value.genesisHash
+        ), // update with any new fields from the config
+        ...NetworksRepository.initializeDefaultTransactionParams(), // initialize with any new transaction params
+        ...value, // override with existing params
+      })
+    );
   }
 
   /**

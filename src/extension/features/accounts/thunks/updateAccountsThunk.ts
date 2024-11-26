@@ -20,6 +20,7 @@ import type {
   IBaseAsyncThunkConfig,
   IMainRootState,
   INetwork,
+  INetworkWithTransactionParams,
 } from '@extension/types';
 import type { IUpdateAccountsPayload } from '../types';
 
@@ -71,7 +72,7 @@ const updateAccountsThunk: AsyncThunk<
     );
     let currentTransactionsLength: number;
     let encodedGenesisHash: string;
-    let network: INetwork | null;
+    let network: INetworkWithTransactionParams | null;
     let numberOfNewTransactions: number;
     let nodeID: string | null;
 

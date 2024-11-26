@@ -600,6 +600,7 @@ const AccountPage: FC = () => {
 
               <StakingTab
                 account={account}
+                colorMode={colorMode}
                 fetching={fetchingAccounts}
                 network={network}
               />

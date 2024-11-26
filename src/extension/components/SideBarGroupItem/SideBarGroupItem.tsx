@@ -49,6 +49,7 @@ import SideBarAccountItem from '@extension/components/SideBarAccountItem';
 // hooks
 import useButtonHoverBackgroundColor from '@extension/hooks/useButtonHoverBackgroundColor';
 import useColorModeValue from '@extension/hooks/useColorModeValue';
+import useDefaultAvatarBackgroundColor from '@extension/hooks/useDefaultAvatarBackgroundColor';
 import useDefaultTextColor from '@extension/hooks/useDefaultTextColor';
 import usePrimaryButtonTextColor from '@extension/hooks/usePrimaryButtonTextColor';
 import usePrimaryColor from '@extension/hooks/usePrimaryColor';
@@ -100,11 +101,11 @@ const SideBarGroupItem: FC<IProps> = ({
   });
   // hooks
   const buttonHoverBackgroundColor = useButtonHoverBackgroundColor();
+  const defaultAvatarBackgroundColor = useDefaultAvatarBackgroundColor();
   const defaultTextColor = useDefaultTextColor();
   const primaryButtonTextColor = usePrimaryButtonTextColor();
   const primaryColor = usePrimaryColor();
   const subTextColor = useSubTextColor();
-  const iconBackground = useColorModeValue('gray.300', 'whiteAlpha.400');
   // memos
   const groupAccounts = useMemo(
     () =>
@@ -190,7 +191,7 @@ const SideBarGroupItem: FC<IProps> = ({
               {/*icon*/}
               <Center minW={`${SIDEBAR_MIN_WIDTH}px`}>
                 <Avatar
-                  bg={iconBackground}
+                  bg={defaultAvatarBackgroundColor}
                   icon={
                     <Icon
                       as={isOpen ? IoFolderOpenOutline : IoFolderOutline}

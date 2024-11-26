@@ -13,7 +13,8 @@ import NetworkClient from '@extension/models/NetworkClient';
 import NetworksRepository from '@extension/repositories/NetworksRepository';
 
 // types
-import type {
+import {
+  IAVMStatus,
   IAVMTransactionParams,
   IBaseAsyncThunkConfig,
   IMainRootState,
@@ -23,6 +24,7 @@ import type {
 // utils
 import selectNetworkFromSettings from '@extension/utils/selectNetworkFromSettings';
 import selectNodeIDByGenesisHashFromSettings from '@extension/utils/selectNodeIDByGenesisHashFromSettings';
+import BigNumber from 'bignumber.js';
 
 const updateTransactionParamsForSelectedNetworkThunk: AsyncThunk<
   INetworkWithTransactionParams | null, // return
@@ -39,9 +41,11 @@ const updateTransactionParamsForSelectedNetworkThunk: AsyncThunk<
     const networks = getState().networks.items;
     const online = getState().system.networkConnectivity.online;
     const settings = getState().settings;
+    let avmStatus: IAVMStatus;
     let avmTransactionParams: IAVMTransactionParams;
     let networkClient: NetworkClient;
     let network: INetworkWithTransactionParams | null;
+    let nodeID: string | null;
     let updatedAt: Date;
 
     if (!online) {
@@ -80,14 +84,13 @@ const updateTransactionParamsForSelectedNetworkThunk: AsyncThunk<
     }
 
     networkClient = new NetworkClient({ logger, network });
+    nodeID = selectNodeIDByGenesisHashFromSettings({
+      genesisHash: network.genesisHash,
+      settings,
+    });
 
     try {
-      avmTransactionParams = await networkClient.transactionParams(
-        selectNodeIDByGenesisHashFromSettings({
-          genesisHash: network.genesisHash,
-          settings,
-        })
-      );
+      avmTransactionParams = await networkClient.transactionParams(nodeID);
     } catch (error) {
       logger.error(
         `${ThunkEnum.UpdateTransactionParamsForSelectedNetworkThunk}: failed to get transaction params for network "${network.genesisId}":`,
@@ -106,6 +109,17 @@ const updateTransactionParamsForSelectedNetworkThunk: AsyncThunk<
       return network;
     }
 
+    try {
+      avmStatus = await networkClient.status(nodeID);
+    } catch (error) {
+      logger.error(
+        `${ThunkEnum.UpdateTransactionParamsForSelectedNetworkThunk}: failed to get transaction params for network "${network.genesisId}":`,
+        error
+      );
+
+      return network;
+    }
+
     updatedAt = new Date();
 
     logger.debug(
@@ -118,18 +132,19 @@ const updateTransactionParamsForSelectedNetworkThunk: AsyncThunk<
 
     network = {
       ...network,
+      currentBlockTime: new BigNumber(
+        String(avmStatus['time-since-last-round'])
+      )
+        .dividedBy(new BigNumber('1000000'))
+        .toFixed(0), // convert from nanoseconds to milliseconds
       fee: avmTransactionParams.fee.toString(),
+      lastSeenBlock: String(avmStatus['last-round']),
       minFee: avmTransactionParams['min-fee'].toString(),
       updatedAt: updatedAt.getTime(),
     };
 
     // save the updated params to storage
-    return await new NetworksRepository().save({
-      ...network,
-      fee: avmTransactionParams.fee.toString(),
-      minFee: avmTransactionParams['min-fee'].toString(),
-      updatedAt: updatedAt.getTime(),
-    });
+    return await new NetworksRepository().save(network);
   }
 );
 

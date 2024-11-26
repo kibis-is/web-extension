@@ -1,5 +1,8 @@
 import {
+  Avatar,
+  AvatarBadge,
   Button,
+  Center,
   HStack,
   Icon,
   Tag,
@@ -10,15 +13,20 @@ import {
 import BigNumber from 'bignumber.js';
 import React, { FC, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { IoChevronForward } from 'react-icons/io5';
-import { Link } from 'react-router-dom';
+import { IoChevronForward, IoFlagOutline } from 'react-icons/io5';
 
 // constants
-import { DEFAULT_GAP, TAB_ITEM_HEIGHT } from '@extension/constants';
+import {
+  BODY_BACKGROUND_COLOR,
+  DEFAULT_GAP,
+  TAB_ITEM_HEIGHT,
+} from '@extension/constants';
 
 // hooks
 import useButtonHoverBackgroundColor from '@extension/hooks/useButtonHoverBackgroundColor';
+import useDefaultAvatarBackgroundColor from '@extension/hooks/useDefaultAvatarBackgroundColor';
 import useDefaultTextColor from '@extension/hooks/useDefaultTextColor';
+import usePrimaryColorScheme from '@extension/hooks/usePrimaryColorScheme';
 import useSubTextColor from '@extension/hooks/useSubTextColor';
 
 // types
@@ -35,9 +43,11 @@ import formatCurrencyUnit from '@common/utils/formatCurrencyUnit';
 const Item: FC<IItemProps> = ({ app, colorMode, network }) => {
   const { t } = useTranslation();
   // hooks
-  const buttonHoverBackgroundColor: string = useButtonHoverBackgroundColor();
-  const defaultTextColor: string = useDefaultTextColor();
-  const subTextColor: string = useSubTextColor();
+  const buttonHoverBackgroundColor = useButtonHoverBackgroundColor();
+  const defaultAvatarBackgroundColor = useDefaultAvatarBackgroundColor();
+  const defaultTextColor = useDefaultTextColor();
+  const primaryColorScheme = usePrimaryColorScheme();
+  const subTextColor = useSubTextColor();
   // misc
   const balanceAsStandardUnit = useMemo(
     () =>
@@ -53,7 +63,6 @@ const Item: FC<IItemProps> = ({ app, colorMode, network }) => {
       _hover={{
         bg: buttonHoverBackgroundColor,
       }}
-      as={Link}
       borderRadius={0}
       fontSize="md"
       h={TAB_ITEM_HEIGHT}
@@ -68,11 +77,30 @@ const Item: FC<IItemProps> = ({ app, colorMode, network }) => {
           color={defaultTextColor}
         />
       }
-      // to={`${ASSETS_ROUTE}/${arc0200Asset.id}`}
       variant="ghost"
       w="full"
     >
       <HStack align="center" m={0} p={0} spacing={DEFAULT_GAP / 3} w="full">
+        <Avatar
+          bg={defaultAvatarBackgroundColor}
+          icon={
+            <Icon
+              as={IoFlagOutline}
+              color="white"
+              boxSize={calculateIconSize('sm')}
+            />
+          }
+          size="sm"
+        >
+          <AvatarBadge
+            bg={app.status === 'online' ? 'green.500' : 'red.300'}
+            borderColor={BODY_BACKGROUND_COLOR}
+            borderWidth={1}
+            boxSize="1em"
+            placement="bottom-end"
+          />
+        </Avatar>
+
         {/*id/address*/}
         <VStack
           align="flex-start"
@@ -98,23 +126,34 @@ const Item: FC<IItemProps> = ({ app, colorMode, network }) => {
           </Text>
         </VStack>
 
-        {/*total balance*/}
-        <HStack align="center" h="100%" justify="center" spacing={1}>
-          <Text color={defaultTextColor} fontSize="sm">
-            {formatCurrencyUnit(balanceAsStandardUnit, {
-              decimals: network.nativeCurrency.decimals,
+        {/*balance/badges*/}
+        <VStack
+          align="flex-end"
+          flexGrow={1}
+          h="100%"
+          justify="space-between"
+          spacing={DEFAULT_GAP / 3}
+        >
+          {/*total balance*/}
+          <HStack align="center" h="100%" justify="center" spacing={1}>
+            <Text color={defaultTextColor} fontSize="sm">
+              {formatCurrencyUnit(balanceAsStandardUnit, {
+                decimals: balanceAsStandardUnit.gt(1)
+                  ? 2
+                  : network.nativeCurrency.decimals,
+              })}
+            </Text>
+
+            {createIconFromDataUri(network.nativeCurrency.iconUrl, {
+              color: defaultTextColor,
+              boxSize: calculateIconSize('xs'),
             })}
-          </Text>
+          </HStack>
 
-          {createIconFromDataUri(network.nativeCurrency.iconUrl, {
-            color: defaultTextColor,
-            boxSize: calculateIconSize('xs'),
-          })}
-
-          {/*phase*/}
+          {/*phase badge*/}
           {app.phase >= 0 && (
             <Tag
-              colorScheme="primary"
+              colorScheme={primaryColorScheme}
               size="sm"
               variant={colorMode === 'dark' ? 'solid' : 'subtle'}
             >
@@ -123,7 +162,7 @@ const Item: FC<IItemProps> = ({ app, colorMode, network }) => {
               </TagLabel>
             </Tag>
           )}
-        </HStack>
+        </VStack>
       </HStack>
     </Button>
   );

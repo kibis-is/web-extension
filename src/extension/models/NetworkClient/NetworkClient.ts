@@ -22,7 +22,7 @@ import BaseARC0072Indexer from '@extension/models/BaseARC0072Indexer';
 
 // types
 import type { ILogger } from '@common/types';
-import type {
+import {
   IAVMAccountInformation,
   IAVMAccountTransaction,
   IAVMAsset,
@@ -37,6 +37,7 @@ import type {
   IARC0200AssetInformation,
   INetwork,
   INode,
+  IAVMStatus,
 } from '@extension/types';
 import {
   IByAddressWithDelayOptions,
@@ -511,6 +512,15 @@ export default class NetworkClient {
           .setIntDecoding(IntDecoding.BIGINT)
           .do()) as IAVMAsset,
     });
+  }
+
+  public async status(nodeID: string | null): Promise<IAVMStatus> {
+    const algod = this.algodByID(nodeID);
+
+    return (await algod
+      .status()
+      .setIntDecoding(IntDecoding.BIGINT)
+      .do()) as IAVMStatus;
   }
 
   public async suggestedParams(

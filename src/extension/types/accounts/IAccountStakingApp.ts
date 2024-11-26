@@ -15,7 +15,7 @@ interface IAccountStakingApp {
   appID: string;
   availableBalance: string;
   balance: string;
-  lockupStartedAt: number;
+  lockupStartedAt: string;
   lockupYears: number;
   phase: number;
   publicKey: string;

@@ -15,12 +15,13 @@ import type { ISCSAccount } from '@extension/models/BaseSCSIndexer';
 import type {
   IAccountNetworkStakingApps,
   IAccountStakingApp,
+  IAVMBlock,
 } from '@extension/types';
 import type { IOptions } from './types';
 
 // utils
-import getRandomItem from '@common/utils/getRandomItem';
 import convertAVMAddressToPublicKey from '@extension/utils/convertAVMAddressToPublicKey';
+import getRandomItem from '@common/utils/getRandomItem';
 
 /**
  * Fetches the staking apps for a given address.
@@ -38,6 +39,9 @@ export default async function updateAccountStakingApps({
   const _functionName = 'updateAccountStakingApps';
   const scsIndexer: BaseSCSIndexer | null =
     getRandomItem(network.scsIndexers) || null;
+  let currentBlockTime: BigNumber;
+  let lastSeenBlock: BigNumber;
+  let lastSeenBlockInformation: IAVMBlock | null = null;
   let scsAccounts: ISCSAccount[];
   let stakingApps: IAccountStakingApp[];
   let networkClient: NetworkClient;
@@ -76,6 +80,24 @@ export default async function updateAccountStakingApps({
     logger,
     network,
   });
+  currentBlockTime = new BigNumber(network.currentBlockTime);
+  lastSeenBlock = new BigNumber(network.lastSeenBlock);
+
+  // get the last seen block information
+  if (lastSeenBlock.gte('0') && currentBlockTime.gte('0')) {
+    try {
+      lastSeenBlockInformation = await networkClient.block({
+        delay,
+        round: network.lastSeenBlock,
+        nodeID,
+      });
+    } catch (error) {
+      logger?.error(
+        `${_functionName}: failed to get the latest block "${network.lastSeenBlock}" on ${network.genesisId}:`,
+        error
+      );
+    }
+  }
 
   try {
     stakingApps = await Promise.all(
@@ -87,7 +109,6 @@ export default async function updateAccountStakingApps({
           global_initial,
           global_period,
           global_total,
-          // part_vote_fst,
           part_vote_lst,
         }) => {
           const { amount } = await networkClient.accountInformationWithDelay({
@@ -102,26 +123,44 @@ export default async function updateAccountStakingApps({
             round: new BigNumber(createRound.toString()).toFixed(0),
             nodeID,
           });
-          // const participationStartBlock = typeof part_vote_fst === 'number' ? await networkClient.block({
-          //   delay,
-          //   round: new BigNumber(part_vote_fst.toString()).toFixed(0),
-          //   nodeID,
-          // }) : null;
+          let participationKeyExpiresAt: string | null = null;
+          let participationKeyLastVoteBlock =
+            typeof part_vote_lst === 'number'
+              ? new BigNumber(part_vote_lst)
+              : null;
+
+          // if we have the participation key expire block and the last seen block is less than the participation key
+          // expire block we can calculate the estimated timestamp the participation key expires
+          if (
+            participationKeyLastVoteBlock &&
+            lastSeenBlockInformation &&
+            participationKeyLastVoteBlock.gte(lastSeenBlock)
+          ) {
+            participationKeyExpiresAt = new BigNumber(
+              String(lastSeenBlockInformation.timestamp)
+            )
+              .plus(
+                participationKeyLastVoteBlock
+                  .minus(lastSeenBlock)
+                  .multipliedBy(currentBlockTime)
+              )
+              .toFixed(0);
+          }
 
           return {
             appID: contractId.toString(),
             availableBalance: accountBalance.minus(balance).toFixed(0),
             balance: balance.toFixed(0),
-            lockupStartedAt: new BigNumber(
-              String(lockupStartBlock.timestamp * BigInt(1000))
-            ).toNumber(), // convert to milliseconds
+            lockupStartedAt: new BigNumber(String(lockupStartBlock.timestamp))
+              .multipliedBy('1000')
+              .toFixed(0), // convert from seconds to milliseconds
             lockupYears: global_period,
-            participationKeyExpiresAt: null, // TODO: estimate when the participation key ends
+            participationKeyExpiresAt,
             phase: new BigNumber(global_initial).toNumber() > 0 ? 1 : 0, // if global_initial is set to "0" this indicates phase 2, otherwise it is phase 1
             publicKey: AccountRepository.encode(
               convertAVMAddressToPublicKey(contractAddress)
             ),
-            status: typeof part_vote_lst === 'number' ? 'online' : 'offline',
+            status: !participationKeyLastVoteBlock ? 'offline' : 'online',
           };
         }
       )

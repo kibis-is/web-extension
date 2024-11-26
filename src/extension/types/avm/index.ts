@@ -15,6 +15,7 @@ export type { default as IAVMPaymentTransaction } from './IAVMPaymentTransaction
 export type { default as IAVMPendingTransactionResponse } from './IAVMPendingTransactionResponse';
 export type { default as IAVMSearchApplicationsResult } from './IAVMSearchApplicationsResult';
 export type { default as IAVMSearchAssetsResult } from './IAVMSearchAssetsResult';
+export type { default as IAVMStatus } from './IAVMStatus';
 export type { default as IAVMStateSchema } from './IAVMStateSchema';
 export type { default as IAVMTealKeyValue } from './IAVMTealKeyValue';
 export type { default as IAVMTealValue } from './IAVMTealValue';

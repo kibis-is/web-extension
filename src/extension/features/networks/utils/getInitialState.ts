@@ -1,6 +1,9 @@
 // config
 import { networks } from '@extension/config';
 
+// repositories
+import NetworksRepository from '@extension/repositories/NetworksRepository';
+
 // types
 import type { INetworkWithTransactionParams } from '@extension/types';
 import type { IState } from '../types';
@@ -10,9 +13,7 @@ export default function getInitialState(): IState {
     fetching: false,
     items: networks.map<INetworkWithTransactionParams>((value) => ({
       ...value,
-      fee: '0',
-      minFee: '0',
-      updatedAt: 0,
+      ...NetworksRepository.initializeDefaultTransactionParams(),
     })),
     pollingId: null,
     saving: false,
