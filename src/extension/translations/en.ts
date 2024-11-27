@@ -13,6 +13,7 @@ const translation: IResourceLanguage = {
     informationIcon: 'An "i" icon for information.',
     pencilIcon: 'A pencil icon.',
     plusIcon: 'A plus icon.',
+    walletIcon: 'A wallet icon.',
   },
   buttons: {
     add: 'Add',
@@ -225,6 +226,8 @@ const translation: IResourceLanguage = {
       'Standard assets require an "opt-in" fee. This is a transaction of the asset with a "0" amount sent to yourself.',
     optOutFee:
       'Standard assets require an "opt-out" fee. This is a transaction of the asset with a "0" amount sent to yourself.',
+    participationKeyExpiresAtWarning:
+      'This is an estimated date based on the current block time.',
     passkeyAdded: 'Passkey {{name}} added!',
     passkeyRemoved: 'Passkey {{name}} removed.',
     passkeyNotSupported1:
@@ -293,6 +296,14 @@ const translation: IResourceLanguage = {
       'An application is requesting to sign a transaction.',
     signTransactionsRequest:
       'An application is requesting to sign multiple transactions.',
+    stakingAppAvailableBalanceInfo:
+      'This is the balance that you are able to withdraw.',
+    stakingAppBalanceInfo:
+      'This is the total balance. The locked-up balance + the available balance (rewards e.t.c).',
+    stakingAppStatusOffline:
+      'This staking app is not participating in staking rewards.',
+    stakingAppStatusOnline:
+      'This staking app is participating and receiving staking rewards.',
     support:
       'Please <2>contact us</2> for further assistance so we can resolve this issue for you.',
     transactionIdCopied: 'Transaction ID copied!',
@@ -432,6 +443,8 @@ const translation: IResourceLanguage = {
     removeGroup: 'Remove Group',
     removePasskey: 'Remove Passkey',
     scanQrCode: 'Scan QR Code(s)',
+    screenCaptureDenied: 'Screen Capture Denied',
+    screenCaptureLoading: 'Screen Capture Loading',
     selectAccount: 'Select Account',
     selectAccounts: 'Select Accounts',
     selectAsset: 'Select Asset',
@@ -447,8 +460,7 @@ const translation: IResourceLanguage = {
     sessionDisconnected: 'Session Disconnected',
     sessionsDisconnected: '{{amount}} Sessions Disconnected',
     shareAddress: 'Share Address',
-    screenCaptureDenied: 'Screen Capture Denied',
-    screenCaptureLoading: 'Screen Capture Loading',
+    stakingApplication: 'Staking Application',
     transaction: 'Unknown Transaction 💀',
     [`transaction_${TransactionTypeEnum.AccountReKey}`]: 'Re-Key Account 🔒',
     [`transaction_${TransactionTypeEnum.AccountUndoReKey}`]:
@@ -590,6 +602,8 @@ const translation: IResourceLanguage = {
     issuer: 'Issuer',
     lastRound: 'Last Round',
     light: 'Light',
+    lockUpExpiresAt: 'Lock-up Expires At',
+    lockUpYears: 'Lock-up Years',
     debugLogging: 'Debug Logging',
     makePrimary: 'Make Primary',
     manage: 'Manage',
@@ -610,6 +624,7 @@ const translation: IResourceLanguage = {
     notSupported: 'Not Supported',
     openSelectModal: 'Open select modal',
     optional: '(optional)',
+    participationKeyExpiresAt: 'Participation Key Renewal Due',
     passkeyName: 'Passkey name',
     password: 'Password',
     port: 'Port',

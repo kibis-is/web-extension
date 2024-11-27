@@ -34,11 +34,10 @@ const AssetDisplay: FC<IProps> = ({
   unit,
 }: IProps) => {
   // hooks
-  const defaultTextColor: string = useDefaultTextColor();
+  const defaultTextColor = useDefaultTextColor();
 
   return (
     <Tooltip
-      aria-label="Asset amount with unrestricted decimals"
       label={`${convertToStandardUnit(atomicUnitAmount, decimals).toString()}${
         unit ? ` ${unit}` : ''
       }`}
@@ -50,7 +49,9 @@ const AssetDisplay: FC<IProps> = ({
             { decimals }
           )}`}
         </Text>
+
         {icon}
+
         {displayUnit && unit && (
           <Text
             color={displayUnitColor || defaultTextColor}

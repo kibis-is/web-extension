@@ -25,6 +25,7 @@ export default class NetworksRepository extends BaseRepository {
       currentBlockTime: '-1',
       fee: '0',
       lastSeenBlock: '-1',
+      lastSeenBlockTimestamp: '-1',
       minFee: '0',
       updatedAt: 0,
     };

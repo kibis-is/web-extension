@@ -1,18 +1,18 @@
 import {
-  HStack,
+  Heading,
   Skeleton,
   SkeletonCircle,
   Text,
   VStack,
 } from '@chakra-ui/react';
 import { faker } from '@faker-js/faker';
-import React, { FC } from 'react';
+import React, { type FC, useMemo } from 'react';
 
 // components
 import PageHeader from '@extension/components/PageHeader';
 
 // constants
-import { DEFAULT_GAP, PAGE_ITEM_HEIGHT } from '@extension/constants';
+import { DEFAULT_GAP } from '@extension/constants';
 
 // hooks
 import useDefaultTextColor from '@extension/hooks/useDefaultTextColor';
@@ -20,10 +20,14 @@ import useDefaultTextColor from '@extension/hooks/useDefaultTextColor';
 const SkeletonAssetPage: FC = () => {
   // hooks
   const defaultTextColor = useDefaultTextColor();
+  // memos
+  const heading = useMemo(() => faker.random.alpha(12), []);
+  const text = useMemo(() => faker.random.alpha(32), []);
+  const title = useMemo(() => faker.random.alpha(12), []);
 
   return (
     <>
-      <PageHeader loading={true} title={faker.random.alpha(12)} />
+      <PageHeader loading={true} title={title} />
 
       <VStack
         alignItems="center"
@@ -34,28 +38,17 @@ const SkeletonAssetPage: FC = () => {
       >
         <SkeletonCircle size="24" />
 
-        {Array.from({ length: 3 }, (_, index) => (
-          <HStack
-            alignItems="center"
-            h={PAGE_ITEM_HEIGHT}
-            justifyContent="space-between"
-            key={`skeleton-asset-page-item-${index}`}
-            spacing={1}
-            w="full"
-          >
-            <Skeleton>
-              <Text color={defaultTextColor} fontSize="sm">
-                {faker.random.alpha(12)}
-              </Text>
-            </Skeleton>
+        <Skeleton>
+          <Heading color={defaultTextColor} size="lg">
+            {heading}
+          </Heading>
+        </Skeleton>
 
-            <Skeleton>
-              <Text color={defaultTextColor} fontSize="sm">
-                {faker.random.alpha(32)}
-              </Text>
-            </Skeleton>
-          </HStack>
-        ))}
+        <Skeleton>
+          <Text color={defaultTextColor} fontSize="sm">
+            {text}
+          </Text>
+        </Skeleton>
       </VStack>
     </>
   );

@@ -15,7 +15,7 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import BigNumber from 'bignumber.js';
-import React, { type FC } from 'react';
+import React, { type FC, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { BsFolderMinus, BsFolderPlus } from 'react-icons/bs';
 import {
@@ -114,6 +114,7 @@ import {
 // types
 import type { TReKeyType } from '@extension/features/re-key-account';
 import type {
+  IAccountStakingApp,
   IAccountWithExtendedProps,
   IAppThunkDispatch,
   IMainRootState,

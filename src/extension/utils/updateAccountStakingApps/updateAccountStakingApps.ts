@@ -41,26 +41,26 @@ export default async function updateAccountStakingApps({
     getRandomItem(network.scsIndexers) || null;
   let currentBlockTime: BigNumber;
   let lastSeenBlock: BigNumber;
-  let lastSeenBlockInformation: IAVMBlock | null = null;
+  let lastSeenBlockTimestamp: BigNumber;
   let scsAccounts: ISCSAccount[];
   let stakingApps: IAccountStakingApp[];
   let networkClient: NetworkClient;
 
   // if there are no scs indexers or staking apps are not out-of-date just return the current information
-  if (
-    !scsIndexer ||
-    currentNetworkStakingApps.lastUpdatedAt +
-      NETWORK_STAKING_APPS_ANTIQUATED_TIMEOUT >
-      new Date().getTime()
-  ) {
-    logger?.debug(
-      `${_functionName}: last updated staking apps for "${address}" on "${new Date(
-        currentNetworkStakingApps.lastUpdatedAt
-      ).toString()}", skipping`
-    );
-
-    return currentNetworkStakingApps;
-  }
+  // if (
+  //   !scsIndexer ||
+  //   currentNetworkStakingApps.lastUpdatedAt +
+  //     NETWORK_STAKING_APPS_ANTIQUATED_TIMEOUT >
+  //     new Date().getTime()
+  // ) {
+  //   logger?.debug(
+  //     `${_functionName}: last updated staking apps for "${address}" on "${new Date(
+  //       currentNetworkStakingApps.lastUpdatedAt
+  //     ).toString()}", skipping`
+  //   );
+  //
+  //   return currentNetworkStakingApps;
+  // }
 
   try {
     scsAccounts = await scsIndexer.fetchByAddress({
@@ -82,22 +82,7 @@ export default async function updateAccountStakingApps({
   });
   currentBlockTime = new BigNumber(network.currentBlockTime);
   lastSeenBlock = new BigNumber(network.lastSeenBlock);
-
-  // get the last seen block information
-  if (lastSeenBlock.gte('0') && currentBlockTime.gte('0')) {
-    try {
-      lastSeenBlockInformation = await networkClient.block({
-        delay,
-        round: network.lastSeenBlock,
-        nodeID,
-      });
-    } catch (error) {
-      logger?.error(
-        `${_functionName}: failed to get the latest block "${network.lastSeenBlock}" on ${network.genesisId}:`,
-        error
-      );
-    }
-  }
+  lastSeenBlockTimestamp = new BigNumber(network.lastSeenBlockTimestamp);
 
   try {
     stakingApps = await Promise.all(
@@ -133,12 +118,12 @@ export default async function updateAccountStakingApps({
           // expire block we can calculate the estimated timestamp the participation key expires
           if (
             participationKeyLastVoteBlock &&
-            lastSeenBlockInformation &&
+            currentBlockTime.gt(0) &&
+            lastSeenBlock.gt(0) &&
+            lastSeenBlockTimestamp.gt(0) &&
             participationKeyLastVoteBlock.gte(lastSeenBlock)
           ) {
-            participationKeyExpiresAt = new BigNumber(
-              String(lastSeenBlockInformation.timestamp)
-            )
+            participationKeyExpiresAt = lastSeenBlockTimestamp
               .plus(
                 participationKeyLastVoteBlock
                   .minus(lastSeenBlock)

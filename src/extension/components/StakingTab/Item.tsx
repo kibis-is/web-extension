@@ -40,7 +40,7 @@ import createIconFromDataUri from '@extension/utils/createIconFromDataUri';
 import ellipseAddress from '@extension/utils/ellipseAddress';
 import formatCurrencyUnit from '@common/utils/formatCurrencyUnit';
 
-const Item: FC<IItemProps> = ({ app, colorMode, network }) => {
+const Item: FC<IItemProps> = ({ app, colorMode, network, onClick }) => {
   const { t } = useTranslation();
   // hooks
   const buttonHoverBackgroundColor = useButtonHoverBackgroundColor();
@@ -57,6 +57,8 @@ const Item: FC<IItemProps> = ({ app, colorMode, network }) => {
       ),
     [app, network]
   );
+  // handlers
+  const handleOnClick = () => onClick(app.appID);
 
   return (
     <Button
@@ -67,6 +69,7 @@ const Item: FC<IItemProps> = ({ app, colorMode, network }) => {
       fontSize="md"
       h={TAB_ITEM_HEIGHT}
       justifyContent="start"
+      onClick={handleOnClick}
       pl={DEFAULT_GAP / 2}
       pr={1}
       py={0}

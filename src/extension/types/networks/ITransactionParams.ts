@@ -5,12 +5,14 @@
  * @property {string} minFee - The minimum transaction fee, in atomic units, (not per byte) required for the
  * txn to validate for the current network protocol.
  * @property {string} lastSeenBlock - The last block seen. A negative value indicates an invalid value.
+ * @property {string} lastSeenBlockTimestamp - The timestamp (in milliseconds) of the last seen block.
  * @property {number} updatedAt - A timestamp (in milliseconds) for when thw network was last queried.
  */
 interface ITransactionParams {
   currentBlockTime: string;
   fee: string;
   lastSeenBlock: string;
+  lastSeenBlockTimestamp: string;
   minFee: string;
   updatedAt: number;
 }
