@@ -1,8 +1,12 @@
+import { decode as decodeBase64 } from '@stablelib/base64';
 import { v4 as uuid } from 'uuid';
 import browser, { type Runtime } from 'webextension-polyfill';
 
 // enums
 import { WebAuthnMessageReferenceEnum } from '@common/enums';
+
+// errors
+import { AuthInvalidPublicKeyError } from '@common/errors';
 
 // messages
 import WebAuthnAccountsRequestMessage from '@common/messages/WebAuthnAccountsRequestMessage';
@@ -12,8 +16,12 @@ import WebAuthnRegisterResponseMessage from '@common/messages/WebAuthnRegisterRe
 import WebAuthnThemeRequestMessage from '@common/messages/WebAuthnThemeRequestMessage';
 import WebAuthnThemeResponseMessage from '@common/messages/WebAuthnThemeResponseMessage';
 
+// models
+import PublicKeyCredentialFactory from '@extension/models/PublicKeyCredentialFactory';
+
 // repository
 import AccountRepository from '@extension/repositories/AccountRepository';
+import PrivateKeyRepository from '@extension/repositories/PrivateKeyRepository';
 import SettingsRepository from '@extension/repositories/SettingsRepository';
 
 // message handlers
@@ -21,21 +29,22 @@ import BaseMessageHandler from '@extension/message-handlers/BaseMessageHandler';
 
 // types
 import type { IBaseOptions, IExternalAccount } from '@common/types';
-import type { IAccount, ISettings } from '@extension/types';
+import type { IAccount, IPrivateKey, ISettings } from '@extension/types';
 
 // utils
 import isWatchAccount from '@extension/utils/isWatchAccount';
-import { AuthInvalidPublicKeyError } from '@common/errors';
 
 export default class WebAuthnMessageHandler extends BaseMessageHandler {
   // private variables
   private readonly _accountRepository: AccountRepository;
+  private readonly _privateKeyRepository: PrivateKeyRepository;
   private readonly _settingsRepository: SettingsRepository;
 
   constructor(options: IBaseOptions) {
     super(options);
 
     this._accountRepository = new AccountRepository();
+    this._privateKeyRepository = new PrivateKeyRepository();
     this._settingsRepository = new SettingsRepository();
   }
 
@@ -94,6 +103,8 @@ export default class WebAuthnMessageHandler extends BaseMessageHandler {
   ): Promise<void> {
     const _functionName = '_handleRegisterRequestMessage';
     let account: IAccount | null;
+    let privateKey: IPrivateKey | null;
+    let publicKeyFactory: PublicKeyCredentialFactory;
 
     this._logger?.debug(
       `${WebAuthnMessageHandler.name}#${_functionName}: received message "${message.reference}"`
@@ -118,7 +129,48 @@ export default class WebAuthnMessageHandler extends BaseMessageHandler {
       );
     }
 
-    // TODO: create passkey and send back data
+    privateKey = await this._privateKeyRepository.fetchByPublicKey(
+      message.payload.publicKey
+    );
+
+    if (!privateKey) {
+      return this._sendResponseToMiddleware(
+        new WebAuthnRegisterResponseMessage({
+          error: new AuthInvalidPublicKeyError(
+            `public key for account not found`
+          ),
+          id: uuid(),
+          reference: WebAuthnMessageReferenceEnum.RegisterResponse,
+          requestID: message.id,
+          result: null,
+        }),
+        originTabID
+      );
+    }
+
+    // publicKeyFactory = PublicKeyCredentialFactory.generate({
+    //   challenge: decodeBase64(message.payload.options.challenge),
+    //   keyPair: Ed21559KeyPair.generateFromPrivateKey(privateKey.),
+    //   rp: message.payload.options.rp,
+    //   user: {
+    //     ...message.payload.options.user,
+    //     id: decodeBase64(message.payload.options.user.id),
+    //   },
+    // });
+
+    return this._sendResponseToMiddleware(
+      new WebAuthnRegisterResponseMessage({
+        error: null,
+        id: uuid(),
+        reference: WebAuthnMessageReferenceEnum.RegisterResponse,
+        requestID: message.id,
+        result: null,
+        // result: {
+        //   credential: publicKeyFactory.attestationCredential(),
+        // },
+      }),
+      originTabID
+    );
   }
 
   private async _handleThemeRequestMessage(
@@ -157,7 +209,10 @@ export default class WebAuthnMessageHandler extends BaseMessageHandler {
    */
 
   protected async _onMessage(
-    message: WebAuthnAccountsRequestMessage | WebAuthnThemeRequestMessage,
+    message:
+      | WebAuthnAccountsRequestMessage
+      | WebAuthnRegisterRequestMessage
+      | WebAuthnThemeRequestMessage,
     sender: Runtime.MessageSender
   ): Promise<void> {
     const _functionName = '_onMessage';
@@ -173,6 +228,9 @@ export default class WebAuthnMessageHandler extends BaseMessageHandler {
     switch (message.reference) {
       case WebAuthnMessageReferenceEnum.AccountsRequest:
         await this._handleAccountsRequestMessage(message, sender.tab.id);
+        break;
+      case WebAuthnMessageReferenceEnum.RegisterRequest:
+        await this._handleRegisterRequestMessage(message, sender.tab.id);
         break;
       case WebAuthnMessageReferenceEnum.ThemeRequest:
         await this._handleThemeRequestMessage(message, sender.tab.id);

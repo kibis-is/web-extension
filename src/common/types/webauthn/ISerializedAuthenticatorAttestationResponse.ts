@@ -1,9 +1,13 @@
+// types
+import type ISerializedAttestationObject from './ISerializedAttestationObject';
+
 /**
- * @property {string} id - A base64 string for ID for the relying party.
+ * @property {ISerializedAttestationObject} attestationObject - The serialized `attestationObject` property.
+ * @property {string} clientDataJSON - The JSON string of the public key `clientDataJSON` property.
  */
-interface ISerializedPublicKeyCredentialDescriptor
-  extends Omit<PublicKeyCredentialDescriptor, 'id'> {
-  id: string;
+interface ISerializedAuthenticatorAttestationResponse {
+  attestationObject: ISerializedAttestationObject;
+  clientDataJSON: string;
 }
 
-export default ISerializedPublicKeyCredentialDescriptor;
+export default ISerializedAuthenticatorAttestationResponse;

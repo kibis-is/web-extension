@@ -4,6 +4,7 @@
     "allowUnreachableCode": false,
     "alwaysStrict": true,
     "baseUrl": "./",
+    "downlevelIteration": true,
     "emitDecoratorMetadata": true,
     "esModuleInterop": true,
     "experimentalDecorators": true,

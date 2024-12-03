@@ -137,6 +137,7 @@
     "@stablelib/base64": "^1.0.1",
     "@stablelib/hex": "^1.0.1",
     "@stablelib/random": "^1.0.2",
+    "@stablelib/sha256": "^2.0.0",
     "@stablelib/utf8": "^1.0.1",
     "algosdk": "^2.7.0",
     "bignumber.js": "^9.1.1",
