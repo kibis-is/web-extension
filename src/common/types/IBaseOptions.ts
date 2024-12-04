@@ -1,5 +1,5 @@
 // types
-import ILogger from './ILogger';
+import type { ILogger } from '@common/types';
 
 interface IBaseOptions {
   logger?: ILogger;

@@ -3,7 +3,7 @@ import type { IClientInformation } from '@common/types';
 
 interface IRegisterOptions {
   clientInfo: IClientInformation;
-  publicKeyCreationOptions: PublicKeyCredentialCreationOptions;
+  publicKeyCreationOptions: PublicKeyCredentialCreationOptions | null;
 }
 
 export default IRegisterOptions;

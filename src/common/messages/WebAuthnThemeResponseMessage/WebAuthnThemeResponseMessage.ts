@@ -1,18 +1,22 @@
 // enums
 import { WebAuthnMessageReferenceEnum } from '@common/enums';
 
-// errors
-import { BaseExtensionError } from '@common/errors';
-
 // types
-import type { IBaseResponseMessage } from '@common/types';
+import type {
+  ISerializedProviderError,
+  IBaseResponseMessage,
+} from '@common/types';
 import type { IResult } from './types';
 
 export default class WebAuthnThemeRequestMessage
   implements
-    IBaseResponseMessage<IResult, WebAuthnMessageReferenceEnum.ThemeResponse>
+    IBaseResponseMessage<
+      IResult,
+      WebAuthnMessageReferenceEnum.ThemeResponse,
+      ISerializedProviderError
+    >
 {
-  public readonly error: BaseExtensionError | null;
+  public readonly error: ISerializedProviderError | null;
   public readonly id: string;
   public readonly reference: WebAuthnMessageReferenceEnum.ThemeResponse;
   public readonly requestID: string;
@@ -26,7 +30,8 @@ export default class WebAuthnThemeRequestMessage
     result,
   }: IBaseResponseMessage<
     IResult,
-    WebAuthnMessageReferenceEnum.ThemeResponse
+    WebAuthnMessageReferenceEnum.ThemeResponse,
+    ISerializedProviderError
   >) {
     this.error = error;
     this.id = id;

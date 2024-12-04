@@ -2,13 +2,19 @@ import { encode as encodeBase64 } from '@stablelib/base64';
 import { v4 as uuid } from 'uuid';
 
 // errors
-import { UnknownError } from '@common/errors';
+import {
+  UnknownError,
+  WebAuthnMalformedRegistrationRequestError,
+} from '@common/errors';
 
 // enums
 import { WebAuthnMessageReferenceEnum } from '@common/enums';
 
 // constants
-import { DEFAULT_REQUEST_TIMEOUT } from '@external/constants';
+import {
+  DEFAULT_REQUEST_TIMEOUT,
+  WEB_AUTHN_REQUEST_TIMEOUT,
+} from '@external/constants';
 
 // messages
 import WebAuthnRegisterRequestMessage from '@common/messages/WebAuthnRegisterRequestMessage';
@@ -175,10 +181,19 @@ export default class WebAuthnMessageManager {
     clientInfo,
     publicKeyCreationOptions,
   }: IRegisterOptions): Promise<IRegisterResult | null> {
-    const result = await this._dispatchMessageWithTimeout<
+    let result: WebAuthnRegisterResponseMessageResult | null;
+
+    if (!publicKeyCreationOptions) {
+      throw new WebAuthnMalformedRegistrationRequestError(
+        'no public key creation options supplied'
+      );
+    }
+
+    result = await this._dispatchMessageWithTimeout<
       WebAuthnRegisterResponseMessageResult,
       WebAuthnRegisterRequestMessage
     >({
+      delay: WEB_AUTHN_REQUEST_TIMEOUT,
       message: new WebAuthnRegisterRequestMessage({
         id: uuid(),
         payload: {

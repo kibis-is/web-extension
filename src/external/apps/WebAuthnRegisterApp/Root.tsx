@@ -18,11 +18,11 @@ import IconButton from '@common/components/IconButton';
 import Notice from '@common/components/Notice';
 
 // constants
+import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@common/constants';
 import {
   EXTERNAL_POPUP_MAX_HEIGHT,
   EXTERNAL_POPUP_MAX_WIDTH,
 } from '@external/constants';
-import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@common/constants';
 
 // hooks
 import useDefaultTextColor from '@common/hooks/useDefaultTextColor';
@@ -46,6 +46,7 @@ const Root: FC<IRootProps> = ({
   fontFamily,
   onCancelClick,
   onRegisterClick,
+  onTryAgainClick,
   result,
 }) => {
   const { t } = useTranslation();
@@ -72,7 +73,7 @@ const Root: FC<IRootProps> = ({
           break;
       }
 
-      return <Notice message={errorMessage} size="xs" type="error" />;
+      return <Notice message={errorMessage} size="xs" type="error" w="full" />;
     }
 
     if (result) {
@@ -104,6 +105,38 @@ const Root: FC<IRootProps> = ({
         </Text>
       </VStack>
     );
+  };
+  const renderCTAButton = () => {
+    if (error) {
+      return (
+        <Button
+          colorMode={colorMode}
+          onClick={onTryAgainClick}
+          size="sm"
+          variant="solid"
+          w="full"
+        >
+          {t<string>('buttons.tryAgain')}
+        </Button>
+      );
+    }
+
+    if (result) {
+      return (
+        <Button
+          colorMode={colorMode}
+          onClick={onRegisterClick}
+          rightIcon={<KbSignIn />}
+          size="sm"
+          variant="solid"
+          w="full"
+        >
+          {t<string>('buttons.tryAgain')}
+        </Button>
+      );
+    }
+
+    return null;
   };
 
   return (
@@ -186,20 +219,7 @@ const Root: FC<IRootProps> = ({
             {t<string>('buttons.cancel')}
           </Button>
 
-          {(result || error) && (
-            <Button
-              colorMode={colorMode}
-              onClick={onRegisterClick}
-              size="sm"
-              variant="solid"
-              w="full"
-              {...(!error && {
-                rightIcon: <KbSignIn />,
-              })}
-            >
-              {t<string>(error ? 'buttons.tryAgain' : 'buttons.register')}
-            </Button>
-          )}
+          {renderCTAButton()}
         </HStack>
       </VStack>
     </VStack>

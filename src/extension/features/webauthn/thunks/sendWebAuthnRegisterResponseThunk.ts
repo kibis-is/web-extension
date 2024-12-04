@@ -34,6 +34,7 @@ import convertPublicKeyToAVMAddress from '@common/utils/convertPublicKeyToAVMAdd
 import fetchDecryptedKeyPairFromStorageWithPasskey from '@extension/utils/fetchDecryptedKeyPairFromStorageWithPasskey';
 import fetchDecryptedKeyPairFromStorageWithPassword from '@extension/utils/fetchDecryptedKeyPairFromStorageWithPassword';
 import fetchDecryptedKeyPairFromStorageWithUnencrypted from '@extension/utils/fetchDecryptedKeyPairFromStorageWithUnencrypted';
+import serialize from '@extension/utils/serialize';
 
 const sendWebAuthnRegisterResponseThunk: AsyncThunk<
   void, // return
@@ -70,7 +71,9 @@ const sendWebAuthnRegisterResponseThunk: AsyncThunk<
       await browser.tabs.sendMessage(
         event.payload.originTabID,
         new WebAuthnRegisterResponseMessage({
-          error: new WebAuthnInvalidPublicKeyError('no account found'),
+          error: serialize(
+            new WebAuthnInvalidPublicKeyError('no account found')
+          ),
           id,
           reference,
           requestID,
@@ -121,7 +124,9 @@ const sendWebAuthnRegisterResponseThunk: AsyncThunk<
       await browser.tabs.sendMessage(
         event.payload.originTabID,
         new WebAuthnRegisterResponseMessage({
-          error: new WebAuthnInvalidPublicKeyError('no private key found'),
+          error: serialize(
+            new WebAuthnInvalidPublicKeyError('no private key found')
+          ),
           id,
           reference,
           requestID,

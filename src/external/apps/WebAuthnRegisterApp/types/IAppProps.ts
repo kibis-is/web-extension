@@ -7,11 +7,11 @@ import type {
 
 interface IAppProps extends IBaseAppProps {
   clientInfo: IClientInformation;
+  credentialCreationOptions: CredentialCreationOptions;
   navigatorCredentialsCreateFn: typeof navigator.credentials.create;
   logger?: ILogger;
   onClose: () => void;
   onResponse: (response: PublicKeyCredential | null) => void;
-  publicKeyCreationOptions: PublicKeyCredentialCreationOptions;
 }
 
 export default IAppProps;

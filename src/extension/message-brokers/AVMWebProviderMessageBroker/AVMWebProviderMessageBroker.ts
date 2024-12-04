@@ -60,10 +60,10 @@ export default class AVMWebProviderMessageBroker extends BaseListener {
       });
     }
 
-    return await this._sendRequestToExtensionWithTimeout(message);
+    return await this._sendMessageToProviderWithTimeout(message);
   }
 
-  private async _sendRequestToExtensionWithTimeout(
+  private async _sendMessageToProviderWithTimeout(
     requestMessage: IAVMWebProviderCallbackOptions
   ): Promise<TResponseResults> {
     return new Promise<TResponseResults>((resolve, reject) => {

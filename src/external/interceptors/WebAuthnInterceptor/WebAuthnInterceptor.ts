@@ -123,6 +123,7 @@ export default class WebAuthnInterceptor {
       root.render(
         createElement(WebAuthnRegisterApp, {
           clientInfo: createClientInformation(),
+          credentialCreationOptions: options,
           i18n: await this._initializeI18n(),
           initialColorMode: 'light', // default to light
           initialFontFamily: 'Nunito',
@@ -130,7 +131,6 @@ export default class WebAuthnInterceptor {
           onClose: () => root.unmount(),
           onResponse: (response: PublicKeyCredential | null) =>
             resolve(response),
-          publicKeyCreationOptions: options.publicKey,
           ...(this._logger && {
             logger: this._logger,
           }),

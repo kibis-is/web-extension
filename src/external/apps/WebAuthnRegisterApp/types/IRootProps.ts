@@ -15,6 +15,7 @@ interface IRootProps {
   fontFamily?: ResponsiveValue<Property.FontFamily>;
   onCancelClick: () => void;
   onRegisterClick: () => void;
+  onTryAgainClick: () => void;
   result: IRegisterResult | null;
 }
 

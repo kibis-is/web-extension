@@ -18,6 +18,9 @@ import type {
 } from '@extension/types';
 import type { IWebAuthnErrorResponseThunkPayload } from '../types';
 
+// utils
+import serialize from '@extension/utils/serialize';
+
 const sendWebAuthnErrorResponseThunk: AsyncThunk<
   void, // return
   IWebAuthnErrorResponseThunkPayload, // args
@@ -37,12 +40,14 @@ const sendWebAuthnErrorResponseThunk: AsyncThunk<
     switch (event.type) {
       case EventTypeEnum.WebAuthnRegisterRequest:
         message = new WebAuthnRegisterResponseMessage({
-          error,
+          error: serialize(error),
           id,
           reference: WebAuthnMessageReferenceEnum.RegisterResponse,
           requestID: event.payload.message.id,
           result: null,
         });
+        break;
+      default:
         break;
     }
 

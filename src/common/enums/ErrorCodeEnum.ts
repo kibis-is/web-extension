@@ -43,7 +43,8 @@ enum ErrorCodeEnum {
 
   // webauthn
   WebAuthnRegistrationCanceledError = 9000,
-  WebAuthnInvalidPublicKeyError = 9001,
+  WebAuthnMalformedRegistrationRequestError = 9001,
+  WebAuthnInvalidPublicKeyError = 9002,
 }
 
 export default ErrorCodeEnum;

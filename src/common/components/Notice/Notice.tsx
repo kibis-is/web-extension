@@ -12,7 +12,12 @@ import { DEFAULT_GAP } from '@common/constants';
 // types
 import type { IProps } from './types';
 
-const Notice: FC<IProps> = ({ message, size = 'md', type = 'info' }) => {
+const Notice: FC<IProps> = ({
+  message,
+  size = 'md',
+  type = 'info',
+  ...stackProps
+}) => {
   // misc
   const backgroundColor = useMemo(() => {
     switch (type) {
@@ -71,6 +76,7 @@ const Notice: FC<IProps> = ({ message, size = 'md', type = 'info' }) => {
       px={DEFAULT_GAP / 3}
       py={1}
       spacing={DEFAULT_GAP / 3}
+      {...stackProps}
     >
       {/*icon*/}
       <Icon as={icon} color={borderColor} h={iconSize} w={iconSize} />

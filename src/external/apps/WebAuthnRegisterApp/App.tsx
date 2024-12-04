@@ -21,6 +21,7 @@ import type { IAppProps } from './types';
 
 const App: FC<IAppProps> = ({
   clientInfo,
+  credentialCreationOptions,
   i18n,
   initialColorMode,
   initialFontFamily,
@@ -28,7 +29,6 @@ const App: FC<IAppProps> = ({
   navigatorCredentialsCreateFn,
   onClose,
   onResponse,
-  publicKeyCreationOptions,
 }) => {
   // hooks
   const { theme: _theme, fetchThemeAction } = useTheme({ logger });
@@ -38,11 +38,12 @@ const App: FC<IAppProps> = ({
     () => _theme?.colorMode || initialColorMode,
     [_theme]
   );
+  const _name = useMemo<string>(() => 'WebAuthnRegisterApp', []);
   const fontFamily = useMemo(() => _theme?.font || initialFontFamily, [_theme]);
   // handlers
   const handleOnCancelClick = () => {
     onResponse(
-      navigatorCredentialsCreateFn.call(this, publicKeyCreationOptions)
+      navigatorCredentialsCreateFn.call(this, credentialCreationOptions)
     );
     onClose();
   };
@@ -50,14 +51,18 @@ const App: FC<IAppProps> = ({
     const _functionName = 'handleOnRegisterClick';
 
     if (!result) {
-      logger?.debug(
-        `WebAuthnRegisterApp#${_functionName}: no credentials found`
-      );
+      logger?.debug(`${_name}#${_functionName}: no credentials found`);
 
       return;
     }
 
     onResponse(result.credential);
+  };
+  const handleOnTryAgainClick = async () => {
+    await registerAction({
+      clientInfo,
+      publicKeyCreationOptions: credentialCreationOptions.publicKey || null,
+    });
   };
 
   useEffect(() => {
@@ -65,7 +70,7 @@ const App: FC<IAppProps> = ({
       await fetchThemeAction();
       await registerAction({
         clientInfo,
-        publicKeyCreationOptions,
+        publicKeyCreationOptions: credentialCreationOptions.publicKey || null,
       });
     })();
   }, []);
@@ -89,6 +94,7 @@ const App: FC<IAppProps> = ({
           fontFamily={fontFamily}
           onCancelClick={handleOnCancelClick}
           onRegisterClick={handleOnRegisterClick}
+          onTryAgainClick={handleOnTryAgainClick}
           result={result}
         />
       </ChakraProvider>
