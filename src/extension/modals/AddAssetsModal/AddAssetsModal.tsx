@@ -431,7 +431,12 @@ const AddAssetsModal: FC<IModalProps> = ({ onClose }) => {
     if (selectedNetwork && account) {
       if (selectedAsset) {
         if (confirming) {
-          return <AddAssetsConfirmingModalContent asset={selectedAsset} />;
+          return (
+            <AddAssetsConfirmingModalContent
+              colorMode={colorMode}
+              asset={selectedAsset}
+            />
+          );
         }
 
         switch (selectedAsset.type) {

@@ -1,20 +1,21 @@
 import {
   ARC0027MethodEnum,
-  IAccount as IAVMWebProvideAccount,
-  IEnableResult,
+  type IAccount as IAVMWebProvideAccount,
+  type IEnableResult,
 } from '@agoralabs-sh/avm-web-provider';
-import { AsyncThunk, createAsyncThunk } from '@reduxjs/toolkit';
+import { type AsyncThunk, createAsyncThunk } from '@reduxjs/toolkit';
 import { v4 as uuid } from 'uuid';
 import browser from 'webextension-polyfill';
 
 // enums
+import { AVMWebProviderMessageReferenceEnum } from '@common/enums';
 import { ThunkEnum } from '../enums';
 
 // features
 import { removeEventByIdThunk } from '@extension/features/events';
 
 // messages
-import { AVMWebProviderResponseMessage } from '@common/messages';
+import AVMWebProviderResponseMessage from '@common/messages/AVMWebProviderResponseMessage';
 
 // types
 import type {
@@ -48,12 +49,14 @@ const sendEnableResponseThunk: AsyncThunk<
     // send the error the webpage (via the content script)
     if (error) {
       await browser.tabs.sendMessage(
-        event.payload.originTabId,
+        event.payload.originTabID,
         new AVMWebProviderResponseMessage<IEnableResult>({
           error,
           id: uuid(),
-          method: event.payload.message.method,
-          requestId: event.payload.message.id,
+          method: event.payload.message.payload.method,
+          reference: AVMWebProviderMessageReferenceEnum.Response,
+          requestID: event.payload.message.id,
+          result: null,
         })
       );
 
@@ -66,11 +69,13 @@ const sendEnableResponseThunk: AsyncThunk<
     // if there is a session, send it back to the webpage (via the content script)
     if (session) {
       await browser.tabs.sendMessage(
-        event.payload.originTabId,
+        event.payload.originTabID,
         new AVMWebProviderResponseMessage<IEnableResult>({
+          error: null,
           id: uuid(),
-          method: event.payload.message.method,
-          requestId: event.payload.message.id,
+          method: event.payload.message.payload.method,
+          reference: AVMWebProviderMessageReferenceEnum.Response,
+          requestID: event.payload.message.id,
           result: {
             accounts: session.authorizedAddresses.map<IAVMWebProvideAccount>(
               (address) => {

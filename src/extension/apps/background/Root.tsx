@@ -15,7 +15,7 @@ import ARC0300KeyRegistrationTransactionSendEventModal from '@extension/modals/A
 import EnableModal from '@extension/modals/EnableModal';
 import SignMessageModal from '@extension/modals/SignMessageModal';
 import SignTransactionsModal from '@extension/modals/SignTransactionsModal';
-import WebAuthnCreateModal from '@extension/modals/WebAuthnCreateModal';
+import WebAuthnRegisterModal from '@extension/modals/WebAuthnRegisterModal';
 
 // pages
 import SplashPage from '@extension/pages/SplashPage';
@@ -64,7 +64,7 @@ const Root: FC<IRootProps> = ({ i18n }) => {
       <ARC0300KeyRegistrationTransactionSendEventModal
         onClose={handleModalClose}
       />
-      <WebAuthnCreateModal onClose={handleModalClose} />
+      <WebAuthnRegisterModal onClose={handleModalClose} />
 
       <SplashPage />
     </>

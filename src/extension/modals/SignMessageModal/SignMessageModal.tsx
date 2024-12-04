@@ -148,7 +148,7 @@ const SignMessageModal: FC<IModalProps> = ({ onClose }) => {
     let signature: Uint8Array;
     let signerAddress: string;
 
-    if (!event || !event.payload.message.params || !signer) {
+    if (!event || !event.payload.message.payload.params || !signer) {
       return;
     }
 
@@ -160,7 +160,9 @@ const SignMessageModal: FC<IModalProps> = ({ onClose }) => {
 
     try {
       signature = await signBytes({
-        bytes: new TextEncoder().encode(event.payload.message.params.message),
+        bytes: new TextEncoder().encode(
+          event.payload.message.payload.params.message
+        ),
         logger,
         publicKey: AccountRepository.decode(signer.publicKey),
         ...result,
@@ -207,7 +209,7 @@ const SignMessageModal: FC<IModalProps> = ({ onClose }) => {
   const renderContent = () => {
     if (
       fetching ||
-      !event?.payload.message.params ||
+      !event?.payload.message.payload.params ||
       !authorizedAccounts ||
       !signer
     ) {
@@ -218,7 +220,7 @@ const SignMessageModal: FC<IModalProps> = ({ onClose }) => {
       <VStack spacing={DEFAULT_GAP - 2} w="full">
         {/*account select*/}
         <VStack spacing={DEFAULT_GAP / 3} w="full">
-          {event.payload.message.params.signer ? (
+          {event.payload.message.payload.params.signer ? (
             <>
               <Text textAlign="left" w="full">{`${t<string>(
                 'labels.addressToSign'
@@ -252,7 +254,7 @@ const SignMessageModal: FC<IModalProps> = ({ onClose }) => {
             'labels.message'
           )}:`}</Text>
           <Code borderRadius="md" w="full">
-            {event.payload.message.params.message}
+            {event.payload.message.payload.params.message}
           </Code>
         </VStack>
       </VStack>
@@ -287,13 +289,21 @@ const SignMessageModal: FC<IModalProps> = ({ onClose }) => {
               <VStack alignItems="center" spacing={DEFAULT_GAP - 2} w="full">
                 <ClientHeader
                   description={
-                    event.payload.message.clientInfo.description || undefined
+                    event.payload.message.payload.clientInfo.description ||
+                    undefined
                   }
                   iconUrl={
-                    event.payload.message.clientInfo.iconUrl || undefined
+                    event.payload.message.payload.clientInfo.iconUrl ||
+                    undefined
                   }
-                  host={event.payload.message.clientInfo.host || 'unknown host'}
-                  name={event.payload.message.clientInfo.appName || 'Unknown'}
+                  host={
+                    event.payload.message.payload.clientInfo.host ||
+                    'unknown host'
+                  }
+                  name={
+                    event.payload.message.payload.clientInfo.appName ||
+                    'Unknown'
+                  }
                 />
 
                 {/*caption*/}

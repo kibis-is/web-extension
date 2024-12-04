@@ -1,14 +1,14 @@
 import type { ISignMessageParams } from '@agoralabs-sh/avm-web-provider';
 
+// events
+import AVMWebProviderRequestEvent from '@extension/events/AVMWebProviderRequestEvent';
+
 // types
-import type {
-  IAccountWithExtendedProps,
-  IAVMWebProviderRequestEvent,
-} from '@extension/types';
+import type { IAccountWithExtendedProps } from '@extension/types';
 
 interface IUseSignMessageModalState {
   authorizedAccounts: IAccountWithExtendedProps[] | null;
-  event: IAVMWebProviderRequestEvent<ISignMessageParams> | null;
+  event: AVMWebProviderRequestEvent<ISignMessageParams> | null;
   signer: IAccountWithExtendedProps | null;
   setAuthorizedAccounts: (
     authorizedAccounts: IAccountWithExtendedProps[] | null

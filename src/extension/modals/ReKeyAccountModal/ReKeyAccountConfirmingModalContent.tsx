@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next';
 
 // components
 import AddressDisplay from '@extension/components/AddressDisplay';
-import CircularProgressWithIcon from '@extension/components/CircularProgressWithIcon';
+import CircularProgressWithIcon from '@common/components/CircularProgressWithIcon';
 
 // constants
 import { DEFAULT_GAP } from '@common/constants';
@@ -22,6 +22,7 @@ import type { IConfirmingModalContentProps } from './types';
 
 const ReKeyAccountConfirmingModalContent: FC<IConfirmingModalContentProps> = ({
   accounts,
+  colorMode,
   currentAddress,
   network,
   reKeyAddress,
@@ -42,6 +43,7 @@ const ReKeyAccountConfirmingModalContent: FC<IConfirmingModalContentProps> = ({
     >
       {/*progress*/}
       <CircularProgressWithIcon
+        colorMode={colorMode}
         icon={reKeyType === 'undo' ? IoLockOpenOutline : IoLockClosedOutline}
       />
 

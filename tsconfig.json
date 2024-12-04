@@ -39,7 +39,7 @@
       "@extension/constants": ["src/extension/constants"],
       "@extension/contracts/*": ["src/extension/contracts/*"],
       "@extension/enums": ["src/extension/enums"],
-      "@extension/events": ["src/extension/events"],
+      "@extension/events/*": ["src/extension/events/*"],
       "@extension/features/*": ["src/extension/features/*"],
       "@extension/fonts/*": ["src/extension/fonts/*"],
       "@extension/hooks/*": ["src/extension/hooks/*"],

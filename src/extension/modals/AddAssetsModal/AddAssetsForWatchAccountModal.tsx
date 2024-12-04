@@ -64,6 +64,7 @@ import {
   useSelectSettingsSelectedNetwork,
   useSelectSettingsPreferredBlockExplorer,
   useSelectSettings,
+  useSelectSettingsColorMode,
 } from '@extension/selectors';
 
 // theme
@@ -94,6 +95,7 @@ const AddAssetsForWatchAccountModal: FC<IModalProps> = ({ onClose }) => {
   const accounts = useSelectAccounts();
   const arc0200Assets = useSelectAddAssetsARC0200Assets();
   const confirming = useSelectAddAssetsConfirming();
+  const colorMode = useSelectSettingsColorMode();
   const explorer = useSelectSettingsPreferredBlockExplorer();
   const fetching = useSelectAddAssetsFetching();
   const selectedNetwork = useSelectSettingsSelectedNetwork();
@@ -246,7 +248,12 @@ const AddAssetsForWatchAccountModal: FC<IModalProps> = ({ onClose }) => {
     if (selectedNetwork && account) {
       if (selectedAsset && selectedAsset.type === AssetTypeEnum.ARC0200) {
         if (confirming) {
-          return <AddAssetsConfirmingModalContent asset={selectedAsset} />;
+          return (
+            <AddAssetsConfirmingModalContent
+              colorMode={colorMode}
+              asset={selectedAsset}
+            />
+          );
         }
 
         return (

@@ -1,11 +1,14 @@
 import {
   ARC0027MethodEnum,
-  IEnableParams,
+  type IEnableParams,
 } from '@agoralabs-sh/avm-web-provider';
 import { useEffect, useState } from 'react';
 
 // enums
 import { EventTypeEnum } from '@extension/enums';
+
+// events
+import AVMWebProviderRequestEvent from '@extension/events/AVMWebProviderRequestEvent';
 
 // selectors
 import {
@@ -18,7 +21,6 @@ import {
 // types
 import type {
   IAccountWithExtendedProps,
-  IAVMWebProviderRequestEvent,
   INetworkWithTransactionParams,
 } from '@extension/types';
 import type { IUseEnableModalState } from './types';
@@ -39,7 +41,7 @@ export default function useEnableModal(): IUseEnableModalState {
     IAccountWithExtendedProps[] | null
   >(null);
   const [event, setEvent] =
-    useState<IAVMWebProviderRequestEvent<IEnableParams> | null>(null);
+    useState<AVMWebProviderRequestEvent<IEnableParams> | null>(null);
   const [network, setNetwork] = useState<INetworkWithTransactionParams | null>(
     null
   );
@@ -49,8 +51,8 @@ export default function useEnableModal(): IUseEnableModalState {
       (events.find(
         (value) =>
           value.type === EventTypeEnum.AVMWebProviderRequest &&
-          value.payload.message.method === ARC0027MethodEnum.Enable
-      ) as IAVMWebProviderRequestEvent<IEnableParams>) || null
+          value.payload.message.payload.method === ARC0027MethodEnum.Enable
+      ) as AVMWebProviderRequestEvent<IEnableParams>) || null
     );
   }, [events]);
   // get the available accounts
@@ -75,7 +77,8 @@ export default function useEnableModal(): IUseEnableModalState {
       setNetwork(
         networks.find(
           (value) =>
-            value.genesisHash === event.payload.message.params?.genesisHash
+            value.genesisHash ===
+            event.payload.message.payload.params?.genesisHash
         ) || selectDefaultNetwork(networks)
       );
     }

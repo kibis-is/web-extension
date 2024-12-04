@@ -20,7 +20,7 @@ import { IoCheckmarkOutline, IoQrCodeOutline } from 'react-icons/io5';
 
 // components
 import Button from '@common/components/Button';
-import CircularProgressWithIcon from '@extension/components/CircularProgressWithIcon';
+import CircularProgressWithIcon from '@common/components/CircularProgressWithIcon';
 import CopyIconButton from '@extension/components/CopyIconButton';
 import PillSwitch from '@extension/components/PillSwitch';
 
@@ -135,7 +135,10 @@ const ShareAddressModal: FC<IProps> = ({ address, isOpen, onClose }) => {
                 justifyContent="center"
                 w={qrCodeSize}
               >
-                <CircularProgressWithIcon icon={IoQrCodeOutline} />
+                <CircularProgressWithIcon
+                  colorMode={colorMode}
+                  icon={IoQrCodeOutline}
+                />
               </Flex>
             )}
             <HStack

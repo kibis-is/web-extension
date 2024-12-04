@@ -1,5 +1,6 @@
 enum ThunkEnum {
-  SendWebAuthnCreateResponse = 'webauthn/sendWebAuthnCreateResponse',
+  SendWebAuthnErrorResponse = 'webauthn/sendWebAuthnErrorResponse',
+  SendWebAuthnRegisterResponse = 'webauthn/sendWebAuthnRegisterResponse',
 }
 
 export default ThunkEnum;

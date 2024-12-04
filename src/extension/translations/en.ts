@@ -194,6 +194,8 @@ const translation: IResourceLanguage = {
     mustEnterPasswordToImportAccount:
       'You must enter your password to import this account.',
     mustEnterPasswordToReEncryptPrivateKeys: `Enter your password to re-encrypt the private keys.`,
+    mustEnterPasswordToRegisterPasskey:
+      'Enter your password to register a passkey.',
     mustEnterPasswordToSign: 'Enter your password to sign.',
     mustEnterPasswordToSignSecurityToken:
       'Enter your password to sign this security token.',
@@ -311,10 +313,11 @@ const translation: IResourceLanguage = {
     updatingTransactions: 'Updating transactions',
     viewSeedPhrase1: 'Select an account to view the seed phrase.',
     viewSeedPhrase2: 'You will be prompted to enter your password.',
-    webAuthnCreateDescription1:
+    webAuthnRegisterRequestDescription1:
       'An app is requesting to register a new passkey.',
-    webAuthnCreateDescription2:
+    webAuthnRegisterRequestDescription2:
       'Select which account you would like to use to register the passkey.',
+    webAuthnRegisterRequestWaiting: 'Waiting for passkey account selection.',
   },
   errors: {
     descriptions: {

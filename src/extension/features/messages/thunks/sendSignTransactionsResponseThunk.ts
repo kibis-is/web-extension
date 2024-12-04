@@ -1,19 +1,20 @@
 import {
   ARC0027MethodEnum,
-  ISignTransactionsResult,
+  type ISignTransactionsResult,
 } from '@agoralabs-sh/avm-web-provider';
-import { AsyncThunk, createAsyncThunk } from '@reduxjs/toolkit';
+import { type AsyncThunk, createAsyncThunk } from '@reduxjs/toolkit';
 import { v4 as uuid } from 'uuid';
 import browser from 'webextension-polyfill';
 
 // enums
+import { AVMWebProviderMessageReferenceEnum } from '@common/enums';
 import { ThunkEnum } from '../enums';
 
 // features
 import { removeEventByIdThunk } from '@extension/features/events';
 
 // messages
-import { AVMWebProviderResponseMessage } from '@common/messages';
+import AVMWebProviderResponseMessage from '@common/messages/AVMWebProviderResponseMessage';
 
 // types
 import type {
@@ -43,12 +44,14 @@ const sendSignTransactionsResponseThunk: AsyncThunk<
     // send the error the webpage (via the content script)
     if (error) {
       await browser.tabs.sendMessage(
-        event.payload.originTabId,
+        event.payload.originTabID,
         new AVMWebProviderResponseMessage<ISignTransactionsResult>({
           error,
           id: uuid(),
-          method: event.payload.message.method,
-          requestId: event.payload.message.id,
+          method: event.payload.message.payload.method,
+          reference: AVMWebProviderMessageReferenceEnum.Response,
+          requestID: event.payload.message.id,
+          result: null,
         })
       );
 
@@ -61,11 +64,13 @@ const sendSignTransactionsResponseThunk: AsyncThunk<
     // if there is signed transactions, send them back to the webpage (via the content script)
     if (stxns) {
       await browser.tabs.sendMessage(
-        event.payload.originTabId,
+        event.payload.originTabID,
         new AVMWebProviderResponseMessage<ISignTransactionsResult>({
+          error: null,
           id: uuid(),
-          method: event.payload.message.method,
-          requestId: event.payload.message.id,
+          method: event.payload.message.payload.method,
+          reference: AVMWebProviderMessageReferenceEnum.Response,
+          requestID: event.payload.message.id,
           result: {
             providerId: __PROVIDER_ID__,
             stxns,

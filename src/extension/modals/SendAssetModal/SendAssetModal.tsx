@@ -353,6 +353,7 @@ const SendAssetModal: FC<IModalProps> = ({ onClose }) => {
     if (confirming) {
       return (
         <SendAssetModalConfirmingContent
+          colorMode={colorMode}
           numberOfTransactions={transactions?.length}
         />
       );

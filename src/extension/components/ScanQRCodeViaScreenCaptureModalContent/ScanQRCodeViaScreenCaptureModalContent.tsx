@@ -20,7 +20,7 @@ import {
 
 // components
 import Button from '@common/components/Button';
-import CircularProgressWithIcon from '@extension/components/CircularProgressWithIcon';
+import CircularProgressWithIcon from '@common/components/CircularProgressWithIcon';
 
 // constants
 import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@common/constants';
@@ -129,6 +129,7 @@ const ScanQRCodeViaScreenCaptureModalContent: FC<
       <>
         {/*progress*/}
         <CircularProgressWithIcon
+          colorMode={colorMode}
           icon={IoQrCodeOutline}
           {...(pagination && {
             progress: pagination,

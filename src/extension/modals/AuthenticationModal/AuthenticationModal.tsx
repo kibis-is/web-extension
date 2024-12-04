@@ -22,7 +22,7 @@ import browser from 'webextension-polyfill';
 
 // components
 import Button from '@common/components/Button';
-import CircularProgressWithIcon from '@extension/components/CircularProgressWithIcon';
+import CircularProgressWithIcon from '@common/components/CircularProgressWithIcon';
 import PasswordInput from '@extension/components/PasswordInput';
 
 // constants
@@ -157,7 +157,10 @@ const AuthenticationModal: FC<IProps> = ({
           w="full"
         >
           {/*progress*/}
-          <CircularProgressWithIcon icon={IoLockClosedOutline} />
+          <CircularProgressWithIcon
+            colorMode={colorMode}
+            icon={IoLockClosedOutline}
+          />
 
           {/*caption*/}
           <Text color={subTextColor} fontSize="sm" textAlign="center" w="full">
@@ -178,7 +181,7 @@ const AuthenticationModal: FC<IProps> = ({
           w="full"
         >
           {/*passkey loader*/}
-          <CircularProgressWithIcon icon={KbPasskey} />
+          <CircularProgressWithIcon colorMode={colorMode} icon={KbPasskey} />
 
           {/*caption*/}
           <Text color={subTextColor} fontSize="sm" textAlign="center" w="full">

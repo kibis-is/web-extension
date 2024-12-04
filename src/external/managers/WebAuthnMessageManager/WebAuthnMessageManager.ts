@@ -11,19 +11,16 @@ import { WebAuthnMessageReferenceEnum } from '@common/enums';
 import { DEFAULT_REQUEST_TIMEOUT } from '@external/constants';
 
 // messages
-import WebAuthnAccountsRequestMessage from '@common/messages/WebAuthnAccountsRequestMessage';
 import WebAuthnRegisterRequestMessage from '@common/messages/WebAuthnRegisterRequestMessage';
 import WebAuthnThemeRequestMessage from '@common/messages/WebAuthnThemeRequestMessage';
 
 // types
-import type { IResult as WebAuthnAccountsResponseMessageResult } from '@common/messages/WebAuthnAccountsResponseMessage';
 import type { IResult as WebAuthnRegisterResponseMessageResult } from '@common/messages/WebAuthnRegisterResponseMessage';
 import type { IResult as WebAuthnThemeResponseMessageResult } from '@common/messages/WebAuthnThemeResponseMessage';
 import type {
   IBaseMessage,
   IBaseOptions,
   IBaseResponseMessage,
-  IExternalAccount,
   IExternalTheme,
   ILogger,
   ISerializedPublicKeyCredentialCreationOptions,
@@ -31,6 +28,7 @@ import type {
 import type {
   IDispatchMessageWithTimeoutOptions,
   IRegisterOptions,
+  IRegisterResult,
 } from './types';
 
 // utils
@@ -158,25 +156,10 @@ export default class WebAuthnMessageManager {
    * public functions
    */
 
-  public async fetchAccounts(): Promise<IExternalAccount[]> {
-    const result = await this._dispatchMessageWithTimeout<
-      WebAuthnAccountsResponseMessageResult,
-      IBaseMessage<WebAuthnMessageReferenceEnum.AccountsRequest>
-    >({
-      message: new WebAuthnAccountsRequestMessage({
-        id: uuid(),
-        reference: WebAuthnMessageReferenceEnum.AccountsRequest,
-      }),
-      responseReference: WebAuthnMessageReferenceEnum.AccountsResponse,
-    });
-
-    return result?.accounts || [];
-  }
-
   public async fetchTheme(): Promise<IExternalTheme | null> {
     const result = await this._dispatchMessageWithTimeout<
       WebAuthnThemeResponseMessageResult,
-      IBaseMessage<WebAuthnMessageReferenceEnum.ThemeRequest>
+      WebAuthnThemeRequestMessage
     >({
       message: new WebAuthnThemeRequestMessage({
         id: uuid(),
@@ -189,19 +172,20 @@ export default class WebAuthnMessageManager {
   }
 
   public async register({
-    options,
-    publicKey,
-  }: IRegisterOptions): Promise<PublicKeyCredential | null> {
+    clientInfo,
+    publicKeyCreationOptions,
+  }: IRegisterOptions): Promise<IRegisterResult | null> {
     const result = await this._dispatchMessageWithTimeout<
       WebAuthnRegisterResponseMessageResult,
-      IBaseMessage<WebAuthnMessageReferenceEnum.RegisterRequest>
+      WebAuthnRegisterRequestMessage
     >({
       message: new WebAuthnRegisterRequestMessage({
         id: uuid(),
         payload: {
-          options:
-            WebAuthnMessageManager._serializePublicKeyCreationOptions(options),
-          publicKey,
+          clientInfo,
+          options: WebAuthnMessageManager._serializePublicKeyCreationOptions(
+            publicKeyCreationOptions
+          ),
         },
         reference: WebAuthnMessageReferenceEnum.RegisterRequest,
       }),
@@ -212,7 +196,10 @@ export default class WebAuthnMessageManager {
       return null;
     }
 
-    // create the public key credential
-    return new PublicKeyCredential();
+    // TODO: convert serialized public key credential
+    return {
+      account: result.account,
+      credential: new PublicKeyCredential(),
+    };
   }
 }

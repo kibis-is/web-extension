@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { IoLockClosedOutline, IoLockOpenOutline } from 'react-icons/io5';
 
 // components
-import CircularProgressWithIcon from '@extension/components/CircularProgressWithIcon';
+import CircularProgressWithIcon from '@common/components/CircularProgressWithIcon';
 
 // constants
 import { DEFAULT_GAP } from '@common/constants';
@@ -17,6 +17,7 @@ import useSubTextColor from '@extension/hooks/useSubTextColor';
 import type { IProps } from './types';
 
 const ReEncryptKeysLoadingContent: FC<IProps> = ({
+  colorMode,
   encryptionProgressState,
   fontSize = 'sm',
 }) => {
@@ -41,6 +42,7 @@ const ReEncryptKeysLoadingContent: FC<IProps> = ({
     >
       {/*progress*/}
       <CircularProgressWithIcon
+        colorMode={colorMode}
         icon={incomplete ? IoLockOpenOutline : IoLockClosedOutline}
         iconColor={incomplete ? defaultTextColor : 'green.600'}
         progress={[count, total]}

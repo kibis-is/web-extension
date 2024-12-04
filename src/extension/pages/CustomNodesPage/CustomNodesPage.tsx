@@ -285,7 +285,6 @@ const CustomNodesPage: FC = () => {
         >
           {/*network selection*/}
           <NetworkSelect
-            _context={_context}
             networks={networks}
             onSelect={handleNetworkSelect}
             value={network}

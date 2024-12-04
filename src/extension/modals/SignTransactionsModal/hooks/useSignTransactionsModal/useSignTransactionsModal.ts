@@ -11,6 +11,9 @@ import { useDispatch } from 'react-redux';
 // enums
 import { EventTypeEnum } from '@extension/enums';
 
+// events
+import AVMWebProviderRequestEvent from '@extension/events/AVMWebProviderRequestEvent';
+
 // features
 import { removeEventByIdThunk } from '@extension/features/events';
 import { sendSignTransactionsResponseThunk } from '@extension/features/messages';
@@ -28,7 +31,6 @@ import {
 import type {
   IAppThunkDispatch,
   IBackgroundRootState,
-  IAVMWebProviderRequestEvent,
   IMainRootState,
   INetwork,
 } from '@extension/types';
@@ -50,15 +52,16 @@ export default function useSignTransactionsModal(): IState {
   const standardAssets = useSelectStandardAssets();
   // state
   const [event, setEvent] =
-    useState<IAVMWebProviderRequestEvent<ISignTransactionsParams> | null>(null);
+    useState<AVMWebProviderRequestEvent<ISignTransactionsParams> | null>(null);
 
   useEffect(() => {
     setEvent(
       (events.find(
         (value) =>
           value.type === EventTypeEnum.AVMWebProviderRequest &&
-          value.payload.message.method === ARC0027MethodEnum.SignTransactions
-      ) as IAVMWebProviderRequestEvent<ISignTransactionsParams>) || null
+          value.payload.message.payload.method ===
+            ARC0027MethodEnum.SignTransactions
+      ) as AVMWebProviderRequestEvent<ISignTransactionsParams>) || null
     );
   }, [events]);
   // check for any unknown standard assets and fetch the asset information
@@ -69,14 +72,15 @@ export default function useSignTransactionsModal(): IState {
 
       if (
         event &&
-        event.payload.message.params &&
+        event.payload.message.payload.params &&
         standardAssets &&
         networks.length > 0
       ) {
         try {
-          decodedUnsignedTransactions = event.payload.message.params.txns.map(
-            (value) => decodeUnsignedTransaction(decodeBase64(value.txn))
-          );
+          decodedUnsignedTransactions =
+            event.payload.message.payload.params.txns.map((value) =>
+              decodeUnsignedTransaction(decodeBase64(value.txn))
+            );
         } catch (error) {
           _error = `failed to decode transactions: ${error.message}`;
 

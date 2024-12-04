@@ -13,10 +13,11 @@ import {
   AppTypeEnum,
   ARC0300AuthorityEnum,
   ARC0300PathEnum,
+  EventTypeEnum,
 } from '@extension/enums';
 
 // events
-import { ARC0300KeyRegistrationTransactionSendEvent } from '@extension/events';
+import ARC0300KeyRegistrationTransactionSendEvent from '@extension/events/ARC0300KeyRegistrationTransactionSendEvent';
 
 // managers
 import AppWindowManager from '@extension/managers/AppWindowManager';
@@ -35,7 +36,7 @@ import BaseListener from '@common/services/BaseListener';
 import CredentialLockService from '../CredentialLockService';
 
 // types
-import type { IBaseOptions, ILogger } from '@common/types';
+import type { IBaseOptions } from '@common/types';
 import {
   IAppWindow,
   IARC0300BaseSchema,
@@ -48,7 +49,7 @@ import {
 // utils
 import isExtensionInitialized from '@extension/utils/isExtensionInitialized';
 import parseURIToARC0300Schema from '@extension/utils/parseURIToARC0300Schema';
-import sendExtensionEvent from '@extension/utils/sendExtensionEvent';
+import queueProviderEvent from '@extension/utils/queueProviderEvent';
 import supportedNetworksFromSettings from '@extension/utils/supportedNetworksFromSettings';
 
 export default class ProviderActionListener extends BaseListener {
@@ -306,13 +307,14 @@ export default class ProviderActionListener extends BaseListener {
               (arc0300Schema as TARC0300TransactionSendSchemas).query.type
             ) {
               case TransactionType.keyreg:
-                return await sendExtensionEvent({
+                return await queueProviderEvent({
                   appWindowRepository: this._appWindowRepository,
                   event: new ARC0300KeyRegistrationTransactionSendEvent({
                     id: uuid(),
                     payload: arc0300Schema as
                       | IARC0300OfflineKeyRegistrationTransactionSendSchema
                       | IARC0300OnlineKeyRegistrationTransactionSendSchema,
+                    type: EventTypeEnum.ARC0300KeyRegistrationTransactionSend,
                   }),
                   ...(this._logger && {
                     logger: this._logger,

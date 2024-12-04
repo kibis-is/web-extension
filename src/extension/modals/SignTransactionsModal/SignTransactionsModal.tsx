@@ -135,7 +135,7 @@ const SignTransactionsModal: FC<IModalProps> = ({ onClose }) => {
     let authorizedAccounts: IAccountWithExtendedProps[];
     let stxns: (string | null)[];
 
-    if (!event || !event.payload.message.params) {
+    if (!event || !event.payload.message.payload.params) {
       return;
     }
 
@@ -151,7 +151,7 @@ const SignTransactionsModal: FC<IModalProps> = ({ onClose }) => {
       });
       stxns = await signTransactions({
         accounts: authorizedAccounts,
-        arc0001Transactions: event.payload.message.params.txns,
+        arc0001Transactions: event.payload.message.payload.params.txns,
         authAccounts: accounts,
         logger,
         networks,
@@ -212,12 +212,12 @@ const SignTransactionsModal: FC<IModalProps> = ({ onClose }) => {
     let decodedTransactions: Transaction[];
     let groupsOfTransactions: Transaction[][];
 
-    if (!event || !event.payload.message.params) {
+    if (!event || !event.payload.message.payload.params) {
       return <VStack spacing={DEFAULT_GAP - 2} w="full"></VStack>;
     }
 
-    decodedTransactions = event.payload.message.params.txns.map((value) =>
-      decodeUnsignedTransaction(decodeBase64(value.txn))
+    decodedTransactions = event.payload.message.payload.params.txns.map(
+      (value) => decodeUnsignedTransaction(decodeBase64(value.txn))
     );
     groupsOfTransactions = groupTransactions(decodedTransactions);
 
@@ -259,9 +259,9 @@ const SignTransactionsModal: FC<IModalProps> = ({ onClose }) => {
         onConfirm={handleOnAuthenticationModalConfirm}
         onError={handleOnError}
         {...(event &&
-          event.payload.message.params && {
+          event.payload.message.payload.params && {
             passwordHint: t<string>(
-              event.payload.message.params.txns.length > 1
+              event.payload.message.payload.params.txns.length > 1
                 ? 'captions.mustEnterPasswordToSignTransactions'
                 : 'captions.mustEnterPasswordToSignTransaction'
             ),
@@ -281,23 +281,31 @@ const SignTransactionsModal: FC<IModalProps> = ({ onClose }) => {
           borderBottomRadius={0}
         >
           <ModalHeader justifyContent="center" px={DEFAULT_GAP}>
-            {event && event.payload.message.params ? (
+            {event && event.payload.message.payload.params ? (
               <VStack alignItems="center" spacing={DEFAULT_GAP - 2} w="full">
                 <ClientHeader
                   description={
-                    event.payload.message.clientInfo.description || undefined
+                    event.payload.message.payload.clientInfo.description ||
+                    undefined
                   }
                   iconUrl={
-                    event.payload.message.clientInfo.iconUrl || undefined
+                    event.payload.message.payload.clientInfo.iconUrl ||
+                    undefined
                   }
-                  host={event.payload.message.clientInfo.host || 'unknown host'}
-                  name={event.payload.message.clientInfo.appName || 'Unknown'}
+                  host={
+                    event.payload.message.payload.clientInfo.host ||
+                    'unknown host'
+                  }
+                  name={
+                    event.payload.message.payload.clientInfo.appName ||
+                    'Unknown'
+                  }
                 />
 
                 {/*caption*/}
                 <Text color={subTextColor} fontSize="sm" textAlign="center">
                   {t<string>(
-                    event.payload.message.params.txns.length > 1
+                    event.payload.message.payload.params.txns.length > 1
                       ? 'captions.signTransactionsRequest'
                       : 'captions.signTransactionRequest'
                   )}

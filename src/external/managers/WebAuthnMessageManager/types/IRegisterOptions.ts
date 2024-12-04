@@ -1,6 +1,9 @@
+// types
+import type { IClientInformation } from '@common/types';
+
 interface IRegisterOptions {
-  options: PublicKeyCredentialCreationOptions;
-  publicKey: string;
+  clientInfo: IClientInformation;
+  publicKeyCreationOptions: PublicKeyCredentialCreationOptions;
 }
 
 export default IRegisterOptions;

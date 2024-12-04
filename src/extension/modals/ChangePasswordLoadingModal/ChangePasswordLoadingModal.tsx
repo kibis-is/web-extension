@@ -1,4 +1,10 @@
-import { Modal, ModalBody, ModalContent, ModalOverlay } from '@chakra-ui/react';
+import {
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalOverlay,
+  useColorMode,
+} from '@chakra-ui/react';
 import React, { FC } from 'react';
 
 // components
@@ -6,6 +12,9 @@ import ReEncryptKeysLoadingContent from '@extension/components/ReEncryptKeysLoad
 
 // constants
 import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@common/constants';
+
+// selectors
+import { useSelectSettingsColorMode } from '@extension/selectors';
 
 // theme
 import { theme } from '@common/theme';
@@ -18,6 +27,8 @@ const ChangePasswordLoadingModal: FC<IProps> = ({
   isOpen,
   onClose,
 }) => {
+  // selectors
+  const colorMode = useSelectSettingsColorMode();
   // handlers
   const handleCLose = () => onClose && onClose();
 
@@ -41,6 +52,7 @@ const ChangePasswordLoadingModal: FC<IProps> = ({
       >
         <ModalBody display="flex" px={DEFAULT_GAP * 2}>
           <ReEncryptKeysLoadingContent
+            colorMode={colorMode}
             encryptionProgressState={encryptionProgressState}
           />
         </ModalBody>

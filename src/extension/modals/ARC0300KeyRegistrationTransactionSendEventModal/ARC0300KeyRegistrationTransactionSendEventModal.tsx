@@ -10,6 +10,9 @@ import ARC0300KeyRegistrationTransactionSendModalContent, {
 // enums
 import { EventTypeEnum } from '@extension/enums';
 
+// events
+import ARC0300KeyRegistrationTransactionSendEvent from '@extension/events/ARC0300KeyRegistrationTransactionSendEvent';
+
 // features
 import { removeEventByIdThunk } from '@extension/features/events';
 
@@ -22,7 +25,6 @@ import {
 // types
 import type {
   IAppThunkDispatch,
-  IARC0300KeyRegistrationTransactionSendEvent,
   IMainRootState,
   IModalProps,
 } from '@extension/types';
@@ -36,7 +38,7 @@ const ARC0300KeyRegistrationTransactionSendEventModal: FC<IModalProps> = ({
   const events = useSelectEvents();
   // state
   const [event, setEvent] =
-    useState<IARC0300KeyRegistrationTransactionSendEvent | null>(null);
+    useState<ARC0300KeyRegistrationTransactionSendEvent | null>(null);
   // misc
   const _context = 'arc-0300-key-registration-send-event-modal';
   // handlers
@@ -54,7 +56,7 @@ const ARC0300KeyRegistrationTransactionSendEventModal: FC<IModalProps> = ({
       (events.find(
         (value) =>
           value.type === EventTypeEnum.ARC0300KeyRegistrationTransactionSend
-      ) as IARC0300KeyRegistrationTransactionSendEvent) || null
+      ) as ARC0300KeyRegistrationTransactionSendEvent) || null
     );
   }, [events]);
 

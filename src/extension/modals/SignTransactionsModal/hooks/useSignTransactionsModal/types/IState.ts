@@ -1,10 +1,10 @@
 import type { ISignTransactionsParams } from '@agoralabs-sh/avm-web-provider';
 
-// types
-import type { IAVMWebProviderRequestEvent } from '@extension/types';
+// events
+import AVMWebProviderRequestEvent from '@extension/events/AVMWebProviderRequestEvent';
 
 interface IState {
-  event: IAVMWebProviderRequestEvent<ISignTransactionsParams> | null;
+  event: AVMWebProviderRequestEvent<ISignTransactionsParams> | null;
 }
 
 export default IState;

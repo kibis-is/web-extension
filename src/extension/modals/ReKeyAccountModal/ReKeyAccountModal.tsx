@@ -251,6 +251,7 @@ const ReKeyAccountModal: FC<IModalProps> = ({ onClose }) => {
           return (
             <ReKeyAccountConfirmingModalContent
               accounts={accounts}
+              colorMode={colorMode}
               currentAddress={accountInformation.authAddress}
               network={network}
               reKeyAddress={convertPublicKeyToAVMAddress(account.publicKey)}
@@ -275,6 +276,7 @@ const ReKeyAccountModal: FC<IModalProps> = ({ onClose }) => {
           return (
             <ReKeyAccountConfirmingModalContent
               accounts={accounts}
+              colorMode={colorMode}
               currentAddress={
                 accountInformation.authAddress ||
                 convertPublicKeyToAVMAddress(account.publicKey)

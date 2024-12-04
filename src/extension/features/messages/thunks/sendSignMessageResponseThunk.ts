@@ -7,10 +7,11 @@ import { v4 as uuid } from 'uuid';
 import browser from 'webextension-polyfill';
 
 // enums
+import { AVMWebProviderMessageReferenceEnum } from '@common/enums';
 import { ThunkEnum } from '../enums';
 
 // messages
-import { AVMWebProviderResponseMessage } from '@common/messages';
+import AVMWebProviderResponseMessage from '@common/messages/AVMWebProviderResponseMessage';
 
 // types
 import type {
@@ -40,12 +41,14 @@ const sendSignMessageResponseThunk: AsyncThunk<
     // send the error the webpage (via the content script)
     if (error) {
       await browser.tabs.sendMessage(
-        event.payload.originTabId,
+        event.payload.originTabID,
         new AVMWebProviderResponseMessage<ISignMessageResult>({
           error,
           id: uuid(),
-          method: event.payload.message.method,
-          requestId: event.payload.message.id,
+          method: event.payload.message.payload.method,
+          reference: AVMWebProviderMessageReferenceEnum.Response,
+          requestID: event.payload.message.id,
+          result: null,
         })
       );
 
@@ -55,11 +58,13 @@ const sendSignMessageResponseThunk: AsyncThunk<
     // if there is a signature, send it back to the webpage (via the content script)
     if (signature && signer) {
       await browser.tabs.sendMessage(
-        event.payload.originTabId,
+        event.payload.originTabID,
         new AVMWebProviderResponseMessage<ISignMessageResult>({
+          error: null,
           id: uuid(),
-          method: event.payload.message.method,
-          requestId: event.payload.message.id,
+          method: event.payload.message.payload.method,
+          reference: AVMWebProviderMessageReferenceEnum.Response,
+          requestID: event.payload.message.id,
           result: {
             providerId: __PROVIDER_ID__,
             signature,

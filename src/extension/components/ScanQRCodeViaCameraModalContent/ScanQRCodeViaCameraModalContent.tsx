@@ -22,7 +22,7 @@ import {
 
 // components
 import Button from '@common/components/Button';
-import CircularProgressWithIcon from '@extension/components/CircularProgressWithIcon';
+import CircularProgressWithIcon from '@common/components/CircularProgressWithIcon';
 import QRCodeFrameIcon from './QRCodeFrameIcon';
 
 // constants
@@ -166,7 +166,10 @@ const ScanQRCodeViaCameraModalContent: FC<IScanQRCodeModalContentProps> = ({
     return (
       <>
         {/*progress*/}
-        <CircularProgressWithIcon icon={IoQrCodeOutline} />
+        <CircularProgressWithIcon
+          colorMode={colorMode}
+          icon={IoQrCodeOutline}
+        />
 
         {/*caption*/}
         <Text color={defaultTextColor} fontSize="sm" textAlign="center">

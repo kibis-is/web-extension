@@ -250,7 +250,12 @@ const RemoveAssetsModal: FC<IRemoveAssetsModalProps> = ({ onClose }) => {
     }
 
     if (confirming) {
-      return <RemoveAssetsConfirmingModalContent asset={selectedAsset} />;
+      return (
+        <RemoveAssetsConfirmingModalContent
+          colorMode={colorMode}
+          asset={selectedAsset}
+        />
+      );
     }
 
     switch (selectedAsset.type) {

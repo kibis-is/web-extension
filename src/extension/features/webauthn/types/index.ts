@@ -1,2 +1,3 @@
 export type { default as IState } from './IState';
-export type { default as IWebAuthnCreateResponseThunkPayload } from './IWebAuthnCreateResponseThunkPayload';
+export type { default as IWebAuthnErrorResponseThunkPayload } from './IWebAuthnErrorResponseThunkPayload';
+export type { default as TWebAuthnRegisterResponseThunkPayload } from './TWebAuthnRegisterResponseThunkPayload';

@@ -1,1 +1,2 @@
-export { default as sendWebAuthnCreateResponseThunk } from './sendWebAuthnCreateResponseThunk';
+export { default as sendWebAuthnErrorResponseThunk } from './sendWebAuthnErrorResponseThunk';
+export { default as sendWebAuthnRegisterResponseThunk } from './sendWebAuthnRegisterResponseThunk';

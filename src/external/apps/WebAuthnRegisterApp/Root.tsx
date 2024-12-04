@@ -1,11 +1,18 @@
-import { Avatar, Box, HStack, Text, TextProps, VStack } from '@chakra-ui/react';
+import {
+  Avatar,
+  Box,
+  HStack,
+  Text,
+  type TextProps,
+  VStack,
+} from '@chakra-ui/react';
 import React, { type FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { IoCloseOutline } from 'react-icons/io5';
 
 // components
 import Button from '@common/components/Button';
-import ExternalAccountSelect from '@external/components/ExternalAccountSelect';
+import CircularProgressWithIcon from '@common/components/CircularProgressWithIcon';
 import IconButton from '@common/components/IconButton';
 
 // constants
@@ -20,6 +27,7 @@ import useDefaultTextColor from '@common/hooks/useDefaultTextColor';
 import useTextBackgroundColor from '@common/hooks/useTextBackgroundColor';
 
 // icons
+import KbPasskey from '@extension/icons/KbPasskey';
 import KbSignIn from '@extension/icons/KbSignIn';
 
 // theme
@@ -29,16 +37,13 @@ import { theme } from '@common/theme';
 import type { IRootProps } from './types';
 
 const Root: FC<IRootProps> = ({
-  accounts,
   clientInfo,
   colorMode,
-  fetching,
+  error,
   fontFamily,
   onCancelClick,
   onRegisterClick,
-  onSelect,
-  saving,
-  selectedAccount,
+  result,
 }) => {
   const { t } = useTranslation();
   // hooks
@@ -116,18 +121,10 @@ const Root: FC<IRootProps> = ({
         {/*body*/}
         <VStack flexGrow={1} spacing={DEFAULT_GAP} w="full">
           <VStack spacing={DEFAULT_GAP - 2} w="full">
-            <Text
-              {...textProps}
-              color={defaultTextColor}
-              fontFamily={fontFamily}
-              fontSize="xs"
-              p={0}
-              textAlign="center"
-              width="full"
-            >
-              {t<string>('captions.webAuthnCreateDescription1')}
-            </Text>
+            {/*passkey loader*/}
+            <CircularProgressWithIcon colorMode={colorMode} icon={KbPasskey} />
 
+            {/*caption*/}
             <Text
               {...textProps}
               color={defaultTextColor}
@@ -137,19 +134,9 @@ const Root: FC<IRootProps> = ({
               textAlign="center"
               width="full"
             >
-              {t<string>('captions.webAuthnCreateDescription2')}
+              {t<string>('captions.webAuthnRegisterRequestWaiting')}
             </Text>
           </VStack>
-
-          {/*account select*/}
-          <ExternalAccountSelect
-            accounts={accounts}
-            colorMode={colorMode}
-            disabled={fetching || saving}
-            fontFamily={fontFamily}
-            onSelect={onSelect}
-            value={selectedAccount}
-          />
         </VStack>
 
         {/*footer*/}
@@ -164,17 +151,20 @@ const Root: FC<IRootProps> = ({
             {t<string>('buttons.cancel')}
           </Button>
 
-          <Button
-            colorMode={colorMode}
-            isLoading={saving}
-            onClick={onRegisterClick}
-            rightIcon={<KbSignIn />}
-            size="sm"
-            variant="solid"
-            w="full"
-          >
-            {t<string>('buttons.register')}
-          </Button>
+          {(result || error) && (
+            <Button
+              colorMode={colorMode}
+              onClick={onRegisterClick}
+              size="sm"
+              variant="solid"
+              w="full"
+              {...(!error && {
+                rightIcon: <KbSignIn />,
+              })}
+            >
+              {t<string>(error ? 'buttons.tryAgain' : 'buttons.register')}
+            </Button>
+          )}
         </HStack>
       </VStack>
     </VStack>

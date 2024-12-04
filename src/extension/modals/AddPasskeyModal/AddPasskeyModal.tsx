@@ -20,7 +20,7 @@ import { useDispatch } from 'react-redux';
 
 // components
 import Button from '@common/components/Button';
-import CircularProgressWithIcon from '@extension/components/CircularProgressWithIcon';
+import CircularProgressWithIcon from '@common/components/CircularProgressWithIcon';
 import CopyIconButton from '@extension/components/CopyIconButton';
 import COSEAlgorithmBadge from '@extension/components/COSEAlgorithmBadge';
 import ModalItem from '@extension/components/ModalItem';
@@ -154,6 +154,7 @@ const AddPasskeyModal: FC<IProps> = ({ addPasskey, onClose }) => {
         >
           {/*loader*/}
           <ReEncryptKeysLoadingContent
+            colorMode={colorMode}
             encryptionProgressState={encryptionProgressState}
           />
         </VStack>
@@ -170,7 +171,7 @@ const AddPasskeyModal: FC<IProps> = ({ addPasskey, onClose }) => {
           w="full"
         >
           {/*passkey loader*/}
-          <CircularProgressWithIcon icon={KbPasskey} />
+          <CircularProgressWithIcon colorMode={colorMode} icon={KbPasskey} />
 
           {/*caption*/}
           <Text color={subTextColor} fontSize="sm" textAlign="justify" w="full">

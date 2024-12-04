@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { IoSwapVerticalOutline } from 'react-icons/io5';
 
 // components
-import CircularProgressWithIcon from '@extension/components/CircularProgressWithIcon';
+import CircularProgressWithIcon from '@common/components/CircularProgressWithIcon';
 
 // constants
 import { DEFAULT_GAP } from '@common/constants';
@@ -17,7 +17,7 @@ import type { ISendAssetModalConfirmingContentProps } from './types';
 
 const SendAssetModalConfirmingContent: FC<
   ISendAssetModalConfirmingContentProps
-> = ({ numberOfTransactions }) => {
+> = ({ colorMode, numberOfTransactions }) => {
   const { t } = useTranslation();
   // hooks
   const defaultTextColor = useDefaultTextColor();
@@ -31,7 +31,10 @@ const SendAssetModalConfirmingContent: FC<
       w="full"
     >
       {/*progress*/}
-      <CircularProgressWithIcon icon={IoSwapVerticalOutline} />
+      <CircularProgressWithIcon
+        colorMode={colorMode}
+        icon={IoSwapVerticalOutline}
+      />
 
       {/*captions*/}
       <Text color={defaultTextColor} fontSize="md" textAlign="center" w="full">

@@ -5,7 +5,6 @@ interface IExternalAccount {
   icon?: TAccountIcons;
   name?: string;
   publicKey: string;
-  watchAccount: boolean;
 }
 
 export default IExternalAccount;

@@ -16,7 +16,6 @@ import {
   type ISignTransactionsParams,
   type ISignTransactionsResult,
   type TRequestParams,
-  type TResponseResults,
 } from '@agoralabs-sh/avm-web-provider';
 import {
   decode as decodeBase64,
@@ -33,17 +32,19 @@ import { networks } from '@extension/config';
 import { HOST, ICON_URI } from '@common/constants';
 
 // enums
+import { AVMWebProviderMessageReferenceEnum } from '@common/enums';
 import { EventTypeEnum } from '@extension/enums';
 
 // events
-import { AVMWebProviderRequestEvent } from '@extension/events';
+import AVMWebProviderRequestEvent from '@extension/events/AVMWebProviderRequestEvent';
+
+// message handlers
+import BaseMessageHandler from '@extension/message-handlers/BaseMessageHandler';
 
 // messages
-import {
-  AVMWebProviderRequestMessage,
-  AVMWebProviderResponseMessage,
-  ProviderSessionsUpdatedMessage,
-} from '@common/messages';
+import AVMWebProviderRequestMessage from '@common/messages/AVMWebProviderRequestMessage';
+import AVMWebProviderResponseMessage from '@common/messages/AVMWebProviderResponseMessage';
+import { ProviderSessionsUpdatedMessage } from '@common/messages';
 
 // repositories
 import AccountRepository from '@extension/repositories/AccountRepository';
@@ -51,15 +52,11 @@ import EventQueueRepository from '@extension/repositories/EventQueueRepository';
 import SessionRepository from '@extension/repositories/SessionRepository';
 import SettingsRepository from '@extension/repositories/SettingsRepository';
 
-// services
-import BaseListener from '@common/services/BaseListener';
-
 // types
 import type { IBaseOptions } from '@common/types';
 import type {
   IAccount,
   IAccountWithExtendedProps,
-  IAVMWebProviderRequestEvent,
   INetwork,
   ISession,
 } from '@extension/types';
@@ -70,13 +67,13 @@ import convertPublicKeyToAVMAddress from '@common/utils/convertPublicKeyToAVMAdd
 import decodeUnsignedTransaction from '@extension/utils/decodeUnsignedTransaction';
 import isNetworkSupportedFromSettings from '@extension/utils/isNetworkSupportedFromSettings';
 import isWatchAccount from '@extension/utils/isWatchAccount';
+import queueProviderEvent from '@extension/utils/queueProviderEvent';
 import selectDefaultNetwork from '@extension/utils/selectDefaultNetwork';
-import sendExtensionEvent from '@extension/utils/sendExtensionEvent';
 import supportedNetworksFromSettings from '@extension/utils/supportedNetworksFromSettings';
 import verifyTransactionGroups from '@extension/utils/verifyTransactionGroups';
 import uniqueGenesisHashesFromTransactions from '@extension/utils/uniqueGenesisHashesFromTransactions';
 
-export default class AVMWebProviderMessageHandler extends BaseListener {
+export default class AVMWebProviderMessageHandler extends BaseMessageHandler {
   // private variables
   private readonly _accountRepository: AccountRepository;
   private readonly _eventQueueRepository: EventQueueRepository;
@@ -139,34 +136,40 @@ export default class AVMWebProviderMessageHandler extends BaseListener {
 
   private async _handleDisableRequestMessage(
     message: AVMWebProviderRequestMessage<IDisableParams>,
-    originTabId: number
+    _originTabID: number
   ): Promise<void> {
     const _functionName = 'handleDisableRequestMessage';
     let network: INetwork | null;
     let sessionIds: string[];
     let sessions: ISession[];
 
-    if (!message.params) {
-      return await this._sendResponse(
+    this._logger?.debug(
+      `${AVMWebProviderMessageHandler.name}#${_functionName}: "${message.payload.method}" message received`
+    );
+
+    if (!message.payload.params) {
+      return await this._sendResponseToMiddleware(
         new AVMWebProviderResponseMessage<IDisableResult>({
           error: new ARC0027InvalidInputError({
             message: `no parameters supplied`,
             providerId: __PROVIDER_ID__,
           }),
           id: uuid(),
-          method: message.method,
-          requestId: message.id,
+          reference: AVMWebProviderMessageReferenceEnum.Response,
+          method: message.payload.method,
+          requestID: message.id,
+          result: null,
         }),
-        originTabId
+        _originTabID
       );
     }
 
     network = selectDefaultNetwork(networks);
 
-    if (message.params.genesisHash) {
+    if (message.payload.params.genesisHash) {
       network =
         networks.find(
-          (value) => value.genesisHash === message.params?.genesisHash
+          (value) => value.genesisHash === message.payload.params?.genesisHash
         ) || network;
     }
 
@@ -177,33 +180,38 @@ export default class AVMWebProviderMessageHandler extends BaseListener {
       );
 
       // send the response to the web page (via the content script)
-      return await this._sendResponse(
+      return await this._sendResponseToMiddleware(
         new AVMWebProviderResponseMessage<IDisableResult>({
           error: new ARC0027NetworkNotSupportedError({
-            genesisHashes: message.params?.genesisHash
-              ? [message.params.genesisHash]
+            genesisHashes: message.payload.params?.genesisHash
+              ? [message.payload.params.genesisHash]
               : [],
             message: `no parameters supplied`,
             providerId: __PROVIDER_ID__,
           }),
           id: uuid(),
-          method: message.method,
-          requestId: message.id,
+          method: message.payload.method,
+          reference: AVMWebProviderMessageReferenceEnum.Response,
+          requestID: message.id,
+          result: null,
         }),
-        originTabId
+        _originTabID
       );
     }
 
     sessions = await this._fetchSessions(
       (value) =>
-        value.host === message.clientInfo.host &&
+        value.host === message.payload.clientInfo.host &&
         value.genesisHash === network?.genesisHash
     );
 
     // if session ids has been specified, filter the sessions
-    if (message.params.sessionIds && message.params.sessionIds.length > 0) {
+    if (
+      message.payload.params.sessionIds &&
+      message.payload.params.sessionIds.length > 0
+    ) {
       sessions = sessions.filter((value) =>
-        message.params?.sessionIds?.includes(value.id)
+        message.payload.params?.sessionIds?.includes(value.id)
       );
     }
 
@@ -214,20 +222,22 @@ export default class AVMWebProviderMessageHandler extends BaseListener {
         AVMWebProviderMessageHandler.name
       }#${_functionName}: removing sessions [${sessionIds
         .map((value) => `"${value}"`)
-        .join(',')}] on host "${message.clientInfo.host}" for network "${
-        network.genesisId
-      }"`
+        .join(',')}] on host "${
+        message.payload.clientInfo.host
+      }" for network "${network.genesisId}"`
     );
 
     // remove the sessions
     await this._sessionRepository.removeByIds(sessionIds);
 
     // send the response to the web page (via the content script)
-    await this._sendResponse(
+    await this._sendResponseToMiddleware(
       new AVMWebProviderResponseMessage<IDisableResult>({
+        error: null,
         id: uuid(),
-        method: message.method,
-        requestId: message.id,
+        method: message.payload.method,
+        reference: AVMWebProviderMessageReferenceEnum.Response,
+        requestID: message.id,
         result: {
           genesisHash: network.genesisHash,
           genesisId: network.genesisId,
@@ -235,7 +245,7 @@ export default class AVMWebProviderMessageHandler extends BaseListener {
           sessionIds,
         },
       }),
-      originTabId
+      _originTabID
     );
 
     // send a message to the popups to indicate the sessions have been updated
@@ -246,18 +256,27 @@ export default class AVMWebProviderMessageHandler extends BaseListener {
 
   private async _handleDiscoverRequestMessage(
     message: AVMWebProviderRequestMessage<IDiscoverParams>,
-    originTabId: number
+    _originTabID: number
   ): Promise<void> {
-    const supportedNetworks = supportedNetworksFromSettings({
+    const _functionName = 'handleDiscoverRequestMessage';
+    let supportedNetworks: INetwork[];
+
+    this._logger?.debug(
+      `${AVMWebProviderMessageHandler.name}#${_functionName}: "${message.payload.method}" message received`
+    );
+
+    supportedNetworks = supportedNetworksFromSettings({
       networks,
       settings: await this._settingsRepository.fetch(),
     });
 
-    return await this._sendResponse(
+    return await this._sendResponseToMiddleware(
       new AVMWebProviderResponseMessage<IDiscoverResult>({
+        error: null,
         id: uuid(),
-        method: message.method,
-        requestId: message.id,
+        method: message.payload.method,
+        reference: AVMWebProviderMessageReferenceEnum.Response,
+        requestID: message.id,
         result: {
           host: HOST,
           icon: ICON_URI,
@@ -272,13 +291,13 @@ export default class AVMWebProviderMessageHandler extends BaseListener {
           providerId: __PROVIDER_ID__,
         },
       }),
-      originTabId
+      _originTabID
     );
   }
 
   private async _handleEnableRequestMessage(
     message: AVMWebProviderRequestMessage<IEnableParams>,
-    originTabId: number
+    originTabID: number
   ): Promise<void> {
     const _functionName = 'handleEnableRequestMessage';
     let accounts: IAccount[];
@@ -287,43 +306,51 @@ export default class AVMWebProviderMessageHandler extends BaseListener {
     let sessionNetwork: INetwork | null;
     let sessions: ISession[];
 
+    this._logger?.debug(
+      `${AVMWebProviderMessageHandler.name}#${_functionName}: "${message.payload.method}" message received`
+    );
+
     // get the network if a genesis hash is present
-    if (message.params?.genesisHash) {
+    if (message.payload.params?.genesisHash) {
       if (
         !isNetworkSupportedFromSettings({
-          genesisHash: message.params.genesisHash,
+          genesisHash: message.payload.params.genesisHash,
           networks,
           settings: await this._settingsRepository.fetch(),
         })
       ) {
         this._logger?.debug(
-          `${AVMWebProviderMessageHandler.name}#${_functionName}: genesis hash "${message.params.genesisHash}" is not supported`
+          `${AVMWebProviderMessageHandler.name}#${_functionName}: genesis hash "${message.payload.params.genesisHash}" is not supported`
         );
 
         // send the response to the web page (via the content script)
-        return await this._sendResponse(
+        return await this._sendResponseToMiddleware(
           new AVMWebProviderResponseMessage<IEnableResult>({
             error: new ARC0027NetworkNotSupportedError({
-              genesisHashes: [message.params.genesisHash],
+              genesisHashes: [message.payload.params.genesisHash],
               message: `no parameters supplied`,
               providerId: __PROVIDER_ID__,
             }),
             id: uuid(),
-            method: message.method,
-            requestId: message.id,
+            method: message.payload.method,
+            reference: AVMWebProviderMessageReferenceEnum.Response,
+            requestID: message.id,
+            result: null,
           }),
-          originTabId
+          originTabID
         );
       }
 
       // filter the sessions by the specified genesis hash
       sessionFilterPredicate = (value) =>
-        value.genesisHash === message.params?.genesisHash;
+        value.genesisHash === message.payload.params?.genesisHash;
     }
 
     sessions = await this._fetchSessions(sessionFilterPredicate);
     session =
-      sessions.find((value) => value.host === message.clientInfo.host) || null;
+      sessions.find(
+        (value) => value.host === message.payload.clientInfo.host
+      ) || null;
 
     // if we have a session, update its use and return it
     if (session) {
@@ -346,11 +373,13 @@ export default class AVMWebProviderMessageHandler extends BaseListener {
         session = await this._sessionRepository.save(session);
 
         // send the response to the web page (via the content script)
-        return await this._sendResponse(
+        return await this._sendResponseToMiddleware(
           new AVMWebProviderResponseMessage<IEnableResult>({
+            error: null,
             id: uuid(),
-            method: message.method,
-            requestId: message.id,
+            method: message.payload.method,
+            reference: AVMWebProviderMessageReferenceEnum.Response,
+            requestID: message.id,
             result: {
               accounts: session.authorizedAddresses.map<IAVMProviderAccount>(
                 (address) => {
@@ -376,7 +405,7 @@ export default class AVMWebProviderMessageHandler extends BaseListener {
               sessionId: session.id,
             },
           }),
-          originTabId
+          originTabID
         );
       }
 
@@ -384,84 +413,93 @@ export default class AVMWebProviderMessageHandler extends BaseListener {
       await this._sessionRepository.removeByIds([session.id]);
     }
 
-    return await this._sendClientMessageEvent(
+    return await this._queueProviderEvent(
       new AVMWebProviderRequestEvent({
         id: uuid(),
         payload: {
           message,
-          originTabId,
+          originTabID,
         },
+        type: EventTypeEnum.AVMWebProviderRequest,
       })
     );
   }
 
   private async _handleSignMessageRequestMessage(
     message: AVMWebProviderRequestMessage<ISignMessageParams>,
-    originTabId: number
+    originTabID: number
   ): Promise<void> {
     const _functionName = 'handleSignMessageRequestMessage';
     const filteredSessions = await this._fetchSessions(
-      (value) => value.host === message.clientInfo.host
+      (value) => value.host === message.payload.clientInfo.host
     );
     let _error: string;
     let authorizedAccounts: IAccountWithExtendedProps[];
     let signerAccount: IAccountWithExtendedProps | null;
 
-    if (!message.params) {
-      return await this._sendResponse(
+    this._logger?.debug(
+      `${AVMWebProviderMessageHandler.name}#${_functionName}: "${message.payload.method}" message received`
+    );
+
+    if (!message.payload.params) {
+      return await this._sendResponseToMiddleware(
         new AVMWebProviderResponseMessage<ISignMessageResult>({
           error: new ARC0027InvalidInputError({
             message: `no message or signer supplied`,
             providerId: __PROVIDER_ID__,
           }),
           id: uuid(),
-          method: message.method,
-          requestId: message.id,
+          method: message.payload.method,
+          reference: AVMWebProviderMessageReferenceEnum.Response,
+          requestID: message.id,
+          result: null,
         }),
-        originTabId
+        originTabID
       );
     }
 
     // if the app has not been enabled
     if (filteredSessions.length <= 0) {
       this._logger?.debug(
-        `${AVMWebProviderMessageHandler.name}#${_functionName}: no sessions found for the "${message.method}" request`
+        `${AVMWebProviderMessageHandler.name}#${_functionName}: no sessions found for the "${message.payload.method}" request`
       );
 
       // send the response to the web page (via the content script)
-      return await this._sendResponse(
+      return await this._sendResponseToMiddleware(
         new AVMWebProviderResponseMessage<ISignMessageResult>({
           error: new ARC0027UnauthorizedSignerError({
-            message: `"${message.clientInfo.appName}" has not been authorized`,
+            message: `"${message.payload.clientInfo.appName}" has not been authorized`,
             providerId: __PROVIDER_ID__,
-            signer: message.params.signer,
+            signer: message.payload.params.signer,
           }),
           id: uuid(),
-          method: message.method,
-          requestId: message.id,
+          method: message.payload.method,
+          reference: AVMWebProviderMessageReferenceEnum.Response,
+          requestID: message.id,
+          result: null,
         }),
-        originTabId
+        originTabID
       );
     }
 
     authorizedAccounts = authorizedAccountsForHost({
       accounts: await this._fetchAccounts(),
-      host: message.clientInfo.host,
+      host: message.payload.clientInfo.host,
       sessions: filteredSessions,
     });
 
     // if the requested signer has not been authorized or is a watch account
-    if (message.params.signer) {
+    if (message.payload.params.signer) {
       signerAccount =
         authorizedAccounts.find(
           (value) =>
             convertPublicKeyToAVMAddress(
               AccountRepository.decode(value.publicKey)
-            ) === message.params?.signer
+            ) === message.payload.params?.signer
         ) || null;
 
       if (!signerAccount || signerAccount.watchAccount) {
-        _error = `"${message.params.signer}" ${
+        _error = `"${message.payload.params.signer}" ${
           signerAccount?.watchAccount
             ? ` is a watch account`
             : `has not been authorized`
@@ -472,36 +510,39 @@ export default class AVMWebProviderMessageHandler extends BaseListener {
         );
 
         // send the response to the web page (via the content script)
-        return await this._sendResponse(
+        return await this._sendResponseToMiddleware(
           new AVMWebProviderResponseMessage<ISignMessageResult>({
             error: new ARC0027UnauthorizedSignerError({
               message: _error,
               providerId: __PROVIDER_ID__,
-              signer: message.params.signer,
+              signer: message.payload.params.signer,
             }),
             id: uuid(),
-            method: message.method,
-            requestId: message.id,
+            method: message.payload.method,
+            reference: AVMWebProviderMessageReferenceEnum.Response,
+            requestID: message.id,
+            result: null,
           }),
-          originTabId
+          originTabID
         );
       }
     }
 
-    return await this._sendClientMessageEvent(
+    return await this._queueProviderEvent(
       new AVMWebProviderRequestEvent({
         id: uuid(),
         payload: {
           message,
-          originTabId,
+          originTabID,
         },
+        type: EventTypeEnum.AVMWebProviderRequest,
       })
     );
   }
 
   private async _handleSignTransactionsRequestMessage(
     message: AVMWebProviderRequestMessage<ISignTransactionsParams>,
-    originTabId: number
+    originTabID: number
   ): Promise<void> {
     const _functionName: string = 'handleSignTransactionsRequestMessage';
     let decodedUnsignedTransactions: Transaction[];
@@ -511,24 +552,30 @@ export default class AVMWebProviderMessageHandler extends BaseListener {
     let supportedNetworks: INetwork[];
     let unsupportedTransactionsByNetwork: Transaction[];
 
-    if (!message.params) {
-      return await this._sendResponse(
+    this._logger?.debug(
+      `${AVMWebProviderMessageHandler.name}#${_functionName}: "${message.payload.method}" message received`
+    );
+
+    if (!message.payload.params) {
+      return await this._sendResponseToMiddleware(
         new AVMWebProviderResponseMessage<ISignTransactionsResult>({
           error: new ARC0027InvalidInputError({
             message: `no transactions supplied`,
             providerId: __PROVIDER_ID__,
           }),
           id: uuid(),
-          method: message.method,
-          requestId: message.id,
+          method: message.payload.method,
+          reference: AVMWebProviderMessageReferenceEnum.Response,
+          requestID: message.id,
+          result: null,
         }),
-        originTabId
+        originTabID
       );
     }
 
     // attempt to decode the transactions
     try {
-      decodedUnsignedTransactions = message.params.txns.map((value) =>
+      decodedUnsignedTransactions = message.payload.params.txns.map((value) =>
         decodeUnsignedTransaction(decodeBase64(value.txn))
       );
     } catch (error) {
@@ -539,17 +586,19 @@ export default class AVMWebProviderMessageHandler extends BaseListener {
       );
 
       // send the response to the web page (via the content script)
-      return await this._sendResponse(
+      return await this._sendResponseToMiddleware(
         new AVMWebProviderResponseMessage<ISignTransactionsResult>({
           error: new ARC0027InvalidInputError({
             message: errorMessage,
             providerId: __PROVIDER_ID__,
           }),
           id: uuid(),
-          method: message.method,
-          requestId: message.id,
+          method: message.payload.method,
+          reference: AVMWebProviderMessageReferenceEnum.Response,
+          requestID: message.id,
+          result: null,
         }),
-        originTabId
+        originTabID
       );
     }
 
@@ -562,17 +611,19 @@ export default class AVMWebProviderMessageHandler extends BaseListener {
       );
 
       // send the response to the web page (via the content script)
-      return await this._sendResponse(
+      return await this._sendResponseToMiddleware(
         new AVMWebProviderResponseMessage<ISignTransactionsResult>({
           error: new ARC0027InvalidGroupIdError({
             message: errorMessage,
             providerId: __PROVIDER_ID__,
           }),
           id: uuid(),
-          method: message.method,
-          requestId: message.id,
+          method: message.payload.method,
+          reference: AVMWebProviderMessageReferenceEnum.Response,
+          requestID: message.id,
+          result: null,
         }),
-        originTabId
+        originTabID
       );
     }
 
@@ -598,7 +649,7 @@ export default class AVMWebProviderMessageHandler extends BaseListener {
       );
 
       // send the response to the web page (via the content script)
-      return await this._sendResponse(
+      return await this._sendResponseToMiddleware(
         new AVMWebProviderResponseMessage<ISignTransactionsResult>({
           error: new ARC0027NetworkNotSupportedError({
             genesisHashes: uniqueGenesisHashesFromTransactions(
@@ -607,10 +658,12 @@ export default class AVMWebProviderMessageHandler extends BaseListener {
             providerId: __PROVIDER_ID__,
           }),
           id: uuid(),
-          method: message.method,
-          requestId: message.id,
+          method: message.payload.method,
+          reference: AVMWebProviderMessageReferenceEnum.Response,
+          requestID: message.id,
+          result: null,
         }),
-        originTabId
+        originTabID
       );
     }
 
@@ -619,7 +672,7 @@ export default class AVMWebProviderMessageHandler extends BaseListener {
     );
     filteredSessions = await this._fetchSessions(
       (session) =>
-        session.host === message.clientInfo.host &&
+        session.host === message.payload.clientInfo.host &&
         genesisHashes.some((value) => value === session.genesisHash)
     );
 
@@ -630,50 +683,83 @@ export default class AVMWebProviderMessageHandler extends BaseListener {
       );
 
       // send the response to the web page
-      return await this._sendResponse(
+      return await this._sendResponseToMiddleware(
         new AVMWebProviderResponseMessage<ISignTransactionsResult>({
           error: new ARC0027UnauthorizedSignerError({
-            message: `client "${message.clientInfo.appName}" has not been authorized`,
+            message: `client "${message.payload.clientInfo.appName}" has not been authorized`,
             providerId: __PROVIDER_ID__,
           }),
           id: uuid(),
-          method: message.method,
-          requestId: message.id,
+          method: message.payload.method,
+          reference: AVMWebProviderMessageReferenceEnum.Response,
+          requestID: message.id,
+          result: null,
         }),
-        originTabId
+        originTabID
       );
     }
 
-    return await this._sendClientMessageEvent(
+    return await this._queueProviderEvent(
       new AVMWebProviderRequestEvent({
         id: uuid(),
         payload: {
           message,
-          originTabId,
+          originTabID,
         },
+        type: EventTypeEnum.AVMWebProviderRequest,
       })
     );
   }
 
-  private async _onMessage(
-    message: AVMWebProviderRequestMessage<TRequestParams>,
-    sender: Runtime.MessageSender
+  private async _queueProviderEvent<Params extends TRequestParams>(
+    event: AVMWebProviderRequestEvent<Params>
   ): Promise<void> {
-    const _functionName: string = 'onMessage';
+    const _functionName = '_queueProviderEvent';
+    const events = await this._eventQueueRepository.fetchByType<
+      AVMWebProviderRequestEvent<TRequestParams>
+    >(EventTypeEnum.AVMWebProviderRequest);
 
-    this._logger?.debug(
-      `${AVMWebProviderMessageHandler.name}#${_functionName}: "${message.method}" message received`
-    );
-
-    if (!sender.tab?.id) {
+    // if the client request already exists, ignore it
+    if (
+      events.find(
+        (value) => value.payload.message.id === event.payload.message.id
+      )
+    ) {
       this._logger?.debug(
-        `${AVMWebProviderMessageHandler.name}#${_functionName}: unknown sender for "${message.method}" message, ignoring`
+        `${AVMWebProviderMessageHandler.name}#${_functionName}: client request "${event.payload.message.id}" already exists, ignoring`
       );
 
       return;
     }
 
-    switch (message.method) {
+    return await queueProviderEvent({
+      event,
+      eventQueueRepository: this._eventQueueRepository,
+      ...(this._logger && {
+        logger: this._logger,
+      }),
+    });
+  }
+
+  /**
+   * protected functions
+   */
+
+  protected async _onMessage(
+    message: AVMWebProviderRequestMessage<TRequestParams>,
+    sender: Runtime.MessageSender
+  ): Promise<void> {
+    const _functionName: string = 'onMessage';
+
+    if (!sender.tab?.id) {
+      this._logger?.debug(
+        `${AVMWebProviderMessageHandler.name}#${_functionName}: unknown sender for "${message.payload.method}" message, ignoring`
+      );
+
+      return;
+    }
+
+    switch (message.payload.method) {
       case ARC0027MethodEnum.Disable:
         return await this._handleDisableRequestMessage(
           message as AVMWebProviderRequestMessage<IDisableParams>,
@@ -702,50 +788,6 @@ export default class AVMWebProviderMessageHandler extends BaseListener {
       default:
         break;
     }
-  }
-
-  private async _sendClientMessageEvent<Params extends TRequestParams>(
-    event: IAVMWebProviderRequestEvent<Params>
-  ): Promise<void> {
-    const _functionName = 'sendClientMessageEvent';
-    const events = await this._eventQueueRepository.fetchByType<
-      IAVMWebProviderRequestEvent<TRequestParams>
-    >(EventTypeEnum.AVMWebProviderRequest);
-
-    // if the client request already exists, ignore it
-    if (
-      events.find(
-        (value) => value.payload.message.id === event.payload.message.id
-      )
-    ) {
-      this._logger?.debug(
-        `${AVMWebProviderMessageHandler.name}#${_functionName}: client request "${event.payload.message.id}" already exists, ignoring`
-      );
-
-      return;
-    }
-
-    return await sendExtensionEvent({
-      event,
-      eventQueueRepository: this._eventQueueRepository,
-      ...(this._logger && {
-        logger: this._logger,
-      }),
-    });
-  }
-
-  private async _sendResponse(
-    message: AVMWebProviderResponseMessage<TResponseResults>,
-    originTabId: number
-  ): Promise<void> {
-    const _functionName: string = 'sendResponse';
-
-    this._logger?.debug(
-      `${AVMWebProviderMessageHandler.name}#${_functionName}: sending "${message.method}" response to tab "${originTabId}"`
-    );
-
-    // send the response to the web page, via the content script
-    return await browser.tabs.sendMessage(originTabId, message);
   }
 
   /**

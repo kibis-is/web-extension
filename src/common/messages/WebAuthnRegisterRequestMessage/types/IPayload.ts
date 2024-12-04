@@ -1,9 +1,12 @@
 // types
-import type { ISerializedPublicKeyCredentialCreationOptions } from '@common/types';
+import type {
+  IClientInformation,
+  ISerializedPublicKeyCredentialCreationOptions,
+} from '@common/types';
 
 interface IPayload {
+  clientInfo: IClientInformation;
   options: ISerializedPublicKeyCredentialCreationOptions;
-  publicKey: string;
 }
 
 export default IPayload;

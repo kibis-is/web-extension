@@ -390,7 +390,7 @@ const AddCustomNodeModal: FC<IProps> = ({ isOpen, onClose, onComplete }) => {
   // renders
   const renderContent = () => {
     if (fetching) {
-      return <AddCustomNodeLoadingModalContent />;
+      return <AddCustomNodeLoadingModalContent colorMode={colorMode} />;
     }
 
     if (customNode && network) {

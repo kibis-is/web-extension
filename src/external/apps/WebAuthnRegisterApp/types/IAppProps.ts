@@ -11,7 +11,7 @@ interface IAppProps extends IBaseAppProps {
   logger?: ILogger;
   onClose: () => void;
   onResponse: (response: PublicKeyCredential | null) => void;
-  options: PublicKeyCredentialCreationOptions;
+  publicKeyCreationOptions: PublicKeyCredentialCreationOptions;
 }
 
 export default IAppProps;

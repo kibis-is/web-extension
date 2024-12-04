@@ -1,20 +1,21 @@
 import type { ColorMode, ResponsiveValue } from '@chakra-ui/react';
 import type { Property } from 'csstype';
 
+// errors
+import { BaseExtensionError } from '@common/errors';
+
 // types
-import type { IClientInformation, IExternalAccount } from '@common/types';
+import type { IClientInformation } from '@common/types';
+import type { IRegisterResult } from '@external/managers/WebAuthnMessageManager';
 
 interface IRootProps {
-  accounts: IExternalAccount[];
   clientInfo: IClientInformation;
   colorMode: ColorMode;
-  fetching: boolean;
+  error: BaseExtensionError | null;
   fontFamily?: ResponsiveValue<Property.FontFamily>;
   onCancelClick: () => void;
   onRegisterClick: () => void;
-  onSelect: (account: IExternalAccount) => void;
-  saving: boolean;
-  selectedAccount: IExternalAccount | null;
+  result: IRegisterResult | null;
 }
 
 export default IRootProps;

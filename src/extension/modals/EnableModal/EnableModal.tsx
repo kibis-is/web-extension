@@ -105,7 +105,7 @@ const EnableModal: FC<IModalProps> = ({ onClose }) => {
         sendEnableResponseThunk({
           error: new ARC0027MethodCanceledError({
             message: `user dismissed connect modal`,
-            method: event.payload.message.method,
+            method: event.payload.message.payload.method,
             providerId: __PROVIDER_ID__,
           }),
           event: event,
@@ -136,7 +136,7 @@ const EnableModal: FC<IModalProps> = ({ onClose }) => {
 
     session = mapSessionFromEnableRequest({
       authorizedAddresses,
-      clientInfo: event.payload.message.clientInfo,
+      clientInfo: event.payload.message.payload.clientInfo,
       network,
     });
 
@@ -307,11 +307,13 @@ const EnableModal: FC<IModalProps> = ({ onClose }) => {
       <VStack alignItems="center" spacing={DEFAULT_GAP - 2} w="full">
         <ClientHeader
           description={
-            event.payload.message.clientInfo.description || undefined
+            event.payload.message.payload.clientInfo.description || undefined
           }
-          iconUrl={event.payload.message.clientInfo.iconUrl || undefined}
-          host={event.payload.message.clientInfo.host || 'unknown host'}
-          name={event.payload.message.clientInfo.appName || 'Unknown'}
+          iconUrl={
+            event.payload.message.payload.clientInfo.iconUrl || undefined
+          }
+          host={event.payload.message.payload.clientInfo.host || 'unknown host'}
+          name={event.payload.message.payload.clientInfo.appName || 'Unknown'}
         />
 
         {/*network*/}

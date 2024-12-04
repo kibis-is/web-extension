@@ -130,7 +130,7 @@ export default class WebAuthnInterceptor {
           onClose: () => root.unmount(),
           onResponse: (response: PublicKeyCredential | null) =>
             resolve(response),
-          options: options.publicKey,
+          publicKeyCreationOptions: options.publicKey,
           ...(this._logger && {
             logger: this._logger,
           }),

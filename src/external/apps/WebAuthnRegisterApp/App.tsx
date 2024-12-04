@@ -1,24 +1,22 @@
 import '@external/styles/fonts.css';
 import { ChakraProvider } from '@chakra-ui/react';
-import React, { type FC, useEffect, useMemo, useState } from 'react';
+import React, { type FC, useEffect, useMemo } from 'react';
 import { I18nextProvider } from 'react-i18next';
 
 // containers
 import Root from './Root';
 
 // hooks
-import useAccounts from '@external/hooks/useAccounts';
 import useTheme from '@external/hooks/useTheme';
+import useWebAuthnRegister from '@external/hooks/useWebAuthnRegister';
 
 // managers
 import ColorModeManager from '@common/managers/ColorModeManager';
-import WebAuthnMessageManager from '@external/managers/WebAuthnMessageManager';
 
 // theme
 import { theme } from '@common/theme';
 
 // types
-import type { IExternalAccount } from '@common/types';
 import type { IAppProps } from './types';
 
 const App: FC<IAppProps> = ({
@@ -30,66 +28,45 @@ const App: FC<IAppProps> = ({
   navigatorCredentialsCreateFn,
   onClose,
   onResponse,
-  options,
+  publicKeyCreationOptions,
 }) => {
   // hooks
-  const { accounts, fetching, fetchAccountsAction } = useAccounts({ logger });
   const { theme: _theme, fetchThemeAction } = useTheme({ logger });
+  const { error, registerAction, result } = useWebAuthnRegister({ logger });
   // memos
   const colorMode = useMemo(
     () => _theme?.colorMode || initialColorMode,
     [_theme]
   );
   const fontFamily = useMemo(() => _theme?.font || initialFontFamily, [_theme]);
-  // states
-  const [account, setAccount] = useState<IExternalAccount | null>(null);
-  const [saving, setSaving] = useState<boolean>(false);
   // handlers
   const handleOnCancelClick = () => {
-    onResponse(navigatorCredentialsCreateFn.call(this, options));
+    onResponse(
+      navigatorCredentialsCreateFn.call(this, publicKeyCreationOptions)
+    );
     onClose();
   };
   const handleOnRegisterClick = async () => {
     const _functionName = 'handleOnRegisterClick';
-    const webAuthnMessageManager = new WebAuthnMessageManager({
-      logger,
-    });
 
-    if (!account) {
+    if (!result) {
       logger?.debug(
-        `WebAuthnRegisterApp#${_functionName}: no account selected`
+        `WebAuthnRegisterApp#${_functionName}: no credentials found`
       );
 
       return;
     }
 
-    setSaving(true);
-
-    try {
-      onResponse(
-        await webAuthnMessageManager.register({
-          options,
-          publicKey: account.publicKey,
-        })
-      );
-    } catch (error) {
-      logger?.error(
-        `WebAuthnRegisterApp#${_functionName}: received error, using fallback function`,
-        error
-      );
-
-      // if an error occurred, use the fallback function
-      onResponse(navigatorCredentialsCreateFn.call(this, options));
-    }
-
-    setSaving(false);
+    onResponse(result.credential);
   };
-  const handleOnSelect = (_account: IExternalAccount) => setAccount(_account);
 
   useEffect(() => {
     (async () => {
       await fetchThemeAction();
-      await fetchAccountsAction();
+      await registerAction({
+        clientInfo,
+        publicKeyCreationOptions,
+      });
     })();
   }, []);
 
@@ -106,16 +83,12 @@ const App: FC<IAppProps> = ({
         }}
       >
         <Root
-          accounts={accounts}
           clientInfo={clientInfo}
           colorMode={colorMode}
-          fetching={fetching}
           fontFamily={fontFamily}
           onCancelClick={handleOnCancelClick}
           onRegisterClick={handleOnRegisterClick}
-          onSelect={handleOnSelect}
-          saving={saving}
-          selectedAccount={account}
+          result={result}
         />
       </ChakraProvider>
     </I18nextProvider>

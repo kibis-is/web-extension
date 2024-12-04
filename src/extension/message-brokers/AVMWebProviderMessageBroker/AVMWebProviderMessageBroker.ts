@@ -3,8 +3,8 @@ import {
   ARC0027MethodTimedOutError,
   ARC0027UnknownError,
   AVMWebProvider,
-  IAVMWebProviderCallbackOptions,
   DEFAULT_REQUEST_TIMEOUT,
+  IAVMWebProviderCallbackOptions,
   TResponseResults,
 } from '@agoralabs-sh/avm-web-provider';
 import browser from 'webextension-polyfill';
@@ -12,11 +12,12 @@ import browser from 'webextension-polyfill';
 // constants
 import { SUPPORTED_METHODS } from '@common/constants';
 
+// enums
+import { AVMWebProviderMessageReferenceEnum } from '@common/enums';
+
 // messages
-import {
-  AVMWebProviderRequestMessage,
-  AVMWebProviderResponseMessage,
-} from '@common/messages';
+import AVMWebProviderRequestMessage from '@common/messages/AVMWebProviderRequestMessage';
+import AVMWebProviderResponseMessage from '@common/messages/AVMWebProviderResponseMessage';
 
 // services
 import BaseListener from '@common/services/BaseListener';
@@ -70,7 +71,7 @@ export default class AVMWebProviderMessageBroker extends BaseListener {
         message: AVMWebProviderResponseMessage<TResponseResults>
       ) => {
         // if the response's request id does not match the intended request, just ignore
-        if (message.requestId !== requestMessage.id) {
+        if (message.requestID !== requestMessage.id) {
           return;
         }
 
@@ -115,10 +116,13 @@ export default class AVMWebProviderMessageBroker extends BaseListener {
       // send the message to the background script/popups
       browser.runtime.sendMessage(
         new AVMWebProviderRequestMessage({
-          clientInfo: createClientInformation(),
           id: requestMessage.id,
-          method: requestMessage.method,
-          params: requestMessage.params,
+          payload: {
+            clientInfo: createClientInformation(),
+            method: requestMessage.method,
+            params: requestMessage.params,
+          },
+          reference: AVMWebProviderMessageReferenceEnum.Request,
         })
       );
     });

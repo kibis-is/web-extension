@@ -39,7 +39,7 @@ export default async function authorizedAccountsForEvent({
   let decodedUnsignedTransactions: Transaction[];
   let network: INetwork | null;
 
-  if (!event.payload.message.params) {
+  if (!event.payload.message.payload.params) {
     _error = `no params in the event "${event.id}"`;
 
     logger?.debug(`${_functionName}: ${_error}`);
@@ -48,7 +48,7 @@ export default async function authorizedAccountsForEvent({
   }
 
   try {
-    decodedUnsignedTransactions = event.payload.message.params.txns.map(
+    decodedUnsignedTransactions = event.payload.message.payload.params.txns.map(
       (value) => decodeUnsignedTransaction(decodeBase64(value.txn))
     );
   } catch (error) {
@@ -69,7 +69,7 @@ export default async function authorizedAccountsForEvent({
         ) || null;
       base64EncodedGenesisHash = encodeBase64(currentValue.genesisHash);
       authorizedAddresses = getAuthorizedAddressesForHost(
-        event.payload.message.clientInfo.host,
+        event.payload.message.payload.clientInfo.host,
         sessions.filter(
           (value) => value.genesisHash === base64EncodedGenesisHash
         )
