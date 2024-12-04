@@ -1,4 +1,4 @@
-// managers
+// interceptors
 import WebAuthnInterceptor from '@external/interceptors/WebAuthnInterceptor';
 
 // types

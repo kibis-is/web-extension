@@ -85,6 +85,7 @@ const App: FC<IAppProps> = ({
         <Root
           clientInfo={clientInfo}
           colorMode={colorMode}
+          error={error}
           fontFamily={fontFamily}
           onCancelClick={handleOnCancelClick}
           onRegisterClick={handleOnRegisterClick}

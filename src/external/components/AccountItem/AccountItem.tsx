@@ -1,22 +1,28 @@
-import { Center, HStack, Text, VStack } from '@chakra-ui/react';
-import React, { type FC } from 'react';
+import { Center, HStack, Icon, Text, VStack } from '@chakra-ui/react';
+import React, { type FC, useMemo } from 'react';
 
 // components
 import AccountAvatar from '@common/components/AccountAvatar';
 
 // constants
 import { DEFAULT_GAP } from '@common/constants';
+import { EXTERNAL_INPUT_HEIGHT } from '@external/constants';
 
 // hooks
+import useBorderColor from '@common/hooks/useBorderColor';
 import useDefaultTextColor from '@common/hooks/useDefaultTextColor';
 import useSubTextColor from '@common/hooks/useSubTextColor';
+
+// icons
+import KbPasskey from '@extension/icons/KbPasskey';
 
 // types
 import type { IProps } from './types';
 
 // utils
-import ellipseAddress from '@common/utils/ellipseAddress';
+import calculateIconSize from '@common/utils/calculateIconSize';
 import convertPublicKeyToAVMAddress from '@common/utils/convertPublicKeyToAVMAddress';
+import ellipseAddress from '@common/utils/ellipseAddress';
 
 const AccountItem: FC<IProps> = ({
   account,
@@ -26,13 +32,28 @@ const AccountItem: FC<IProps> = ({
   textColor,
 }) => {
   // hooks
+  const borderColor = useBorderColor(colorMode);
   const defaultSubTextColor = useSubTextColor(colorMode);
   const defaultTextColor = useDefaultTextColor(colorMode);
   // misc
-  const address = convertPublicKeyToAVMAddress(account.publicKey);
+  const address = useMemo(
+    () => convertPublicKeyToAVMAddress(account.publicKey),
+    [account]
+  );
 
   return (
-    <HStack m={0} p={0} spacing={DEFAULT_GAP / 3} w="full">
+    <HStack
+      borderColor={borderColor}
+      borderStyle="solid"
+      borderRadius="full"
+      borderWidth="1px"
+      h={EXTERNAL_INPUT_HEIGHT}
+      m={0}
+      px={DEFAULT_GAP - 2}
+      py={1}
+      spacing={DEFAULT_GAP / 3}
+      w="full"
+    >
       {/*avatar*/}
       <Center>
         <AccountAvatar
@@ -43,6 +64,7 @@ const AccountItem: FC<IProps> = ({
         />
       </Center>
 
+      {/*name/address*/}
       {account.name ? (
         <VStack
           alignItems="flex-start"
@@ -93,6 +115,9 @@ const AccountItem: FC<IProps> = ({
           })}
         </Text>
       )}
+
+      {/*icon*/}
+      <Icon as={KbPasskey} boxSize={calculateIconSize()} color={subTextColor} />
     </HStack>
   );
 };

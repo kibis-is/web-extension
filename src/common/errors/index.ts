@@ -1,5 +1,3 @@
-export { default as AuthInvalidPublicKeyError } from './AuthInvalidPublicKeyError';
-export { default as AuthRequestCanceledError } from './AuthRequestCanceledError';
 export { default as BaseExtensionError } from './BaseExtensionError';
 export { default as CameraError } from './CameraError';
 export { default as CameraNotAllowedError } from './CameraNotAllowedError';
@@ -27,3 +25,5 @@ export { default as ScreenCaptureNotAllowedError } from './ScreenCaptureNotAllow
 export { default as ScreenCaptureNotFoundError } from './ScreenCaptureNotFoundError';
 export { default as UnableToFetchPasskeyError } from './UnableToFetchPasskeyError';
 export { default as UnknownError } from './UnknownError';
+export { default as WebAuthnRegistrationCanceledError } from './WebAuthnRegistrationCanceledError';
+export { default as WebAuthnInvalidPublicKeyError } from './WebAuthnInvalidPublicKeyError';

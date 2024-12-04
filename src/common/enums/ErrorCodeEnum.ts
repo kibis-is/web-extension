@@ -41,9 +41,9 @@ enum ErrorCodeEnum {
   PasskeyCreationError = 8001,
   UnableToFetchPasskeyError = 8002,
 
-  // authentication
-  AuthRequestCanceledError = 9000,
-  AuthInvalidPublicKeyError = 9001,
+  // webauthn
+  WebAuthnRegistrationCanceledError = 9000,
+  WebAuthnInvalidPublicKeyError = 9001,
 }
 
 export default ErrorCodeEnum;

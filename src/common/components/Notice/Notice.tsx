@@ -1,6 +1,10 @@
 import { HStack, Icon, Text } from '@chakra-ui/react';
 import React, { type FC, useMemo } from 'react';
-import { IoInformationCircleOutline, IoWarningOutline } from 'react-icons/io5';
+import {
+  IoAlertCircleOutline,
+  IoInformationCircleOutline,
+  IoWarningOutline,
+} from 'react-icons/io5';
 
 // constants
 import { DEFAULT_GAP } from '@common/constants';
@@ -12,6 +16,8 @@ const Notice: FC<IProps> = ({ message, size = 'md', type = 'info' }) => {
   // misc
   const backgroundColor = useMemo(() => {
     switch (type) {
+      case 'error':
+        return 'red.100';
       case 'warning':
         return 'orange.100';
       case 'info':
@@ -21,6 +27,8 @@ const Notice: FC<IProps> = ({ message, size = 'md', type = 'info' }) => {
   }, [type]);
   const borderColor = useMemo(() => {
     switch (type) {
+      case 'error':
+        return 'red.600';
       case 'warning':
         return 'orange.600';
       case 'info':
@@ -30,6 +38,8 @@ const Notice: FC<IProps> = ({ message, size = 'md', type = 'info' }) => {
   }, [type]);
   const icon = useMemo(() => {
     switch (type) {
+      case 'error':
+        return IoAlertCircleOutline;
       case 'warning':
         return IoWarningOutline;
       case 'info':
@@ -49,7 +59,7 @@ const Notice: FC<IProps> = ({ message, size = 'md', type = 'info' }) => {
       default:
         return 8;
     }
-  }, []);
+  }, [size]);
 
   return (
     <HStack

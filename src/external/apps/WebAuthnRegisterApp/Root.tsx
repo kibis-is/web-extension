@@ -11,9 +11,11 @@ import { useTranslation } from 'react-i18next';
 import { IoCloseOutline } from 'react-icons/io5';
 
 // components
+import AccountItem from '@external/components/AccountItem';
 import Button from '@common/components/Button';
 import CircularProgressWithIcon from '@common/components/CircularProgressWithIcon';
 import IconButton from '@common/components/IconButton';
+import Notice from '@common/components/Notice';
 
 // constants
 import {
@@ -35,6 +37,7 @@ import { theme } from '@common/theme';
 
 // types
 import type { IRootProps } from './types';
+import { ErrorCodeEnum } from '@common/enums';
 
 const Root: FC<IRootProps> = ({
   clientInfo,
@@ -53,6 +56,54 @@ const Root: FC<IRootProps> = ({
   const textProps: Partial<TextProps> = {
     fontFamily,
     m: 0,
+  };
+  // renders
+  const renderBody = () => {
+    let errorMessage = t<string>('errors.descriptions.generic');
+
+    if (error) {
+      switch (error.code) {
+        case ErrorCodeEnum.WebAuthnRegistrationCanceledError:
+          errorMessage = t<string>('errors.descriptions.code', {
+            context: error.code,
+          });
+          break;
+        default:
+          break;
+      }
+
+      return <Notice message={errorMessage} size="xs" type="error" />;
+    }
+
+    if (result) {
+      return (
+        <AccountItem
+          account={result.account}
+          colorMode={colorMode}
+          fontFamily={fontFamily}
+        />
+      );
+    }
+
+    return (
+      <VStack spacing={DEFAULT_GAP - 2} w="full">
+        {/*passkey loader*/}
+        <CircularProgressWithIcon colorMode={colorMode} icon={KbPasskey} />
+
+        {/*caption*/}
+        <Text
+          {...textProps}
+          color={defaultTextColor}
+          fontFamily={fontFamily}
+          fontSize="xs"
+          p={0}
+          textAlign="center"
+          width="full"
+        >
+          {t<string>('captions.webAuthnRegisterRequestWaiting')}
+        </Text>
+      </VStack>
+    );
   };
 
   return (
@@ -120,23 +171,7 @@ const Root: FC<IRootProps> = ({
 
         {/*body*/}
         <VStack flexGrow={1} spacing={DEFAULT_GAP} w="full">
-          <VStack spacing={DEFAULT_GAP - 2} w="full">
-            {/*passkey loader*/}
-            <CircularProgressWithIcon colorMode={colorMode} icon={KbPasskey} />
-
-            {/*caption*/}
-            <Text
-              {...textProps}
-              color={defaultTextColor}
-              fontFamily={fontFamily}
-              fontSize="xs"
-              p={0}
-              textAlign="center"
-              width="full"
-            >
-              {t<string>('captions.webAuthnRegisterRequestWaiting')}
-            </Text>
-          </VStack>
+          {renderBody()}
         </VStack>
 
         {/*footer*/}

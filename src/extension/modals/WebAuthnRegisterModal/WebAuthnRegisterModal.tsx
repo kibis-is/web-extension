@@ -17,7 +17,7 @@ import {
 import { faker } from '@faker-js/faker';
 import React, { type FC, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { IoCheckmarkDoneOutline } from 'react-icons/io5';
+import { IoCheckmarkOutline } from 'react-icons/io5';
 import { useDispatch } from 'react-redux';
 
 // components
@@ -32,7 +32,10 @@ import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@common/constants';
 import { EventTypeEnum } from '@extension/enums';
 
 // errors
-import { AuthRequestCanceledError, BaseExtensionError } from '@common/errors';
+import {
+  BaseExtensionError,
+  WebAuthnRegistrationCanceledError,
+} from '@common/errors';
 
 // events
 import WebAuthnRegisterRequestEvent from '@extension/events/WebAuthnRegisterRequestEvent';
@@ -112,7 +115,7 @@ const WebAuthnRegisterModal: FC<IModalProps> = ({ onClose }) => {
     if (event) {
       await dispatch(
         sendWebAuthnErrorResponseThunk({
-          error: new AuthRequestCanceledError(
+          error: new WebAuthnRegistrationCanceledError(
             `user dismissed webauthn request modal`
           ),
           event: event,
@@ -347,7 +350,7 @@ const WebAuthnRegisterModal: FC<IModalProps> = ({ onClose }) => {
                 colorMode={colorMode}
                 isLoading={saving}
                 onClick={handleOnConfirmClick}
-                rightIcon={<IoCheckmarkDoneOutline />}
+                rightIcon={<IoCheckmarkOutline />}
                 size="lg"
                 variant="solid"
                 w="full"

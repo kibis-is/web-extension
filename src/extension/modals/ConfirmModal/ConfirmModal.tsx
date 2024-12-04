@@ -16,7 +16,7 @@ import { IoCheckmarkOutline } from 'react-icons/io5';
 
 // components
 import Button from '@common/components/Button';
-import Notice from '@extension/components/Notice';
+import Notice from '@common/components/Notice';
 
 // constants
 import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@common/constants';

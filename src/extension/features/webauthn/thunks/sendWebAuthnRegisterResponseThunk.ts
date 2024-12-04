@@ -9,7 +9,7 @@ import { EncryptionMethodEnum } from '@extension/enums';
 import { ThunkEnum } from '../enums';
 
 // errors
-import { AuthInvalidPublicKeyError } from '@common/errors';
+import { WebAuthnInvalidPublicKeyError } from '@common/errors';
 
 // factories
 import PublicKeyCredentialFactory from '@extension/models/PublicKeyCredentialFactory';
@@ -45,10 +45,7 @@ const sendWebAuthnRegisterResponseThunk: AsyncThunk<
   IBaseAsyncThunkConfig<IBackgroundRootState | IMainRootState>
 >(
   ThunkEnum.SendWebAuthnRegisterResponse,
-  async (
-    { accountID, event, ...encryptionOptions },
-    { dispatch, getState }
-  ) => {
+  async ({ accountID, event, ...encryptionOptions }, { getState }) => {
     const accounts = getState().accounts.items;
     const id = uuid();
     const logger = getState().system.logger;
@@ -56,7 +53,6 @@ const sendWebAuthnRegisterResponseThunk: AsyncThunk<
     const reference = WebAuthnMessageReferenceEnum.RegisterResponse;
     const requestID = message.id;
     let account: IAccount | null;
-    let address: string;
     let keyPair: Ed21559KeyPair | null = null;
     let publicKeyCredentialFactory: PublicKeyCredentialFactory;
 
@@ -74,7 +70,7 @@ const sendWebAuthnRegisterResponseThunk: AsyncThunk<
       await browser.tabs.sendMessage(
         event.payload.originTabID,
         new WebAuthnRegisterResponseMessage({
-          error: new AuthInvalidPublicKeyError('no account found'),
+          error: new WebAuthnInvalidPublicKeyError('no account found'),
           id,
           reference,
           requestID,
@@ -125,7 +121,7 @@ const sendWebAuthnRegisterResponseThunk: AsyncThunk<
       await browser.tabs.sendMessage(
         event.payload.originTabID,
         new WebAuthnRegisterResponseMessage({
-          error: new AuthInvalidPublicKeyError('no private key found'),
+          error: new WebAuthnInvalidPublicKeyError('no private key found'),
           id,
           reference,
           requestID,
