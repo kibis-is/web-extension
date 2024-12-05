@@ -18,7 +18,7 @@ import type { IBaseOptions } from '@common/types';
 import type { IOptions } from './types';
 
 // utils
-import isExtensionInitialized from '@extension/utils/isExtensionInitialized';
+import isProviderInitialized from '@extension/utils/isProviderInitialized';
 
 /**
  * Convenience function that adds an even to the event queue and, if the main app is open, posts a message. However, if
@@ -35,7 +35,7 @@ export default async function queueProviderEvent({
   const _eventQueueRepository =
     eventQueueRepository || new EventQueueRepository();
   const _functionName = 'sendProviderEvent';
-  const isInitialized = await isExtensionInitialized();
+  const isInitialized = await isProviderInitialized();
   const mainAppWindows = await _appWindowRepository.fetchByType(
     AppTypeEnum.MainApp
   );

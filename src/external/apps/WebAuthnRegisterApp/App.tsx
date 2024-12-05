@@ -7,7 +7,6 @@ import { I18nextProvider } from 'react-i18next';
 import Root from './Root';
 
 // hooks
-import useTheme from '@external/hooks/useTheme';
 import useWebAuthnRegister from '@external/hooks/useWebAuthnRegister';
 
 // managers
@@ -21,25 +20,27 @@ import type { IAppProps } from './types';
 
 const App: FC<IAppProps> = ({
   clientInfo,
+  config,
   credentialCreationOptions,
   i18n,
-  initialColorMode,
-  initialFontFamily,
   logger,
   navigatorCredentialsCreateFn,
   onClose,
   onResponse,
+  webAuthnMessageManager,
 }) => {
   // hooks
-  const { theme: _theme, fetchThemeAction } = useTheme({ logger });
-  const { error, registerAction, result } = useWebAuthnRegister({ logger });
+  const { error, registerAction, result } = useWebAuthnRegister({
+    logger,
+    webAuthnMessageManager,
+  });
   // memos
   const colorMode = useMemo(
-    () => _theme?.colorMode || initialColorMode,
-    [_theme]
+    () => config.theme.colorMode,
+    [config.theme.colorMode]
   );
   const _name = useMemo<string>(() => 'WebAuthnRegisterApp', []);
-  const fontFamily = useMemo(() => _theme?.font || initialFontFamily, [_theme]);
+  const fontFamily = useMemo(() => config.theme.font, [config.theme.font]);
   // handlers
   const handleOnCancelClick = () => {
     onResponse(
@@ -67,7 +68,6 @@ const App: FC<IAppProps> = ({
 
   useEffect(() => {
     (async () => {
-      await fetchThemeAction();
       await registerAction({
         clientInfo,
         publicKeyCreationOptions: credentialCreationOptions.publicKey || null,
@@ -82,7 +82,7 @@ const App: FC<IAppProps> = ({
         theme={{
           ...theme,
           fonts: {
-            body: initialFontFamily,
+            body: fontFamily,
             heading: fontFamily,
           },
         }}

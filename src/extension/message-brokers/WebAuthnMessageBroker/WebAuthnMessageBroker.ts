@@ -16,8 +16,8 @@ import { IBaseMessage, IBaseResponseMessage } from '@common/types';
 export default class WebAuthnMessageBroker extends BaseListener {
   // private variables
   private readonly _clientRequestReferences: WebAuthnMessageReferenceEnum[] = [
+    WebAuthnMessageReferenceEnum.ConfigRequest,
     WebAuthnMessageReferenceEnum.RegisterRequest,
-    WebAuthnMessageReferenceEnum.ThemeRequest,
   ];
 
   /**

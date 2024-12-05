@@ -8,17 +8,17 @@ import type {
 } from '@common/types';
 import type { IResult } from './types';
 
-export default class WebAuthnThemeRequestMessage
+export default class WebAuthnConfigResponseMessage
   implements
     IBaseResponseMessage<
       IResult,
-      WebAuthnMessageReferenceEnum.ThemeResponse,
+      WebAuthnMessageReferenceEnum.ConfigResponse,
       ISerializedProviderError
     >
 {
   public readonly error: ISerializedProviderError | null;
   public readonly id: string;
-  public readonly reference: WebAuthnMessageReferenceEnum.ThemeResponse;
+  public readonly reference: WebAuthnMessageReferenceEnum.ConfigResponse;
   public readonly requestID: string;
   public readonly result: IResult | null;
 
@@ -30,7 +30,7 @@ export default class WebAuthnThemeRequestMessage
     result,
   }: IBaseResponseMessage<
     IResult,
-    WebAuthnMessageReferenceEnum.ThemeResponse,
+    WebAuthnMessageReferenceEnum.ConfigResponse,
     ISerializedProviderError
   >) {
     this.error = error;

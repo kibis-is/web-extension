@@ -99,14 +99,12 @@ const sendWebAuthnRegisterResponseThunk: AsyncThunk<
           password: encryptionOptions.password,
           publicKey: account.publicKey,
         });
-
         break;
       case EncryptionMethodEnum.Unencrypted:
         keyPair = await fetchDecryptedKeyPairFromStorageWithUnencrypted({
           logger,
           publicKey: account.publicKey,
         });
-
         break;
       default:
         break;

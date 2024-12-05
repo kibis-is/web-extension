@@ -13,15 +13,19 @@ import type {
 } from '@external/managers/WebAuthnMessageManager';
 import type { IOptions, IState } from './types';
 
-export default function useWebAuthnRegister({ logger }: IOptions = {}): IState {
+export default function useWebAuthnRegister({
+  logger,
+  webAuthnMessageManager,
+}: IOptions = {}): IState {
   const _hooksName = 'useWebAuthnRegister';
   // memos
-  const webAuthnMessageManager = useMemo(
+  const _webAuthnMessageManager = useMemo(
     () =>
+      webAuthnMessageManager ||
       new WebAuthnMessageManager({
         logger,
       }),
-    []
+    [webAuthnMessageManager]
   );
   // states
   const [error, setError] = useState<BaseExtensionError | null>(null);
@@ -34,7 +38,7 @@ export default function useWebAuthnRegister({ logger }: IOptions = {}): IState {
     setError(null);
 
     try {
-      _result = await webAuthnMessageManager.register(options);
+      _result = await _webAuthnMessageManager.register(options);
 
       setResult(_result);
     } catch (error) {

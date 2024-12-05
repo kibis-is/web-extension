@@ -17,17 +17,17 @@ import {
 } from '@external/constants';
 
 // messages
+import WebAuthnConfigRequestMessage from '@common/messages/WebAuthnConfigRequestMessage';
 import WebAuthnRegisterRequestMessage from '@common/messages/WebAuthnRegisterRequestMessage';
-import WebAuthnThemeRequestMessage from '@common/messages/WebAuthnThemeRequestMessage';
 
 // types
+import type { IResult as WebAuthnConfigResponseMessageResult } from '@common/messages/WebAuthnConfigResponseMessage';
 import type { IResult as WebAuthnRegisterResponseMessageResult } from '@common/messages/WebAuthnRegisterResponseMessage';
-import type { IResult as WebAuthnThemeResponseMessageResult } from '@common/messages/WebAuthnThemeResponseMessage';
 import type {
   IBaseMessage,
   IBaseOptions,
   IBaseResponseMessage,
-  IExternalTheme,
+  IExternalConfig,
   ILogger,
   ISerializedPublicKeyCredentialCreationOptions,
 } from '@common/types';
@@ -162,19 +162,19 @@ export default class WebAuthnMessageManager {
    * public functions
    */
 
-  public async fetchTheme(): Promise<IExternalTheme | null> {
+  public async config(): Promise<IExternalConfig | null> {
     const result = await this._dispatchMessageWithTimeout<
-      WebAuthnThemeResponseMessageResult,
-      WebAuthnThemeRequestMessage
+      WebAuthnConfigResponseMessageResult,
+      WebAuthnConfigRequestMessage
     >({
-      message: new WebAuthnThemeRequestMessage({
+      message: new WebAuthnConfigRequestMessage({
         id: uuid(),
-        reference: WebAuthnMessageReferenceEnum.ThemeRequest,
+        reference: WebAuthnMessageReferenceEnum.ConfigRequest,
       }),
-      responseReference: WebAuthnMessageReferenceEnum.ThemeResponse,
+      responseReference: WebAuthnMessageReferenceEnum.ConfigResponse,
     });
 
-    return result?.theme || null;
+    return result?.config || null;
   }
 
   public async register({

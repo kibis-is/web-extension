@@ -7,27 +7,71 @@ import { createRoot, type Root } from 'react-dom/client';
 // apps
 import WebAuthnRegisterApp from '@external/apps/WebAuthnRegisterApp';
 
+// managers
+import WebAuthnMessageManager from '@external/managers/WebAuthnMessageManager';
+
 // translations
 import { en } from '@extension/translations';
 
 // types
-import type { ILogger } from '@common/types';
-import type { INewOptions } from './types';
+import type { IExternalConfig, ILogger } from '@common/types';
+import type { IInitializeOptions, INewOptions } from './types';
 
 // utils
 import createClientInformation from '@common/utils/createClientInformation';
+import createLogger from '@common/utils/createLogger';
 
 export default class WebAuthnInterceptor {
   // private variables
+  private _config: IExternalConfig;
   private _i18next: i18n | null;
-  private readonly _rootElementID: string = `kibisis_${randomString(8)}`;
+  private readonly _rootElementID = randomString(12);
   private readonly _logger: ILogger | null;
   private readonly _navigatorCredentialsCreateFn: typeof navigator.credentials.create;
+  private readonly _webAuthnMessageManager: WebAuthnMessageManager;
 
-  constructor({ logger, navigatorCredentialsCreateFn }: INewOptions) {
+  private constructor({
+    config,
+    logger,
+    navigatorCredentialsCreateFn,
+    webAuthnMessageManager,
+  }: INewOptions) {
+    this._config = config || {
+      debugLogging: __ENV__ === 'development',
+      isInitialized: false,
+      theme: {
+        colorMode: 'light',
+        font: 'Nunito',
+      },
+    };
     this._i18next = null;
     this._logger = logger || null;
     this._navigatorCredentialsCreateFn = navigatorCredentialsCreateFn;
+    this._webAuthnMessageManager =
+      webAuthnMessageManager || new WebAuthnMessageManager({ logger });
+  }
+
+  /**
+   * public static methods
+   */
+
+  public static async initialize({
+    navigatorCredentialsCreateFn,
+  }: IInitializeOptions): Promise<WebAuthnInterceptor> {
+    let logger = createLogger(__ENV__ === 'development' ? 'debug' : 'error');
+    const webAuthnMessageManager = new WebAuthnMessageManager({ logger });
+    const config = await webAuthnMessageManager.config(); // get the config
+
+    if (config?.debugLogging) {
+      logger = createLogger('debug');
+    }
+
+    return new WebAuthnInterceptor({
+      logger,
+      navigatorCredentialsCreateFn,
+      webAuthnMessageManager,
+      ...(config && { config }),
+    });
   }
 
   /**
@@ -101,6 +145,15 @@ export default class WebAuthnInterceptor {
       };
       let root: Root;
 
+      // if the
+      if (!this._config.isInitialized) {
+        this._logger?.debug(
+          `${WebAuthnInterceptor.name}#${_functionName}: provider has not been initialized`
+        );
+
+        return resolve(this._navigatorCredentialsCreateFn.call(this, options));
+      }
+
       if (!options?.publicKey) {
         // if (!options?.publicKey?.pubKeyCredParams.find(({ alg }) => alg === -8)) {
         this._logger?.debug(
@@ -123,10 +176,9 @@ export default class WebAuthnInterceptor {
       root.render(
         createElement(WebAuthnRegisterApp, {
           clientInfo: createClientInformation(),
+          config: this._config,
           credentialCreationOptions: options,
           i18n: await this._initializeI18n(),
-          initialColorMode: 'light', // default to light
-          initialFontFamily: 'Nunito',
           navigatorCredentialsCreateFn: this._navigatorCredentialsCreateFn,
           onClose: () => root.unmount(),
           onResponse: (response: PublicKeyCredential | null) =>
@@ -134,6 +186,7 @@ export default class WebAuthnInterceptor {
           ...(this._logger && {
             logger: this._logger,
           }),
+          webAuthnMessageManager: this._webAuthnMessageManager,
         })
       );
     });

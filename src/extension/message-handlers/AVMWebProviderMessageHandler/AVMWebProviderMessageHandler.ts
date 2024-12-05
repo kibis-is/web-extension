@@ -136,7 +136,7 @@ export default class AVMWebProviderMessageHandler extends BaseMessageHandler {
 
   private async _handleDisableRequestMessage(
     message: AVMWebProviderRequestMessage<IDisableParams>,
-    _originTabID: number
+    originTabID: number
   ): Promise<void> {
     const _functionName = 'handleDisableRequestMessage';
     let network: INetwork | null;
@@ -160,7 +160,7 @@ export default class AVMWebProviderMessageHandler extends BaseMessageHandler {
           requestID: message.id,
           result: null,
         }),
-        _originTabID
+        originTabID
       );
     }
 
@@ -195,7 +195,7 @@ export default class AVMWebProviderMessageHandler extends BaseMessageHandler {
           requestID: message.id,
           result: null,
         }),
-        _originTabID
+        originTabID
       );
     }
 
@@ -245,7 +245,7 @@ export default class AVMWebProviderMessageHandler extends BaseMessageHandler {
           sessionIds,
         },
       }),
-      _originTabID
+      originTabID
     );
 
     // send a message to the popups to indicate the sessions have been updated
@@ -256,7 +256,7 @@ export default class AVMWebProviderMessageHandler extends BaseMessageHandler {
 
   private async _handleDiscoverRequestMessage(
     message: AVMWebProviderRequestMessage<IDiscoverParams>,
-    _originTabID: number
+    originTabID: number
   ): Promise<void> {
     const _functionName = 'handleDiscoverRequestMessage';
     let supportedNetworks: INetwork[];
@@ -291,7 +291,7 @@ export default class AVMWebProviderMessageHandler extends BaseMessageHandler {
           providerId: __PROVIDER_ID__,
         },
       }),
-      _originTabID
+      originTabID
     );
   }
 

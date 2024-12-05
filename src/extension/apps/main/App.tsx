@@ -34,18 +34,13 @@ import { reducer as webauthnReducer } from '@extension/features/webauthn';
 import SplashPage from '@extension/pages/SplashPage';
 
 // types
-import type { IAppProps } from '@common/types';
-import type { IMainRootState } from '@extension/types';
+import type { IAppProps, IMainRootState } from '@extension/types';
 
 // utils
 import makeStore from '@extension/utils/makeStore';
 import createRouter from './utils/createRouter';
 
-const App: FC<IAppProps> = ({
-  i18n,
-  initialColorMode,
-  initialFontFamily,
-}: IAppProps) => {
+const App: FC<IAppProps> = ({ i18n, initialColorMode, initialFontFamily }) => {
   const store: Store<IMainRootState> = makeStore<IMainRootState>(
     combineReducers({
       accounts: accountsReducer,

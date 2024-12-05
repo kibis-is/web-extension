@@ -18,6 +18,7 @@ import BaseListener from '@common/services/BaseListener';
 
 // types
 import type { IBaseOptions } from '@common/types';
+import type { IAppWindow } from '@extension/types';
 
 export default class ProviderMessageHandler extends BaseListener {
   // private variables
@@ -33,11 +34,21 @@ export default class ProviderMessageHandler extends BaseListener {
    * private functions
    */
 
-  private async _handleFactoryResetMessage(): Promise<void> {
-    const backgroundAppWindows = await this._appWindowRepository.fetchByType(
+  private async _handleFactoryResetMessage({
+    reference,
+  }: BaseProviderMessage): Promise<void> {
+    const _functionName = '_handleFactoryResetMessage';
+    let backgroundAppWindows: IAppWindow[];
+    let mainAppWindows: IAppWindow[];
+
+    this._logger?.debug(
+      `${ProviderMessageHandler.name}#${_functionName}: message "${reference}" received`
+    );
+
+    backgroundAppWindows = await this._appWindowRepository.fetchByType(
       AppTypeEnum.BackgroundApp
     );
-    const mainAppWindows = await this._appWindowRepository.fetchByType(
+    mainAppWindows = await this._appWindowRepository.fetchByType(
       AppTypeEnum.MainApp
     );
 
@@ -63,11 +74,21 @@ export default class ProviderMessageHandler extends BaseListener {
     await browser.storage.local.clear();
   }
 
-  private async _handleRegistrationCompletedMessage(): Promise<void> {
-    const mainAppWindows = await this._appWindowRepository.fetchByType(
+  private async _handleRegistrationCompletedMessage({
+    reference,
+  }: BaseProviderMessage): Promise<void> {
+    const _functionName = '_handleRegistrationCompletedMessage';
+    let mainAppWindows: IAppWindow[];
+    let registrationAppWindows: IAppWindow[];
+
+    this._logger?.debug(
+      `${ProviderMessageHandler.name}#${_functionName}: message "${reference}" received`
+    );
+
+    mainAppWindows = await this._appWindowRepository.fetchByType(
       AppTypeEnum.MainApp
     );
-    const registrationAppWindows = await this._appWindowRepository.fetchByType(
+    registrationAppWindows = await this._appWindowRepository.fetchByType(
       AppTypeEnum.RegistrationApp
     );
 
@@ -98,17 +119,11 @@ export default class ProviderMessageHandler extends BaseListener {
   }
 
   private async _onMessage(message: BaseProviderMessage): Promise<void> {
-    const _functionName = 'onMessage';
-
-    this._logger?.debug(
-      `${ProviderMessageHandler.name}#${_functionName}: message "${message.reference}" received`
-    );
-
     switch (message.reference) {
       case ProviderMessageReferenceEnum.FactoryReset:
-        return await this._handleFactoryResetMessage();
+        return await this._handleFactoryResetMessage(message);
       case ProviderMessageReferenceEnum.RegistrationCompleted:
-        return await this._handleRegistrationCompletedMessage();
+        return await this._handleRegistrationCompletedMessage(message);
       default:
         break;
     }

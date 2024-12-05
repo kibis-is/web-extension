@@ -47,7 +47,7 @@ import {
 } from '@extension/types';
 
 // utils
-import isExtensionInitialized from '@extension/utils/isExtensionInitialized';
+import isProviderInitialized from '@extension/utils/isProviderInitialized';
 import parseURIToARC0300Schema from '@extension/utils/parseURIToARC0300Schema';
 import queueProviderEvent from '@extension/utils/queueProviderEvent';
 import supportedNetworksFromSettings from '@extension/utils/supportedNetworksFromSettings';
@@ -169,7 +169,7 @@ export default class ProviderActionListener extends BaseListener {
 
   private async _onExtensionClick(): Promise<void> {
     const _functionName = 'onExtensionClick';
-    const isInitialized = await isExtensionInitialized();
+    const isInitialized = await isProviderInitialized();
     let mainAppWindows: IAppWindow[];
     let registrationAppWindows: IAppWindow[];
 

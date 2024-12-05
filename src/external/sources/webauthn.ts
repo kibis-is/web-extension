@@ -1,23 +1,15 @@
 // interceptors
 import WebAuthnInterceptor from '@external/interceptors/WebAuthnInterceptor';
 
-// types
-import type { ILogger } from '@common/types';
-
-// utils
-import createLogger from '@common/utils/createLogger';
-
-(() => {
-  let logger: ILogger;
+(async () => {
   let webAuthnInterceptor: WebAuthnInterceptor;
 
   if (!window.navigator.credentials) {
     return;
   }
 
-  logger = createLogger(__ENV__ === 'development' ? 'debug' : 'error');
-  webAuthnInterceptor = new WebAuthnInterceptor({
-    logger,
+  // initialize the interceptor with the original functions
+  webAuthnInterceptor = await WebAuthnInterceptor.initialize({
     navigatorCredentialsCreateFn: window.navigator.credentials.create.bind(
       window.navigator.credentials
     ),
