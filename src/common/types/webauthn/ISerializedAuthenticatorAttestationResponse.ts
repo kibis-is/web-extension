@@ -1,12 +1,11 @@
-// types
-import type ISerializedAttestationObject from './ISerializedAttestationObject';
-
 /**
- * @property {ISerializedAttestationObject} attestationObject - The serialized `attestationObject` property.
- * @property {string} clientDataJSON - The JSON string of the public key `clientDataJSON` property.
+ * @property {string} attestationObject - The base64 encoded string of the public key credential's `attestationObject`
+ * property. On deserialization, it must be converted to an `ArrayBuffer`.
+ * @property {string} clientDataJSON - The base64 encoded string of the public key credential's `clientDataJSON`
+ * property. On deserialization, it must be converted to an `ArrayBuffer`.
  */
 interface ISerializedAuthenticatorAttestationResponse {
-  attestationObject: ISerializedAttestationObject;
+  attestationObject: string;
   clientDataJSON: string;
 }
 

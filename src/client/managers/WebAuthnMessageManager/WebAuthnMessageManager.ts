@@ -1,4 +1,9 @@
-import { encode as encodeBase64 } from '@stablelib/base64';
+import {
+  decode as decodeBase64,
+  encode as encodeBase64,
+  encodeURLSafe as encodeBase64URLSafe,
+} from '@stablelib/base64';
+import { decode as decodeCOBOR } from '@stablelib/cbor';
 import { v4 as uuid } from 'uuid';
 
 // errors
@@ -9,22 +14,26 @@ import { WebAuthnMessageReferenceEnum } from '@common/enums';
 
 // constants
 import { WEB_AUTHN_REQUEST_TIMEOUT } from '@client/constants';
+import { COSE_ED21559_ALGORITHM } from '@common/constants';
 
 // messages
 import WebAuthnRegisterRequestMessage from '@common/messages/WebAuthnRegisterRequestMessage';
 
 // types
 import type { IResult as WebAuthnRegisterResponseMessageResult } from '@common/messages/WebAuthnRegisterResponseMessage';
-import type {
+import {
   IBaseOptions,
   ILogger,
   ISerializedPublicKeyCredentialCreationOptions,
+  ISerializedPublicKeyCredentialWithAuthenticatorAttestationResponse,
+  TReplace,
 } from '@common/types';
 import type { IRegisterOptions, IRegisterResult } from './types';
 
 // utils
 import bufferSourceToUint8Array from '@common/utils/bufferSourceToUint8Array';
 import dispatchMessageWithTimeout from '@client/utils/dispatchMessageWithTimeout';
+import uint8ArrayToArrayBuffer from '@common/utils/uint8ArrayToArrayBuffer';
 
 export default class WebAuthnMessageManager {
   // private variables
@@ -37,6 +46,38 @@ export default class WebAuthnMessageManager {
   /**
    * private functions
    */
+
+  private static _deserializeAttestationCredential(
+    credential: ISerializedPublicKeyCredentialWithAuthenticatorAttestationResponse
+  ): TReplace<
+    PublicKeyCredential,
+    'response',
+    AuthenticatorAttestationResponse
+  > {
+    const attestationObject = decodeBase64(
+      credential.response.attestationObject
+    );
+    const decodedAttestationObject = decodeCOBOR(attestationObject);
+    const decodedRawID = decodeBase64(credential.rawId);
+
+    return {
+      ...credential,
+      getClientExtensionResults: () => ({}),
+      id: encodeBase64URLSafe(decodedRawID).replace(/=/g, ''), // remove the padding
+      rawId: uint8ArrayToArrayBuffer(decodedRawID),
+      response: {
+        attestationObject: uint8ArrayToArrayBuffer(attestationObject),
+        clientDataJSON: uint8ArrayToArrayBuffer(
+          decodeBase64(credential.response.clientDataJSON)
+        ),
+        getAuthenticatorData: () =>
+          uint8ArrayToArrayBuffer(decodedAttestationObject.authData),
+        getPublicKey: () => null,
+        getPublicKeyAlgorithm: () => COSE_ED21559_ALGORITHM,
+        getTransports: () => ['internal'],
+      },
+    };
+  }
 
   /**
    * Convenience function that serializes the public key creation credentials, converting any raw bytes to base64
@@ -108,10 +149,11 @@ export default class WebAuthnMessageManager {
       return null;
     }
 
-    // TODO: convert serialized public key credential
     return {
       account: result.account,
-      credential: new PublicKeyCredential(),
+      credential: WebAuthnMessageManager._deserializeAttestationCredential(
+        result.credential
+      ),
     };
   }
 }

@@ -136,14 +136,9 @@ const sendWebAuthnRegisterResponseThunk: AsyncThunk<
     }
 
     publicKeyCredentialFactory = PublicKeyCredentialFactory.generate({
-      challenge: decodeBase64(message.payload.options.challenge),
       keyPair,
       origin: new URL(message.payload.clientInfo.host).origin,
-      rp: message.payload.options.rp,
-      user: {
-        ...message.payload.options.user,
-        id: decodeBase64(message.payload.options.user.id),
-      },
+      publicKeyCreationOptions: message.payload.options,
     });
 
     // TODO: save passkey to account
@@ -169,13 +164,14 @@ const sendWebAuthnRegisterResponseThunk: AsyncThunk<
               name: account.name,
             }),
           },
-          credential: publicKeyCredentialFactory.attestationCredential(),
+          credential:
+            publicKeyCredentialFactory.serializedAttestationCredential(),
         },
       })
     );
 
     logger.debug(
-      `${ThunkEnum.SendWebAuthnRegisterResponse}: sent response "${reference}" message to the client via the middleware (content script)`
+      `${ThunkEnum.SendWebAuthnRegisterResponse}: sent response "${reference}" message to the middleware (content script)`
     );
   }
 );

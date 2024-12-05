@@ -131,7 +131,7 @@ const Root: FC<IRootProps> = ({
           variant="solid"
           w="full"
         >
-          {t<string>('buttons.tryAgain')}
+          {t<string>('buttons.register')}
         </Button>
       );
     }

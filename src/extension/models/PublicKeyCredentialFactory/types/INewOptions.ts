@@ -5,7 +5,7 @@ import Ed21559KeyPair from '@extension/models/Ed21559KeyPair';
 import type { IAccountPasskey } from '@extension/types';
 
 interface INewOptions {
-  challenge: Uint8Array;
+  challenge: string;
   keyPair: Ed21559KeyPair;
   passkey: IAccountPasskey;
 }

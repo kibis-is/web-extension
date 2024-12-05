@@ -2,15 +2,12 @@
 import Ed21559KeyPair from '@extension/models/Ed21559KeyPair';
 
 // types
-import type IRPOptions from './IRPOptions';
-import type IUserOptions from './IUserOptions';
+import type { ISerializedPublicKeyCredentialCreationOptions } from '@common/types';
 
 interface IGenerateOptions {
-  challenge: Uint8Array;
   keyPair: Ed21559KeyPair;
   origin: string;
-  rp: IRPOptions;
-  user: IUserOptions;
+  publicKeyCreationOptions: ISerializedPublicKeyCredentialCreationOptions;
 }
 
 export default IGenerateOptions;

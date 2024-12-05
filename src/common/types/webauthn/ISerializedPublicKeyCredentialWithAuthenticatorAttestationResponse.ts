@@ -2,11 +2,12 @@
 import type ISerializedAuthenticatorAttestationResponse from './ISerializedAuthenticatorAttestationResponse';
 
 /**
- * @property {string} id - A base64 URL safe encoded string of the raw ID of the credential.
+ * @property {string} rawId - A base64 encoded string of the raw ID of the credential. On deserialization, it must be
+ * converted to an `ArrayBuffer`.
  */
 interface ISerializedPublicKeyCredentialWithAuthenticatorAttestationResponse {
   authenticatorAttachment: 'platform';
-  id: string;
+  rawId: string;
   response: ISerializedAuthenticatorAttestationResponse;
   type: 'public-key';
 }

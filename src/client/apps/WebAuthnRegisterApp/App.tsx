@@ -58,6 +58,7 @@ const App: FC<IAppProps> = ({
     }
 
     onResponse(result.credential);
+    onClose();
   };
   const handleOnTryAgainClick = async () => {
     await registerAction({

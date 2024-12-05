@@ -1,1 +1,1 @@
-export { default } from './bufferSourceToUint8Array';
+export { default } from './uint8ArrayToArrayBuffer';

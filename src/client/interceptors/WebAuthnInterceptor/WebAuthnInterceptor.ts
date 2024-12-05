@@ -7,6 +7,9 @@ import { createRoot, type Root } from 'react-dom/client';
 // apps
 import WebAuthnRegisterApp from '@client/apps/WebAuthnRegisterApp';
 
+// constants
+import { COSE_ED21559_ALGORITHM } from '@common/constants';
+
 // managers
 import ConfigManager from '@client/managers/ConfigManager';
 import WebAuthnMessageManager from '@client/managers/WebAuthnMessageManager';
@@ -169,10 +172,24 @@ export default class WebAuthnInterceptor {
         return resolve(this._navigatorCredentialsCreateFn.call(this, options));
       }
 
+      // if this the request is not public key credentials
       if (!options?.publicKey) {
-        // if (!options?.publicKey?.pubKeyCredParams.find(({ alg }) => alg === -8)) {
         this._logger?.debug(
-          `${WebAuthnInterceptor.name}#${_functionName}: public key credentials do not request "-8" (ed25519)"`
+          `${WebAuthnInterceptor.name}#${_functionName}: public key credentials not requested`
+        );
+
+        return resolve(this._navigatorCredentialsCreateFn.call(this, options));
+      }
+
+      // if the specific public key algorithms have been requested, check they are ed25519
+      if (
+        options.publicKey.pubKeyCredParams.length > 0 &&
+        !options.publicKey.pubKeyCredParams.find(
+          ({ alg }) => alg === COSE_ED21559_ALGORITHM
+        )
+      ) {
+        this._logger?.debug(
+          `${WebAuthnInterceptor.name}#${_functionName}: public key credentials did not request "-8" (ed25519)`
         );
 
         return resolve(this._navigatorCredentialsCreateFn.call(this, options));

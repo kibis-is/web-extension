@@ -47,10 +47,9 @@ const AccountItem: FC<IProps> = ({
       borderStyle="solid"
       borderRadius="full"
       borderWidth="1px"
-      h={EXTERNAL_INPUT_HEIGHT}
       m={0}
-      px={DEFAULT_GAP - 2}
-      py={1}
+      px={DEFAULT_GAP / 2}
+      py={DEFAULT_GAP / 3}
       spacing={DEFAULT_GAP / 3}
       w="full"
     >
@@ -67,9 +66,10 @@ const AccountItem: FC<IProps> = ({
       {/*name/address*/}
       {account.name ? (
         <VStack
-          alignItems="flex-start"
+          align="flex-start"
           flexGrow={1}
-          justifyContent="space-evenly"
+          h={EXTERNAL_INPUT_HEIGHT}
+          justify="space-evenly"
           spacing={0}
         >
           <Text

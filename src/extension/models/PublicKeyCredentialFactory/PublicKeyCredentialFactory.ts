@@ -3,12 +3,17 @@ import {
   encode as encodeBase64,
   encodeURLSafe as encodeBase64URLSafe,
 } from '@stablelib/base64';
+import { encode as encodeCBOR } from '@stablelib/cbor';
 import { hash as hashSHA256 } from '@stablelib/sha256';
 import { encode as encodeUTF8 } from '@stablelib/utf8';
-import { randomBytes, sign } from 'tweetnacl';
+import { sign } from 'tweetnacl';
+
+// constants
+import { COSE_ED21559_ALGORITHM } from '@common/constants';
 
 // models
 import Ed21559KeyPair from '@extension/models/Ed21559KeyPair';
+import UUID from '@extension/models/UUID';
 
 // types
 import type { ISerializedPublicKeyCredentialWithAuthenticatorAttestationResponse } from '@common/types';
@@ -16,10 +21,10 @@ import type { IAccountPasskey } from '@extension/types';
 import type { IGenerateOptions, IInitOptions, INewOptions } from './types';
 
 export default class PublicKeyCredentialFactory {
-  // public variables
-  public readonly _challenge: Uint8Array;
-  public readonly _keyPair: Ed21559KeyPair;
-  public readonly _passkey: IAccountPasskey;
+  // private variables
+  private readonly _challenge: string;
+  private readonly _keyPair: Ed21559KeyPair;
+  private readonly _passkey: IAccountPasskey;
 
   private constructor({ challenge, keyPair, passkey }: INewOptions) {
     this._challenge = challenge;
@@ -32,41 +37,35 @@ export default class PublicKeyCredentialFactory {
    */
 
   public static generate({
-    challenge,
     keyPair,
     origin,
-    rp,
-    user,
+    publicKeyCreationOptions,
   }: IGenerateOptions): PublicKeyCredentialFactory {
     return new PublicKeyCredentialFactory({
-      challenge,
+      challenge: publicKeyCreationOptions.challenge,
       keyPair,
       passkey: {
-        alg: -8,
+        alg: COSE_ED21559_ALGORITHM,
         createdAt: new Date().getTime().toString(10),
-        id: encodeBase64(randomBytes(32)),
+        id: new UUID().toString(),
         lastUsedAt: new Date().getTime().toString(10),
         origin,
         rp: {
-          id: rp.id || origin,
-          name: rp.name,
+          ...publicKeyCreationOptions.rp,
+          id: publicKeyCreationOptions.rp.id || origin,
         },
-        user: {
-          displayName: user.displayName,
-          id: encodeBase64(user.id),
-          name: user.name,
-        },
+        user: publicKeyCreationOptions.user,
       },
     });
   }
 
   public static init({
-    challenge,
     keyPair,
     passkey,
+    publicKeyCredentialRequestOptions,
   }: IInitOptions): PublicKeyCredentialFactory {
     return new PublicKeyCredentialFactory({
-      challenge,
+      challenge: publicKeyCredentialRequestOptions.challenge,
       keyPair,
       passkey,
     });
@@ -76,11 +75,42 @@ export default class PublicKeyCredentialFactory {
    * private functions
    */
 
-  private _authenticatorData(): Uint8Array {
-    const attestedCredentialData = new Uint8Array([...this._keyPair.publicKey]);
-    const flags = 0x41;
+  private _coseEncodedKey(): Uint8Array {
+    const coseKey = new Map<number, number | Uint8Array>([
+      [1, 1], // key type: okp (Octet Key Pair)
+      [3, COSE_ED21559_ALGORITHM], // algorithm: eddsa
+      [-1, 6], // curve: ed25519
+      [-2, this._keyPair.publicKey], // public key bytes
+    ]);
+
+    return encodeCBOR(Object.fromEntries(coseKey));
+  }
+
+  /**
+   * public functions
+   */
+
+  /**
+   * Creates the authenticated data.
+   * @returns {Uint8Array} The authenticated data.
+   * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/Web_Authentication_API/Authenticator_data#data_structure}
+   * @private
+   */
+  public authenticatorData(): Uint8Array {
+    const decodedCredentialID = new UUID(this._passkey.id).toBytes();
+    const credentialIDLength = new Uint8Array([
+      (decodedCredentialID.length >> 8) & 0xff, // high byte
+      decodedCredentialID.length & 0xff, // low byte
+    ]);
+    const flags = 0x41; // user present and attestation flag
     const rpIDHash = hashSHA256(encodeUTF8(this._passkey.rp.id));
     const signCount = new Uint8Array(4); // default to zero
+    const attestedCredentialData = new Uint8Array([
+      ...new UUID(__PROVIDER_ID__).toBytes(), // use the provider identifier as the aaguid
+      ...credentialIDLength,
+      ...decodedCredentialID,
+      ...this._coseEncodedKey(),
+    ]);
 
     return new Uint8Array([
       ...rpIDHash,
@@ -90,37 +120,43 @@ export default class PublicKeyCredentialFactory {
     ]);
   }
 
-  /**
-   * public functions
-   */
+  public passkey(): IAccountPasskey {
+    return this._passkey;
+  }
 
-  public attestationCredential(): ISerializedPublicKeyCredentialWithAuthenticatorAttestationResponse {
-    const authenticatorData = this._authenticatorData();
-    const clientDataJSON = JSON.stringify({
-      type: 'webauthn.create',
-      challenge: encodeBase64URLSafe(this._challenge),
-      origin: this._passkey.origin,
+  public serializedAttestationCredential(): ISerializedPublicKeyCredentialWithAuthenticatorAttestationResponse {
+    const authenticatorData = this.authenticatorData();
+    const clientDataJSON = encodeUTF8(
+      JSON.stringify({
+        type: 'webauthn.create',
+        challenge: encodeBase64URLSafe(decodeBase64(this._challenge)), // convert the base64 encoded challenge to url safe
+        origin: this._passkey.origin,
+      })
+    );
+    const signature = sign(
+      new Uint8Array([
+        ...authenticatorData,
+        ...hashSHA256(clientDataJSON), // include the hash of the client json
+      ]),
+      this._keyPair.getSecretKey()
+    );
+    const attestationObject = encodeCBOR({
+      attStmt: {
+        alg: this._passkey.alg,
+        sig: signature,
+      },
+      authData: authenticatorData,
+      fmt: 'packed',
     });
-    const signature = sign(authenticatorData, this._keyPair.getSecretKey());
 
     return {
       authenticatorAttachment: 'platform',
-      id: encodeBase64URLSafe(decodeBase64(this._passkey.id)),
+      rawId: encodeBase64(new UUID(this._passkey.id).toBytes()),
       response: {
-        attestationObject: {
-          attStmt: {
-            sig: encodeBase64(signature),
-          },
-          authData: encodeBase64(authenticatorData),
-          fmt: 'none',
-        },
-        clientDataJSON,
+        attestationObject: encodeBase64(attestationObject),
+        clientDataJSON: encodeBase64(clientDataJSON),
       },
       type: 'public-key',
     };
-  }
-
-  public passkey(): IAccountPasskey {
-    return this._passkey;
   }
 }
