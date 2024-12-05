@@ -251,9 +251,9 @@ const configs: (
     merge(commonConfig, {
       devtool,
       entry: {
-        ['background']: resolve(SRC_PATH, 'background.ts'),
-        ['middleware']: resolve(SRC_PATH, 'middleware.ts'),
-        ['webauthn']: resolve(SRC_PATH, 'external', 'sources', 'webauthn.ts'),
+        ['client']: resolve(SRC_PATH, 'client', 'main.ts'),
+        ['middleware']: resolve(SRC_PATH, 'middleware', 'main.ts'),
+        ['provider']: resolve(SRC_PATH, 'extension', 'main.ts'),
       },
       mode: environment,
       module: {

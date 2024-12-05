@@ -5,7 +5,7 @@ import browser from 'webextension-polyfill';
 import { ThunkEnum } from '../enums';
 
 // messages
-import { ProviderRegistrationCompletedMessage } from '@common/messages';
+import ProviderRegistrationCompletedMessage from '@common/messages/ProviderRegistrationCompletedMessage';
 
 // types
 import type {

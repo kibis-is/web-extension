@@ -5,7 +5,7 @@ import browser from 'webextension-polyfill';
 import { ThunkEnum } from '../enums';
 
 // messages
-import { ProviderFactoryResetMessage } from '@common/messages';
+import ProviderFactoryResetMessage from '@common/messages/ProviderFactoryResetMessage';
 
 // types
 import type { IBaseAsyncThunkConfig, IMainRootState } from '@extension/types';

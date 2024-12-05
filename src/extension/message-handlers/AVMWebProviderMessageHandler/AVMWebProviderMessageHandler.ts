@@ -44,7 +44,7 @@ import BaseMessageHandler from '@extension/message-handlers/BaseMessageHandler';
 // messages
 import AVMWebProviderRequestMessage from '@common/messages/AVMWebProviderRequestMessage';
 import AVMWebProviderResponseMessage from '@common/messages/AVMWebProviderResponseMessage';
-import { ProviderSessionsUpdatedMessage } from '@common/messages';
+import ProviderSessionsUpdatedMessage from '@common/messages/ProviderSessionsUpdatedMessage';
 
 // repositories
 import AccountRepository from '@extension/repositories/AccountRepository';
@@ -745,11 +745,11 @@ export default class AVMWebProviderMessageHandler extends BaseMessageHandler {
    * protected functions
    */
 
-  protected async _onMessage(
+  protected async _onMiddlewareMessage(
     message: AVMWebProviderRequestMessage<TRequestParams>,
     sender: Runtime.MessageSender
   ): Promise<void> {
-    const _functionName: string = 'onMessage';
+    const _functionName: string = '_onMiddlewareMessage';
 
     if (!sender.tab?.id) {
       this._logger?.debug(
@@ -795,9 +795,11 @@ export default class AVMWebProviderMessageHandler extends BaseMessageHandler {
    */
 
   public startListening(): void {
-    browser.runtime.onMessage.addListener(this._onMessage.bind(this));
+    browser.runtime.onMessage.addListener(this._onMiddlewareMessage.bind(this));
   }
   public stopListening() {
-    browser.runtime.onMessage.removeListener(this._onMessage.bind(this));
+    browser.runtime.onMessage.removeListener(
+      this._onMiddlewareMessage.bind(this)
+    );
   }
 }

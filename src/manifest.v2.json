@@ -5,8 +5,8 @@
     "default_title": "Kibisis"
   },
   "background": {
-    "scripts": ["background.js"],
+    "scripts": ["provider.js"],
     "persistent": true
   },
-  "web_accessible_resources": ["webauthn.js"]
+  "web_accessible_resources": ["client.js"]
 }

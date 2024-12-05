@@ -23,7 +23,7 @@ import ARC0300KeyRegistrationTransactionSendEvent from '@extension/events/ARC030
 import AppWindowManager from '@extension/managers/AppWindowManager';
 
 // messages
-import { ProviderCredentialLockActivatedMessage } from '@common/messages';
+import ProviderCredentialLockActivatedMessage from '@common/messages/ProviderCredentialLockActivatedMessage';
 
 // repositories
 import AppWindowRepository from '@extension/repositories/AppWindowRepository';

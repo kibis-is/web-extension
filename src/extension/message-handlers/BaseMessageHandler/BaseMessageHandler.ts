@@ -14,7 +14,7 @@ export default abstract class BaseMessageHandler extends BaseListener {
    * protected methods
    */
 
-  protected abstract _onMessage(
+  protected abstract _onMiddlewareMessage(
     message: IBaseMessage<unknown>,
     sender: Runtime.MessageSender
   ): Promise<void>;
@@ -33,7 +33,7 @@ export default abstract class BaseMessageHandler extends BaseListener {
       `${BaseMessageHandler.name}#${_functionName}: sending "${message.reference}" response to middleware "${originTabID}"`
     );
 
-    // send the response to the client (web page), via the middleware (content script)
+    // send the response to the middleware (content script)
     return await browser.tabs.sendMessage(originTabID, message);
   }
 }

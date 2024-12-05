@@ -9,14 +9,25 @@ import { SRC_PATH } from '../constants';
  * @returns {Configuration} a common configuration.
  */
 export default function createCommonConfig(): Configuration {
+  const clientPath = resolve(SRC_PATH, 'client');
   const commonPath = resolve(SRC_PATH, 'common');
   const extensionPath = resolve(SRC_PATH, 'extension');
-  const externalPath = resolve(SRC_PATH, 'external');
+  const middlewarePath = resolve(SRC_PATH, 'middleware');
 
   return {
     node: false,
     resolve: {
       alias: {
+        // client
+        ['@client/apps']: resolve(clientPath, 'apps'),
+        ['@client/components']: resolve(clientPath, 'components'),
+        ['@client/constants']: resolve(clientPath, 'constants'),
+        ['@client/hooks']: resolve(clientPath, 'hooks'),
+        ['@client/interceptors']: resolve(clientPath, 'interceptors'),
+        ['@client/managers']: resolve(clientPath, 'managers'),
+        ['@client/styles']: resolve(clientPath, 'styles'),
+        ['@client/utils']: resolve(clientPath, 'utils'),
+
         // common
         ['@common/components']: resolve(commonPath, 'components'),
         ['@common/constants']: resolve(commonPath, 'constants'),
@@ -46,10 +57,6 @@ export default function createCommonConfig(): Configuration {
         ['@extension/icons']: resolve(extensionPath, 'icons'),
         ['@extension/images']: resolve(extensionPath, 'images'),
         ['@extension/managers']: resolve(extensionPath, 'managers'),
-        ['@extension/message-brokers']: resolve(
-          extensionPath,
-          'message-brokers'
-        ),
         ['@extension/message-handlers']: resolve(
           extensionPath,
           'message-handlers'
@@ -66,14 +73,12 @@ export default function createCommonConfig(): Configuration {
         ['@extension/types']: resolve(extensionPath, 'types'),
         ['@extension/utils']: resolve(extensionPath, 'utils'),
 
-        // external
-        ['@external/apps']: resolve(externalPath, 'apps'),
-        ['@external/components']: resolve(externalPath, 'components'),
-        ['@external/constants']: resolve(externalPath, 'constants'),
-        ['@external/hooks']: resolve(externalPath, 'hooks'),
-        ['@external/interceptors']: resolve(externalPath, 'interceptors'),
-        ['@external/managers']: resolve(externalPath, 'managers'),
-        ['@external/styles']: resolve(externalPath, 'styles'),
+        // middleware
+        ['@middleware/message-brokers']: resolve(
+          middlewarePath,
+          'message-brokers'
+        ),
+        ['@middleware/utils']: resolve(middlewarePath, 'utils'),
       },
       extensions: ['.css', '.js', '.ts', '.tsx'],
     },

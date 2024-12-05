@@ -9,75 +9,33 @@ import { EventTypeEnum } from '@extension/enums';
 import WebAuthnRegisterRequestEvent from '@extension/events/WebAuthnRegisterRequestEvent';
 
 // messages
-import WebAuthnConfigRequestMessage from '@common/messages/WebAuthnConfigRequestMessage';
-import WebAuthnConfigResponseMessage from '@common/messages/WebAuthnConfigResponseMessage';
 import WebAuthnRegisterRequestMessage from '@common/messages/WebAuthnRegisterRequestMessage';
 
 // repository
 import EventQueueRepository from '@extension/repositories/EventQueueRepository';
-import SettingsRepository from '@extension/repositories/SettingsRepository';
 
 // message handlers
 import BaseMessageHandler from '@extension/message-handlers/BaseMessageHandler';
 
 // types
 import type { IBaseOptions } from '@common/types';
-import type { ISettings } from '@extension/types';
 
 // utils
-import isProviderInitialized from '@extension/utils/isProviderInitialized';
 import queueProviderEvent from '@extension/utils/queueProviderEvent';
 
 export default class WebAuthnMessageHandler extends BaseMessageHandler {
   // private variables
   private readonly _eventQueueRepository: EventQueueRepository;
-  private readonly _settingsRepository: SettingsRepository;
 
   constructor(options: IBaseOptions) {
     super(options);
 
     this._eventQueueRepository = new EventQueueRepository();
-    this._settingsRepository = new SettingsRepository();
   }
 
   /**
    * private methods
    */
-
-  private async _handleConfigRequestMessage(
-    message: WebAuthnConfigRequestMessage,
-    originTabID: number
-  ): Promise<void> {
-    const _functionName = '_handleConfigRequestMessage';
-    let settings: ISettings;
-
-    this._logger?.debug(
-      `${WebAuthnMessageHandler.name}#${_functionName}: received message "${message.reference}"`
-    );
-
-    settings = await this._settingsRepository.fetch();
-
-    // send a response with all accounts
-    return this._sendResponseToMiddleware(
-      new WebAuthnConfigResponseMessage({
-        error: null,
-        id: uuid(),
-        reference: WebAuthnMessageReferenceEnum.ConfigResponse,
-        requestID: message.id,
-        result: {
-          config: {
-            debugLogging: settings.advanced.debugLogging,
-            isInitialized: await isProviderInitialized(),
-            theme: {
-              colorMode: settings.appearance.theme,
-              font: settings.appearance.font,
-            },
-          },
-        },
-      }),
-      originTabID
-    );
-  }
 
   private async _handleRegisterRequestMessage(
     message: WebAuthnRegisterRequestMessage,
@@ -135,8 +93,8 @@ export default class WebAuthnMessageHandler extends BaseMessageHandler {
    * protected methods
    */
 
-  protected async _onMessage(
-    message: WebAuthnRegisterRequestMessage | WebAuthnConfigRequestMessage,
+  protected async _onMiddlewareMessage(
+    message: WebAuthnRegisterRequestMessage,
     sender: Runtime.MessageSender
   ): Promise<void> {
     const _functionName = '_onMessage';
@@ -150,9 +108,6 @@ export default class WebAuthnMessageHandler extends BaseMessageHandler {
     }
 
     switch (message.reference) {
-      case WebAuthnMessageReferenceEnum.ConfigRequest:
-        await this._handleConfigRequestMessage(message, sender.tab.id);
-        break;
       case WebAuthnMessageReferenceEnum.RegisterRequest:
         await this._handleRegisterRequestMessage(message, sender.tab.id);
         break;
@@ -166,10 +121,12 @@ export default class WebAuthnMessageHandler extends BaseMessageHandler {
    */
 
   public startListening(): void {
-    browser.runtime.onMessage.addListener(this._onMessage.bind(this));
+    browser.runtime.onMessage.addListener(this._onMiddlewareMessage.bind(this));
   }
 
   public stopListening(): void {
-    browser.runtime.onMessage.removeListener(this._onMessage.bind(this));
+    browser.runtime.onMessage.removeListener(
+      this._onMiddlewareMessage.bind(this)
+    );
   }
 }

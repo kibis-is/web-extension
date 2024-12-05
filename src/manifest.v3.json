@@ -5,12 +5,12 @@
     "default_title": "Kibisis"
   },
   "background": {
-    "service_worker": "background.js"
+    "service_worker": "provider.js"
   },
   "web_accessible_resources": [
     {
       "matches": ["*://*/*"],
-      "resources": ["webauthn.js"]
+      "resources": ["client.js"]
     }
   ]
 }

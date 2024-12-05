@@ -1,7 +1,7 @@
 // types
 import type IBaseMessage from './IBaseMessage';
 
-interface IBaseRequestMessage<Reference, Payload = null>
+interface IBaseRequestMessage<Reference = string, Payload = null>
   extends IBaseMessage<Reference> {
   payload: Payload;
 }

@@ -10,8 +10,7 @@ import SettingsRepository from '@extension/repositories/SettingsRepository';
 import { en } from '@extension/translations';
 
 // types
-import type { IAppProps } from '@common/types';
-import type { ISettings } from '@extension/types';
+import type { IAppProps, ISettings } from '@extension/types';
 
 export default function bootstrapApp(app: FC<IAppProps>): () => Promise<void> {
   return async (): Promise<void> => {

@@ -54,26 +54,30 @@
   This is the Kibisis web extension built in React, TypeScript and Webpack.
 </p>
 
-### Table of contents
+### Table Of Contents
 
 * [1. Overview](#-1-overview)
 * [2. Usage](#-2-usage)
 * [2. Development](#-3-development)
-  * [3.1. Requirements](#31-requirements)
-  * [3.2. Setup](#32-setup)
-  * [3.3. Install Local Browsers](#33-install-local-browsers-optional)
-    * [3.3.1. Chrome](#331-chrome)
-    * [3.3.2. Firefox](#332-firefox)
-  * [3.4. Run](#34-run)
+  -[3.1. Requirements](#31-requirements)
+  -[3.2. Setup](#32-setup)
+  -[3.3. Install Local Browsers](#33-install-local-browsers-optional)
+    -[3.3.1. Chrome](#331-chrome)
+    -[3.3.2. Firefox](#332-firefox)
+  -[3.4. Run](#34-run)
 * [4. Appendix](#-4-appendix)
-  * [4.1. Useful Commands](#41-useful-commands)
-  * [4.2. Manifest Permissions](#42-manifest-permissions)
+  -[4.1. Useful Commands](#41-useful-commands)
+  -[4.2. Manifest Permissions](#42-manifest-permissions)
 * [5. How To Contribute](#-5-how-to-contribute)
 * [6. License](#-6-license)
 
-## 🗂️ 1. Overview
+## 🔭 1. Overview
 
-Coming soon...
+### 1.1. Terminology
+
+* **Client**: These are all external resources to the provider, except the middleware. These include webpages and other extensions.
+* **Middleware**: Also known as content scripts. These resources automatically injected into the webpage and have limited access to both the web extension APIs and the webpage's DOM.
+* **Provider**: This is the web extension and includes both the extension's service workers and pages/pop-ups. These have full access to the web extension APIs and communicate to clients via the middleware.
 
 ## 🪄 2. Usage
 
@@ -192,7 +196,7 @@ Please refer to the [COPYING][license] file.
 
 <sup>[Back to top ^][table-of-contents]</sup>
 
-<!-- Links -->
+<!-- links -->
 [capture-visible-tab-api]: https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/tabs/captureVisibleTab
 [contribute]: ./CONTRIBUTING.md
 [download-api]: https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/downloads/download

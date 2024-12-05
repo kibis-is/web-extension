@@ -13,7 +13,10 @@ import SettingsSelectItem from '@extension/components/SettingsSelectItem';
 import { DEFAULT_GAP } from '@common/constants';
 
 // features
-import { saveToStorageThunk as saveSettingsToStorageThunk } from '@extension/features/settings';
+import {
+  saveToStorageThunk as saveSettingsToStorageThunk,
+  sendThemeUpdatedMessageThunk,
+} from '@extension/features/settings';
 
 // selectors
 import {
@@ -32,7 +35,6 @@ const AppearanceSettingsPage: FC = () => {
   const colorMode = useSelectSettingsColorMode();
   const settings = useSelectSettings();
   // misc
-  const _context = 'appearance-settings-page';
   const themeOptions: IOption<ColorMode>[] = [
     {
       icon: IoMoonOutline,
@@ -56,8 +58,10 @@ const AppearanceSettingsPage: FC = () => {
     },
   ];
   // handlers
-  const handleOnFontChange = ({ value }: IOption<CSS.Property.FontFamily>) => {
-    dispatch(
+  const handleOnFontChange = async ({
+    value,
+  }: IOption<CSS.Property.FontFamily>) => {
+    await dispatch(
       saveSettingsToStorageThunk({
         ...settings,
         appearance: {
@@ -65,10 +69,12 @@ const AppearanceSettingsPage: FC = () => {
           font: value,
         },
       })
-    );
+    ).unwrap();
+    // send a message
+    dispatch(sendThemeUpdatedMessageThunk());
   };
-  const handleOnThemeChange = ({ value }: IOption<ColorMode>) => {
-    dispatch(
+  const handleOnThemeChange = async ({ value }: IOption<ColorMode>) => {
+    await dispatch(
       saveSettingsToStorageThunk({
         ...settings,
         appearance: {
@@ -76,7 +82,9 @@ const AppearanceSettingsPage: FC = () => {
           theme: value,
         },
       })
-    );
+    ).unwrap();
+    // send a message
+    dispatch(sendThemeUpdatedMessageThunk());
   };
 
   return (

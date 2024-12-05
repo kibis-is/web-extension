@@ -7,7 +7,7 @@ import { AppTypeEnum } from '@extension/enums';
 import AppWindowManager from '@extension/managers/AppWindowManager';
 
 // messages
-import { ProviderEventAddedMessage } from '@common/messages';
+import ProviderEventAddedMessage from '@common/messages/ProviderEventAddedMessage';
 
 // repositories
 import AppWindowRepository from '@extension/repositories/AppWindowRepository';

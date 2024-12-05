@@ -12,8 +12,8 @@ export default class WebAuthnRegisterResponseMessage
   implements
     IBaseResponseMessage<
       IResult,
-      WebAuthnMessageReferenceEnum.RegisterResponse,
-      ISerializedProviderError
+      ISerializedProviderError,
+      WebAuthnMessageReferenceEnum.RegisterResponse
     >
 {
   public readonly error: ISerializedProviderError | null;
@@ -30,8 +30,8 @@ export default class WebAuthnRegisterResponseMessage
     result,
   }: IBaseResponseMessage<
     IResult,
-    WebAuthnMessageReferenceEnum.RegisterResponse,
-    ISerializedProviderError
+    ISerializedProviderError,
+    WebAuthnMessageReferenceEnum.RegisterResponse
   >) {
     this.error = error;
     this.id = id;
