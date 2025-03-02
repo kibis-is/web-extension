@@ -11,7 +11,7 @@ import type { IProps } from './types';
 const COSEAlgorithmBadge: FC<IProps> = ({ algorithm, size = 'sm' }: IProps) => {
   const { t } = useTranslation();
   // hooks
-  const colorMode: ColorMode = useSelectSettingsColorMode();
+  const colorMode = useSelectSettingsColorMode();
   // misc
   let colorScheme = 'orange';
   let label = t<string>('labels.unknown');

@@ -55,7 +55,9 @@ import GroupBadge from '@extension/components/GroupBadge';
 import { DEFAULT_GAP } from '@common/constants';
 import {
   ACCOUNT_PAGE_HEADER_ITEM_HEIGHT,
+  ACCOUNTS_ROUTE,
   ADD_ACCOUNT_ROUTE,
+  PASSKEY_ROUTE,
 } from '@extension/constants';
 
 // enums
@@ -115,6 +117,7 @@ import {
 // types
 import type { TReKeyType } from '@extension/features/re-key-account';
 import type {
+  IAccountPasskey,
   IAccountWithExtendedProps,
   IAppThunkDispatch,
   IMainRootState,
@@ -195,7 +198,8 @@ const AccountPage: FC = () => {
   const handleOnEditAccountClick = () => onEditAccountModalOpen();
   const handleOnMakePrimaryClick = () =>
     account && dispatch(savePolisAccountIDThunk(account.id));
-  const handleOnWhatsNewClick = () => dispatch(setWhatsNewModal(true));
+  const handleOnMoveGroupClick = () =>
+    account && dispatch(openMoveGroupModal(account.id));
   const handleOnRefreshActivityClick = () => {
     dispatch(
       updateAccountsThunk({
@@ -206,8 +210,6 @@ const AccountPage: FC = () => {
       })
     );
   };
-  const handleOnMoveGroupClick = () =>
-    account && dispatch(openMoveGroupModal(account.id));
   const handleOnRemoveGroupClick = async () => {
     let _account: IAccountWithExtendedProps | null;
 
@@ -234,10 +236,7 @@ const AccountPage: FC = () => {
       const passkey =
         account?.passkeys.find((value) => value.id === id) || null;
 
-      console.log('id:', id);
-      console.log('account:', account);
       if (!account || !passkey) {
-        console.log('herererere?');
         return;
       }
 
@@ -261,7 +260,7 @@ const AccountPage: FC = () => {
             dispatch(
               createNotification({
                 ephemeral: true,
-                title: t<string>('headings.removedGroup'),
+                title: t<string>('headings.removedPasskey'),
                 type: 'info',
               })
             );
@@ -272,7 +271,11 @@ const AccountPage: FC = () => {
     },
     [account]
   );
-  const handleOnViewPasskeyClick = useCallback((id: string) => {}, []);
+  const handleOnViewPasskeyClick = useCallback(
+    (id: string) => navigate(`${ACCOUNTS_ROUTE}${PASSKEY_ROUTE}/${id}`),
+    []
+  );
+  const handleOnWhatsNewClick = () => dispatch(setWhatsNewModal(true));
   const handleNetworkSelect = async (value: INetwork) => {
     await dispatch(
       saveSettingsToStorageThunk({
