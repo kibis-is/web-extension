@@ -3,6 +3,9 @@ import { decode as decodeBase64 } from '@stablelib/base64';
 import { v4 as uuid } from 'uuid';
 import browser from 'webextension-polyfill';
 
+// constants
+import { COSE_ED25519_ALGORITHM } from '@common/constants';
+
 // enums
 import { WebAuthnMessageReferenceEnum } from '@common/enums';
 import { EncryptionMethodEnum } from '@extension/enums';
@@ -14,6 +17,9 @@ import { WebAuthnInvalidPublicKeyError } from '@common/errors';
 // factories
 import PublicKeyCredentialFactory from '@extension/models/PublicKeyCredentialFactory';
 
+// features
+import { saveAccountsThunk } from '@extension/features/accounts';
+
 // messages
 import WebAuthnRegisterResponseMessage from '@common/messages/WebAuthnRegisterResponseMessage';
 
@@ -22,7 +28,7 @@ import Ed21559KeyPair from '@extension/models/Ed21559KeyPair';
 
 // types
 import type {
-  IAccount,
+  IAccountWithExtendedProps,
   IBackgroundRootState,
   IBaseAsyncThunkConfig,
   IMainRootState,
@@ -35,6 +41,9 @@ import fetchDecryptedKeyPairFromStorageWithPasskey from '@extension/utils/fetchD
 import fetchDecryptedKeyPairFromStorageWithPassword from '@extension/utils/fetchDecryptedKeyPairFromStorageWithPassword';
 import fetchDecryptedKeyPairFromStorageWithUnencrypted from '@extension/utils/fetchDecryptedKeyPairFromStorageWithUnencrypted';
 import serialize from '@extension/utils/serialize';
+import AccountRepository from '@extension/repositories/AccountRepository';
+import type IAccountPasskeyRelayingParty from '../../../types/accounts/IAccountPasskeyRelayingParty';
+import type IAccountPasskeyUser from '../../../types/accounts/IAccountPasskeyUser';
 
 const sendWebAuthnRegisterResponseThunk: AsyncThunk<
   void, // return
@@ -46,15 +55,20 @@ const sendWebAuthnRegisterResponseThunk: AsyncThunk<
   IBaseAsyncThunkConfig<IBackgroundRootState | IMainRootState>
 >(
   ThunkEnum.SendWebAuthnRegisterResponse,
-  async ({ accountID, event, ...encryptionOptions }, { getState }) => {
+  async (
+    { accountID, event, ...encryptionOptions },
+    { dispatch, getState }
+  ) => {
     const accounts = getState().accounts.items;
     const id = uuid();
     const logger = getState().system.logger;
     const message = event.payload.message;
     const reference = WebAuthnMessageReferenceEnum.RegisterResponse;
     const requestID = message.id;
-    let account: IAccount | null;
+    let account: IAccountWithExtendedProps | null;
     let keyPair: Ed21559KeyPair | null = null;
+    let now: Date;
+    let origin: string;
     let publicKeyCredentialFactory: PublicKeyCredentialFactory;
 
     logger?.debug(
@@ -135,13 +149,37 @@ const sendWebAuthnRegisterResponseThunk: AsyncThunk<
       return;
     }
 
+    now = new Date();
+    origin = new URL(message.payload.clientInfo.host).origin;
     publicKeyCredentialFactory = PublicKeyCredentialFactory.generate({
       keyPair,
       origin: new URL(message.payload.clientInfo.host).origin,
       publicKeyCreationOptions: message.payload.options,
     });
 
-    // TODO: save passkey to account
+    // save the passkey to storage
+    dispatch(
+      saveAccountsThunk([
+        {
+          ...account,
+          passkeys: [
+            ...account.passkeys,
+            {
+              alg: COSE_ED25519_ALGORITHM,
+              createdAt: now.getTime().toString(),
+              id,
+              lastUsedAt: now.getTime().toString(),
+              origin,
+              rp: {
+                ...message.payload.options.rp,
+                id: message.payload.options.rp.id || origin,
+              },
+              user: message.payload.options.user,
+            },
+          ],
+        },
+      ])
+    );
 
     // return public credentials
     await browser.tabs.sendMessage(

@@ -28,15 +28,6 @@ const PasskeysTab: FC<IProps> = ({
   const { t } = useTranslation();
   // memos
   const _context = useMemo(() => randomString(8), []);
-  // handlers
-  const handleOnRemoveClick = useCallback(
-    () => onRemoveClick(account.id),
-    [account]
-  );
-  const handleOnViewClick = useCallback(
-    () => onViewClick(account.id),
-    [account]
-  );
   // renders
   const renderContent = () => {
     let nodes: ReactNode[] = [];
@@ -51,8 +42,8 @@ const PasskeysTab: FC<IProps> = ({
       nodes = account.passkeys.map((value) => (
         <Item
           key={`${_context}-${value.id}`}
-          onRemoveClick={handleOnRemoveClick}
-          onViewClick={handleOnViewClick}
+          onRemoveClick={onRemoveClick}
+          onViewClick={onViewClick}
           passkey={value}
         />
       ));

@@ -1,1 +1,1 @@
-export const COSE_ED21559_ALGORITHM = -8;
+export const COSE_ED25519_ALGORITHM = -8;

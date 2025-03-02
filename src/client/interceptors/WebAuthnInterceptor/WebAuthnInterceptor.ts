@@ -8,7 +8,7 @@ import { createRoot, type Root } from 'react-dom/client';
 import WebAuthnRegisterApp from '@client/apps/WebAuthnRegisterApp';
 
 // constants
-import { COSE_ED21559_ALGORITHM } from '@common/constants';
+import { COSE_ED25519_ALGORITHM } from '@common/constants';
 
 // managers
 import ConfigManager from '@client/managers/ConfigManager';
@@ -185,11 +185,17 @@ export default class WebAuthnInterceptor {
       if (
         options.publicKey.pubKeyCredParams.length > 0 &&
         !options.publicKey.pubKeyCredParams.find(
-          ({ alg }) => alg === COSE_ED21559_ALGORITHM
+          ({ alg }) => alg === COSE_ED25519_ALGORITHM
         )
       ) {
         this._logger?.debug(
-          `${WebAuthnInterceptor.name}#${_functionName}: public key credentials did not request "-8" (ed25519)`
+          `${
+            WebAuthnInterceptor.name
+          }#${_functionName}: public key credentials requested [${options.publicKey.pubKeyCredParams
+            .map(({ alg }) => alg)
+            .join(
+              ','
+            )}], but provider only supports: "-7" (ECDSA w/ SHA-256) or "-8" (EdDSA)`
         );
 
         return resolve(this._navigatorCredentialsCreateFn.call(this, options));

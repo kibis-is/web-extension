@@ -44,9 +44,9 @@ const ConfirmModal: FC<IModalProps> = ({ onClose }) => {
   const initialRef = useRef<HTMLButtonElement | null>(null);
   // selectors
   const colorMode = useSelectSettingsColorMode();
-  const defaultTextColor: string = useDefaultTextColor();
+  const defaultTextColor = useDefaultTextColor();
   // hooks
-  const confirm: IConfirmModal | null = useSelectConfirmModal();
+  const confirm = useSelectConfirmModal();
   // handlers
   const handleCancelClick = () => {
     if (confirm?.onCancel) {

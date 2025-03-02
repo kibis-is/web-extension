@@ -14,7 +14,7 @@ import { WebAuthnMessageReferenceEnum } from '@common/enums';
 
 // constants
 import { WEB_AUTHN_REQUEST_TIMEOUT } from '@client/constants';
-import { COSE_ED21559_ALGORITHM } from '@common/constants';
+import { COSE_ED25519_ALGORITHM } from '@common/constants';
 
 // messages
 import WebAuthnRegisterRequestMessage from '@common/messages/WebAuthnRegisterRequestMessage';
@@ -73,7 +73,7 @@ export default class WebAuthnMessageManager {
         getAuthenticatorData: () =>
           uint8ArrayToArrayBuffer(decodedAttestationObject.authData),
         getPublicKey: () => null,
-        getPublicKeyAlgorithm: () => COSE_ED21559_ALGORITHM,
+        getPublicKeyAlgorithm: () => COSE_ED25519_ALGORITHM,
         getTransports: () => ['internal'],
       },
     };

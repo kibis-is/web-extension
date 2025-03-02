@@ -2095,6 +2095,11 @@
     "@motionone/dom" "^10.16.4"
     tslib "^2.3.1"
 
+"@noble/hashes@^1.7.1":
+  version "1.7.1"
+  resolved "https://registry.yarnpkg.com/@noble/hashes/-/hashes-1.7.1.tgz#5738f6d765710921e7a751e00c20ae091ed8db0f"
+  integrity sha512-B8XBPsn4vT/KJAGqDzbwztd+6Yte3P4V7iafm24bxgDe/mlRuK6xmWPuCNrKt2vDafZ8MfJLlchDG/vYafQEjQ==
+
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
   resolved "https://registry.npmjs.org/@nodelib/fs.scandir/-/fs.scandir-2.1.5.tgz"
@@ -2374,6 +2379,49 @@
   integrity sha512-HdqWTf5Z3qwDVlzCrP8UJquMwunpDiMPt5er+QjGzL4hqr/vBVY/MauQgS1xWxCDT1oMx1EULyqxncdCY/NVSQ==
   dependencies:
     "@octokit/openapi-types" "^22.2.0"
+
+"@oslojs/asn1@1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@oslojs/asn1/-/asn1-1.0.0.tgz#25edb31585b369efdc103e9a1eb822df9c235174"
+  integrity sha512-zw/wn0sj0j0QKbIXfIlnEcTviaCzYOY3V5rAyjR6YtOByFtJiT574+8p9Wlach0lZH9fddD4yb9laEAIl4vXQA==
+  dependencies:
+    "@oslojs/binary" "1.0.0"
+
+"@oslojs/binary@1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@oslojs/binary/-/binary-1.0.0.tgz#3e73f9cef0d06731d2aa528066666ccc00d610d6"
+  integrity sha512-9RCU6OwXU6p67H4NODbuxv2S3eenuQ4/WFLrsq+K/k682xrznH5EVWA7N4VFk9VYVcbFtKqur5YQQZc0ySGhsQ==
+
+"@oslojs/cbor@1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@oslojs/cbor/-/cbor-1.0.0.tgz#8881731c8cdf5a5c2b93db1cd605bf663aa2f636"
+  integrity sha512-AY6Lknexs7n2xp8Cgey95c+975VG7XOk4UEdRdNFxHmDDbuf47OC/LAVRsl14DeTLwo8W6xr3HLFwUFmKcndTQ==
+  dependencies:
+    "@oslojs/binary" "1.0.0"
+
+"@oslojs/crypto@1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@oslojs/crypto/-/crypto-1.0.0.tgz#56c1c76c31f57469bffbabd89a2b6173255b5ce7"
+  integrity sha512-dVz8TkkgYdr3tlwxHd7SCYGxoN7ynwHLA0nei/Aq9C+ERU0BK+U8+/3soEzBUxUNKYBf42351DyJUZ2REla50w==
+  dependencies:
+    "@oslojs/asn1" "1.0.0"
+    "@oslojs/binary" "1.0.0"
+
+"@oslojs/encoding@1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@oslojs/encoding/-/encoding-1.0.0.tgz#ac3219e7c2b28a4e29a32d5cebb7cae57b4526bd"
+  integrity sha512-dyIB0SdZgMm5BhGwdSp8rMxEFIopLKxDG1vxIBaiogyom6ZqH2aXPb6DEC2WzOOWKdPSq1cxdNeRx2wAn1Z+ZQ==
+
+"@oslojs/webauthn@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@oslojs/webauthn/-/webauthn-1.0.0.tgz#6c546fce389cff7de424687c2c9f33538f06e8c8"
+  integrity sha512-2ZRpbt3msNURwvjmavzq9vrNlxUnWFBGMYqbC1kO3fYBLskL7r4DiLJT1wbtLoI+hclFwjhl48YhRFBl6RWg1A==
+  dependencies:
+    "@oslojs/asn1" "1.0.0"
+    "@oslojs/binary" "1.0.0"
+    "@oslojs/cbor" "1.0.0"
+    "@oslojs/crypto" "1.0.0"
+    "@oslojs/encoding" "1.0.0"
 
 "@parcel/watcher-android-arm64@2.4.1":
   version "2.4.1"
@@ -2748,10 +2796,10 @@
   resolved "https://registry.yarnpkg.com/@stablelib/aead/-/aead-1.0.1.tgz#c4b1106df9c23d1b867eb9b276d8f42d5fc4c0c3"
   integrity sha512-q39ik6sxGHewqtO0nP4BuSe3db5G1fEJE8ukvngS2gLkBXyy6E7pLubhbYgnkDFv6V8cWaxcE4Xn0t6LWcJkyg==
 
-"@stablelib/base64@^1.0.1":
-  version "1.0.1"
-  resolved "https://registry.npmjs.org/@stablelib/base64/-/base64-1.0.1.tgz"
-  integrity sha512-1bnPQqSxSuc3Ii6MhBysoWCg58j97aUjuCSZrGSmDxNqtytIi0k8utUenAwTZN4V5mXXYGsVUI9zeBqy+jBOSQ==
+"@stablelib/base64@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@stablelib/base64/-/base64-2.0.1.tgz#f1546ab26896b3490d1ab531373c0dc39e12cee1"
+  integrity sha512-P2z89A7N1ETt6RxgpVdDT2xlg8cnm3n6td0lY9gyK7EiWK3wdq388yFX/hLknkCC0we05OZAD1rfxlQJUbl5VQ==
 
 "@stablelib/binary@^1.0.1":
   version "1.0.1"
@@ -2843,15 +2891,10 @@
   resolved "https://registry.yarnpkg.com/@stablelib/hash/-/hash-1.0.1.tgz#3c944403ff2239fad8ebb9015e33e98444058bc5"
   integrity sha512-eTPJc/stDkdtOcrNMZ6mcMK1e6yBbqRBaNW55XA1jU8w/7QdnCF0CmMmOD1m7VSkBR44PWrMHU2l6r8YEQHMgg==
 
-"@stablelib/hash@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@stablelib/hash/-/hash-2.0.0.tgz#7b74c372dc07187e273844e970a475f1338e92cf"
-  integrity sha512-u3WPSqGido8lwJuMcrBgM5K54LrPGhkWAdtsyccf7dGsLixAZUds77zOAbu7bvKPwQlmoByH0txBi5rTmEKuHg==
-
-"@stablelib/hex@^1.0.1":
-  version "1.0.1"
-  resolved "https://registry.npmjs.org/@stablelib/hex/-/hex-1.0.1.tgz"
-  integrity sha512-PQOEChVBjhYGgAD+ehO2ow1gSj1slre3jW4oMD4kV8VrhYhzmtsQDWDZej3BQO8qkVezdczDvISxVSF24PuYNA==
+"@stablelib/hex@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@stablelib/hex/-/hex-2.0.1.tgz#e8fd33086778135ad60c35f3b7d25eb7d4f7aafb"
+  integrity sha512-nsAgs3109myeijRQg3HASq3vlxe/8uDKHEUuIwn9ZLxfWtXavgojAGLBjI7Sda6seOhy7rKrpmeehYo0Z5VGQA==
 
 "@stablelib/hkdf@1.0.1":
   version "1.0.1"
@@ -2913,15 +2956,6 @@
     "@stablelib/hash" "^1.0.1"
     "@stablelib/wipe" "^1.0.1"
 
-"@stablelib/sha256@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@stablelib/sha256/-/sha256-2.0.0.tgz#e003266515fa1799478ccaa009dab6c7ba551241"
-  integrity sha512-cBoyZwgZzQ1+SH/l/deD1y4a8UvdDySlCKS/O/ztvdyfRCy/pxx5u8XsX2szQad7dh0YIV1lpk5fvagj/5ihNA==
-  dependencies:
-    "@stablelib/binary" "^2.0.0"
-    "@stablelib/hash" "^2.0.0"
-    "@stablelib/wipe" "^2.0.0"
-
 "@stablelib/sha512@^1.0.1":
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@stablelib/sha512/-/sha512-1.0.1.tgz#6da700c901c2c0ceacbd3ae122a38ac57c72145f"
@@ -2931,15 +2965,15 @@
     "@stablelib/hash" "^1.0.1"
     "@stablelib/wipe" "^1.0.1"
 
-"@stablelib/utf8@^1.0.1":
-  version "1.0.1"
-  resolved "https://registry.npmjs.org/@stablelib/utf8/-/utf8-1.0.1.tgz"
-  integrity sha512-FrYD1xadah/TtAP6VJ04lDD5h9rdDj/d8wH/jMYTtHqZBv9z2btdvEU8vTxdjdkFmo1b/BH+t3R1wi/mYhCCNg==
-
 "@stablelib/utf8@^2.0.0":
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/@stablelib/utf8/-/utf8-2.0.0.tgz#05725ef9d39ed10a017e1b6e01374bd998c83167"
   integrity sha512-bHaUduwFKYgj6rRvA5udyyg+ASx6gJZiQaXvfBHb7A2r+X9tRIKJ/VmpQKFQnEMInpBTh7jJLy+Gt99GH9YZ9g==
+
+"@stablelib/utf8@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@stablelib/utf8/-/utf8-2.0.1.tgz#3693310a5013cdcf92ed0bd763c8a278db6fee07"
+  integrity sha512-7+C2Iap42fbLyoKMaEIIDSb1TrcQVo+lGDItYAwb2JoAJr7QffyuDnbtvV/qzTyokOIMBrJgT+Rpsp1bPR8SjA==
 
 "@stablelib/wipe@^1.0.1":
   version "1.0.1"

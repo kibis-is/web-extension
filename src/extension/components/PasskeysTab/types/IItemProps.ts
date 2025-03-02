@@ -2,8 +2,8 @@
 import type { IAccountPasskey } from '@extension/types';
 
 interface IItemProps {
-  onRemoveClick: () => void;
-  onViewClick: () => void;
+  onRemoveClick: (id: string) => void;
+  onViewClick: (id: string) => void;
   passkey: IAccountPasskey;
 }
 

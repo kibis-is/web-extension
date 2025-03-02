@@ -249,6 +249,8 @@ const translation: IResourceLanguage = {
     reKeyFee:
       'Re-keying accounts requires a "re-key" fee. This is a transaction of with a "0" amount sent to yourself.',
     removeAccount: 'Are you sure you want to remove account "{{address}}"?',
+    removeAccountPasskeyConfirm:
+      'Are you sure you want to remove the passkey for "{{name}}"?',
     removeAccountWarning:
       'To add this account back you will need the seed phrase',
     removeAsset:
@@ -456,6 +458,7 @@ const translation: IResourceLanguage = {
     removedCustomNode: 'Removed Custom Node',
     removedFromGroupConfirm: 'Remove From Group',
     removedGroup: 'Removed Group',
+    removedPasskey: 'Removed Passkey',
     removeGroup: 'Remove Group',
     removePasskey: 'Remove Passkey',
     scanQrCode: 'Scan QR Code(s)',

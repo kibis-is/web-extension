@@ -65,6 +65,7 @@ import { AccountTabEnum } from '@extension/enums';
 import {
   removeFromGroupThunk,
   removeAccountByIdThunk,
+  removeAccountPasskeyByIDThunk,
   saveActiveAccountDetails,
   updateAccountsThunk,
 } from '@extension/features/accounts';
@@ -228,7 +229,49 @@ const AccountPage: FC = () => {
       })
     );
   };
-  const handleOnRemovePasskeyClick = useCallback((id: string) => {}, []);
+  const handleOnRemovePasskeyClick = useCallback(
+    (id: string) => {
+      const passkey =
+        account?.passkeys.find((value) => value.id === id) || null;
+
+      console.log('id:', id);
+      console.log('account:', account);
+      if (!account || !passkey) {
+        console.log('herererere?');
+        return;
+      }
+
+      dispatch(
+        openConfirmModal({
+          description: t<string>('captions.removeAccountPasskeyConfirm', {
+            name: passkey.rp.name,
+          }),
+          onConfirm: async () => {
+            const _account = await dispatch(
+              removeAccountPasskeyByIDThunk({
+                accountID: account.id,
+                passkeyID: passkey.id,
+              })
+            ).unwrap();
+
+            if (!_account) {
+              return;
+            }
+
+            dispatch(
+              createNotification({
+                ephemeral: true,
+                title: t<string>('headings.removedGroup'),
+                type: 'info',
+              })
+            );
+          },
+          title: t<string>('headings.removePasskey'),
+        })
+      );
+    },
+    [account]
+  );
   const handleOnViewPasskeyClick = useCallback((id: string) => {}, []);
   const handleNetworkSelect = async (value: INetwork) => {
     await dispatch(
