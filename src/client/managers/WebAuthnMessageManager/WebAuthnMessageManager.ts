@@ -1,10 +1,10 @@
+import { generate as generateUUID } from '@agoralabs-sh/uuid';
 import {
   decode as decodeBase64,
   encode as encodeBase64,
   encodeURLSafe as encodeBase64URLSafe,
 } from '@stablelib/base64';
 import { decode as decodeCOBOR } from '@stablelib/cbor';
-import { v4 as uuid } from 'uuid';
 
 // errors
 import { WebAuthnMalformedRegistrationRequestError } from '@common/errors';
@@ -132,7 +132,7 @@ export default class WebAuthnMessageManager {
     >({
       delay: WEB_AUTHN_REQUEST_TIMEOUT,
       message: new WebAuthnRegisterRequestMessage({
-        id: uuid(),
+        id: generateUUID(),
         payload: {
           clientInfo,
           options: WebAuthnMessageManager._serializePublicKeyCreationOptions(

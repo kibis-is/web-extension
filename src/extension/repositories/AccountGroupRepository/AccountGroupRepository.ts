@@ -1,4 +1,4 @@
-import { v4 as uuid } from 'uuid';
+import { generate as generateUUID } from '@agoralabs-sh/uuid';
 
 // constants
 import { ACCOUNT_GROUPS_ITEM_KEY } from '@extension/constants';
@@ -24,7 +24,7 @@ export default class AccountGroupRepository extends BaseRepository {
     return {
       _delimiter: DelimiterEnum.Group,
       createdAt: new Date().getTime(),
-      id: uuid(),
+      id: generateUUID(),
       index: null,
       name,
     };

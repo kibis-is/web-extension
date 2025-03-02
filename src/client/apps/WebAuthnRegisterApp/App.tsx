@@ -49,10 +49,10 @@ const App: FC<IAppProps> = ({
     onClose();
   };
   const handleOnRegisterClick = async () => {
-    const _functionName = 'handleOnRegisterClick';
+    const __function = 'handleOnRegisterClick';
 
     if (!result) {
-      logger?.debug(`${_name}#${_functionName}: no credentials found`);
+      logger?.debug(`${_name}#${__function}: no credentials found`);
 
       return;
     }

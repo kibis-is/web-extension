@@ -1,5 +1,5 @@
 import { sign } from 'jsonwebtoken';
-import { v4 as uuid } from 'uuid';
+import { generate as generateUUID } from '@agoralabs-sh/uuid';
 
 // constants
 import { JWT_EXPIRY_TIME_IN_SECONDS } from '../constants';
@@ -16,7 +16,7 @@ export default function createJwt(issuer: string, secret: string): string {
     exp: issuedAt + JWT_EXPIRY_TIME_IN_SECONDS,
     iat: issuedAt,
     iss: issuer,
-    jti: uuid(),
+    jti: generateUUID(),
   };
   return sign(payload, secret, { algorithm: 'HS256' });
 }

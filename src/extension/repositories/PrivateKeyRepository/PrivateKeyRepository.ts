@@ -1,5 +1,5 @@
+import { generate as generateUUID } from '@agoralabs-sh/uuid';
 import { sign } from 'tweetnacl';
-import { v4 as uuid } from 'uuid';
 
 // constants
 import { PRIVATE_KEY_ITEM_KEY_PREFIX } from '@extension/constants';
@@ -65,7 +65,7 @@ export default class PrivateKeyRepository extends BaseRepository {
       encryptedPrivateKey: PrivateKeyRepository.encode(encryptedPrivateKey),
       encryptionID,
       encryptionMethod,
-      id: uuid(),
+      id: generateUUID(),
       privateKey: privateKey ? PrivateKeyRepository.encode(privateKey) : null,
       publicKey: PrivateKeyRepository.encode(publicKey),
       updatedAt: now.getTime(),

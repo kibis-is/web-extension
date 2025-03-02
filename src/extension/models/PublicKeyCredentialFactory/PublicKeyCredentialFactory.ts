@@ -1,3 +1,7 @@
+import {
+  decode as decodeUUID,
+  generate as generateUUID,
+} from '@agoralabs-sh/uuid';
 import { sha256 } from '@noble/hashes/sha256';
 import {
   decode as decodeBase64,
@@ -13,7 +17,6 @@ import { COSE_ED25519_ALGORITHM } from '@common/constants';
 
 // models
 import Ed21559KeyPair from '@extension/models/Ed21559KeyPair';
-import UUID from '@extension/models/UUID';
 
 // types
 import type { ISerializedPublicKeyCredentialWithAuthenticatorAttestationResponse } from '@common/types';
@@ -47,7 +50,7 @@ export default class PublicKeyCredentialFactory {
       passkey: {
         alg: COSE_ED25519_ALGORITHM,
         createdAt: new Date().getTime().toString(10),
-        id: new UUID().toString(),
+        id: generateUUID(),
         lastUsedAt: new Date().getTime().toString(10),
         origin,
         rp: {
@@ -95,7 +98,7 @@ export default class PublicKeyCredentialFactory {
    * @private
    */
   public authenticatorData(): Uint8Array {
-    const decodedCredentialID = new UUID(this._passkey.id).toBytes();
+    const decodedCredentialID = decodeUUID(this._passkey.id);
     const credentialIDLength = new Uint8Array([
       (decodedCredentialID.length >> 8) & 0xff, // high byte
       decodedCredentialID.length & 0xff, // low byte
@@ -104,7 +107,7 @@ export default class PublicKeyCredentialFactory {
     const rpIDHash = sha256(encodeUTF8(this._passkey.rp.id));
     const signCount = new Uint8Array(4); // default to zero
     const attestedCredentialData = new Uint8Array([
-      ...new UUID(__PROVIDER_ID__).toBytes(), // use the provider identifier as the aaguid
+      ...decodeUUID(__PROVIDER_ID__), // use the provider identifier as the aaguid
       ...credentialIDLength,
       ...decodedCredentialID,
       ...this._coseEncodedKey(),
@@ -150,7 +153,7 @@ export default class PublicKeyCredentialFactory {
 
     return {
       authenticatorAttachment: 'platform',
-      rawId: encodeBase64(new UUID(this._passkey.id).toBytes()),
+      rawId: encodeBase64(decodeUUID(this._passkey.id)),
       response: {
         attestationObject: encodeBase64(attestationObject),
         clientDataJSON: encodeBase64(clientDataJSON),

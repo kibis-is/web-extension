@@ -1,4 +1,4 @@
-import { v4 as uuid } from 'uuid';
+import { generate as generateUUID } from '@agoralabs-sh/uuid';
 
 // config
 import { networks } from '@extension/config';
@@ -90,7 +90,7 @@ export default class AccountRepository extends BaseRepository {
       groupID: null,
       groupIndex: null,
       icon: null,
-      id: id || uuid(),
+      id: id || generateUUID(),
       name: name || null,
       networkInformation: networks.reduce<Record<string, IAccountInformation>>(
         (acc, { genesisHash }) => ({

@@ -18,4 +18,6 @@ import WebAuthnInterceptor from '@client/interceptors/WebAuthnInterceptor';
   // intercept the webauthn functions to create/get passkeys
   window.navigator.credentials.create =
     webAuthnInterceptor.create.bind(webAuthnInterceptor);
+  window.navigator.credentials.get =
+    webAuthnInterceptor.get.bind(webAuthnInterceptor);
 })();

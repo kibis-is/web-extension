@@ -33,6 +33,7 @@ export default class WebAuthnInterceptor {
   private readonly _rootElementID = randomString(12);
   private readonly _logger: ILogger | null;
   private readonly _navigatorCredentialsCreateFn: typeof navigator.credentials.create;
+  private readonly _navigatorCredentialsGetFn: typeof navigator.credentials.get;
   private readonly _webAuthnMessageManager: WebAuthnMessageManager;
 
   private constructor({
@@ -146,7 +147,7 @@ export default class WebAuthnInterceptor {
     options?: CredentialCreationOptions
   ): Promise<PublicKeyCredential | null> {
     return new Promise(async (resolve) => {
-      const _functionName = 'create';
+      const __function = 'create';
       const onAbortListener = (_: Event, _root: Root) => {
         // unmount the app
         if (_root) {
@@ -166,7 +167,7 @@ export default class WebAuthnInterceptor {
       // if the provider is not initialized, invoke the original
       if (!this._config.isInitialized) {
         this._logger?.debug(
-          `${WebAuthnInterceptor.name}#${_functionName}: provider has not been initialized`
+          `${WebAuthnInterceptor.name}#${__function}: provider has not been initialized`
         );
 
         return resolve(this._navigatorCredentialsCreateFn.call(this, options));
@@ -175,7 +176,7 @@ export default class WebAuthnInterceptor {
       // if this the request is not public key credentials
       if (!options?.publicKey) {
         this._logger?.debug(
-          `${WebAuthnInterceptor.name}#${_functionName}: public key credentials not requested`
+          `${WebAuthnInterceptor.name}#${__function}: public key credentials not requested`
         );
 
         return resolve(this._navigatorCredentialsCreateFn.call(this, options));
@@ -191,11 +192,9 @@ export default class WebAuthnInterceptor {
         this._logger?.debug(
           `${
             WebAuthnInterceptor.name
-          }#${_functionName}: public key credentials requested [${options.publicKey.pubKeyCredParams
+          }#${__function}: public key credentials requested [${options.publicKey.pubKeyCredParams
             .map(({ alg }) => alg)
-            .join(
-              ','
-            )}], but provider only supports: "-7" (ECDSA w/ SHA-256) or "-8" (EdDSA)`
+            .join(',')}], but provider only supports: "-8" (Ed25519)`
         );
 
         return resolve(this._navigatorCredentialsCreateFn.call(this, options));
@@ -227,6 +226,57 @@ export default class WebAuthnInterceptor {
           webAuthnMessageManager: this._webAuthnMessageManager,
         })
       );
+    });
+  }
+
+  public async get(
+    options?: CredentialRequestOptions
+  ): Promise<PublicKeyCredential | null> {
+    return new Promise(async (resolve) => {
+      const __function = 'get';
+      const onAbortListener = (_: Event, _root: Root) => {
+        // unmount the app
+        if (_root) {
+          root.unmount();
+        }
+
+        // clean up
+        if (options?.signal) {
+          options.signal.removeEventListener(
+            'abort',
+            onAbortListener.bind(this, _root)
+          );
+        }
+      };
+      let root: Root;
+
+      // if the provider is not initialized, invoke the original
+      if (!this._config.isInitialized) {
+        this._logger?.debug(
+          `${WebAuthnInterceptor.name}#${__function}: provider has not been initialized`
+        );
+
+        return resolve(this._navigatorCredentialsGetFn.call(this, options));
+      }
+
+      // if this the request is not public key credentials
+      if (!options?.publicKey) {
+        this._logger?.debug(
+          `${WebAuthnInterceptor.name}#${__function}: public key credentials not requested`
+        );
+
+        return resolve(this._navigatorCredentialsGetFn.call(this, options));
+      }
+
+      root = this._createAppRoot();
+
+      // handle abort signal
+      if (options.signal) {
+        options.signal.addEventListener(
+          'abort',
+          onAbortListener.bind(this, root)
+        );
+      }
     });
   }
 }

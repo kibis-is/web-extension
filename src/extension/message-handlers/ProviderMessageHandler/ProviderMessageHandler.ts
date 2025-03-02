@@ -1,4 +1,4 @@
-import { v4 as uuid } from 'uuid';
+import { generate as generateUUID } from '@agoralabs-sh/uuid';
 import browser, { type Tabs } from 'webextension-polyfill';
 
 // enums
@@ -82,7 +82,7 @@ export default class ProviderMessageHandler extends BaseListener {
     // proxy an update to the middlewares
     return this._sendMessageToMiddlewares(
       new ExternalConfigOnUpdateMessage({
-        id: uuid(),
+        id: generateUUID(),
         reference: ExternalConfigMessageReferenceEnum.OnUpdate,
       })
     );
@@ -134,7 +134,7 @@ export default class ProviderMessageHandler extends BaseListener {
     // proxy an update to the middlewares
     return this._sendMessageToMiddlewares(
       new ExternalConfigOnUpdateMessage({
-        id: uuid(),
+        id: generateUUID(),
         reference: ExternalConfigMessageReferenceEnum.OnUpdate,
       })
     );
@@ -152,7 +152,7 @@ export default class ProviderMessageHandler extends BaseListener {
     // proxy an update to the middlewares
     return this._sendMessageToMiddlewares(
       new ExternalConfigOnUpdateMessage({
-        id: uuid(),
+        id: generateUUID(),
         reference: ExternalConfigMessageReferenceEnum.OnUpdate,
       })
     );

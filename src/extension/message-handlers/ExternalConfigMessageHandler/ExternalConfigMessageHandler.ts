@@ -1,4 +1,4 @@
-import { v4 as uuid } from 'uuid';
+import { generate as generateUUID } from '@agoralabs-sh/uuid';
 import browser, { type Runtime } from 'webextension-polyfill';
 
 // enums
@@ -52,7 +52,7 @@ export default class ExternalConfigMessageHandler extends BaseMessageHandler {
     return this._sendResponseToMiddleware(
       new ExternalConfigResponseMessage({
         error: null,
-        id: uuid(),
+        id: generateUUID(),
         reference: ExternalConfigMessageReferenceEnum.Response,
         requestID: message.id,
         result: {

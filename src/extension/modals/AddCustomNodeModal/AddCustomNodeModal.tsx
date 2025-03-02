@@ -1,3 +1,4 @@
+import { generate as generateUUID } from '@agoralabs-sh/uuid';
 import {
   Checkbox,
   Heading,
@@ -21,7 +22,6 @@ import {
   IoSaveOutline,
 } from 'react-icons/io5';
 import { useDispatch } from 'react-redux';
-import { v4 as uuid } from 'uuid';
 
 // components
 import Button from '@common/components/Button';
@@ -331,7 +331,7 @@ const AddCustomNodeModal: FC<IProps> = ({ isOpen, onClose, onComplete }) => {
         url: algodURLValue,
       },
       genesisHash: _network.genesisHash,
-      id: uuid(),
+      id: generateUUID(),
       name: nameValue,
       indexer: indexerURLValue
         ? {

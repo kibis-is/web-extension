@@ -1,5 +1,5 @@
 import { type AsyncThunk, createAsyncThunk } from '@reduxjs/toolkit';
-import { v4 as uuid } from 'uuid';
+import { generate as generateUUID } from '@agoralabs-sh/uuid';
 import browser from 'webextension-polyfill';
 
 // enums
@@ -32,7 +32,7 @@ const sendWebAuthnErrorResponseThunk: AsyncThunk<
 >(
   ThunkEnum.SendWebAuthnErrorResponse,
   async ({ error, event }, { getState }) => {
-    const id = uuid();
+    const id = generateUUID();
     const logger = getState().system.logger;
     let message: WebAuthnRegisterResponseMessage | null = null;
 

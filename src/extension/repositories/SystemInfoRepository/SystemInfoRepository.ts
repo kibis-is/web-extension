@@ -1,4 +1,4 @@
-import { v4 as uuid } from 'uuid';
+import { generate as generateUUID } from '@agoralabs-sh/uuid';
 
 // constants
 import { SYSTEM_KEY } from '@extension/constants';
@@ -16,7 +16,7 @@ export default class SystemInfoRepository extends BaseRepository {
 
   public static initializeDefaultSystem(): ISystemInfo {
     return {
-      deviceID: uuid(),
+      deviceID: generateUUID(),
       polisAccountID: null,
       whatsNewInfo: {
         disableOnUpdate: false,

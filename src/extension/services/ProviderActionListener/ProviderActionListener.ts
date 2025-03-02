@@ -1,5 +1,5 @@
+import { generate as generateUUID } from '@agoralabs-sh/uuid';
 import { TransactionType } from 'algosdk';
-import { v4 as uuid } from 'uuid';
 import browser, { Alarms, Tabs, Windows } from 'webextension-polyfill';
 
 // configs
@@ -310,7 +310,7 @@ export default class ProviderActionListener extends BaseListener {
                 return await queueProviderEvent({
                   appWindowRepository: this._appWindowRepository,
                   event: new ARC0300KeyRegistrationTransactionSendEvent({
-                    id: uuid(),
+                    id: generateUUID(),
                     payload: arc0300Schema as
                       | IARC0300OfflineKeyRegistrationTransactionSendSchema
                       | IARC0300OnlineKeyRegistrationTransactionSendSchema,

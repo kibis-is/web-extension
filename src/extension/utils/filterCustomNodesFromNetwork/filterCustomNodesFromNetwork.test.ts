@@ -1,4 +1,4 @@
-import { v4 as uuid } from 'uuid';
+import { generate as generateUUID } from '@agoralabs-sh/uuid';
 
 // constants
 import { SUPPORTED_METHODS } from '@common/constants';
@@ -90,7 +90,7 @@ describe('filterCustomNodesFromNetwork', () => {
       algods: [
         {
           canonicalName: 'Algod',
-          id: uuid(),
+          id: generateUUID(),
           port: null,
           token: null,
           url: 'https://algod.node',
@@ -112,7 +112,7 @@ describe('filterCustomNodesFromNetwork', () => {
       indexers: [
         {
           canonicalName: 'Index',
-          id: uuid(),
+          id: generateUUID(),
           port: null,
           token: null,
           url: 'https://indexer.node',
@@ -128,7 +128,7 @@ describe('filterCustomNodesFromNetwork', () => {
 
   it('should add both the indexer and algod node', () => {
     // arrange
-    const id = uuid();
+    const id = generateUUID();
     const canonicalName = 'A Node';
     // act
     const result = filterCustomNodesFromNetwork({

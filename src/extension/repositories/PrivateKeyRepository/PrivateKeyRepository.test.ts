@@ -1,4 +1,4 @@
-import { v4 as uuid } from 'uuid';
+import { generate as generateUUID } from '@agoralabs-sh/uuid';
 
 // enums
 import { EncryptionMethodEnum } from '@extension/enums';
@@ -40,7 +40,7 @@ describe(PrivateKeyRepository.name, () => {
       });
       const legacyItem: Partial<IPrivateKey> = {
         createdAt: legacyCreatedAt,
-        id: uuid(),
+        id: generateUUID(),
         encryptedPrivateKey: PrivateKeyRepository.encode(encryptedPrivateKey), // pre-v1.18.0 (version 2) used the secret key
         publicKey: PrivateKeyRepository.encode(keyPair.publicKey),
         updatedAt: legacyCreatedAt,
@@ -77,7 +77,7 @@ describe(PrivateKeyRepository.name, () => {
       });
       const legacyItem: Partial<IPrivateKey> = {
         createdAt: legacyCreatedAt,
-        id: uuid(),
+        id: generateUUID(),
         encryptedPrivateKey: PrivateKeyRepository.encode(encryptedPrivateKey), // pre-v1.18.0 (version 2) used the secret key
         publicKey: PrivateKeyRepository.encode(keyPair.publicKey),
         updatedAt: legacyCreatedAt,

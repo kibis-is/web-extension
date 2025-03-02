@@ -1,4 +1,4 @@
-import { v4 as uuid } from 'uuid';
+import { generate as generateUUID } from '@agoralabs-sh/uuid';
 
 // enums
 import { ProviderMessageReferenceEnum } from '@common/enums';
@@ -8,7 +8,7 @@ export default class BaseProviderMessage {
   public readonly reference: ProviderMessageReferenceEnum;
 
   constructor(reference: ProviderMessageReferenceEnum) {
-    this.id = uuid();
+    this.id = generateUUID();
     this.reference = reference;
   }
 }

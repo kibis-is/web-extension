@@ -1,9 +1,5 @@
-import {
-  AlgorandProvider,
-  BaseError,
-  IBaseResult,
-  ISignBytesResult,
-} from '@agoralabs-sh/algorand-provider';
+import { generate as generateUUID } from '@agoralabs-sh/uuid';
+import { IBaseResult, ISignBytesResult } from '@agoralabs-sh/algorand-provider';
 import {
   Button,
   Code,
@@ -22,7 +18,6 @@ import { encode as encodeHex } from '@stablelib/hex';
 import { verifyBytes } from 'algosdk';
 import React, { ChangeEvent, FC, useState } from 'react';
 import { IoCheckmarkCircleSharp, IoCloseCircleSharp } from 'react-icons/io5';
-import { v4 as uuid } from 'uuid';
 
 // enums
 import { ConnectionTypeEnum } from '../../enums';
@@ -200,7 +195,7 @@ const SignJwtTab: FC<IProps> = ({ account }: IProps) => {
   "exp": ${now + 300000},
   "iat": ${now},
   "iss": "did:algo:${account.address}",
-  "jti": "${uuid()}",
+  "jti": "${generateUUID()}",
   "gty": "did",
   "sub": "${account.address}"
 }`);

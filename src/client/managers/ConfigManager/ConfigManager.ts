@@ -1,4 +1,4 @@
-import { v4 as uuid } from 'uuid';
+import { generate as generateUUID } from '@agoralabs-sh/uuid';
 
 // enums
 import { ExternalConfigMessageReferenceEnum } from '@common/enums';
@@ -54,7 +54,7 @@ export default class ConfigManager {
    */
 
   public onUpdate(listener: TListener): string {
-    const id = uuid();
+    const id = generateUUID();
 
     this._listeners.set(id, listener);
 
@@ -67,7 +67,7 @@ export default class ConfigManager {
       ExternalConfigRequestMessage
     >({
       message: new ExternalConfigRequestMessage({
-        id: uuid(),
+        id: generateUUID(),
         reference: ExternalConfigMessageReferenceEnum.Request,
       }),
       responseReference: ExternalConfigMessageReferenceEnum.Response,

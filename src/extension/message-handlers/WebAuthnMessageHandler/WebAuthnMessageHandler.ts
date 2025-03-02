@@ -1,4 +1,4 @@
-import { v4 as uuid } from 'uuid';
+import { generate as generateUUID } from '@agoralabs-sh/uuid';
 import browser, { type Runtime } from 'webextension-polyfill';
 
 // enums
@@ -49,7 +49,7 @@ export default class WebAuthnMessageHandler extends BaseMessageHandler {
 
     return await this._queueProviderEvent(
       new WebAuthnRegisterRequestEvent({
-        id: uuid(),
+        id: generateUUID(),
         payload: {
           message,
           originTabID,

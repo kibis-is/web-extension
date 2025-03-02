@@ -2,8 +2,8 @@ import {
   ARC0027MethodEnum,
   ISignMessageResult,
 } from '@agoralabs-sh/avm-web-provider';
+import { generate as generateUUID } from '@agoralabs-sh/uuid';
 import { AsyncThunk, createAsyncThunk } from '@reduxjs/toolkit';
-import { v4 as uuid } from 'uuid';
 import browser from 'webextension-polyfill';
 
 // enums
@@ -44,7 +44,7 @@ const sendSignMessageResponseThunk: AsyncThunk<
         event.payload.originTabID,
         new AVMWebProviderResponseMessage<ISignMessageResult>({
           error,
-          id: uuid(),
+          id: generateUUID(),
           method: event.payload.message.payload.method,
           reference: AVMWebProviderMessageReferenceEnum.Response,
           requestID: event.payload.message.id,
@@ -61,7 +61,7 @@ const sendSignMessageResponseThunk: AsyncThunk<
         event.payload.originTabID,
         new AVMWebProviderResponseMessage<ISignMessageResult>({
           error: null,
-          id: uuid(),
+          id: generateUUID(),
           method: event.payload.message.payload.method,
           reference: AVMWebProviderMessageReferenceEnum.Response,
           requestID: event.payload.message.id,

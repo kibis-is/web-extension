@@ -21,6 +21,14 @@
   dependencies:
     uuid "^9.0.1"
 
+"@agoralabs-sh/uuid@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@agoralabs-sh/uuid/-/uuid-1.1.0.tgz#aee1559b9fd3898a07d87ef019db92e33f67f199"
+  integrity sha512-Or/N9YG/zAnrSzZrG4Dlu9/vxMzU8tjpKjUBoGrSC3C/vAGlPRuxNMt0GGiJjuEqe/JtLb+IOYC8LISaHrT3rw==
+  dependencies:
+    "@stablelib/hex" "^2.0.1"
+    "@stablelib/uuid" "^2.0.1"
+
 "@ampproject/remapping@^2.2.0":
   version "2.2.0"
   resolved "https://registry.npmjs.org/@ampproject/remapping/-/remapping-2.2.0.tgz"
@@ -2380,49 +2388,6 @@
   dependencies:
     "@octokit/openapi-types" "^22.2.0"
 
-"@oslojs/asn1@1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@oslojs/asn1/-/asn1-1.0.0.tgz#25edb31585b369efdc103e9a1eb822df9c235174"
-  integrity sha512-zw/wn0sj0j0QKbIXfIlnEcTviaCzYOY3V5rAyjR6YtOByFtJiT574+8p9Wlach0lZH9fddD4yb9laEAIl4vXQA==
-  dependencies:
-    "@oslojs/binary" "1.0.0"
-
-"@oslojs/binary@1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@oslojs/binary/-/binary-1.0.0.tgz#3e73f9cef0d06731d2aa528066666ccc00d610d6"
-  integrity sha512-9RCU6OwXU6p67H4NODbuxv2S3eenuQ4/WFLrsq+K/k682xrznH5EVWA7N4VFk9VYVcbFtKqur5YQQZc0ySGhsQ==
-
-"@oslojs/cbor@1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@oslojs/cbor/-/cbor-1.0.0.tgz#8881731c8cdf5a5c2b93db1cd605bf663aa2f636"
-  integrity sha512-AY6Lknexs7n2xp8Cgey95c+975VG7XOk4UEdRdNFxHmDDbuf47OC/LAVRsl14DeTLwo8W6xr3HLFwUFmKcndTQ==
-  dependencies:
-    "@oslojs/binary" "1.0.0"
-
-"@oslojs/crypto@1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@oslojs/crypto/-/crypto-1.0.0.tgz#56c1c76c31f57469bffbabd89a2b6173255b5ce7"
-  integrity sha512-dVz8TkkgYdr3tlwxHd7SCYGxoN7ynwHLA0nei/Aq9C+ERU0BK+U8+/3soEzBUxUNKYBf42351DyJUZ2REla50w==
-  dependencies:
-    "@oslojs/asn1" "1.0.0"
-    "@oslojs/binary" "1.0.0"
-
-"@oslojs/encoding@1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@oslojs/encoding/-/encoding-1.0.0.tgz#ac3219e7c2b28a4e29a32d5cebb7cae57b4526bd"
-  integrity sha512-dyIB0SdZgMm5BhGwdSp8rMxEFIopLKxDG1vxIBaiogyom6ZqH2aXPb6DEC2WzOOWKdPSq1cxdNeRx2wAn1Z+ZQ==
-
-"@oslojs/webauthn@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@oslojs/webauthn/-/webauthn-1.0.0.tgz#6c546fce389cff7de424687c2c9f33538f06e8c8"
-  integrity sha512-2ZRpbt3msNURwvjmavzq9vrNlxUnWFBGMYqbC1kO3fYBLskL7r4DiLJT1wbtLoI+hclFwjhl48YhRFBl6RWg1A==
-  dependencies:
-    "@oslojs/asn1" "1.0.0"
-    "@oslojs/binary" "1.0.0"
-    "@oslojs/cbor" "1.0.0"
-    "@oslojs/crypto" "1.0.0"
-    "@oslojs/encoding" "1.0.0"
-
 "@parcel/watcher-android-arm64@2.4.1":
   version "2.4.1"
   resolved "https://registry.yarnpkg.com/@parcel/watcher-android-arm64/-/watcher-android-arm64-2.4.1.tgz#c2c19a3c442313ff007d2d7a9c2c1dd3e1c9ca84"
@@ -2815,6 +2780,13 @@
   dependencies:
     "@stablelib/int" "^2.0.0"
 
+"@stablelib/binary@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@stablelib/binary/-/binary-2.0.1.tgz#65c36a24e2c65f375e4c5c4cb340b9112d9badb6"
+  integrity sha512-U9iAO8lXgEDONsA0zPPSgcf3HUBNAqHiJmSHgZz62OvC3Hi2Bhc5kTnQ3S1/L+sthDTHtCMhcEiklmIly6uQ3w==
+  dependencies:
+    "@stablelib/int" "^2.0.1"
+
 "@stablelib/bytereader@^2.0.0":
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/@stablelib/bytereader/-/bytereader-2.0.0.tgz#b81ef89ba46dacf3ee217f12d0686f69ab18809e"
@@ -2924,6 +2896,11 @@
   resolved "https://registry.yarnpkg.com/@stablelib/int/-/int-2.0.0.tgz#2b19f82c7831e91ed1a00a75cb2f23839c767c9d"
   integrity sha512-EiSYDisTYKk1wuCqoh7wuBySmE0A1isq7TQbsijQ6XFi6nIAozchgAT7Zv2PCl2iY8BTe0URScC4PdYHOe3Yow==
 
+"@stablelib/int@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@stablelib/int/-/int-2.0.1.tgz#daf262843b158e6bb99ec029a14378ecdda2230f"
+  integrity sha512-Ht63fQp3wz/F8U4AlXEPb7hfJOIILs8Lq55jgtD7KueWtyjhVuzcsGLSTAWtZs3XJDZYdF1WcSKn+kBtbzupww==
+
 "@stablelib/keyagreement@^1.0.1":
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@stablelib/keyagreement/-/keyagreement-1.0.1.tgz#4612efb0a30989deb437cd352cee637ca41fc50f"
@@ -2946,6 +2923,14 @@
   dependencies:
     "@stablelib/binary" "^1.0.1"
     "@stablelib/wipe" "^1.0.1"
+
+"@stablelib/random@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@stablelib/random/-/random-2.0.1.tgz#b082eee976684a970d5f28ffbdea074a83ad2475"
+  integrity sha512-W6GAtXEEs7r+dSbuBsvoFmlyL3gLxle41tQkjKu17dDWtDdjhVUbtRfRCQcCUeczwkgjQxMPopgwYEvxXtHXGw==
+  dependencies:
+    "@stablelib/binary" "^2.0.1"
+    "@stablelib/wipe" "^2.0.1"
 
 "@stablelib/sha256@1.0.1":
   version "1.0.1"
@@ -2975,6 +2960,15 @@
   resolved "https://registry.yarnpkg.com/@stablelib/utf8/-/utf8-2.0.1.tgz#3693310a5013cdcf92ed0bd763c8a278db6fee07"
   integrity sha512-7+C2Iap42fbLyoKMaEIIDSb1TrcQVo+lGDItYAwb2JoAJr7QffyuDnbtvV/qzTyokOIMBrJgT+Rpsp1bPR8SjA==
 
+"@stablelib/uuid@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@stablelib/uuid/-/uuid-2.0.1.tgz#5c6d7fbb9f64af9f7826f246126dc8c99c3e5b34"
+  integrity sha512-6tPZoUOhrqcXP8n3BvooLa1QFcY//F37/TIMEOt/nwODEfrLr50JcXNz2L9YA+GF+scwy8yIxGi022aXoyCTyw==
+  dependencies:
+    "@stablelib/hex" "^2.0.1"
+    "@stablelib/random" "^2.0.1"
+    "@stablelib/wipe" "^2.0.1"
+
 "@stablelib/wipe@^1.0.1":
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@stablelib/wipe/-/wipe-1.0.1.tgz#d21401f1d59ade56a62e139462a97f104ed19a36"
@@ -2984,6 +2978,11 @@
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/@stablelib/wipe/-/wipe-2.0.0.tgz#b4b17fedfad02dbfc7120c10160f2b71a7dadc41"
   integrity sha512-VBMpCJx8py9j9F5DxV5dGmSSO+vkYDnXHXG4alkfpaD08UTfNTqsQoRlUh5obeqBNHiO+3Iv40GxKpM0gfd5xA==
+
+"@stablelib/wipe@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@stablelib/wipe/-/wipe-2.0.1.tgz#9bc1d20519aa4fc513fe1992cf8061bab33c3049"
+  integrity sha512-1eU2K9EgOcV4qc9jcP6G72xxZxEm5PfeI5H55l08W95b4oRJaqhmlWRc4xZAm6IVSKhVNxMi66V67hCzzuMTAg==
 
 "@stablelib/x25519@1.0.3":
   version "1.0.3"
@@ -3468,11 +3467,6 @@
   version "0.0.3"
   resolved "https://registry.npmjs.org/@types/use-sync-external-store/-/use-sync-external-store-0.0.3.tgz"
   integrity sha512-EwmlvuaxPNej9+T4v5AuBPJa2x2UOJVdjCtDHgcDqitUeOtjnJKJ+apYjVcAoBEMjKW1VVFGZLUb5+qqa09XFA==
-
-"@types/uuid@^9.0.1":
-  version "9.0.1"
-  resolved "https://registry.npmjs.org/@types/uuid/-/uuid-9.0.1.tgz"
-  integrity sha512-rFT3ak0/2trgvp4yYZo5iKFEPsET7vKydKF+VRCxlQ9bpheehyAJH89dAkaLEq/j/RZXJIqcgsmPJKUP1Z28HA==
 
 "@types/webextension-polyfill@^0.10.0":
   version "0.10.0"
@@ -13674,11 +13668,6 @@ uuid@^8.3.2:
   version "8.3.2"
   resolved "https://registry.npmjs.org/uuid/-/uuid-8.3.2.tgz"
   integrity sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==
-
-uuid@^9.0.0:
-  version "9.0.0"
-  resolved "https://registry.npmjs.org/uuid/-/uuid-9.0.0.tgz"
-  integrity sha512-MXcSTerfPa4uqyzStbRoTgt5XIe3x5+42+q1sDuy3R5MDk66URdLMOZe5aPX/SQd+kuYAh0FdP/pO28IkQyTeg==
 
 uuid@^9.0.1:
   version "9.0.1"

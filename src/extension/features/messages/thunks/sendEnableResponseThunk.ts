@@ -3,8 +3,8 @@ import {
   type IAccount as IAVMWebProvideAccount,
   type IEnableResult,
 } from '@agoralabs-sh/avm-web-provider';
+import { generate as generateUUID } from '@agoralabs-sh/uuid';
 import { type AsyncThunk, createAsyncThunk } from '@reduxjs/toolkit';
-import { v4 as uuid } from 'uuid';
 import browser from 'webextension-polyfill';
 
 // enums
@@ -52,7 +52,7 @@ const sendEnableResponseThunk: AsyncThunk<
         event.payload.originTabID,
         new AVMWebProviderResponseMessage<IEnableResult>({
           error,
-          id: uuid(),
+          id: generateUUID(),
           method: event.payload.message.payload.method,
           reference: AVMWebProviderMessageReferenceEnum.Response,
           requestID: event.payload.message.id,
@@ -72,7 +72,7 @@ const sendEnableResponseThunk: AsyncThunk<
         event.payload.originTabID,
         new AVMWebProviderResponseMessage<IEnableResult>({
           error: null,
-          id: uuid(),
+          id: generateUUID(),
           method: event.payload.message.payload.method,
           reference: AVMWebProviderMessageReferenceEnum.Response,
           requestID: event.payload.message.id,

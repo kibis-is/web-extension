@@ -1,3 +1,4 @@
+import { generate as generateUUID } from '@agoralabs-sh/uuid';
 import {
   ARC0027InvalidGroupIdError,
   ARC0027InvalidInputError,
@@ -22,7 +23,6 @@ import {
   encode as encodeBase64,
 } from '@stablelib/base64';
 import { Transaction } from 'algosdk';
-import { v4 as uuid } from 'uuid';
 import browser, { Runtime } from 'webextension-polyfill';
 
 // config
@@ -154,7 +154,7 @@ export default class AVMWebProviderMessageHandler extends BaseMessageHandler {
             message: `no parameters supplied`,
             providerId: __PROVIDER_ID__,
           }),
-          id: uuid(),
+          id: generateUUID(),
           reference: AVMWebProviderMessageReferenceEnum.Response,
           method: message.payload.method,
           requestID: message.id,
@@ -189,7 +189,7 @@ export default class AVMWebProviderMessageHandler extends BaseMessageHandler {
             message: `no parameters supplied`,
             providerId: __PROVIDER_ID__,
           }),
-          id: uuid(),
+          id: generateUUID(),
           method: message.payload.method,
           reference: AVMWebProviderMessageReferenceEnum.Response,
           requestID: message.id,
@@ -234,7 +234,7 @@ export default class AVMWebProviderMessageHandler extends BaseMessageHandler {
     await this._sendResponseToMiddleware(
       new AVMWebProviderResponseMessage<IDisableResult>({
         error: null,
-        id: uuid(),
+        id: generateUUID(),
         method: message.payload.method,
         reference: AVMWebProviderMessageReferenceEnum.Response,
         requestID: message.id,
@@ -273,7 +273,7 @@ export default class AVMWebProviderMessageHandler extends BaseMessageHandler {
     return await this._sendResponseToMiddleware(
       new AVMWebProviderResponseMessage<IDiscoverResult>({
         error: null,
-        id: uuid(),
+        id: generateUUID(),
         method: message.payload.method,
         reference: AVMWebProviderMessageReferenceEnum.Response,
         requestID: message.id,
@@ -331,7 +331,7 @@ export default class AVMWebProviderMessageHandler extends BaseMessageHandler {
               message: `no parameters supplied`,
               providerId: __PROVIDER_ID__,
             }),
-            id: uuid(),
+            id: generateUUID(),
             method: message.payload.method,
             reference: AVMWebProviderMessageReferenceEnum.Response,
             requestID: message.id,
@@ -376,7 +376,7 @@ export default class AVMWebProviderMessageHandler extends BaseMessageHandler {
         return await this._sendResponseToMiddleware(
           new AVMWebProviderResponseMessage<IEnableResult>({
             error: null,
-            id: uuid(),
+            id: generateUUID(),
             method: message.payload.method,
             reference: AVMWebProviderMessageReferenceEnum.Response,
             requestID: message.id,
@@ -415,7 +415,7 @@ export default class AVMWebProviderMessageHandler extends BaseMessageHandler {
 
     return await this._queueProviderEvent(
       new AVMWebProviderRequestEvent({
-        id: uuid(),
+        id: generateUUID(),
         payload: {
           message,
           originTabID,
@@ -448,7 +448,7 @@ export default class AVMWebProviderMessageHandler extends BaseMessageHandler {
             message: `no message or signer supplied`,
             providerId: __PROVIDER_ID__,
           }),
-          id: uuid(),
+          id: generateUUID(),
           method: message.payload.method,
           reference: AVMWebProviderMessageReferenceEnum.Response,
           requestID: message.id,
@@ -472,7 +472,7 @@ export default class AVMWebProviderMessageHandler extends BaseMessageHandler {
             providerId: __PROVIDER_ID__,
             signer: message.payload.params.signer,
           }),
-          id: uuid(),
+          id: generateUUID(),
           method: message.payload.method,
           reference: AVMWebProviderMessageReferenceEnum.Response,
           requestID: message.id,
@@ -517,7 +517,7 @@ export default class AVMWebProviderMessageHandler extends BaseMessageHandler {
               providerId: __PROVIDER_ID__,
               signer: message.payload.params.signer,
             }),
-            id: uuid(),
+            id: generateUUID(),
             method: message.payload.method,
             reference: AVMWebProviderMessageReferenceEnum.Response,
             requestID: message.id,
@@ -530,7 +530,7 @@ export default class AVMWebProviderMessageHandler extends BaseMessageHandler {
 
     return await this._queueProviderEvent(
       new AVMWebProviderRequestEvent({
-        id: uuid(),
+        id: generateUUID(),
         payload: {
           message,
           originTabID,
@@ -563,7 +563,7 @@ export default class AVMWebProviderMessageHandler extends BaseMessageHandler {
             message: `no transactions supplied`,
             providerId: __PROVIDER_ID__,
           }),
-          id: uuid(),
+          id: generateUUID(),
           method: message.payload.method,
           reference: AVMWebProviderMessageReferenceEnum.Response,
           requestID: message.id,
@@ -592,7 +592,7 @@ export default class AVMWebProviderMessageHandler extends BaseMessageHandler {
             message: errorMessage,
             providerId: __PROVIDER_ID__,
           }),
-          id: uuid(),
+          id: generateUUID(),
           method: message.payload.method,
           reference: AVMWebProviderMessageReferenceEnum.Response,
           requestID: message.id,
@@ -617,7 +617,7 @@ export default class AVMWebProviderMessageHandler extends BaseMessageHandler {
             message: errorMessage,
             providerId: __PROVIDER_ID__,
           }),
-          id: uuid(),
+          id: generateUUID(),
           method: message.payload.method,
           reference: AVMWebProviderMessageReferenceEnum.Response,
           requestID: message.id,
@@ -657,7 +657,7 @@ export default class AVMWebProviderMessageHandler extends BaseMessageHandler {
             ),
             providerId: __PROVIDER_ID__,
           }),
-          id: uuid(),
+          id: generateUUID(),
           method: message.payload.method,
           reference: AVMWebProviderMessageReferenceEnum.Response,
           requestID: message.id,
@@ -689,7 +689,7 @@ export default class AVMWebProviderMessageHandler extends BaseMessageHandler {
             message: `client "${message.payload.clientInfo.appName}" has not been authorized`,
             providerId: __PROVIDER_ID__,
           }),
-          id: uuid(),
+          id: generateUUID(),
           method: message.payload.method,
           reference: AVMWebProviderMessageReferenceEnum.Response,
           requestID: message.id,
@@ -701,7 +701,7 @@ export default class AVMWebProviderMessageHandler extends BaseMessageHandler {
 
     return await this._queueProviderEvent(
       new AVMWebProviderRequestEvent({
-        id: uuid(),
+        id: generateUUID(),
         payload: {
           message,
           originTabID,
