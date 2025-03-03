@@ -46,8 +46,8 @@ const Root: FC<IRootProps> = ({
   colorMode,
   error,
   fontFamily,
+  onAuthenticateClick,
   onCancelClick,
-  onRegisterClick,
   onTryAgainClick,
   result,
 }) => {
@@ -103,7 +103,7 @@ const Root: FC<IRootProps> = ({
           textAlign="center"
           width="full"
         >
-          {t<string>('captions.webAuthnRegisterRequestWaiting')}
+          {t<string>('captions.webAuthnAuthenticateRequestWaiting')}
         </Text>
       </VStack>
     );
@@ -127,13 +127,13 @@ const Root: FC<IRootProps> = ({
       return (
         <Button
           colorMode={colorMode}
-          onClick={onRegisterClick}
+          onClick={onAuthenticateClick}
           rightIcon={<KbSignIn />}
           size="sm"
           variant="solid"
           w="full"
         >
-          {t<string>('buttons.register')}
+          {t<string>('buttons.authenticate')}
         </Button>
       );
     }

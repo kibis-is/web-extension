@@ -1,2 +1,2 @@
-export type { default as IRegisterOptions } from './IRegisterOptions';
-export type { default as IRegisterResult } from './IRegisterResult';
+export type { default as IOptions } from './IOptions';
+export type { default as IResult } from './IResult';

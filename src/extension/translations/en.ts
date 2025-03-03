@@ -23,6 +23,7 @@ const translation: IResourceLanguage = {
     addPasskey: 'Add Passkey',
     allow: 'Allow',
     approve: 'Approve',
+    authenticate: 'Authenticate',
     cancel: 'Cancel',
     changePassword: 'Change Password',
     clearAllData: 'Clear All Data',
@@ -316,6 +317,11 @@ const translation: IResourceLanguage = {
     updatingTransactions: 'Updating transactions',
     viewSeedPhrase1: 'Select an account to view the seed phrase.',
     viewSeedPhrase2: 'You will be prompted to enter your password.',
+    webAuthnAuthenticateRequestDescription1:
+      'An app is requesting to authenticate a passkey.',
+    webAuthnAuthenticateRequestDescription2:
+      'Select the registered passkey you would like to use to authenticate with {{rpName}}.',
+    webAuthnAuthenticateRequestWaiting: 'Waiting for passkey selection.',
     webAuthnRegisterRequestDescription1:
       'An app is requesting to register a new passkey.',
     webAuthnRegisterRequestDescription2:

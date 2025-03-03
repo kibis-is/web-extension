@@ -7,7 +7,10 @@ import {
 import { decode as decodeCOBOR } from '@stablelib/cbor';
 
 // errors
-import { WebAuthnMalformedRegistrationRequestError } from '@common/errors';
+import {
+  WebAuthnMalformedAuthenticationRequestError,
+  WebAuthnMalformedRegistrationRequestError,
+} from '@common/errors';
 
 // enums
 import { WebAuthnMessageReferenceEnum } from '@common/enums';
@@ -17,18 +20,23 @@ import { WEB_AUTHN_REQUEST_TIMEOUT } from '@client/constants';
 import { COSE_ED25519_ALGORITHM } from '@common/constants';
 
 // messages
+import WebAuthnAuthenticateRequestMessage from '@common/messages/WebAuthnAuthenticateRequestMessage';
 import WebAuthnRegisterRequestMessage from '@common/messages/WebAuthnRegisterRequestMessage';
 
 // types
+import type { IResult as WebAuthnAuthenticateResponseMessageResult } from '@common/messages/WebAuthnAuthenticateResponseMessage';
 import type { IResult as WebAuthnRegisterResponseMessageResult } from '@common/messages/WebAuthnRegisterResponseMessage';
 import {
   IBaseOptions,
   ILogger,
+  ISerializedAuthenticatorAssertionResponse,
+  ISerializedAuthenticatorAttestationResponse,
+  ISerializedPublicKeyCredential,
   ISerializedPublicKeyCredentialCreationOptions,
-  ISerializedPublicKeyCredentialWithAuthenticatorAttestationResponse,
+  ISerializedPublicKeyCredentialRequestOptions,
   TReplace,
 } from '@common/types';
-import type { IRegisterOptions, IRegisterResult } from './types';
+import type { IOptions, IResult } from './types';
 
 // utils
 import bufferSourceToUint8Array from '@common/utils/bufferSourceToUint8Array';
@@ -47,8 +55,35 @@ export default class WebAuthnMessageManager {
    * private functions
    */
 
+  private static _deserializeAssertionCredential(
+    credential: ISerializedPublicKeyCredential<ISerializedAuthenticatorAssertionResponse>
+  ): TReplace<PublicKeyCredential, 'response', AuthenticatorAssertionResponse> {
+    const decodedRawID = decodeBase64(credential.rawId);
+
+    return {
+      ...credential,
+      getClientExtensionResults: () => ({}),
+      id: encodeBase64URLSafe(decodedRawID).replace(/=/g, ''), // remove the padding
+      rawId: uint8ArrayToArrayBuffer(decodedRawID),
+      response: {
+        authenticatorData: uint8ArrayToArrayBuffer(
+          decodeBase64(credential.response.authenticatorData)
+        ),
+        clientDataJSON: uint8ArrayToArrayBuffer(
+          decodeBase64(credential.response.clientDataJSON)
+        ),
+        signature: uint8ArrayToArrayBuffer(
+          decodeBase64(credential.response.signature)
+        ),
+        userHandle: uint8ArrayToArrayBuffer(
+          decodeBase64(credential.response.userHandle)
+        ),
+      },
+    };
+  }
+
   private static _deserializeAttestationCredential(
-    credential: ISerializedPublicKeyCredentialWithAuthenticatorAttestationResponse
+    credential: ISerializedPublicKeyCredential<ISerializedAuthenticatorAttestationResponse>
   ): TReplace<
     PublicKeyCredential,
     'response',
@@ -80,8 +115,8 @@ export default class WebAuthnMessageManager {
   }
 
   /**
-   * Convenience function that serializes the public key creation credentials, converting any raw bytes to base64
-   * encoded strings to allow to posting to the extension.
+   * Serializes the public key creation credentials, converting any raw bytes to base64 encoded strings to allow to
+   * post to the extension.
    * @param {PublicKeyCredentialCreationOptions} options - The public key creation options to serialize.
    * @returns {ISerializedPublicKeyCredentialCreationOptions} The serialized public key creation options.
    * @private
@@ -111,16 +146,42 @@ export default class WebAuthnMessageManager {
   }
 
   /**
+   * Serializes the public key creation credentials, converting any raw bytes to base64 encoded strings to allow to
+   * post to the extension.
+   * @param {PublicKeyCredentialRequestOptions} options - The public key request options to serialize.
+   * @returns {ISerializedPublicKeyCredentialRequestOptions} The serialized public key request options.
+   * @private
+   */
+  private static _serializePublicKeyRequestOptions({
+    allowCredentials,
+    challenge,
+    ...otherOptions
+  }: PublicKeyCredentialRequestOptions): ISerializedPublicKeyCredentialRequestOptions {
+    return {
+      ...otherOptions,
+      challenge: encodeBase64(bufferSourceToUint8Array(challenge)),
+      ...(allowCredentials && {
+        allowCredentials: allowCredentials.map(
+          ({ id, ...otherAllowCredentialProps }) => ({
+            ...otherAllowCredentialProps,
+            id: encodeBase64(bufferSourceToUint8Array(id)),
+          })
+        ),
+      }),
+    };
+  }
+
+  /**
    * public functions
    */
 
   public async register({
     clientInfo,
-    publicKeyCreationOptions,
-  }: IRegisterOptions): Promise<IRegisterResult | null> {
+    publicKeyOptions,
+  }: IOptions<PublicKeyCredentialCreationOptions>): Promise<IResult | null> {
     let result: WebAuthnRegisterResponseMessageResult | null;
 
-    if (!publicKeyCreationOptions) {
+    if (!publicKeyOptions) {
       throw new WebAuthnMalformedRegistrationRequestError(
         'no public key creation options supplied'
       );
@@ -135,9 +196,10 @@ export default class WebAuthnMessageManager {
         id: generateUUID(),
         payload: {
           clientInfo,
-          options: WebAuthnMessageManager._serializePublicKeyCreationOptions(
-            publicKeyCreationOptions
-          ),
+          options:
+            WebAuthnMessageManager._serializePublicKeyCreationOptions(
+              publicKeyOptions
+            ),
         },
         reference: WebAuthnMessageReferenceEnum.RegisterRequest,
       }),
@@ -152,6 +214,50 @@ export default class WebAuthnMessageManager {
     return {
       account: result.account,
       credential: WebAuthnMessageManager._deserializeAttestationCredential(
+        result.credential
+      ),
+    };
+  }
+
+  public async authenticate({
+    clientInfo,
+    publicKeyOptions,
+  }: IOptions<PublicKeyCredentialRequestOptions>): Promise<IResult | null> {
+    let result: WebAuthnAuthenticateResponseMessageResult | null;
+
+    if (!publicKeyOptions) {
+      throw new WebAuthnMalformedAuthenticationRequestError(
+        'no public key creation options supplied'
+      );
+    }
+
+    result = await dispatchMessageWithTimeout<
+      WebAuthnAuthenticateResponseMessageResult,
+      WebAuthnAuthenticateRequestMessage
+    >({
+      delay: WEB_AUTHN_REQUEST_TIMEOUT,
+      message: new WebAuthnAuthenticateRequestMessage({
+        id: generateUUID(),
+        payload: {
+          clientInfo,
+          options:
+            WebAuthnMessageManager._serializePublicKeyRequestOptions(
+              publicKeyOptions
+            ),
+        },
+        reference: WebAuthnMessageReferenceEnum.AuthenticateRequest,
+      }),
+      responseReference: WebAuthnMessageReferenceEnum.AuthenticateResponse,
+      ...(this._logger && { logger: this._logger }),
+    });
+
+    if (!result) {
+      return null;
+    }
+
+    return {
+      account: result.account,
+      credential: WebAuthnMessageManager._deserializeAssertionCredential(
         result.credential
       ),
     };

@@ -1,9 +1,9 @@
 // types
 import type { IExternalAccount } from '@common/types';
 
-interface IRegisterResult {
+interface IResult {
   account: IExternalAccount;
   credential: PublicKeyCredential;
 }
 
-export default IRegisterResult;
+export default IResult;

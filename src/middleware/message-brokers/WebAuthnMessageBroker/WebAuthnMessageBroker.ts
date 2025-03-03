@@ -18,6 +18,7 @@ import { IBaseMessage, IBaseResponseMessage } from '@common/types';
 export default class WebAuthnMessageBroker extends BaseListener {
   // private variables
   private readonly _clientRequestReferences: WebAuthnMessageReferenceEnum[] = [
+    WebAuthnMessageReferenceEnum.AuthenticateRequest,
     WebAuthnMessageReferenceEnum.RegisterRequest,
   ];
 
@@ -28,10 +29,10 @@ export default class WebAuthnMessageBroker extends BaseListener {
   private _onClientMessage(
     message: CustomEvent<IBaseMessage<WebAuthnMessageReferenceEnum>>
   ) {
-    const _functionName = '_onClientMessage';
+    const __function = '_onClientMessage';
 
     this._logger?.debug(
-      `${WebAuthnMessageBroker.name}#${_functionName}: received client message "${message.detail.reference}" with id "${message.detail.id}"`
+      `${WebAuthnMessageBroker.name}#${__function}: received client message "${message.detail.reference}" with id "${message.detail.id}"`
     );
 
     // proxy message to the provider
@@ -44,10 +45,10 @@ export default class WebAuthnMessageBroker extends BaseListener {
       WebAuthnMessageReferenceEnum
     >
   ): void {
-    const _functionName = '_onProviderMessage';
+    const __function = '_onProviderMessage';
 
     this._logger?.debug(
-      `${WebAuthnMessageBroker.name}#${_functionName}: received provider message "${message.reference}" with id "${message.id}"`
+      `${WebAuthnMessageBroker.name}#${__function}: received provider message "${message.reference}" with id "${message.id}"`
     );
 
     // proxy message to the client

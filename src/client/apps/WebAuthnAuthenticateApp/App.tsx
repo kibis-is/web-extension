@@ -21,16 +21,16 @@ import type { IAppProps } from './types';
 const App: FC<IAppProps> = ({
   clientInfo,
   config,
-  credentialCreationOptions,
+  credentialRequestOptions,
   i18n,
   logger,
-  navigatorCredentialsCreateFn,
+  navigatorCredentialsGetFn,
   onClose,
   onResponse,
   webAuthnMessageManager,
 }) => {
   // hooks
-  const { error, registerAction, result } = useWebAuthn({
+  const { authenticateAction, error, result } = useWebAuthn({
     logger,
     webAuthnMessageManager,
   });
@@ -39,17 +39,15 @@ const App: FC<IAppProps> = ({
     () => config.theme.colorMode,
     [config.theme.colorMode]
   );
-  const _name = useMemo<string>(() => 'WebAuthnRegisterApp', []);
+  const _name = useMemo<string>(() => 'WebAuthnAuthenticateApp', []);
   const fontFamily = useMemo(() => config.theme.font, [config.theme.font]);
   // handlers
   const handleOnCancelClick = () => {
-    onResponse(
-      navigatorCredentialsCreateFn.call(this, credentialCreationOptions)
-    );
+    onResponse(navigatorCredentialsGetFn.call(this, credentialRequestOptions));
     onClose();
   };
-  const handleOnRegisterClick = async () => {
-    const __function = 'handleOnRegisterClick';
+  const handleOnAuthenticateClick = async () => {
+    const __function = 'handleOnAuthenticateClick';
 
     if (!result) {
       logger?.debug(`${_name}#${__function}: no credentials found`);
@@ -61,17 +59,17 @@ const App: FC<IAppProps> = ({
     onClose();
   };
   const handleOnTryAgainClick = async () => {
-    await registerAction({
+    await authenticateAction({
       clientInfo,
-      publicKeyOptions: credentialCreationOptions.publicKey || null,
+      publicKeyOptions: credentialRequestOptions.publicKey || null,
     });
   };
 
   useEffect(() => {
     (async () => {
-      await registerAction({
+      await authenticateAction({
         clientInfo,
-        publicKeyOptions: credentialCreationOptions.publicKey || null,
+        publicKeyOptions: credentialRequestOptions.publicKey || null,
       });
     })();
   }, []);
@@ -93,8 +91,8 @@ const App: FC<IAppProps> = ({
           colorMode={colorMode}
           error={error}
           fontFamily={fontFamily}
+          onAuthenticateClick={handleOnAuthenticateClick}
           onCancelClick={handleOnCancelClick}
-          onRegisterClick={handleOnRegisterClick}
           onTryAgainClick={handleOnTryAgainClick}
           result={result}
         />

@@ -5,6 +5,7 @@ import { createElement } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
 
 // apps
+import WebAuthnAuthenticateApp from '@client/apps/WebAuthnAuthenticateApp';
 import WebAuthnRegisterApp from '@client/apps/WebAuthnRegisterApp';
 
 // constants
@@ -277,6 +278,23 @@ export default class WebAuthnInterceptor {
           onAbortListener.bind(this, root)
         );
       }
+
+      root.render(
+        createElement(WebAuthnAuthenticateApp, {
+          clientInfo: createClientInformation(),
+          config: this._config,
+          credentialRequestOptions: options,
+          i18n: await this._initializeI18n(),
+          navigatorCredentialsGetFn: this._navigatorCredentialsGetFn,
+          onClose: () => root.unmount(),
+          onResponse: (response: PublicKeyCredential | null) =>
+            resolve(response),
+          ...(this._logger && {
+            logger: this._logger,
+          }),
+          webAuthnMessageManager: this._webAuthnMessageManager,
+        })
+      );
     });
   }
 }

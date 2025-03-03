@@ -2,7 +2,7 @@
 import type { IBaseRootProps } from '@client/types';
 
 interface IRootProps extends IBaseRootProps {
-  onRegisterClick: () => void;
+  onAuthenticateClick: () => void;
 }
 
 export default IRootProps;

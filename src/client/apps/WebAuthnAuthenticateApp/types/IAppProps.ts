@@ -2,8 +2,8 @@
 import type { IBaseAppProps } from '@client/types';
 
 interface IAppProps extends IBaseAppProps {
-  credentialCreationOptions: CredentialCreationOptions;
-  navigatorCredentialsCreateFn: typeof navigator.credentials.create;
+  credentialRequestOptions: CredentialRequestOptions;
+  navigatorCredentialsGetFn: typeof navigator.credentials.get;
 }
 
 export default IAppProps;

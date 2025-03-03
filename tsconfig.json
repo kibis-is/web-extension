@@ -19,6 +19,7 @@
     "noImplicitReturns": true,
     "noImplicitThis": true,
     "paths": {
+      "@client/*": ["src/client/*"],
       "@client/apps/*": ["src/client/apps/*"],
       "@client/components/*": ["src/client/components/*"],
       "@client/constants": ["src/client/constants"],
@@ -28,6 +29,7 @@
       "@client/styles/*": ["src/client/styles/*"],
       "@client/utils/*": ["src/client/utils/*"],
 
+      "@common/*": ["src/common/*"],
       "@common/components/*": ["src/common/components/*"],
       "@common/constants": ["src/common/constants"],
       "@common/enums": ["src/common/enums"],
@@ -42,6 +44,7 @@
 
       "@docs/*": ["src/docs/*"],
 
+      "@extension/*": ["src/extension/*"],
       "@extension/components/*": ["src/extension/components/*"],
       "@extension/config": ["src/extension/config"],
       "@extension/constants": ["src/extension/constants"],
@@ -68,9 +71,11 @@
       "@extension/types": ["src/extension/types"],
       "@extension/utils/*": ["src/extension/utils/*"],
 
+      "@middleware/*": ["src/middleware/*"],
       "@middleware/message-brokers/*": ["src/middleware/message-brokers/*"],
       "@middleware/utils/*": ["src/middleware/utils/*"],
 
+      "@test/*": ["test/*"],
       "@test/utils/*": ["test/utils/*"]
     },
     "removeComments": false,
