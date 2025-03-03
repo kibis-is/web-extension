@@ -1,6 +1,6 @@
 # Middleware
 
-### Table Of Contents
+### Table of Contents
 
 * [1. Overview](#-1-overview)
   -[1.1. Message Brokerage](#11-message-brokerage)
@@ -9,9 +9,9 @@
 
 ## 🔭 1. Overview
 
-The middleware, also known as "content scripts", are the go between the client (webpage) and the provider (extension).
+The middleware, also known as "content scripts", are the go between the [client][client] (webpage) and the [provider][provider] (extension).
 
-The main responsibility of the middleware is to act as a brokerage of messaging between the webpage and the provider.
+The main responsibility of the middleware is to act as a brokerage of messaging between the client and the provider.
 
 <sup>[Back to top ^][table-of-contents]</sup>
 
@@ -29,9 +29,11 @@ Content scripts have limited access to a web-page, however, to overcome this lim
 
 ## 🪄 2. Usage
 
-The main entry point is the [`src/middleware/sources/middleware.ts`](./sources/middleware.ts) file. This file contains all the initializations of the message brokers and injects any scripts into the webpage.
+The main entry point is the [`src/middleware/main.ts`](./main.ts) file. This file contains all the initializations of the message brokers and injects any scripts into the webpage.
 
 <sup>[Back to top ^][table-of-contents]</sup>
 
 <!-- links -->
+[client]: ../client/README.md
+[provider]: ../provider/README.md
 [table-of-contents]: #table-of-contents
