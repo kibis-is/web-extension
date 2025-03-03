@@ -51,6 +51,7 @@ import ScanQRCodeModal from '@extension/modals/ScanQRCodeModal';
 import SendAssetModal from '@extension/modals/SendAssetModal';
 import SignMessageModal from '@extension/modals/SignMessageModal';
 import SignTransactionsModal from '@extension/modals/SignTransactionsModal';
+import WebAuthnAuthenticateModal from '@extension/modals/WebAuthnAuthenticateModal';
 import WebAuthnRegisterModal from '@extension/modals/WebAuthnRegisterModal';
 import WhatsNewModal from '@extension/modals/WhatsNewModal';
 
@@ -127,6 +128,7 @@ const Root: FC<IRootProps> = ({ i18n }) => {
       <SignTransactionsModal />
       <ARC0300KeyRegistrationTransactionSendEventModal />
       <WebAuthnRegisterModal />
+      <WebAuthnAuthenticateModal />
 
       {/*information modals*/}
       <WhatsNewModal onClose={handleWhatsNewModalClose} />

@@ -1,22 +1,31 @@
 // enums
 import { EventTypeEnum } from '@extension/enums';
 
+// messages
+import WebAuthnRegisterRequestMessage from '@common/messages/WebAuthnRegisterRequestMessage';
+
 // types
-import type { IBaseEvent } from '@extension/types';
-import type { TPayload } from './types';
+import type { IBaseEvent, IBaseMessageEventPayload } from '@extension/types';
 
 export default class WebAuthnRegisterRequestEvent
-  implements IBaseEvent<TPayload, EventTypeEnum.WebAuthnRegisterRequest>
+  implements
+    IBaseEvent<
+      IBaseMessageEventPayload<WebAuthnRegisterRequestMessage>,
+      EventTypeEnum.WebAuthnRegisterRequest
+    >
 {
   public readonly id: string;
-  public readonly payload: TPayload;
+  public readonly payload: IBaseMessageEventPayload<WebAuthnRegisterRequestMessage>;
   public readonly type: EventTypeEnum.WebAuthnRegisterRequest;
 
   constructor({
     id,
     payload,
     type,
-  }: IBaseEvent<TPayload, EventTypeEnum.WebAuthnRegisterRequest>) {
+  }: IBaseEvent<
+    IBaseMessageEventPayload<WebAuthnRegisterRequestMessage>,
+    EventTypeEnum.WebAuthnRegisterRequest
+  >) {
     this.id = id;
     this.payload = payload;
     this.type = type;

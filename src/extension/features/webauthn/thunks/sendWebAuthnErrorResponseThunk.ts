@@ -8,6 +8,7 @@ import { EventTypeEnum } from '@extension/enums';
 import { ThunkEnum } from '../enums';
 
 // messages
+import WebAuthnAuthenticateResponseMessage from '@common/messages/WebAuthnAuthenticateResponseMessage';
 import WebAuthnRegisterResponseMessage from '@common/messages/WebAuthnRegisterResponseMessage';
 
 // types
@@ -34,10 +35,22 @@ const sendWebAuthnErrorResponseThunk: AsyncThunk<
   async ({ error, event }, { getState }) => {
     const id = generateUUID();
     const logger = getState().system.logger;
-    let message: WebAuthnRegisterResponseMessage | null = null;
+    let message:
+      | WebAuthnAuthenticateResponseMessage
+      | WebAuthnRegisterResponseMessage
+      | null = null;
 
     // send the error the client via the middleware (content script)
     switch (event.type) {
+      case EventTypeEnum.WebAuthnAuthenticateRequest:
+        message = new WebAuthnAuthenticateResponseMessage({
+          error: serialize(error),
+          id,
+          reference: WebAuthnMessageReferenceEnum.AuthenticateResponse,
+          requestID: event.payload.message.id,
+          result: null,
+        });
+        break;
       case EventTypeEnum.WebAuthnRegisterRequest:
         message = new WebAuthnRegisterResponseMessage({
           error: serialize(error),

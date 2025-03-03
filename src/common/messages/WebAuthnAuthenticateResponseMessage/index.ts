@@ -1,2 +1,2 @@
-export { default } from './WebAuthnRegisterResponseMessage';
+export { default } from './WebAuthnAuthenticateResponseMessage';
 export * from './types';

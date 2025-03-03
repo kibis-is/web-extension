@@ -196,6 +196,8 @@ const translation: IResourceLanguage = {
     mustEnterPasswordToImportAccount:
       'You must enter your password to import this account.',
     mustEnterPasswordToReEncryptPrivateKeys: `Enter your password to re-encrypt the private keys.`,
+    mustEnterPasswordToAuthenticatePasskey:
+      'Enter your password to authenticate a passkey.',
     mustEnterPasswordToRegisterPasskey:
       'Enter your password to register a passkey.',
     mustEnterPasswordToSign: 'Enter your password to sign.',
@@ -349,6 +351,7 @@ const translation: IResourceLanguage = {
       code_8002:
         'Failed to communicate with the passkey device. Please try again.',
       code_9000: 'Passkey registration canceled.',
+      code_9003: 'Passkey authentication canceled.',
       generic: 'Something went wrong, please try again.',
     },
     inputs: {
@@ -382,6 +385,7 @@ const translation: IResourceLanguage = {
       code_8001: '8001 Passkey Creation Failure',
       code_8002: '8002 Passkey Communication Failed',
       code_9000: '9000 Passkey Registration Canceled',
+      code_9003: '9003 Passkey Authentication Canceled',
     },
   },
   headings: {
@@ -401,6 +405,7 @@ const translation: IResourceLanguage = {
     analyticsAndTracking: 'Analytics & Tracking',
     almostThere: 'Almost There...',
     assetDetails: 'Asset Details',
+    authenticateWithPasskey: 'Authenticate with Passkey',
     authentication: 'Authentication',
     beta: 'Beta',
     cameraDenied: 'Camera Denied',

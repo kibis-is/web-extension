@@ -4,13 +4,29 @@ import { createSlice } from '@reduxjs/toolkit';
 import { StoreNameEnum } from '@extension/enums';
 
 // thunks
-import { sendWebAuthnRegisterResponseThunk } from './thunks';
+import {
+  sendWebAuthnAuthenticateResponseThunk,
+  sendWebAuthnRegisterResponseThunk,
+} from './thunks';
 
 // utils
 import getInitialState from './utils/getInitialState';
 
 const slice = createSlice({
   extraReducers: (builder) => {
+    /** send webauthn authenticate response **/
+    builder.addCase(
+      sendWebAuthnAuthenticateResponseThunk.fulfilled,
+      (state) => {
+        state.saving = false;
+      }
+    );
+    builder.addCase(sendWebAuthnAuthenticateResponseThunk.pending, (state) => {
+      state.saving = true;
+    });
+    builder.addCase(sendWebAuthnAuthenticateResponseThunk.rejected, (state) => {
+      state.saving = false;
+    });
     /** send webauthn register response **/
     builder.addCase(sendWebAuthnRegisterResponseThunk.fulfilled, (state) => {
       state.saving = false;

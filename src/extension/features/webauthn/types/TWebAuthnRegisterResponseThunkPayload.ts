@@ -1,4 +1,5 @@
 // events
+import WebAuthnAuthenticateRequestEvent from '@extension/events/WebAuthnAuthenticateRequestEvent';
 import WebAuthnRegisterRequestEvent from '@extension/events/WebAuthnRegisterRequestEvent';
 
 // types

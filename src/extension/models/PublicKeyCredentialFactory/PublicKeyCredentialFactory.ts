@@ -19,7 +19,11 @@ import { COSE_ED25519_ALGORITHM } from '@common/constants';
 import Ed21559KeyPair from '@extension/models/Ed21559KeyPair';
 
 // types
-import type { ISerializedPublicKeyCredentialWithAuthenticatorAttestationResponse } from '@common/types';
+import type {
+  ISerializedAuthenticatorAssertionResponse,
+  ISerializedAuthenticatorAttestationResponse,
+  ISerializedPublicKeyCredential,
+} from '@common/types';
 import type { IAccountPasskey } from '@extension/types';
 import type { IGenerateOptions, IInitOptions, INewOptions } from './types';
 
@@ -125,7 +129,37 @@ export default class PublicKeyCredentialFactory {
     return this._passkey;
   }
 
-  public serializedAttestationCredential(): ISerializedPublicKeyCredentialWithAuthenticatorAttestationResponse {
+  public serializedAssertionCredential(): ISerializedPublicKeyCredential<ISerializedAuthenticatorAssertionResponse> {
+    const authenticatorData = this.authenticatorData();
+    const clientDataJSON = encodeUTF8(
+      JSON.stringify({
+        type: 'webauthn.get',
+        challenge: encodeBase64URLSafe(decodeBase64(this._challenge)), // convert the base64 encoded challenge to url safe
+        origin: this._passkey.origin,
+      })
+    );
+    const signature = sign.detached(
+      new Uint8Array([
+        ...authenticatorData,
+        ...sha256(clientDataJSON), // include the hash of the client json
+      ]),
+      this._keyPair.getSecretKey()
+    );
+
+    return {
+      authenticatorAttachment: 'platform',
+      rawId: encodeBase64(decodeUUID(this._passkey.id)),
+      response: {
+        authenticatorData: encodeBase64(authenticatorData),
+        clientDataJSON: encodeBase64(clientDataJSON),
+        signature: encodeBase64(signature),
+        userHandle: encodeBase64(encodeUTF8(this._passkey.user.id)),
+      },
+      type: 'public-key',
+    };
+  }
+
+  public serializedAttestationCredential(): ISerializedPublicKeyCredential<ISerializedAuthenticatorAttestationResponse> {
     const authenticatorData = this.authenticatorData();
     const clientDataJSON = encodeUTF8(
       JSON.stringify({

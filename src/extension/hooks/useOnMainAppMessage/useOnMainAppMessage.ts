@@ -24,14 +24,14 @@ import { useSelectLogger } from '@extension/selectors';
 import type { IAppThunkDispatch, IMainRootState } from '@extension/types';
 
 export default function useOnMainAppMessage(): void {
-  const _functionName = 'useOnMainAppMessage';
+  const __function = 'useOnMainAppMessage';
   const { t } = useTranslation();
   const dispatch = useDispatch<IAppThunkDispatch<IMainRootState>>();
   // selectors
   const logger = useSelectLogger();
   const handleMessage = async (message: BaseProviderMessage) => {
     message.reference &&
-      logger.debug(`${_functionName}: message "${message.reference}" received`);
+      logger.debug(`${__function}: message "${message.reference}" received`);
 
     switch (message.reference) {
       case ProviderMessageReferenceEnum.EventAdded:

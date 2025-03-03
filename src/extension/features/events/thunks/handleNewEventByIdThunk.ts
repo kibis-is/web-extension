@@ -38,6 +38,7 @@ const handleNewEventByIdThunk: AsyncThunk<
   switch (event.type) {
     case EventTypeEnum.AVMWebProviderRequest:
     case EventTypeEnum.ARC0300KeyRegistrationTransactionSend:
+    case EventTypeEnum.WebAuthnAuthenticateRequest:
     case EventTypeEnum.WebAuthnRegisterRequest:
       return event;
     default:

@@ -47,6 +47,7 @@ enum ErrorCodeEnum {
   WebAuthnInvalidPublicKeyError = 9002,
   WebAuthnAuthenticationCanceledError = 9003,
   WebAuthnMalformedAuthenticationRequestError = 9004,
+  WebAuthnInvalidPasskeyError = 9005,
 }
 
 export default ErrorCodeEnum;
