@@ -117,7 +117,6 @@ import {
 // types
 import type { TReKeyType } from '@extension/features/re-key-account';
 import type {
-  IAccountPasskey,
   IAccountWithExtendedProps,
   IAppThunkDispatch,
   IMainRootState,
@@ -630,9 +629,11 @@ const AccountPage: FC = () => {
               <Tab>{t<string>('labels.assets')}</Tab>
               <Tab>{t<string>('labels.nfts')}</Tab>
               <Tab>{t<string>('labels.activity')}</Tab>
-              <Tab isDisabled={account.watchAccount}>
-                {t<string>('labels.passkeys')}
-              </Tab>
+              {settings.advanced.allowAccountPasskeys && (
+                <Tab isDisabled={account.watchAccount}>
+                  {t<string>('labels.passkeys')}
+                </Tab>
+              )}
             </TabList>
 
             <TabPanels sx={{ display: 'flex', flexDirection: 'column' }}>
@@ -651,13 +652,15 @@ const AccountPage: FC = () => {
                 updating={updatingActiveAccountTransactions}
               />
 
-              <PasskeysTab
-                account={account}
-                colorMode={colorMode}
-                fetching={fetchingAccounts}
-                onRemoveClick={handleOnRemovePasskeyClick}
-                onViewClick={handleOnViewPasskeyClick}
-              />
+              {settings.advanced.allowAccountPasskeys && (
+                <PasskeysTab
+                  account={account}
+                  colorMode={colorMode}
+                  fetching={fetchingAccounts}
+                  onRemoveClick={handleOnRemovePasskeyClick}
+                  onViewClick={handleOnViewPasskeyClick}
+                />
+              )}
             </TabPanels>
           </Tabs>
         </>

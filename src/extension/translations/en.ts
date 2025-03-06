@@ -90,6 +90,8 @@ const translation: IResourceLanguage = {
     addWatchAccount: 'Add a watch account by providing a valid address.',
     addWatchAccountComplete: `Press save to confirm adding the watch account.`,
     algodToken: `This is the 'X-Algo-API-Token' header that will be used to authenticate REST calls to the algod node.`,
+    allowAccountPasskeys:
+      'You will be able to sign-in to web apps using your AVM accounts via passkeys.',
     allowActionTracking: 'By tracking certain actions, you can earn rewards.',
     allowBetaNet: 'Let BetaNet networks appear in the networks list.',
     allowDidTokenFormat:
@@ -351,6 +353,7 @@ const translation: IResourceLanguage = {
         'Failed to communicate with the passkey device. Please try again.',
       code_9000: 'Passkey registration canceled.',
       code_9003: 'Passkey authentication canceled.',
+      code_9006: 'Passkeys not enabled.',
       generic: 'Something went wrong, please try again.',
     },
     inputs: {
@@ -385,6 +388,7 @@ const translation: IResourceLanguage = {
       code_8002: '8002 Passkey Communication Failed',
       code_9000: '9000 Passkey Registration Canceled',
       code_9003: '9003 Passkey Authentication Canceled',
+      code_9006: '9006 Passkeys Not Enabled',
     },
   },
   headings: {
@@ -550,6 +554,7 @@ const translation: IResourceLanguage = {
     addGroup: 'Add Group',
     addMaximumAmount: 'Add Maximum Amount',
     algorithm: 'Algorithm',
+    allowAccountPasskeys: 'Enable passkeys?',
     allowActionTracking: 'Allow certain actions to be tracked?',
     allowBetaNet: 'Allow BetaNet networks?',
     allowDidTokenFormat: 'Allow DID token format in address sharing?',

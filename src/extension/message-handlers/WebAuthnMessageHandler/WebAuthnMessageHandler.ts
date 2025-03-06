@@ -6,46 +6,129 @@ import { WebAuthnMessageReferenceEnum } from '@common/enums';
 import { EventTypeEnum } from '@extension/enums';
 
 // events
+import WebAuthnAuthenticateRequestEvent from '@extension/events/WebAuthnAuthenticateRequestEvent';
 import WebAuthnRegisterRequestEvent from '@extension/events/WebAuthnRegisterRequestEvent';
 
-// messages
-import WebAuthnRegisterRequestMessage from '@common/messages/WebAuthnRegisterRequestMessage';
+// errors
+import { WebAuthnNotEnabledError } from '@common/errors';
 
-// repository
-import EventQueueRepository from '@extension/repositories/EventQueueRepository';
+// messages
+import WebAuthnAuthenticateRequestMessage from '@common/messages/WebAuthnAuthenticateRequestMessage';
+import WebAuthnAuthenticateResponseMessage from '@common/messages/WebAuthnAuthenticateResponseMessage';
+import WebAuthnRegisterRequestMessage from '@common/messages/WebAuthnRegisterRequestMessage';
+import WebAuthnRegisterResponseMessage from '@common/messages/WebAuthnRegisterResponseMessage';
 
 // message handlers
 import BaseMessageHandler from '@extension/message-handlers/BaseMessageHandler';
 
+// repository
+import EventQueueRepository from '@extension/repositories/EventQueueRepository';
+import SettingsRepository from '@extension/repositories/SettingsRepository';
+
 // types
 import type { IBaseOptions } from '@common/types';
+import type { ISettings } from '@extension/types';
 
 // utils
+import isProviderInitialized from '@extension/utils/isProviderInitialized';
 import queueProviderEvent from '@extension/utils/queueProviderEvent';
+import serialize from '@extension/utils/serialize';
 
 export default class WebAuthnMessageHandler extends BaseMessageHandler {
   // private variables
   private readonly _eventQueueRepository: EventQueueRepository;
+  private readonly _settingsRepository: SettingsRepository;
 
   constructor(options: IBaseOptions) {
     super(options);
 
     this._eventQueueRepository = new EventQueueRepository();
+    this._settingsRepository = new SettingsRepository();
   }
 
   /**
    * private methods
    */
 
+  private async _handleAuthenticateRequestMessage(
+    message: WebAuthnAuthenticateRequestMessage,
+    originTabID: number
+  ): Promise<void> {
+    const _function = '_handleAuthenticateRequestMessage';
+    let isInitialized: boolean;
+    let settings: ISettings;
+
+    this._logger?.debug(
+      `${WebAuthnMessageHandler.name}#${_function}: received message "${message.reference}"`
+    );
+
+    isInitialized = await isProviderInitialized();
+    settings = await this._settingsRepository.fetch();
+
+    if (!isInitialized || !settings.advanced.allowAccountPasskeys) {
+      this._logger?.debug(
+        `${WebAuthnMessageHandler.name}#${_function}: provider not initialized or webauthn not enabled`
+      );
+
+      await browser.tabs.sendMessage(
+        originTabID,
+        new WebAuthnAuthenticateResponseMessage({
+          error: serialize(new WebAuthnNotEnabledError('webauthn not enabled')),
+          id: generateUUID(),
+          reference: WebAuthnMessageReferenceEnum.AuthenticateResponse,
+          requestID: message.id,
+          result: null,
+        })
+      );
+
+      return;
+    }
+
+    return await this._queueProviderEvent(
+      new WebAuthnAuthenticateRequestEvent({
+        id: generateUUID(),
+        payload: {
+          message,
+          originTabID,
+        },
+        type: EventTypeEnum.WebAuthnAuthenticateRequest,
+      })
+    );
+  }
+
   private async _handleRegisterRequestMessage(
     message: WebAuthnRegisterRequestMessage,
     originTabID: number
   ): Promise<void> {
-    const _functionName = '_handleRegisterRequestMessage';
+    const _function = '_handleRegisterRequestMessage';
+    let isInitialized: boolean;
+    let settings: ISettings;
 
     this._logger?.debug(
-      `${WebAuthnMessageHandler.name}#${_functionName}: received message "${message.reference}"`
+      `${WebAuthnMessageHandler.name}#${_function}: received message "${message.reference}"`
     );
+
+    isInitialized = await isProviderInitialized();
+    settings = await this._settingsRepository.fetch();
+
+    if (!isInitialized || !settings.advanced.allowAccountPasskeys) {
+      this._logger?.debug(
+        `${WebAuthnMessageHandler.name}#${_function}: provider not initialized or webauthn not enabled`
+      );
+
+      await browser.tabs.sendMessage(
+        originTabID,
+        new WebAuthnRegisterResponseMessage({
+          error: serialize(new WebAuthnNotEnabledError('webauthn not enabled')),
+          id: generateUUID(),
+          reference: WebAuthnMessageReferenceEnum.RegisterResponse,
+          requestID: message.id,
+          result: null,
+        })
+      );
+
+      return;
+    }
 
     return await this._queueProviderEvent(
       new WebAuthnRegisterRequestEvent({
@@ -59,10 +142,12 @@ export default class WebAuthnMessageHandler extends BaseMessageHandler {
     );
   }
 
-  private async _queueProviderEvent<Event extends WebAuthnRegisterRequestEvent>(
-    event: Event
-  ): Promise<void> {
-    const _functionName = '_queueProviderEvent';
+  private async _queueProviderEvent<
+    Event extends
+      | WebAuthnAuthenticateRequestEvent
+      | WebAuthnRegisterRequestEvent
+  >(event: Event): Promise<void> {
+    const _function = '_queueProviderEvent';
     const events = await this._eventQueueRepository.fetchByType<Event>(
       event.type
     );
@@ -74,7 +159,7 @@ export default class WebAuthnMessageHandler extends BaseMessageHandler {
       )
     ) {
       this._logger?.debug(
-        `${WebAuthnMessageHandler.name}#${_functionName}: client request "${event.payload.message.id}" already exists, ignoring`
+        `${WebAuthnMessageHandler.name}#${_function}: client request "${event.payload.message.id}" already exists, ignoring`
       );
 
       return;
@@ -94,20 +179,25 @@ export default class WebAuthnMessageHandler extends BaseMessageHandler {
    */
 
   protected async _onMiddlewareMessage(
-    message: WebAuthnRegisterRequestMessage,
+    message:
+      | WebAuthnAuthenticateRequestMessage
+      | WebAuthnRegisterRequestMessage,
     sender: Runtime.MessageSender
   ): Promise<void> {
-    const _functionName = '_onMessage';
+    const _function = '_onMiddlewareMessage';
 
     if (!sender.tab?.id) {
       this._logger?.debug(
-        `${WebAuthnMessageHandler.name}#${_functionName}: unknown sender for "${message.reference}" message, ignoring`
+        `${WebAuthnMessageHandler.name}#${_function}: unknown sender for "${message.reference}" message, ignoring`
       );
 
       return;
     }
 
     switch (message.reference) {
+      case WebAuthnMessageReferenceEnum.AuthenticateRequest:
+        await this._handleAuthenticateRequestMessage(message, sender.tab.id);
+        break;
       case WebAuthnMessageReferenceEnum.RegisterRequest:
         await this._handleRegisterRequestMessage(message, sender.tab.id);
         break;

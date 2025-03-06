@@ -45,6 +45,7 @@ export default class WebAuthnInterceptor {
     webAuthnMessageManager,
   }: INewOptions) {
     this._config = initialConfig || {
+      allowAccountPasskeys: false,
       debugLogging: __ENV__ === 'development',
       isInitialized: false,
       theme: {
@@ -166,9 +167,9 @@ export default class WebAuthnInterceptor {
       let root: Root;
 
       // if the provider is not initialized, invoke the original
-      if (!this._config.isInitialized) {
+      if (!this._config.isInitialized || !this._config.allowAccountPasskeys) {
         this._logger?.debug(
-          `${WebAuthnInterceptor.name}#${__function}: provider has not been initialized`
+          `${WebAuthnInterceptor.name}#${__function}: provider has not been initialized or has not enabled passkeys`
         );
 
         return resolve(this._navigatorCredentialsCreateFn.call(this, options));
@@ -252,9 +253,9 @@ export default class WebAuthnInterceptor {
       let root: Root;
 
       // if the provider is not initialized, invoke the original
-      if (!this._config.isInitialized) {
+      if (!this._config.isInitialized || !this._config.allowAccountPasskeys) {
         this._logger?.debug(
-          `${WebAuthnInterceptor.name}#${__function}: provider has not been initialized`
+          `${WebAuthnInterceptor.name}#${__function}: provider has not been initialized or has not enabled passkeys`
         );
 
         return resolve(this._navigatorCredentialsGetFn.call(this, options));

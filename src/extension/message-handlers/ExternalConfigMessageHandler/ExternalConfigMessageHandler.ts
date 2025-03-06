@@ -57,6 +57,7 @@ export default class ExternalConfigMessageHandler extends BaseMessageHandler {
         requestID: message.id,
         result: {
           config: {
+            allowAccountPasskeys: settings.advanced.allowAccountPasskeys,
             debugLogging: settings.advanced.debugLogging,
             isInitialized: await isProviderInitialized(),
             theme: {

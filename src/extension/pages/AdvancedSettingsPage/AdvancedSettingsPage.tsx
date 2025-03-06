@@ -1,5 +1,5 @@
 import { VStack } from '@chakra-ui/react';
-import React, { type ChangeEvent, type FC } from 'react';
+import React, { type ChangeEvent, type FC, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { IoGlobeOutline } from 'react-icons/io5';
 import { useDispatch } from 'react-redux';
@@ -10,6 +10,9 @@ import SettingsLinkItem from '@extension/components/SettingsLinkItem';
 import SettingsSubHeading from '@extension/components/SettingsSubHeading';
 import SettingsSwitchItem from '@extension/components/SettingsSwitchItem';
 
+// enums
+import { AccountTabEnum } from '@extension/enums';
+
 // constants
 import { DEFAULT_GAP } from '@common/constants';
 import {
@@ -19,10 +22,12 @@ import {
 } from '@extension/constants';
 
 // features
+import { saveActiveAccountDetails } from '@extension/features/accounts';
 import { saveToStorageThunk as saveSettingsToStorageThunk } from '@extension/features/settings';
 
 // selectors
 import {
+  useSelectActiveAccountDetails,
   useSelectSettings,
   useSelectSettingsColorMode,
 } from '@extension/selectors';
@@ -38,6 +43,7 @@ const AdvancedSettingsPage: FC = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch<IAppThunkDispatch<IMainRootState>>();
   // selectors
+  const activeAccountDetails = useSelectActiveAccountDetails();
   const colorMode = useSelectSettingsColorMode();
   const settings = useSelectSettings();
   // handlers
@@ -54,6 +60,33 @@ const AdvancedSettingsPage: FC = () => {
         })
       );
     };
+  const handleOnAllowAccountPasskeysChange = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) => {
+      // if we are disabling, we need to reset the account page tab
+      if (
+        !event.target.checked &&
+        activeAccountDetails?.tabIndex === AccountTabEnum.Passkeys
+      ) {
+        dispatch(
+          saveActiveAccountDetails({
+            ...activeAccountDetails,
+            tabIndex: AccountTabEnum.Assets,
+          })
+        );
+      }
+
+      dispatch(
+        saveSettingsToStorageThunk({
+          ...settings,
+          advanced: {
+            ...settings.advanced,
+            allowAccountPasskeys: event.target.checked,
+          },
+        })
+      );
+    },
+    [activeAccountDetails, settings]
+  );
 
   return (
     <>
@@ -63,7 +96,7 @@ const AdvancedSettingsPage: FC = () => {
       />
 
       <VStack spacing={DEFAULT_GAP - 2} w="full">
-        {/*developer*/}
+        {/*networks*/}
         <VStack w="full">
           <SettingsSubHeading text={t<string>('headings.networks')} />
 
@@ -110,6 +143,13 @@ const AdvancedSettingsPage: FC = () => {
             description={t<string>('captions.allowDidTokenFormat')}
             label={t<string>('labels.allowDidTokenFormat')}
             onChange={handleOnSwitchChange('allowDidTokenFormat')}
+          />
+
+          <SettingsSwitchItem
+            checked={settings.advanced.allowAccountPasskeys}
+            description={t<string>('captions.allowAccountPasskeys')}
+            label={t<string>('labels.allowAccountPasskeys')}
+            onChange={handleOnAllowAccountPasskeysChange}
           />
         </VStack>
       </VStack>

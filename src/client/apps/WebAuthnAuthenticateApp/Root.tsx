@@ -67,6 +67,7 @@ const Root: FC<IRootProps> = ({
     if (error) {
       switch (error.code) {
         case ErrorCodeEnum.WebAuthnAuthenticationCanceledError:
+        case ErrorCodeEnum.WebAuthnNotEnabledError:
           errorMessage = t<string>('errors.descriptions.code', {
             context: error.code,
           });

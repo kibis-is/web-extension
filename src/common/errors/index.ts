@@ -25,9 +25,4 @@ export { default as ScreenCaptureNotAllowedError } from './ScreenCaptureNotAllow
 export { default as ScreenCaptureNotFoundError } from './ScreenCaptureNotFoundError';
 export { default as UnableToFetchPasskeyError } from './UnableToFetchPasskeyError';
 export { default as UnknownError } from './UnknownError';
-export { default as WebAuthnAuthenticationCanceledError } from './WebAuthnAuthenticationCanceledError';
-export { default as WebAuthnInvalidPasskeyError } from './WebAuthnInvalidPasskeyError';
-export { default as WebAuthnInvalidPublicKeyError } from './WebAuthnInvalidPublicKeyError';
-export { default as WebAuthnMalformedAuthenticationRequestError } from './WebAuthnMalformedAuthenticationRequestError';
-export { default as WebAuthnMalformedRegistrationRequestError } from './WebAuthnMalformedRegistrationRequestError';
-export { default as WebAuthnRegistrationCanceledError } from './WebAuthnRegistrationCanceledError';
+export * from './webauthn';
