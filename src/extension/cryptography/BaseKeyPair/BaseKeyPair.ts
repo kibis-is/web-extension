@@ -15,12 +15,7 @@ export default abstract class BaseKeyPair {
    * public abstract functions
    */
 
-  /**
-   * Gets the secret key for signing. The secret key is a 64 byte concatenation of the private key (32 byte) and the
-   * public key (32 byte).
-   * @returns {Uint8Array} the secret key used for signing.
-   * @public
-   */
+  public abstract coseAlgorithm(): number;
   public abstract secretKey(): Uint8Array;
 
   /**

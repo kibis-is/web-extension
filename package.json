@@ -132,6 +132,7 @@
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
     "@faker-js/faker": "^7.6.0",
+    "@noble/curves": "^1.8.1",
     "@noble/hashes": "^1.7.1",
     "@reduxjs/toolkit": "^1.9.3",
     "@stablelib/base64": "^2.0.1",

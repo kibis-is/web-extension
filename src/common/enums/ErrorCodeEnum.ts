@@ -5,14 +5,9 @@ enum ErrorCodeEnum {
   ParsingError = 1002,
   NetworkNotSelectedError = 1003,
   NetworkConnectionError = 1004,
-  EncodingError = 1005,
-  DecodingError = 1006,
 
-  // private key
+  // authentication
   InvalidPasswordError = 2000,
-  EncryptionError = 2001,
-  DecryptionError = 2002,
-  PrivateKeyAlreadyExistsError = 2003,
 
   // connection
   OfflineError = 3000,
@@ -49,6 +44,13 @@ enum ErrorCodeEnum {
   WebAuthnMalformedAuthenticationRequestError = 9004,
   WebAuthnInvalidPasskeyError = 9005,
   WebAuthnNotEnabledError = 9006,
+
+  // cryptography
+  EncryptionError = 10000,
+  DecryptionError = 10001,
+  EncodingError = 10003,
+  DecodingError = 10004,
+  InvalidKeyPairGenerationError = 10005,
 }
 
 export default ErrorCodeEnum;

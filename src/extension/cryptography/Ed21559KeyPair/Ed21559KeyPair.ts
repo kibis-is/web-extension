@@ -1,4 +1,10 @@
-import { sign, type SignKeyPair } from 'tweetnacl';
+import { ed25519 } from '@noble/curves/ed25519';
+
+// constants
+import { COSE_ED25519_ALGORITHM } from '@common/constants';
+
+// errors
+import { InvalidKeyPairGenerationError } from '@common/errors';
 
 // cryptography
 import BaseKeyPair from '@extension/cryptography/BaseKeyPair';
@@ -15,33 +21,45 @@ export default class Ed21559KeyPair extends BaseKeyPair {
    * @static
    */
   public static generate(): Ed21559KeyPair {
-    const keyPair: SignKeyPair = sign.keyPair();
+    const privateKey = ed25519.utils.randomPrivateKey();
 
     return new Ed21559KeyPair({
-      privateKey: keyPair.secretKey.slice(0, sign.seedLength), // the private key or "seed" is the first 32 bytes of the "secret key" which is the private key concentrated to the public key
-      publicKey: keyPair.publicKey,
+      privateKey,
+      publicKey: ed25519.getPublicKey(privateKey),
     });
   }
 
   /**
    * Generates an Ed21559 key pair from a private key.
-   * @param {Uint8Array} privateKey - a 32-byte private key (seed).
+   * @param {Uint8Array} privateKey - a 32-byte private key.
    * @returns {Ed21559KeyPair} a new Ed21559 key pair.
    * @public
    * @static
    */
   public static generateFromPrivateKey(privateKey: Uint8Array): Ed21559KeyPair {
-    const keyPair: SignKeyPair = sign.keyPair.fromSeed(privateKey);
+    if (privateKey.length !== 32) {
+      throw new InvalidKeyPairGenerationError('private key is not 32-bytes');
+    }
 
     return new Ed21559KeyPair({
-      privateKey: keyPair.secretKey.slice(0, sign.seedLength), // the private key or "seed" is the first 32 bytes of the "secret key" which is the private key concentrated to the public key
-      publicKey: keyPair.publicKey,
+      privateKey,
+      publicKey: ed25519.getPublicKey(privateKey),
     });
   }
 
   /**
    * public functions
    */
+
+  /**
+   * Gets the COSE algorithm value.
+   * @returns {number} The COSE algorithm: -8
+   * @see {@link https://www.iana.org/assignments/cose/cose.xhtml}
+   * @public
+   */
+  public coseAlgorithm(): number {
+    return COSE_ED25519_ALGORITHM;
+  }
 
   /**
    * Gets the secret key for signing. The secret key is a 64 byte concatenation of the private key (32 byte) and the
