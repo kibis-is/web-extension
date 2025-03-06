@@ -14,7 +14,7 @@ import { useTranslation } from 'react-i18next';
 import { IoArrowBackOutline, IoDownloadOutline } from 'react-icons/io5';
 
 // components
-import Button from '@extension/components/Button';
+import Button from '@common/components/Button';
 import NewAccountItem from '@extension/components/NewAccountItem';
 import ScanModeModalContent from '@extension/components/ScanModeModalContent';
 import ScanQRCodeViaCameraModalContent from '@extension/components/ScanQRCodeViaCameraModalContent';
@@ -23,7 +23,7 @@ import ScanQRCodeViaTabModalContent from '@extension/components/ScanQRCodeViaTab
 import UnknownURIModalContent from '@extension/components/UnknownURIModalContent';
 
 // constants
-import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@extension/constants';
+import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@common/constants';
 
 // enums
 import { ARC0300AuthorityEnum, ARC0300PathEnum } from '@extension/enums';
@@ -32,10 +32,14 @@ import { ARC0300AuthorityEnum, ARC0300PathEnum } from '@extension/enums';
 import useDefaultTextColor from '@extension/hooks/useDefaultTextColor';
 
 // selectors
-import { useSelectLogger, useSelectNetworks } from '@extension/selectors';
+import {
+  useSelectLogger,
+  useSelectNetworks,
+  useSelectSettingsColorMode,
+} from '@extension/selectors';
 
 // theme
-import { theme } from '@extension/theme';
+import { theme } from '@common/theme';
 
 // types
 import type {
@@ -46,7 +50,7 @@ import type {
 import type { IProps } from './types';
 
 // utils
-import convertPublicKeyToAVMAddress from '@extension/utils/convertPublicKeyToAVMAddress';
+import convertPublicKeyToAVMAddress from '@common/utils/convertPublicKeyToAVMAddress';
 import determinePaginationFromARC0300Schemas from '@extension/utils/determinePaginationFromARC0300Schemas';
 import flattenAccountImportSchemaToNewAccounts from '@extension/utils/flattenAccountImportSchemaToNewAccounts';
 import parseURIToARC0300Schema from '@extension/utils/parseURIToARC0300Schema';
@@ -60,6 +64,7 @@ const RegistrationImportAccountViaQRCodeModal: FC<IProps> = ({
 }) => {
   const { t } = useTranslation();
   // selectors
+  const colorMode = useSelectSettingsColorMode();
   const logger = useSelectLogger();
   const networks = useSelectNetworks();
   // hooks
@@ -124,6 +129,7 @@ const RegistrationImportAccountViaQRCodeModal: FC<IProps> = ({
       ) {
         return (
           <UnknownURIModalContent
+            colorMode={colorMode}
             onPreviousClick={handlePreviousClick}
             uri={uris[0]}
           />
@@ -201,6 +207,7 @@ const RegistrationImportAccountViaQRCodeModal: FC<IProps> = ({
               <HStack spacing={DEFAULT_GAP - 2} w="full">
                 {/*cancel button*/}
                 <Button
+                  colorMode={colorMode}
                   leftIcon={<IoArrowBackOutline />}
                   onClick={handleCancelClick}
                   size="lg"
@@ -212,6 +219,7 @@ const RegistrationImportAccountViaQRCodeModal: FC<IProps> = ({
 
                 {/*import button*/}
                 <Button
+                  colorMode={colorMode}
                   isLoading={saving}
                   onClick={handleImportClick(accounts)}
                   rightIcon={<IoDownloadOutline />}
@@ -233,6 +241,7 @@ const RegistrationImportAccountViaQRCodeModal: FC<IProps> = ({
     if (scanViaCamera) {
       return (
         <ScanQRCodeViaCameraModalContent
+          colorMode={colorMode}
           onPreviousClick={handlePreviousClick}
           onURI={handleOnURI}
           {...(pagination && { pagination })}
@@ -243,6 +252,7 @@ const RegistrationImportAccountViaQRCodeModal: FC<IProps> = ({
     if (scanViaScreenCapture) {
       return (
         <ScanQRCodeViaScreenCaptureModalContent
+          colorMode={colorMode}
           onPreviousClick={handlePreviousClick}
           onURI={handleOnURI}
           {...(pagination && { pagination })}
@@ -253,6 +263,7 @@ const RegistrationImportAccountViaQRCodeModal: FC<IProps> = ({
     if (scanViaTab) {
       return (
         <ScanQRCodeViaTabModalContent
+          colorMode={colorMode}
           onPreviousClick={handlePreviousClick}
           onURI={handleOnURI}
           {...(pagination && { pagination })}
@@ -262,6 +273,7 @@ const RegistrationImportAccountViaQRCodeModal: FC<IProps> = ({
 
     return (
       <ScanModeModalContent
+        colorMode={colorMode}
         onCancelClick={handleCancelClick}
         onScanViaCameraClick={handleScanViaCameraClick}
         onScanViaScreenCaptureClick={handleScanViaScreenCaptureClick}

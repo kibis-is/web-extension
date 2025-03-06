@@ -10,7 +10,7 @@ import SettingsSelectItem from '@extension/components/SettingsSelectItem';
 import SettingsSubHeading from '@extension/components/SettingsSubHeading';
 
 // constants
-import { DEFAULT_GAP } from '@extension/constants';
+import { DEFAULT_GAP } from '@common/constants';
 
 // features
 import { openConfirmModal } from '@extension/features/layout';
@@ -27,6 +27,7 @@ import {
   useSelectSettings,
   useSelectSettingsPreferredBlockExplorer,
   useSelectSettingsPreferredNFTExplorer,
+  useSelectSettingsColorMode,
 } from '@extension/selectors';
 
 // types
@@ -40,6 +41,7 @@ const GeneralSettingsPage: FC = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch<IAppThunkDispatch<IMainRootState>>();
   // selectors
+  const colorMode = useSelectSettingsColorMode();
   const network = useSelectSettingsSelectedNetwork();
   const preferredBlockExplorer = useSelectSettingsPreferredBlockExplorer();
   const preferredNFTExplorer = useSelectSettingsPreferredNFTExplorer();
@@ -119,7 +121,10 @@ const GeneralSettingsPage: FC = () => {
   return (
     <>
       {/*header*/}
-      <PageHeader title={t<string>('titles.page', { context: 'general' })} />
+      <PageHeader
+        colorMode={colorMode}
+        title={t<string>('titles.page', { context: 'general' })}
+      />
 
       {/*content*/}
       <VStack spacing={DEFAULT_GAP - 2} w="full">
@@ -129,7 +134,7 @@ const GeneralSettingsPage: FC = () => {
 
           {/* preferred block explorer */}
           <SettingsSelectItem
-            _context={_context}
+            colorMode={colorMode}
             description={t<string>('captions.preferredBlockExplorer')}
             emptyOptionLabel={t<string>('captions.noBlockExplorersAvailable')}
             label={t<string>('labels.preferredBlockExplorer')}
@@ -144,7 +149,7 @@ const GeneralSettingsPage: FC = () => {
 
           {/* preferred nft explorer */}
           <SettingsSelectItem
-            _context={_context}
+            colorMode={colorMode}
             description={t<string>('captions.preferredNFTExplorer')}
             emptyOptionLabel={t<string>('captions.noNFTExplorersAvailable')}
             label={t<string>('labels.preferredNFTExplorer')}
@@ -168,6 +173,7 @@ const GeneralSettingsPage: FC = () => {
           {/*factory reset button*/}
           <SettingsButtonItem
             buttonLabel={t<string>('buttons.reset')}
+            colorMode={colorMode}
             description={t<string>('captions.factoryReset')}
             isWarning={true}
             label={t<string>('labels.factoryReset')}

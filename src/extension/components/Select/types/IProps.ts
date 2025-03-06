@@ -1,8 +1,8 @@
 // types
+import type { IBaseComponentProps } from '@common/types';
 import type IOption from './IOption';
 
-interface IProps {
-  _context: string;
+interface IProps extends IBaseComponentProps {
   buttonTooltipLabel?: string;
   disabled?: boolean;
   emptyOptionLabel?: string;

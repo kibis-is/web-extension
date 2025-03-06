@@ -1,5 +1,5 @@
 // types
-import type { TAccountColors, TAccountIcons } from '@extension/types';
+import type { TAccountColors, TAccountIcons } from '@common/types';
 
 interface ISaveAccountDetailsPayload {
   accountId: string;

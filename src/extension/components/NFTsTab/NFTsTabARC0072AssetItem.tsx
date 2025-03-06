@@ -9,7 +9,8 @@ import AssetIcon from '@extension/components/AssetIcon';
 import NFTAvatar from '@extension/components/NFTAvatar';
 
 // constants
-import { DEFAULT_GAP, TAB_ITEM_HEIGHT, NFTS_ROUTE } from '@extension/constants';
+import { DEFAULT_GAP, TAB_ITEM_HEIGHT } from '@common/constants';
+import { NFTS_ROUTE } from '@extension/constants';
 
 // enums
 import { AssetTypeEnum } from '@extension/enums';

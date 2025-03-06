@@ -6,7 +6,7 @@ import { IoBluetoothOutline, IoFingerPrintOutline } from 'react-icons/io5';
 import { LuNfc } from 'react-icons/lu';
 
 // constants
-import { DEFAULT_GAP } from '@extension/constants';
+import { DEFAULT_GAP } from '@common/constants';
 
 // hooks
 import useSubTextColor from '@extension/hooks/useSubTextColor';
@@ -15,7 +15,7 @@ import useSubTextColor from '@extension/hooks/useSubTextColor';
 import type { IProps } from './types';
 
 // utils
-import calculateIconSize from '@extension/utils/calculateIconSize';
+import calculateIconSize from '@common/utils/calculateIconSize';
 
 const PasskeyCapabilities: FC<IProps> = ({ capabilities, size = 'sm' }) => {
   // hooks

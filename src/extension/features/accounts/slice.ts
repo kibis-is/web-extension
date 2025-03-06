@@ -10,6 +10,7 @@ import {
   addToGroupThunk,
   fetchAccountsFromStorageThunk,
   removeAccountByIdThunk,
+  removeAccountPasskeyByIDThunk,
   removeARC0200AssetHoldingsThunk,
   removeFromGroupThunk,
   removeGroupByIDThunk,
@@ -116,7 +117,7 @@ const slice = createSlice({
         );
       }
     );
-    /** remove from group **/
+    /** add to group **/
     builder.addCase(addToGroupThunk.fulfilled, (state: IState, action) => {
       if (action.payload) {
         state.items = upsertItemsById<IAccountWithExtendedProps>(state.items, [
@@ -162,6 +163,26 @@ const slice = createSlice({
       state.saving = true;
     });
     builder.addCase(removeAccountByIdThunk.rejected, (state: IState) => {
+      state.saving = false;
+    });
+    /** remove account passkey by id **/
+    builder.addCase(
+      removeAccountPasskeyByIDThunk.fulfilled,
+      (state: IState, action) => {
+        if (action.payload) {
+          state.items = upsertItemsById<IAccountWithExtendedProps>(
+            state.items,
+            [action.payload]
+          );
+        }
+
+        state.saving = false;
+      }
+    );
+    builder.addCase(removeAccountPasskeyByIDThunk.pending, (state: IState) => {
+      state.saving = true;
+    });
+    builder.addCase(removeAccountPasskeyByIDThunk.rejected, (state: IState) => {
       state.saving = false;
     });
     /** remove arc-0200 asset holdings **/

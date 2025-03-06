@@ -2,7 +2,7 @@ import { HStack, StackProps, Text } from '@chakra-ui/react';
 import React, { type FC } from 'react';
 
 // constants
-import { DEFAULT_GAP } from '@extension/constants';
+import { DEFAULT_GAP } from '@common/constants';
 
 // enums
 import { NetworkTypeEnum } from '@extension/enums';
@@ -11,7 +11,7 @@ import { NetworkTypeEnum } from '@extension/enums';
 import useColorModeValue from '@extension/hooks/useColorModeValue';
 
 // theme
-import { theme } from '@extension/theme';
+import { theme } from '@common/theme';
 
 // types
 import type { IProps } from './types';

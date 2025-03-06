@@ -13,14 +13,14 @@ import { IoChevronDownOutline } from 'react-icons/io5';
 import { randomBytes } from 'tweetnacl';
 
 // components
-import IconButton from '@extension/components/IconButton';
-import Label from '@extension/components/Label';
+import Label from '@common/components/Label';
+import IconButton from '@common/components/IconButton';
 
 // constants
-import { DEFAULT_GAP, INPUT_HEIGHT } from '@extension/constants';
+import { DEFAULT_GAP, INPUT_HEIGHT } from '@common/constants';
 
 // hooks
-import usePrimaryColor from '@extension/hooks/usePrimaryColor';
+import usePrimaryColor from '@common/hooks/usePrimaryColor';
 
 // modals
 import { AccountSelectModal } from '@extension/components/AccountSelect';
@@ -30,20 +30,22 @@ import type { IAccountWithExtendedProps } from '@extension/types';
 import type { TProps } from './types';
 
 // utils
-import convertPublicKeyToAVMAddress from '@extension/utils/convertPublicKeyToAVMAddress';
+import convertPublicKeyToAVMAddress from '@common/utils/convertPublicKeyToAVMAddress';
 
 const AddressInput: FC<TProps> = ({
-  _context,
   accounts,
   allowWatchAccounts = true,
+  colorMode,
   error,
   id,
   isDisabled,
   label,
+  network,
   onSelect,
   required = false,
   selectButtonLabel,
   selectModalTitle,
+  systemInfo,
   validate,
   ...inputProps
 }) => {
@@ -54,7 +56,7 @@ const AddressInput: FC<TProps> = ({
     onOpen: onAccountSelectModalOpen,
   } = useDisclosure();
   // hooks
-  const primaryColor = usePrimaryColor();
+  const primaryColor = usePrimaryColor(colorMode);
   // misc
   const _id = id || encodeBase64URLSafe(randomBytes(6));
   // handlers
@@ -71,19 +73,22 @@ const AddressInput: FC<TProps> = ({
     <>
       {/*account select modal*/}
       <AccountSelectModal
-        _context={_context}
         accounts={accounts}
         allowWatchAccounts={allowWatchAccounts}
+        colorMode={colorMode}
         isOpen={isAccountSelectModalOpen}
         multiple={false}
+        network={network}
         onClose={onAccountSelectClose}
         onSelect={handleOnSelect}
+        systemInfo={systemInfo}
         title={selectModalTitle}
       />
 
       <VStack alignItems="flex-start" spacing={DEFAULT_GAP / 3} w="full">
         {/*label*/}
         <Label
+          colorMode={colorMode}
           error={error}
           inputID={_id}
           label={label || t<string>('labels.address')}
@@ -117,6 +122,7 @@ const AddressInput: FC<TProps> = ({
                   selectButtonLabel || t<string>('labels.selectAccount')
                 }
                 borderRadius="full"
+                colorMode={colorMode}
                 isDisabled={isDisabled}
                 icon={IoChevronDownOutline}
                 onClick={handleOnClick}

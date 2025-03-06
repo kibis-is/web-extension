@@ -12,16 +12,16 @@ import { useTranslation } from 'react-i18next';
 import { IoBrowsersOutline, IoVideocamOutline } from 'react-icons/io5';
 
 // components
-import Button from '@extension/components/Button';
+import Button from '@common/components/Button';
 
 // constants
-import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@extension/constants';
+import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@common/constants';
 
 // hooks
 import useDefaultTextColor from '@extension/hooks/useDefaultTextColor';
 
 // theme
-import { theme } from '@extension/theme';
+import { theme } from '@common/theme';
 
 // types
 import type { IProps } from './types';
@@ -31,6 +31,7 @@ import isCameraAvailable from '@extension/utils/isCameraAvailable';
 import isScreenCaptureAvailable from '@extension/utils/isScreenCaptureAvailable';
 
 const ScanModeModalContent: FC<IProps> = ({
+  colorMode,
   onCancelClick,
   onScanViaCameraClick,
   onScanViaScreenCaptureClick,
@@ -76,6 +77,7 @@ const ScanModeModalContent: FC<IProps> = ({
             {/*scan via a window button*/}
             {isScreenCaptureAvailable() && (
               <Button
+                colorMode={colorMode}
                 onClick={handleScanViaScreenCaptureClick}
                 rightIcon={<IoBrowsersOutline />}
                 size="lg"
@@ -88,6 +90,7 @@ const ScanModeModalContent: FC<IProps> = ({
 
             {/*scan via current tab button*/}
             <Button
+              colorMode={colorMode}
               onClick={handleScanViaTabClick}
               rightIcon={<IoBrowsersOutline />}
               size="lg"
@@ -100,6 +103,7 @@ const ScanModeModalContent: FC<IProps> = ({
             {/*scan via camera button*/}
             {isCameraAvailable() && (
               <Button
+                colorMode={colorMode}
                 onClick={handleScanViaCameraClick}
                 rightIcon={<IoVideocamOutline />}
                 size="lg"
@@ -117,6 +121,7 @@ const ScanModeModalContent: FC<IProps> = ({
       <ModalFooter p={DEFAULT_GAP}>
         {/*cancel button*/}
         <Button
+          colorMode={colorMode}
           onClick={handleCancelClick}
           size="lg"
           variant="outline"

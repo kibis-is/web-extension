@@ -21,7 +21,7 @@ import {
   NotAZeroBalanceError,
   NotEnoughMinimumBalanceError,
   OfflineError,
-} from '@extension/errors';
+} from '@common/errors';
 
 // models
 import NetworkClient from '@extension/models/NetworkClient';
@@ -46,7 +46,7 @@ import type {
 // utils
 import calculateMinimumBalanceRequirementForStandardAssets from '@extension/utils/calculateMinimumBalanceRequirementForStandardAssets';
 import convertGenesisHashToHex from '@extension/utils/convertGenesisHashToHex';
-import convertPublicKeyToAVMAddress from '@extension/utils/convertPublicKeyToAVMAddress';
+import convertPublicKeyToAVMAddress from '@common/utils/convertPublicKeyToAVMAddress';
 import isWatchAccount from '@extension/utils/isWatchAccount';
 import selectNodeIDByGenesisHashFromSettings from '@extension/utils/selectNodeIDByGenesisHashFromSettings/selectNodeIDByGenesisHashFromSettings';
 import serialize from '@extension/utils/serialize';

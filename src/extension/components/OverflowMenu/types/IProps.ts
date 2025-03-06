@@ -2,7 +2,6 @@
 import type IMenuItemProps from './IMenuItemProps';
 
 interface IProps {
-  context: string;
   items: IMenuItemProps[];
 }
 

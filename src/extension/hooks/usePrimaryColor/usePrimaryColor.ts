@@ -1,6 +1,9 @@
 // hooks
-import useColorModeValue from '@extension/hooks/useColorModeValue';
+import _usePrimaryColor from '@common/hooks/usePrimaryColor';
+
+// selectors
+import { useSelectSettingsColorMode } from '@extension/selectors';
 
 export default function usePrimaryColor(): string {
-  return useColorModeValue('primaryLight.500', 'primaryDark.500');
+  return _usePrimaryColor(useSelectSettingsColorMode());
 }

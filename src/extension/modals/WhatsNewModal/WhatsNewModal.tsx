@@ -15,11 +15,11 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 
 // components
-import Button from '@extension/components/Button';
+import Button from '@common/components/Button';
 import Markdown from '@extension/components/Markdown';
 
 // constants
-import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@extension/constants';
+import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@common/constants';
 
 // docs
 import whatsNewDocument from '@docs/whats_new.md';
@@ -39,10 +39,11 @@ import useSubTextColor from '@extension/hooks/useSubTextColor';
 import {
   useSelectWhatsNewModal,
   useSelectSystemWhatsNewInfo,
+  useSelectSettingsColorMode,
 } from '@extension/selectors';
 
 // theme
-import { theme } from '@extension/theme';
+import { theme } from '@common/theme';
 
 // types
 import type {
@@ -56,6 +57,7 @@ const WhatsNewModal: FC<IModalProps> = ({ onClose }) => {
   const dispatch = useDispatch<IAppThunkDispatch<IMainRootState>>();
   const initialRef = createRef<HTMLButtonElement>();
   // selectors
+  const colorMode = useSelectSettingsColorMode();
   const whatsNewModalOpen = useSelectWhatsNewModal();
   const whatsNewInfo = useSelectSystemWhatsNewInfo();
   // hooks
@@ -126,6 +128,7 @@ const WhatsNewModal: FC<IModalProps> = ({ onClose }) => {
 
             {/*ok*/}
             <Button
+              colorMode={colorMode}
               onClick={handleClose}
               ref={initialRef}
               size="lg"

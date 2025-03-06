@@ -4,7 +4,7 @@ import browser from 'webextension-polyfill';
 import { EncryptionMethodEnum } from '@extension/enums';
 
 // errors
-import { InvalidPasswordError } from '@extension/errors';
+import { InvalidPasswordError } from '@common/errors';
 
 // models
 import Ed21559KeyPair from '@extension/models/Ed21559KeyPair';

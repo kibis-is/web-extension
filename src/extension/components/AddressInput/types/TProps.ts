@@ -1,9 +1,11 @@
 import type { InputProps } from '@chakra-ui/react';
 
 // types
+import type { IBaseComponentProps } from '@common/types';
 import type {
   IAccountWithExtendedProps,
-  IPropsWithContext,
+  INetworkWithTransactionParams,
+  ISystemInfo,
 } from '@extension/types';
 
 interface IProps {
@@ -12,12 +14,14 @@ interface IProps {
   error?: string | null;
   id?: string;
   label?: string;
+  network: INetworkWithTransactionParams | null;
   onSelect?: (value: string) => void;
   required?: boolean;
   selectButtonLabel?: string;
   selectModalTitle?: string;
+  systemInfo: ISystemInfo | null;
   validate?: (value: string) => string | null;
 }
-type TProps = IProps & IPropsWithContext & Omit<InputProps, 'onSelect'>;
+type TProps = IProps & IBaseComponentProps & Omit<InputProps, 'onSelect'>;
 
 export default TProps;

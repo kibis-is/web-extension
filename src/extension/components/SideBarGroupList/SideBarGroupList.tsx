@@ -28,6 +28,7 @@ import sortByIndex from '@extension/utils/sortByIndex';
 const SideBarGroupList: FC<IProps> = ({
   accounts,
   activeAccountID,
+  colorMode,
   groups,
   isShortForm,
   network,
@@ -90,6 +91,7 @@ const SideBarGroupList: FC<IProps> = ({
           <SideBarGroupItem
             activeAccountID={activeAccountID}
             accounts={accounts}
+            colorMode={colorMode}
             group={group}
             isShortForm={isShortForm}
             key={group.id}

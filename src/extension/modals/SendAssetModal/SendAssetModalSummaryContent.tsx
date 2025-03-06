@@ -14,7 +14,7 @@ import ModalTextItem from '@extension/components/ModalTextItem';
 import Warning from '@extension/components/Warning';
 
 // constants
-import { DEFAULT_GAP } from '@extension/constants';
+import { DEFAULT_GAP } from '@common/constants';
 
 // enums
 import { AssetTypeEnum } from '@extension/enums';
@@ -31,8 +31,8 @@ import type { ISendAssetModalSummaryContentProps } from './types';
 import convertToAtomicUnit from '@common/utils/convertToAtomicUnit';
 import convertToStandardUnit from '@common/utils/convertToStandardUnit';
 import formatCurrencyUnit from '@common/utils/formatCurrencyUnit';
-import calculateIconSize from '@extension/utils/calculateIconSize';
-import convertPublicKeyToAVMAddress from '@extension/utils/convertPublicKeyToAVMAddress';
+import calculateIconSize from '@common/utils/calculateIconSize';
+import convertPublicKeyToAVMAddress from '@common/utils/convertPublicKeyToAVMAddress';
 import createIconFromDataUri from '@extension/utils/createIconFromDataUri';
 
 const SendAssetModalSummaryContent: FC<ISendAssetModalSummaryContentProps> = ({

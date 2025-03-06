@@ -5,13 +5,13 @@ import React, { type FC } from 'react';
 import AnimatedKibisisIcon from '@extension/components/AnimatedKibisisIcon';
 
 // constants
-import { BODY_BACKGROUND_COLOR } from '@extension/constants';
+import { BODY_BACKGROUND_COLOR } from '@common/constants';
 
 // hooks
 import usePrimaryColor from '@extension/hooks/usePrimaryColor';
 
 // utils
-import calculateIconSize from '@extension/utils/calculateIconSize';
+import calculateIconSize from '@common/utils/calculateIconSize';
 
 const SplashPage: FC = () => {
   // hooks

@@ -7,6 +7,9 @@ import { useEffect, useState } from 'react';
 // enums
 import { EventTypeEnum } from '@extension/enums';
 
+// events
+import AVMWebProviderRequestEvent from '@extension/events/AVMWebProviderRequestEvent';
+
 // selectors
 import {
   useSelectAccounts,
@@ -15,15 +18,12 @@ import {
 } from '@extension/selectors';
 
 // types
-import type {
-  IAccountWithExtendedProps,
-  IClientRequestEvent,
-} from '@extension/types';
+import type { IAccountWithExtendedProps } from '@extension/types';
 import type { IUseSignMessageModalState } from './types';
 
 // utils
 import authorizedAccountsForHost from '@extension/utils/authorizedAccountsForHost';
-import convertPublicKeyToAVMAddress from '@extension/utils/convertPublicKeyToAVMAddress';
+import convertPublicKeyToAVMAddress from '@common/utils/convertPublicKeyToAVMAddress';
 
 export default function useSignMessageModal(): IUseSignMessageModalState {
   // selectors
@@ -35,16 +35,16 @@ export default function useSignMessageModal(): IUseSignMessageModalState {
     IAccountWithExtendedProps[] | null
   >(null);
   const [event, setEvent] =
-    useState<IClientRequestEvent<ISignMessageParams> | null>(null);
+    useState<AVMWebProviderRequestEvent<ISignMessageParams> | null>(null);
   const [signer, setSigner] = useState<IAccountWithExtendedProps | null>(null);
 
   useEffect(() => {
     setEvent(
       (events.find(
         (value) =>
-          value.type === EventTypeEnum.ClientRequest &&
-          value.payload.message.method === ARC0027MethodEnum.SignMessage
-      ) as IClientRequestEvent<ISignMessageParams>) || null
+          value.type === EventTypeEnum.AVMWebProviderRequest &&
+          value.payload.message.payload.method === ARC0027MethodEnum.SignMessage
+      ) as AVMWebProviderRequestEvent<ISignMessageParams>) || null
     );
   }, [events]);
   // when we have accounts, sessions and the event, update the authorized accounts
@@ -53,7 +53,7 @@ export default function useSignMessageModal(): IUseSignMessageModalState {
       setAuthorizedAccounts(
         authorizedAccountsForHost({
           accounts,
-          host: event.payload.message.clientInfo.host,
+          host: event.payload.message.payload.clientInfo.host,
           sessions,
         })
       );
@@ -66,7 +66,7 @@ export default function useSignMessageModal(): IUseSignMessageModalState {
         authorizedAccounts.find(
           (value) =>
             convertPublicKeyToAVMAddress(value.publicKey) ===
-            event.payload.message.params?.signer
+            event.payload.message.payload.params?.signer
         ) ||
           authorizedAccounts[0] ||
           null

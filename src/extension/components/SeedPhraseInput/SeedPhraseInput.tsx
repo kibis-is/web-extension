@@ -10,20 +10,22 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react';
+import { randomString } from '@stablelib/random';
 import React, {
   type ChangeEvent,
   type ClipboardEvent,
   type FC,
   type ReactNode,
+  useMemo,
   useState,
 } from 'react';
 import { useTranslation } from 'react-i18next';
 
 // components
-import Label from '@extension/components/Label';
+import Label from '@common/components/Label';
 
 // constants
-import { DEFAULT_GAP, INPUT_HEIGHT } from '@extension/constants';
+import { DEFAULT_GAP, INPUT_HEIGHT } from '@common/constants';
 
 // hooks
 import useButtonHoverBackgroundColor from '@extension/hooks/useButtonHoverBackgroundColor';
@@ -37,7 +39,7 @@ import type { IProps } from './types';
 import { isPhrasesEmpty } from './utils';
 
 const SeedPhraseInput: FC<IProps> = ({
-  _context,
+  colorMode,
   disabled,
   error,
   onChange,
@@ -48,6 +50,8 @@ const SeedPhraseInput: FC<IProps> = ({
   const buttonHoverBackgroundColor = useButtonHoverBackgroundColor();
   const primaryColor = usePrimaryColor();
   const subTextColor = useSubTextColor();
+  // memo
+  const _context = useMemo(() => randomString(8), []);
   // states
   const [currentFocusIndex, setCurrentFocusIndex] = useState<number>(0);
   // handlers
@@ -89,6 +93,7 @@ const SeedPhraseInput: FC<IProps> = ({
       >
         {/*label*/}
         <Label
+          colorMode={colorMode}
           error={error}
           label={t<string>('labels.seedPhrase')}
           pl={DEFAULT_GAP / 3}

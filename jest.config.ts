@@ -8,9 +8,10 @@ const config: Config = {
   coverageDirectory: 'coverage',
   moduleFileExtensions: ['js', 'ts', 'tsx'],
   moduleNameMapper: {
+    '@client/(.*)': '<rootDir>/src/client/$1',
     '@common/(.*)': '<rootDir>/src/common/$1',
     '@extension/(.*)': '<rootDir>/src/extension/$1',
-    '@external/(.*)': '<rootDir>/src/external/$1',
+    '@middleware/(.*)': '<rootDir>/src/middleware/$1',
   },
   rootDir: '.',
   setupFilesAfterEnv: ['<rootDir>/test/setup.ts'],

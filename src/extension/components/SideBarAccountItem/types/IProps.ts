@@ -1,4 +1,5 @@
 // types
+import type { IBaseComponentProps } from '@common/types';
 import type {
   IAccountWithExtendedProps,
   INetworkWithTransactionParams,
@@ -8,7 +9,7 @@ import type {
 /**
  * @property {boolean} isShortForm - Whether the full item is being shown or just the avatar.
  */
-interface IProps {
+interface IProps extends IBaseComponentProps {
   account: IAccountWithExtendedProps;
   accounts: IAccountWithExtendedProps[];
   active: boolean;

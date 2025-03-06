@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import InformationIcon from '@extension/components/InformationIcon';
 
 // constants
-import { DEFAULT_GAP } from '@extension/constants';
+import { DEFAULT_GAP } from '@common/constants';
 
 // hooks
 import useDefaultTextColor from '@extension/hooks/useDefaultTextColor';
@@ -21,7 +21,7 @@ import createIconFromDataUri from '@extension/utils/createIconFromDataUri';
 import type { IProps } from './types';
 
 // utils
-import calculateIconSize from '@extension/utils/calculateIconSize';
+import calculateIconSize from '@common/utils/calculateIconSize';
 
 const NativeBalance: FC<IProps> = ({
   atomicBalance,

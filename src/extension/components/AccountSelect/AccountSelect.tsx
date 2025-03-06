@@ -2,6 +2,7 @@ import {
   Button as ChakraButton,
   Icon,
   Stack,
+  Text,
   useDisclosure,
   VStack,
 } from '@chakra-ui/react';
@@ -11,15 +12,16 @@ import { IoChevronDownOutline } from 'react-icons/io5';
 
 // components
 import AccountItem from '@extension/components/AccountItem';
-import Label from '@extension/components/Label';
+import Label from '@common/components/Label';
 
 // constants
-import { DEFAULT_GAP, INPUT_HEIGHT } from '@extension/constants';
+import { DEFAULT_GAP, INPUT_HEIGHT } from '@common/constants';
 
 // hooks
 import useBorderColor from '@extension/hooks/useBorderColor';
 import useButtonHoverBackgroundColor from '@extension/hooks/useButtonHoverBackgroundColor';
 import useColorModeValue from '@extension/hooks/useColorModeValue';
+import useDefaultTextColor from '@extension/hooks/useDefaultTextColor';
 import usePrimaryColor from '@extension/hooks/usePrimaryColor';
 import useSubTextColor from '@extension/hooks/useSubTextColor';
 
@@ -27,23 +29,25 @@ import useSubTextColor from '@extension/hooks/useSubTextColor';
 import AccountSelectModal from './AccountSelectModal';
 
 // theme
-import { theme } from '@extension/theme';
+import { theme } from '@common/theme';
 
 // types
 import type { IAccountWithExtendedProps } from '@extension/types';
 import type { IProps } from './types';
 
 // utils
-import calculateIconSize from '@extension/utils/calculateIconSize';
+import calculateIconSize from '@common/utils/calculateIconSize';
 
 const AccountSelect: FC<IProps> = ({
-  _context,
   accounts,
   allowWatchAccounts,
+  colorMode,
   label,
+  network,
   onSelect,
   required = false,
   selectModalTitle,
+  systemInfo,
   value,
 }) => {
   const { t } = useTranslation();
@@ -54,6 +58,7 @@ const AccountSelect: FC<IProps> = ({
     theme.colors.primaryLight['500'],
     theme.colors.primaryDark['500']
   );
+  const defaultTextColor = useDefaultTextColor();
   const primaryColor = usePrimaryColor();
   const subTextColor = useSubTextColor();
   const {
@@ -70,20 +75,27 @@ const AccountSelect: FC<IProps> = ({
     <>
       {/*account select modal*/}
       <AccountSelectModal
-        _context={_context}
         accounts={accounts}
         allowWatchAccounts={allowWatchAccounts}
+        colorMode={colorMode}
         isOpen={isAccountSelectModalOpen}
         multiple={false}
+        network={network}
         onClose={onAccountSelectClose}
         onSelect={handleOnSelect}
+        systemInfo={systemInfo}
         title={selectModalTitle}
       />
 
       <VStack alignItems="flex-start" spacing={DEFAULT_GAP / 3} w="full">
         {/*label*/}
         {label && (
-          <Label label={label} px={DEFAULT_GAP - 2} required={required} />
+          <Label
+            colorMode={colorMode}
+            label={label}
+            px={DEFAULT_GAP - 2}
+            required={required}
+          />
         )}
 
         <ChakraButton
@@ -116,7 +128,18 @@ const AccountSelect: FC<IProps> = ({
           w="full"
         >
           <Stack flexGrow={1} justifyContent="center" w="full">
-            <AccountItem account={value} />
+            {value ? (
+              <AccountItem colorMode={colorMode} account={value} />
+            ) : (
+              <Text
+                color={defaultTextColor}
+                flexGrow={1}
+                fontSize="sm"
+                textAlign="left"
+              >
+                {t<string>('placeholders.selectAnAccount')}
+              </Text>
+            )}
           </Stack>
         </ChakraButton>
       </VStack>

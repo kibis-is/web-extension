@@ -18,7 +18,8 @@ import AssetTransferTransactionContent from './AssetTransferTransactionContent';
 import PaymentTransactionContent from './PaymentTransactionContent';
 
 // constants
-import { DEFAULT_GAP, NODE_REQUEST_DELAY } from '@extension/constants';
+import { DEFAULT_GAP } from '@common/constants';
+import { NODE_REQUEST_DELAY } from '@extension/constants';
 
 // enums
 import { TransactionTypeEnum } from '@extension/enums';
@@ -51,7 +52,7 @@ import type { IAtomicTransactionsContentProps } from './types';
 // utils
 import computeGroupId from '@common/utils/computeGroupId';
 import convertGenesisHashToHex from '@extension/utils/convertGenesisHashToHex';
-import convertPublicKeyToAVMAddress from '@extension/utils/convertPublicKeyToAVMAddress';
+import convertPublicKeyToAVMAddress from '@common/utils/convertPublicKeyToAVMAddress';
 import parseTransactionType from '@extension/utils/parseTransactionType';
 import selectNodeIDByGenesisHashFromSettings from '@extension/utils/selectNodeIDByGenesisHashFromSettings';
 import uniqueGenesisHashesFromTransactions from '@extension/utils/uniqueGenesisHashesFromTransactions';

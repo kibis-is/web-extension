@@ -4,7 +4,7 @@ import { type AsyncThunk, createAsyncThunk } from '@reduxjs/toolkit';
 import { ThunkEnum } from '../enums';
 
 // errors
-import { MalformedDataError, NetworkNotSelectedError } from '@extension/errors';
+import { MalformedDataError, NetworkNotSelectedError } from '@common/errors';
 
 // repositories
 import AccountRepository from '@extension/repositories/AccountRepository';

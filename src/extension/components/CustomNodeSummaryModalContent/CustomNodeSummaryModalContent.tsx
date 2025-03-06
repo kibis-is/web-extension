@@ -9,7 +9,7 @@ import ModalTextItem from '@extension/components/ModalTextItem';
 import ModalSubHeading from '@extension/components/ModalSubHeading';
 
 // constants
-import { DEFAULT_GAP } from '@extension/constants';
+import { DEFAULT_GAP } from '@common/constants';
 
 // types
 import type { IProps } from './types';

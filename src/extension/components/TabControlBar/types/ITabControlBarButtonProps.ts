@@ -1,5 +1,5 @@
 // types
-import type { IProps as IIconButtonProps } from '@extension/components/IconButton';
+import type { TProps as IIconButtonProps } from '@common/components/IconButton';
 
 interface ITabControlBarButtonProps {
   button: IIconButtonProps;

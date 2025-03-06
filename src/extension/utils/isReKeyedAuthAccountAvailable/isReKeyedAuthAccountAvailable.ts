@@ -5,7 +5,7 @@ import AccountRepository from '@extension/repositories/AccountRepository';
 import type { IOptions } from './types';
 
 // utils
-import convertPublicKeyToAVMAddress from '@extension/utils/convertPublicKeyToAVMAddress';
+import convertPublicKeyToAVMAddress from '@common/utils/convertPublicKeyToAVMAddress';
 
 /**
  * Convenience function that checks if an account's re-keyed auth account is present in a list of accounts, and is NOT a

@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { EncryptionMethodEnum } from '@extension/enums';
 
 // errors
-import { DecryptionError } from '@extension/errors';
+import { DecryptionError } from '@common/errors';
 
 // models
 import Ed21559KeyPair from '@extension/models/Ed21559KeyPair';
@@ -17,7 +17,7 @@ import type { IAccountAndSeedPhraseValue } from '../../types';
 import type { IDecryptSeedPhraseActionOptions, IState } from './types';
 
 // utils
-import convertPublicKeyToAVMAddress from '@extension/utils/convertPublicKeyToAVMAddress';
+import convertPublicKeyToAVMAddress from '@common/utils/convertPublicKeyToAVMAddress';
 import convertPrivateKeyToSeedPhrase from '@extension/utils/convertPrivateKeyToSeedPhrase';
 import createMaskedSeedPhrase from '@extension/utils/createMaskedSeedPhrase';
 import fetchDecryptedKeyPairFromStorageWithPasskey from '@extension/utils/fetchDecryptedKeyPairFromStorageWithPasskey';

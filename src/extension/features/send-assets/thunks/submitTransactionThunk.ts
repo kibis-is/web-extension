@@ -11,7 +11,7 @@ import {
   NetworkNotSelectedError,
   NotEnoughMinimumBalanceError,
   OfflineError,
-} from '@extension/errors';
+} from '@common/errors';
 
 // models
 import NetworkClient from '@extension/models/NetworkClient';
@@ -25,7 +25,7 @@ import type {
 import type { TSubmitTransactionsThunkPayload } from '../types';
 
 // utils
-import convertPublicKeyToAVMAddress from '@extension/utils/convertPublicKeyToAVMAddress';
+import convertPublicKeyToAVMAddress from '@common/utils/convertPublicKeyToAVMAddress';
 import doesAccountFallBelowMinimumBalanceRequirementForTransactions from '@extension/utils/doesAccountFallBelowMinimumBalanceRequirementForTransactions';
 import isAccountKnown from '@extension/utils/isAccountKnown';
 import selectNodeIDByGenesisHashFromSettings from '@extension/utils/selectNodeIDByGenesisHashFromSettings/selectNodeIDByGenesisHashFromSettings';

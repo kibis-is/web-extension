@@ -5,20 +5,21 @@ import { useTranslation } from 'react-i18next';
 import { randomBytes } from 'tweetnacl';
 
 // components
-import Label from '@extension/components/Label';
+import Label from '@common/components/Label';
 
 // constants
-import { DEFAULT_GAP } from '@extension/constants';
+import { DEFAULT_GAP } from '@common/constants';
 
 // hooks
 import usePrimaryColor from '@extension/hooks/usePrimaryColor';
 import useSubTextColor from '@extension/hooks/useSubTextColor';
 
 // types
-import type { IProps } from './types';
+import type { TProps } from './types';
 
-const GenericTextarea: FC<IProps> = ({
+const GenericTextarea: FC<TProps> = ({
   charactersRemaining,
+  colorMode,
   error,
   id,
   label,
@@ -36,6 +37,7 @@ const GenericTextarea: FC<IProps> = ({
   return (
     <VStack alignItems="flex-start" spacing={DEFAULT_GAP / 3} w="full">
       <Label
+        colorMode={colorMode}
         error={error}
         inputID={_id}
         label={label}

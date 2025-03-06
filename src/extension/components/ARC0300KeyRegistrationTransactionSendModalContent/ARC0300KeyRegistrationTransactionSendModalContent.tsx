@@ -20,12 +20,12 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 
 // components
-import Button from '@extension/components/Button';
+import Button from '@common/components/Button';
 import KeyRegistrationTransactionModalBody from '@extension/components/KeyRegistrationTransactionModalBody';
 import ModalSkeletonItem from '@extension/components/ModalSkeletonItem';
 
 // constants
-import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@extension/constants';
+import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@common/constants';
 
 // enums
 import {
@@ -38,7 +38,7 @@ import {
 import {
   BaseExtensionError,
   NotEnoughMinimumBalanceError,
-} from '@extension/errors';
+} from '@common/errors';
 
 // features
 import { updateAccountsThunk } from '@extension/features/accounts';
@@ -61,7 +61,7 @@ import {
 } from '@extension/selectors';
 
 // theme
-import { theme } from '@extension/theme';
+import { theme } from '@common/theme';
 
 // types
 import type {
@@ -89,6 +89,7 @@ const ARC0300KeyRegistrationTransactionSendModalContent: FC<
 > = ({
   cancelButtonIcon,
   cancelButtonLabel,
+  colorMode,
   onComplete,
   onCancel,
   schemaOrSchemas: schema,
@@ -399,6 +400,7 @@ const ARC0300KeyRegistrationTransactionSendModalContent: FC<
           <HStack spacing={DEFAULT_GAP - 2} w="full">
             {/*cancel button*/}
             <Button
+              colorMode={colorMode}
               leftIcon={cancelButtonIcon}
               onClick={handleCancelClick}
               size="lg"
@@ -410,6 +412,7 @@ const ARC0300KeyRegistrationTransactionSendModalContent: FC<
 
             {/*send button*/}
             <Button
+              colorMode={colorMode}
               isLoading={sending}
               onClick={handleSendClick}
               rightIcon={<IoArrowUpOutline />}

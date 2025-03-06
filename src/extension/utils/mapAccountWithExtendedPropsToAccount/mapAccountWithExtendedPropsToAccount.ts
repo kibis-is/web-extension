@@ -21,6 +21,7 @@ export default function mapAccountWithExtendedPropsToAccount({
   networkInformation,
   networkTransactions,
   index,
+  passkeys,
   publicKey,
   updatedAt,
 }: IAccountWithExtendedProps): IAccount {
@@ -36,6 +37,7 @@ export default function mapAccountWithExtendedPropsToAccount({
     networkInformation,
     networkTransactions,
     index,
+    passkeys,
     publicKey,
     updatedAt,
   };

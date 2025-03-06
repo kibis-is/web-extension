@@ -4,7 +4,8 @@ import {
   Tooltip,
   useDisclosure,
 } from '@chakra-ui/react';
-import React, { type FC } from 'react';
+import { randomString } from '@stablelib/random';
+import React, { type FC, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { IoChevronDownOutline } from 'react-icons/io5';
 
@@ -12,7 +13,7 @@ import { IoChevronDownOutline } from 'react-icons/io5';
 import NetworkBadge from '@extension/components/NetworkBadge';
 
 // constants
-import { DEFAULT_GAP } from '@extension/constants';
+import { DEFAULT_GAP } from '@common/constants';
 
 // hooks
 import useBorderColor from '@extension/hooks/useBorderColor';
@@ -27,15 +28,9 @@ import type { INetwork } from '@extension/types';
 import type { IProps } from './types';
 
 // utils
-import calculateIconSize from '@extension/utils/calculateIconSize';
+import calculateIconSize from '@common/utils/calculateIconSize';
 
-const NetworkSelect: FC<IProps> = ({
-  _context,
-  networks,
-  onSelect,
-  size,
-  value,
-}) => {
+const NetworkSelect: FC<IProps> = ({ networks, onSelect, size, value }) => {
   const { t } = useTranslation();
   const {
     isOpen: isSelectModalOpen,
@@ -46,6 +41,8 @@ const NetworkSelect: FC<IProps> = ({
   const borderColor = useBorderColor();
   const buttonHoverBackgroundColor = useButtonHoverBackgroundColor();
   const subTextColor = useSubTextColor();
+  // memos
+  const _context = useMemo(() => randomString(8), []);
   // misc
   const iconSize = calculateIconSize('sm');
   // handlers

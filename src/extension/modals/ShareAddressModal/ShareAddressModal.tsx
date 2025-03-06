@@ -19,33 +19,38 @@ import { useTranslation } from 'react-i18next';
 import { IoCheckmarkOutline, IoQrCodeOutline } from 'react-icons/io5';
 
 // components
-import Button from '@extension/components/Button';
-import CircularProgressWithIcon from '@extension/components/CircularProgressWithIcon';
+import Button from '@common/components/Button';
+import CircularProgressWithIcon from '@common/components/CircularProgressWithIcon';
 import CopyIconButton from '@extension/components/CopyIconButton';
 import PillSwitch from '@extension/components/PillSwitch';
 
 // constants
-import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@extension/constants';
+import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@common/constants';
 
 // hooks
 import useDefaultTextColor from '@extension/hooks/useDefaultTextColor';
 import useTextBackgroundColor from '@extension/hooks/useTextBackgroundColor';
 
 // selectors
-import { useSelectLogger, useSelectSettings } from '@extension/selectors';
+import {
+  useSelectLogger,
+  useSelectSettings,
+  useSelectSettingsColorMode,
+} from '@extension/selectors';
 
 // theme
-import { theme } from '@extension/theme';
+import { theme } from '@common/theme';
 
 // types
 import type { IProps } from './types';
 
 // utils
-import ellipseAddress from '@extension/utils/ellipseAddress';
+import ellipseAddress from '@common/utils/ellipseAddress';
 
 const ShareAddressModal: FC<IProps> = ({ address, isOpen, onClose }) => {
   const { t } = useTranslation();
   // selectors
+  const colorMode = useSelectSettingsColorMode();
   const logger = useSelectLogger();
   const settings = useSelectSettings();
   // hooks
@@ -130,7 +135,10 @@ const ShareAddressModal: FC<IProps> = ({ address, isOpen, onClose }) => {
                 justifyContent="center"
                 w={qrCodeSize}
               >
-                <CircularProgressWithIcon icon={IoQrCodeOutline} />
+                <CircularProgressWithIcon
+                  colorMode={colorMode}
+                  icon={IoQrCodeOutline}
+                />
               </Flex>
             )}
             <HStack
@@ -170,6 +178,7 @@ const ShareAddressModal: FC<IProps> = ({ address, isOpen, onClose }) => {
         {/*footer*/}
         <ModalFooter p={DEFAULT_GAP}>
           <Button
+            colorMode={colorMode}
             onClick={handleClose}
             rightIcon={<IoCheckmarkOutline />}
             size="lg"

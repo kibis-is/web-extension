@@ -11,10 +11,10 @@ import { IoChevronDownOutline } from 'react-icons/io5';
 
 // components
 import AssetItem from '@extension/components/AssetItem';
-import Label from '@extension/components/Label';
+import Label from '@common/components/Label';
 
 // constants
-import { DEFAULT_GAP, INPUT_HEIGHT } from '@extension/constants';
+import { DEFAULT_GAP, INPUT_HEIGHT } from '@common/constants';
 
 // hooks
 import useBorderColor from '@extension/hooks/useBorderColor';
@@ -27,18 +27,18 @@ import useSubTextColor from '@extension/hooks/useSubTextColor';
 import AssetSelectModal from './AssetSelectModal';
 
 // theme
-import { theme } from '@extension/theme';
+import { theme } from '@common/theme';
 
 // types
 import type { IAssetTypes, INativeCurrency } from '@extension/types';
 import type { IProps } from './types';
 
 // utils
-import calculateIconSize from '@extension/utils/calculateIconSize';
+import calculateIconSize from '@common/utils/calculateIconSize';
 
 const AssetSelect: FC<IProps> = ({
-  _context,
   assets,
+  colorMode,
   label,
   network,
   onSelect,
@@ -69,8 +69,8 @@ const AssetSelect: FC<IProps> = ({
     <>
       {/*asset select modal*/}
       <AssetSelectModal
-        _context={_context}
         assets={assets}
+        colorMode={colorMode}
         isOpen={isAssetSelectModalOpen}
         multiple={false}
         onClose={onAssetSelectClose}
@@ -80,7 +80,12 @@ const AssetSelect: FC<IProps> = ({
       <VStack alignItems="flex-start" spacing={DEFAULT_GAP / 3} w="full">
         {/*label*/}
         {label && (
-          <Label label={label} px={DEFAULT_GAP - 2} required={required} />
+          <Label
+            colorMode={colorMode}
+            label={label}
+            px={DEFAULT_GAP - 2}
+            required={required}
+          />
         )}
 
         <ChakraButton

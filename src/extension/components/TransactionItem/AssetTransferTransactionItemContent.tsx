@@ -20,7 +20,7 @@ import type { IAssetTransferTransaction } from '@extension/types';
 import type { IProps } from './types';
 
 // utils
-import convertPublicKeyToAVMAddress from '@extension/utils/convertPublicKeyToAVMAddress';
+import convertPublicKeyToAVMAddress from '@common/utils/convertPublicKeyToAVMAddress';
 
 const AssetTransferTransactionItemContent: FC<
   IProps<IAssetTransferTransaction>

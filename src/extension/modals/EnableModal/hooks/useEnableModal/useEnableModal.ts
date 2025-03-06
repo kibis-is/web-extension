@@ -1,11 +1,14 @@
 import {
   ARC0027MethodEnum,
-  IEnableParams,
+  type IEnableParams,
 } from '@agoralabs-sh/avm-web-provider';
 import { useEffect, useState } from 'react';
 
 // enums
 import { EventTypeEnum } from '@extension/enums';
+
+// events
+import AVMWebProviderRequestEvent from '@extension/events/AVMWebProviderRequestEvent';
 
 // selectors
 import {
@@ -18,7 +21,6 @@ import {
 // types
 import type {
   IAccountWithExtendedProps,
-  IClientRequestEvent,
   INetworkWithTransactionParams,
 } from '@extension/types';
 import type { IUseEnableModalState } from './types';
@@ -38,9 +40,8 @@ export default function useEnableModal(): IUseEnableModalState {
   const [availableAccounts, setAvailableAccounts] = useState<
     IAccountWithExtendedProps[] | null
   >(null);
-  const [event, setEvent] = useState<IClientRequestEvent<IEnableParams> | null>(
-    null
-  );
+  const [event, setEvent] =
+    useState<AVMWebProviderRequestEvent<IEnableParams> | null>(null);
   const [network, setNetwork] = useState<INetworkWithTransactionParams | null>(
     null
   );
@@ -49,9 +50,9 @@ export default function useEnableModal(): IUseEnableModalState {
     setEvent(
       (events.find(
         (value) =>
-          value.type === EventTypeEnum.ClientRequest &&
-          value.payload.message.method === ARC0027MethodEnum.Enable
-      ) as IClientRequestEvent<IEnableParams>) || null
+          value.type === EventTypeEnum.AVMWebProviderRequest &&
+          value.payload.message.payload.method === ARC0027MethodEnum.Enable
+      ) as AVMWebProviderRequestEvent<IEnableParams>) || null
     );
   }, [events]);
   // get the available accounts
@@ -76,7 +77,8 @@ export default function useEnableModal(): IUseEnableModalState {
       setNetwork(
         networks.find(
           (value) =>
-            value.genesisHash === event.payload.message.params?.genesisHash
+            value.genesisHash ===
+            event.payload.message.payload.params?.genesisHash
         ) || selectDefaultNetwork(networks)
       );
     }

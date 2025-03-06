@@ -3,6 +3,7 @@ export { default as addStandardAssetHoldingsThunk } from './addStandardAssetHold
 export { default as addToGroupThunk } from './addToGroupThunk';
 export { default as fetchAccountsFromStorageThunk } from './fetchAccountsFromStorageThunk';
 export { default as removeAccountByIdThunk } from './removeAccountByIdThunk';
+export { default as removeAccountPasskeyByIDThunk } from './removeAccountPasskeyByIDThunk';
 export { default as removeARC0200AssetHoldingsThunk } from './removeARC0200AssetHoldingsThunk';
 export { default as removeFromGroupThunk } from './removeFromGroupThunk';
 export { default as removeGroupByIDThunk } from './removeGroupByIDThunk';

@@ -5,11 +5,8 @@ import React, { type FC, type PropsWithChildren } from 'react';
 import SideBar from '@extension/components/SideBar';
 
 // constants
-import {
-  BODY_BACKGROUND_COLOR,
-  SIDEBAR_BORDER_WIDTH,
-  SIDEBAR_MIN_WIDTH,
-} from '@extension/constants';
+import { BODY_BACKGROUND_COLOR } from '@common/constants';
+import { SIDEBAR_BORDER_WIDTH, SIDEBAR_MIN_WIDTH } from '@extension/constants';
 
 // selectors
 import { useSelectSideBar } from '@extension/selectors';

@@ -1,7 +1,8 @@
 // types
+import type { IBaseComponentProps } from '@common/types';
 import type { IAccountWithExtendedProps } from '@extension/types';
 
-interface IProps {
+interface IProps extends IBaseComponentProps {
   account: IAccountWithExtendedProps;
   subTextColor?: string;
   textColor?: string;

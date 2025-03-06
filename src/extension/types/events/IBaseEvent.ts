@@ -1,10 +1,10 @@
 // enums
 import { EventTypeEnum } from '@extension/enums';
 
-interface IBaseEvent<Payload> {
+interface IBaseEvent<Payload, Type = EventTypeEnum> {
   id: string;
   payload: Payload;
-  type: EventTypeEnum;
+  type: Type;
 }
 
 export default IBaseEvent;

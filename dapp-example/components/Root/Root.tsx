@@ -31,13 +31,12 @@ import SignPaymentTransactionTab from '../SignPaymentTransactionTab';
 import SignMessageTab from '../SignMessageTab';
 
 // constants
-import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@extension/constants';
+import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@common/constants';
 
 // enums
 import { ConnectionTypeEnum } from '../../enums';
 
 // hooks
-import useAlgorandProviderConnector from '../../hooks/useAlgorandProviderConnector';
 import useAVMWebProviderConnector from '../../hooks/useAVMWebProviderConnector';
 import useDefaultTextColor from '../../hooks/useDefaultTextColor';
 import usePrimaryColorScheme from '../../hooks/usePrimaryColorScheme';
@@ -59,13 +58,6 @@ const Root: FC = () => {
   const { colorMode, toggleColorMode } = useColorMode();
   // hooks
   const {
-    connectAction: algorandProviderConnectAction,
-    disconnectAction: algorandProviderDisconnectAction,
-    enabledAccounts: algorandProviderEnabledAccounts,
-    signMessageAction: algorandProviderSignMessageAction,
-    signTransactionsAction: algorandProviderSignTransactionsAction,
-  } = useAlgorandProviderConnector({ toast });
-  const {
     connectAction: avmWebProviderConnectAction,
     disconnectAction: avmWebProviderDisconnectAction,
     enabledAccounts: avmWebProviderEnabledAccounts,
@@ -76,16 +68,16 @@ const Root: FC = () => {
   const primaryColorScheme = usePrimaryColorScheme();
   const subTextColor = useSubTextColor();
   const {
-    connectAction: useUseWalletConnectAction,
-    disconnectAction: useUseWalletDisconnectAction,
-    enabledAccounts: useUseWalletEnabledAccounts,
-    signTransactionsAction: useUseWalletSignTransactionsAction,
+    connectAction: useWalletConnectAction,
+    disconnectAction: useWalletDisconnectAction,
+    enabledAccounts: useWalletEnabledAccounts,
+    signTransactionsAction: useWalletSignTransactionsAction,
   } = useUseWalletConnector({ toast });
   const {
-    connectAction: useWalletConnectConnectAction,
-    disconnectAction: useUseWalletConnectDisconnectAction,
-    enabledAccounts: useUseWalletConnectEnabledAccounts,
-    signTransactionsAction: useUseWalletConnectSignTransactionsAction,
+    connectAction: walletConnectConnectAction,
+    disconnectAction: walletConnectDisconnectAction,
+    enabledAccounts: walletConnectEnabledAccounts,
+    signTransactionsAction: walletConnectSignTransactionsAction,
   } = useWalletConnectConnector({ toast });
   // states
   const [connectionType, setConnectionType] =
@@ -113,17 +105,14 @@ const Root: FC = () => {
     let result: boolean = false;
 
     switch (connectionType) {
-      case ConnectionTypeEnum.AlgorandProvider:
-        result = await algorandProviderConnectAction(network);
-        break;
       case ConnectionTypeEnum.AVMWebProvider:
         result = await avmWebProviderConnectAction(network);
         break;
       case ConnectionTypeEnum.UseWallet:
-        result = await useUseWalletConnectAction(network);
+        result = await useWalletConnectAction(network);
         break;
       case ConnectionTypeEnum.WalletConnect:
-        result = await useWalletConnectConnectAction(network);
+        result = await walletConnectConnectAction(network);
         break;
       default:
         break;
@@ -138,17 +127,14 @@ const Root: FC = () => {
   };
   const handleDisconnect = async () => {
     switch (connectionType) {
-      case ConnectionTypeEnum.AlgorandProvider:
-        await algorandProviderDisconnectAction();
-        break;
       case ConnectionTypeEnum.AVMWebProvider:
         await avmWebProviderDisconnectAction();
         break;
       case ConnectionTypeEnum.UseWallet:
-        await useUseWalletDisconnectAction();
+        await useWalletDisconnectAction();
         break;
       case ConnectionTypeEnum.WalletConnect:
-        await useUseWalletConnectDisconnectAction();
+        await walletConnectDisconnectAction();
         break;
       default:
         break;
@@ -163,68 +149,6 @@ const Root: FC = () => {
     let signTransactionProps: IBaseTransactionProps;
 
     switch (connectionType) {
-      case ConnectionTypeEnum.AlgorandProvider:
-        signTransactionProps = {
-          account: selectedAccount,
-          connectionType,
-          network: selectedNetwork,
-          signTransactionsAction: algorandProviderSignTransactionsAction,
-        };
-
-        return (
-          <Tabs colorScheme={primaryColorScheme} w="full">
-            <TabList>
-              <Tab>
-                <Text fontSize="sm">Sign Payment Transaction</Text>
-              </Tab>
-              <Tab>
-                <Text fontSize="sm">Sign Asset Transaction</Text>
-              </Tab>
-              <Tab>
-                <Text fontSize="sm">Sign Atomic Transactions</Text>
-              </Tab>
-              <Tab>
-                <Text fontSize="sm">Sign Application Transaction</Text>
-              </Tab>
-              <Tab>
-                <Text fontSize="sm">Sign Key Registration Transaction</Text>
-              </Tab>
-              <Tab>
-                <Text fontSize="sm">Sign Message</Text>
-              </Tab>
-              <Tab>
-                <Text fontSize="sm">Import Account Via QR Code</Text>
-              </Tab>
-              <Tab>
-                <Text fontSize="sm">Send Key Registration Via URI</Text>
-              </Tab>
-            </TabList>
-
-            <TabPanels>
-              <SignPaymentTransactionTab {...signTransactionProps} />
-
-              <SignAssetTransactionTab {...signTransactionProps} />
-
-              <SignAtomicTransactionsTab {...signTransactionProps} />
-
-              <SignApplicationTransactionTab {...signTransactionProps} />
-
-              <SignKeyRegistrationTransactionTab {...signTransactionProps} />
-
-              <SignMessageTab
-                account={selectedAccount}
-                signMessageAction={algorandProviderSignMessageAction}
-              />
-
-              <ImportAccountViaQRCodeTab />
-
-              <SendKeyRegistrationViaURITab
-                account={selectedAccount}
-                network={selectedNetwork}
-              />
-            </TabPanels>
-          </Tabs>
-        );
       case ConnectionTypeEnum.AVMWebProvider:
         signTransactionProps = {
           account: selectedAccount,
@@ -293,7 +217,7 @@ const Root: FC = () => {
           account: selectedAccount,
           connectionType,
           network: selectedNetwork,
-          signTransactionsAction: useUseWalletSignTransactionsAction,
+          signTransactionsAction: useWalletSignTransactionsAction,
         };
 
         return (
@@ -349,7 +273,7 @@ const Root: FC = () => {
           account: selectedAccount,
           connectionType,
           network: selectedNetwork,
-          signTransactionsAction: useUseWalletConnectSignTransactionsAction,
+          signTransactionsAction: walletConnectSignTransactionsAction,
         };
 
         return (
@@ -418,23 +342,23 @@ const Root: FC = () => {
 
   useEffect(() => {
     switch (connectionType) {
-      case ConnectionTypeEnum.AlgorandProvider:
-        setEnabledAccounts(algorandProviderEnabledAccounts);
-        break;
       case ConnectionTypeEnum.AVMWebProvider:
         setEnabledAccounts(avmWebProviderEnabledAccounts);
         break;
       case ConnectionTypeEnum.UseWallet:
-        setEnabledAccounts(useUseWalletEnabledAccounts);
+        setEnabledAccounts(useWalletEnabledAccounts);
+        break;
+      case ConnectionTypeEnum.WalletConnect:
+        setEnabledAccounts(walletConnectEnabledAccounts);
         break;
       default:
         setEnabledAccounts([]);
         break;
     }
   }, [
-    algorandProviderEnabledAccounts,
     avmWebProviderEnabledAccounts,
-    useUseWalletEnabledAccounts,
+    useWalletEnabledAccounts,
+    walletConnectEnabledAccounts,
   ]);
   useEffect(
     () => setSelectedAccount(enabledAccounts[0] || null),

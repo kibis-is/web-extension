@@ -251,13 +251,20 @@ const configs: (
     merge(commonConfig, {
       devtool,
       entry: {
-        ['background']: resolve(SRC_PATH, 'background.ts'),
-        ['content-script']: resolve(SRC_PATH, 'content-script.ts'),
-        ['algorand-provider']: resolve(SRC_PATH, 'algorand-provider.ts'),
+        ['client']: resolve(SRC_PATH, 'client', 'main.ts'),
+        ['middleware']: resolve(SRC_PATH, 'middleware', 'main.ts'),
+        ['provider']: resolve(SRC_PATH, 'extension', 'main.ts'),
       },
       mode: environment,
       module: {
-        rules: [tsLoaderRule],
+        rules: [
+          {
+            test: /\.(svg?.+|ttf?.+|woff?.+|woff2?.+)$/,
+            type: 'asset/inline',
+          },
+          stylesLoaderRule,
+          tsLoaderRule,
+        ],
       },
       name: ConfigNameEnum.ExtensionScripts,
       optimization: {

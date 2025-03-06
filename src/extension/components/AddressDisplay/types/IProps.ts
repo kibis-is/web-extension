@@ -1,5 +1,6 @@
 // types
-import type { IAccount, INetwork, TSizes } from '@extension/types';
+import type { TSizes } from '@common/types';
+import type { IAccount, INetwork } from '@extension/types';
 
 interface IProps {
   accounts: IAccount[];

@@ -21,7 +21,8 @@ import PageHeader from '@extension/components/PageHeader';
 import PageItem from '@extension/components/PageItem';
 
 // constants
-import { DEFAULT_GAP, PAGE_ITEM_HEIGHT } from '@extension/constants';
+import { DEFAULT_GAP } from '@common/constants';
+import { PAGE_ITEM_HEIGHT } from '@extension/constants';
 
 // enums
 import { TransactionTypeEnum } from '@extension/enums';
@@ -32,7 +33,10 @@ import useStandardAssetById from '@extension/hooks/useStandardAssetById';
 import useSubTextColor from '@extension/hooks/useSubTextColor';
 
 // selectors
-import { useSelectSettingsPreferredBlockExplorer } from '@extension/selectors';
+import {
+  useSelectSettingsColorMode,
+  useSelectSettingsPreferredBlockExplorer,
+} from '@extension/selectors';
 
 // types
 import type {
@@ -43,7 +47,7 @@ import type { IProps } from './types';
 
 // utils
 import createIconFromDataUri from '@extension/utils/createIconFromDataUri';
-import ellipseAddress from '@extension/utils/ellipseAddress';
+import ellipseAddress from '@common/utils/ellipseAddress';
 import isAccountKnown from '@extension/utils/isAccountKnown';
 
 const AssetTransferTransactionContent: FC<
@@ -52,6 +56,7 @@ const AssetTransferTransactionContent: FC<
   const { t } = useTranslation();
   const { isOpen, onOpen, onClose } = useDisclosure();
   // selectors
+  const colorMode = useSelectSettingsColorMode();
   const preferredExplorer = useSelectSettingsPreferredBlockExplorer();
   // hooks
   const { standardAsset, updating } = useStandardAssetById(transaction.assetId);
@@ -75,6 +80,7 @@ const AssetTransferTransactionContent: FC<
   return (
     <>
       <PageHeader
+        colorMode={colorMode}
         title={t<string>('headings.transaction', { context: transaction.type })}
       />
 
@@ -82,7 +88,7 @@ const AssetTransferTransactionContent: FC<
         alignItems="flex-start"
         justifyContent="flex-start"
         px={DEFAULT_GAP}
-        spacing={4}
+        spacing={DEFAULT_GAP - 2}
         w="full"
       >
         {/*asset id*/}

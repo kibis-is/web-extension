@@ -2,7 +2,7 @@ import { Text } from '@chakra-ui/react';
 import React, { FC } from 'react';
 
 // constants
-import { DEFAULT_GAP } from '@extension/constants';
+import { DEFAULT_GAP } from '@common/constants';
 
 // hooks
 import useSubTextColor from '@extension/hooks/useSubTextColor';

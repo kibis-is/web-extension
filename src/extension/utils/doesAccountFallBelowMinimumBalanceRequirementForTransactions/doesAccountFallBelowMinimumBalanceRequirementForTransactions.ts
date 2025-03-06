@@ -9,7 +9,7 @@ import type { IAccountInformation } from '@extension/types';
 import type { IOptions } from './types';
 
 // utils
-import convertPublicKeyToAVMAddress from '@extension/utils/convertPublicKeyToAVMAddress';
+import convertPublicKeyToAVMAddress from '@common/utils/convertPublicKeyToAVMAddress';
 
 /**
  * Convenience function to determine if an account balance will fall below the minimum balance requirement (MBR) with the

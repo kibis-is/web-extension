@@ -2,7 +2,7 @@ import { Grid, GridItem, HStack, Text } from '@chakra-ui/react';
 import React, { type FC } from 'react';
 
 // constants
-import { DEFAULT_GAP } from '@extension/constants';
+import { DEFAULT_GAP } from '@common/constants';
 
 // hooks
 import useDefaultTextColor from '@extension/hooks/useDefaultTextColor';

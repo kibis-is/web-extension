@@ -28,6 +28,7 @@ import { reducer as sessionsReducer } from '@extension/features/sessions';
 import { reducer as settingsReducer } from '@extension/features/settings';
 import { reducer as standardAssetsReducer } from '@extension/features/standard-assets';
 import { reducer as systemReducer } from '@extension/features/system';
+import { reducer as webauthnReducer } from '@extension/features/webauthn';
 
 // pages
 import SplashPage from '@extension/pages/SplashPage';
@@ -39,11 +40,7 @@ import type { IAppProps, IMainRootState } from '@extension/types';
 import makeStore from '@extension/utils/makeStore';
 import createRouter from './utils/createRouter';
 
-const App: FC<IAppProps> = ({
-  i18n,
-  initialColorMode,
-  initialFontFamily,
-}: IAppProps) => {
+const App: FC<IAppProps> = ({ i18n, initialColorMode, initialFontFamily }) => {
   const store: Store<IMainRootState> = makeStore<IMainRootState>(
     combineReducers({
       accounts: accountsReducer,
@@ -66,6 +63,7 @@ const App: FC<IAppProps> = ({
       settings: settingsReducer,
       standardAssets: standardAssetsReducer,
       system: systemReducer,
+      webauthn: webauthnReducer,
     })
   );
 

@@ -33,7 +33,7 @@ import useSubTextColor from '../../hooks/useSubTextColor';
 import Ed21559KeyPair from '@extension/models/Ed21559KeyPair';
 
 // theme
-import { theme } from '@extension/theme';
+import { theme } from '@common/theme';
 
 // utils
 import createAccountImportURI from '@extension/utils/createAccountImportURI';

@@ -1,20 +1,21 @@
 import {
   ARC0027MethodEnum,
-  IAccount as IAVMWebProvideAccount,
-  IEnableResult,
+  type IAccount as IAVMWebProvideAccount,
+  type IEnableResult,
 } from '@agoralabs-sh/avm-web-provider';
-import { AsyncThunk, createAsyncThunk } from '@reduxjs/toolkit';
-import { v4 as uuid } from 'uuid';
+import { generate as generateUUID } from '@agoralabs-sh/uuid';
+import { type AsyncThunk, createAsyncThunk } from '@reduxjs/toolkit';
 import browser from 'webextension-polyfill';
 
 // enums
-import { MessagesThunkEnum } from '@extension/enums';
+import { AVMWebProviderMessageReferenceEnum } from '@common/enums';
+import { ThunkEnum } from '../enums';
 
 // features
 import { removeEventByIdThunk } from '@extension/features/events';
 
 // messages
-import { ClientResponseMessage } from '@common/messages';
+import AVMWebProviderResponseMessage from '@common/messages/AVMWebProviderResponseMessage';
 
 // types
 import type {
@@ -25,7 +26,7 @@ import type {
 import type { IEnableResponseThunkPayload } from '../types';
 
 // utils
-import convertPublicKeyToAVMAddress from '@extension/utils/convertPublicKeyToAVMAddress';
+import convertPublicKeyToAVMAddress from '@common/utils/convertPublicKeyToAVMAddress';
 
 const sendEnableResponseThunk: AsyncThunk<
   void, // return
@@ -36,24 +37,26 @@ const sendEnableResponseThunk: AsyncThunk<
   IEnableResponseThunkPayload,
   IBaseAsyncThunkConfig<IMainRootState>
 >(
-  MessagesThunkEnum.SendEnableResponse,
+  ThunkEnum.SendEnableResponse,
   async ({ error, event, session }, { dispatch, getState }) => {
     const accounts = getState().accounts.items;
     const logger = getState().system.logger;
 
     logger.debug(
-      `${MessagesThunkEnum.SendEnableResponse}: sending "${ARC0027MethodEnum.Enable}" message to the content script`
+      `${ThunkEnum.SendEnableResponse}: sending "${ARC0027MethodEnum.Enable}" message to the content script`
     );
 
     // send the error the webpage (via the content script)
     if (error) {
       await browser.tabs.sendMessage(
-        event.payload.originTabId,
-        new ClientResponseMessage<IEnableResult>({
+        event.payload.originTabID,
+        new AVMWebProviderResponseMessage<IEnableResult>({
           error,
-          id: uuid(),
-          method: event.payload.message.method,
-          requestId: event.payload.message.id,
+          id: generateUUID(),
+          method: event.payload.message.payload.method,
+          reference: AVMWebProviderMessageReferenceEnum.Response,
+          requestID: event.payload.message.id,
+          result: null,
         })
       );
 
@@ -66,11 +69,13 @@ const sendEnableResponseThunk: AsyncThunk<
     // if there is a session, send it back to the webpage (via the content script)
     if (session) {
       await browser.tabs.sendMessage(
-        event.payload.originTabId,
-        new ClientResponseMessage<IEnableResult>({
-          id: uuid(),
-          method: event.payload.message.method,
-          requestId: event.payload.message.id,
+        event.payload.originTabID,
+        new AVMWebProviderResponseMessage<IEnableResult>({
+          error: null,
+          id: generateUUID(),
+          method: event.payload.message.payload.method,
+          reference: AVMWebProviderMessageReferenceEnum.Response,
+          requestID: event.payload.message.id,
           result: {
             accounts: session.authorizedAddresses.map<IAVMWebProvideAccount>(
               (address) => {

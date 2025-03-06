@@ -1,6 +1,7 @@
 export type { default as IAccountUpdateRequest } from './IAccountUpdateRequest';
 export type { default as IAddToGroupPayload } from './IAddToGroupPayload';
 export type { default as IFetchAccountsFromStorageResult } from './IFetchAccountsFromStorageResult';
+export type { default as IRemovePasskeyByIDPayload } from './IRemovePasskeyByIDPayload';
 export type { default as ISaveAccountDetailsPayload } from './ISaveAccountDetailsPayload';
 export type { default as ISaveNewAccountsPayload } from './ISaveNewAccountsPayload';
 export type { default as ISaveNewWatchAccountPayload } from './ISaveNewWatchAccountPayload';

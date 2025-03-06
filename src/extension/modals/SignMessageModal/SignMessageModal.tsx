@@ -23,17 +23,17 @@ import { useDispatch } from 'react-redux';
 // components
 import AccountSelect from '@extension/components/AccountSelect';
 import AccountItem from '@extension/components/AccountItem';
-import Button from '@extension/components/Button';
+import Button from '@common/components/Button';
 import ClientHeader, {
   ClientHeaderSkeleton,
 } from '@extension/components/ClientHeader';
 import SignMessageContentSkeleton from './SignMessageContentSkeleton';
 
 // constants
-import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@extension/constants';
+import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@common/constants';
 
 // errors
-import { BaseExtensionError } from '@extension/errors';
+import { BaseExtensionError } from '@common/errors';
 
 // features
 import { removeEventByIdThunk } from '@extension/features/events';
@@ -54,10 +54,13 @@ import AccountRepository from '@extension/repositories/AccountRepository';
 import {
   useSelectAccountsFetching,
   useSelectLogger,
+  useSelectSettingsColorMode,
+  useSelectSettingsSelectedNetwork,
+  useSelectSystemInfo,
 } from '@extension/selectors';
 
 // theme
-import { theme } from '@extension/theme';
+import { theme } from '@common/theme';
 
 // types
 import type {
@@ -70,7 +73,7 @@ import type {
 } from '@extension/types';
 
 // utils
-import convertPublicKeyToAVMAddress from '@extension/utils/convertPublicKeyToAVMAddress';
+import convertPublicKeyToAVMAddress from '@common/utils/convertPublicKeyToAVMAddress';
 import signBytes from '@extension/utils/signBytes';
 
 const SignMessageModal: FC<IModalProps> = ({ onClose }) => {
@@ -83,8 +86,11 @@ const SignMessageModal: FC<IModalProps> = ({ onClose }) => {
     onOpen: onAuthenticationModalOpen,
   } = useDisclosure();
   // selectors
+  const colorMode = useSelectSettingsColorMode();
   const fetching = useSelectAccountsFetching();
   const logger = useSelectLogger();
+  const network = useSelectSettingsSelectedNetwork();
+  const systemInfo = useSelectSystemInfo();
   // hooks
   const {
     authorizedAccounts,
@@ -94,8 +100,6 @@ const SignMessageModal: FC<IModalProps> = ({ onClose }) => {
     setSigner,
   } = useSignMessageModal();
   const subTextColor = useSubTextColor();
-  // misc
-  const _context = 'sign-message-modal';
   // handlers
   const handleAccountSelect = (account: IAccountWithExtendedProps) =>
     setSigner(account);
@@ -144,7 +148,7 @@ const SignMessageModal: FC<IModalProps> = ({ onClose }) => {
     let signature: Uint8Array;
     let signerAddress: string;
 
-    if (!event || !event.payload.message.params || !signer) {
+    if (!event || !event.payload.message.payload.params || !signer) {
       return;
     }
 
@@ -156,7 +160,9 @@ const SignMessageModal: FC<IModalProps> = ({ onClose }) => {
 
     try {
       signature = await signBytes({
-        bytes: new TextEncoder().encode(event.payload.message.params.message),
+        bytes: new TextEncoder().encode(
+          event.payload.message.payload.params.message
+        ),
         logger,
         publicKey: AccountRepository.decode(signer.publicKey),
         ...result,
@@ -203,7 +209,7 @@ const SignMessageModal: FC<IModalProps> = ({ onClose }) => {
   const renderContent = () => {
     if (
       fetching ||
-      !event?.payload.message.params ||
+      !event?.payload.message.payload.params ||
       !authorizedAccounts ||
       !signer
     ) {
@@ -214,13 +220,13 @@ const SignMessageModal: FC<IModalProps> = ({ onClose }) => {
       <VStack spacing={DEFAULT_GAP - 2} w="full">
         {/*account select*/}
         <VStack spacing={DEFAULT_GAP / 3} w="full">
-          {event.payload.message.params.signer ? (
+          {event.payload.message.payload.params.signer ? (
             <>
               <Text textAlign="left" w="full">{`${t<string>(
                 'labels.addressToSign'
               )}:`}</Text>
 
-              <AccountItem account={signer} />
+              <AccountItem account={signer} colorMode={colorMode} />
             </>
           ) : (
             <>
@@ -229,11 +235,13 @@ const SignMessageModal: FC<IModalProps> = ({ onClose }) => {
               )}:`}</Text>
 
               <AccountSelect
-                _context={_context}
                 accounts={authorizedAccounts}
                 allowWatchAccounts={false}
+                colorMode={colorMode}
+                network={network}
                 onSelect={handleAccountSelect}
                 required={true}
+                systemInfo={systemInfo}
                 value={signer}
               />
             </>
@@ -246,7 +254,7 @@ const SignMessageModal: FC<IModalProps> = ({ onClose }) => {
             'labels.message'
           )}:`}</Text>
           <Code borderRadius="md" w="full">
-            {event.payload.message.params.message}
+            {event.payload.message.payload.params.message}
           </Code>
         </VStack>
       </VStack>
@@ -281,13 +289,21 @@ const SignMessageModal: FC<IModalProps> = ({ onClose }) => {
               <VStack alignItems="center" spacing={DEFAULT_GAP - 2} w="full">
                 <ClientHeader
                   description={
-                    event.payload.message.clientInfo.description || undefined
+                    event.payload.message.payload.clientInfo.description ||
+                    undefined
                   }
                   iconUrl={
-                    event.payload.message.clientInfo.iconUrl || undefined
+                    event.payload.message.payload.clientInfo.iconUrl ||
+                    undefined
                   }
-                  host={event.payload.message.clientInfo.host || 'unknown host'}
-                  name={event.payload.message.clientInfo.appName || 'Unknown'}
+                  host={
+                    event.payload.message.payload.clientInfo.host ||
+                    'unknown host'
+                  }
+                  name={
+                    event.payload.message.payload.clientInfo.appName ||
+                    'Unknown'
+                  }
                 />
 
                 {/*caption*/}
@@ -305,6 +321,7 @@ const SignMessageModal: FC<IModalProps> = ({ onClose }) => {
           <ModalFooter p={DEFAULT_GAP}>
             <HStack spacing={DEFAULT_GAP / 3} w="full">
               <Button
+                colorMode={colorMode}
                 onClick={handleCancelClick}
                 size="lg"
                 variant="outline"
@@ -314,6 +331,7 @@ const SignMessageModal: FC<IModalProps> = ({ onClose }) => {
               </Button>
 
               <Button
+                colorMode={colorMode}
                 onClick={handleSignClick}
                 rightIcon={<IoCreateOutline />}
                 size="lg"

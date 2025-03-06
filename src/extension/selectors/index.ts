@@ -19,3 +19,4 @@ export * from './sessions';
 export * from './settings';
 export * from './standard-assets';
 export * from './system';
+export * from './webauthn';

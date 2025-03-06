@@ -1,5 +1,6 @@
 export const ABOUT_ROUTE: string = '/about';
 export const ACCOUNTS_ROUTE: string = '/accounts';
+export const ACCOUNT_PASSKEYS_ROUTE: string = '/account-passkeys';
 export const ADD_ACCOUNT_ROUTE: string = '/add-account';
 export const ADD_WATCH_ACCOUNT_ROUTE: string = '/add-watch-account';
 export const ADVANCED_ROUTE: string = '/advanced';
@@ -15,7 +16,7 @@ export const GET_STARTED_ROUTE: string = '/get-started';
 export const IMPORT_ACCOUNT_VIA_SEED_PHRASE_ROUTE: string =
   '/import-account-via-seed-phrase';
 export const NFTS_ROUTE: string = '/nfts';
-export const PASSKEY_ROUTE: string = '/passkey';
+export const PASSKEY_ROUTE: string = '/passkeys';
 export const PRIVACY_ROUTE: string = '/privacy';
 export const SECURITY_ROUTE: string = '/security';
 export const SESSIONS_ROUTE: string = '/sessions';

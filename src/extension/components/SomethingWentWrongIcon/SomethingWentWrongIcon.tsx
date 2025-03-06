@@ -5,7 +5,7 @@ import React, { FC } from 'react';
 import useColorModeValue from '@extension/hooks/useColorModeValue';
 
 // theme
-import { theme } from '@extension/theme';
+import { theme } from '@common/theme';
 
 interface IProps extends Omit<IconProps, 'fill'> {
   accentColor?: string;

@@ -4,7 +4,7 @@ import { encode as encodeBase64 } from '@stablelib/base64';
 import { EncryptionMethodEnum } from '@extension/enums';
 
 // errors
-import { MalformedDataError } from '@extension/errors';
+import { MalformedDataError } from '@common/errors';
 
 // models
 import Ed21559KeyPair from '@extension/models/Ed21559KeyPair';
@@ -21,7 +21,7 @@ import type { TOptions } from './types';
 
 // utils
 import convertAVMAddressToPublicKey from '@extension/utils/convertAVMAddressToPublicKey';
-import convertPublicKeyToAVMAddress from '@extension/utils/convertPublicKeyToAVMAddress';
+import convertPublicKeyToAVMAddress from '@common/utils/convertPublicKeyToAVMAddress';
 import fetchDecryptedKeyPairFromStorageWithPasskey from '@extension/utils/fetchDecryptedKeyPairFromStorageWithPasskey';
 import fetchDecryptedKeyPairFromStorageWithPassword from '@extension/utils/fetchDecryptedKeyPairFromStorageWithPassword';
 import fetchDecryptedKeyPairFromStorageWithUnencrypted from '@extension/utils/fetchDecryptedKeyPairFromStorageWithUnencrypted';

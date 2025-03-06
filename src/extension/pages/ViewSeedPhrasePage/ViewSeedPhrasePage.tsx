@@ -12,7 +12,7 @@ import { useDispatch } from 'react-redux';
 
 // components
 import AccountSelect from '@extension/components/AccountSelect';
-import Button from '@extension/components/Button';
+import Button from '@common/components/Button';
 import CopyButton from '@extension/components/CopyButton';
 import PageHeader from '@extension/components/PageHeader';
 import SeedPhraseDisplay, {
@@ -20,13 +20,11 @@ import SeedPhraseDisplay, {
 } from '@extension/components/SeedPhraseDisplay';
 
 // constants
-import {
-  ACCOUNT_SELECT_ITEM_MINIMUM_HEIGHT,
-  DEFAULT_GAP,
-} from '@extension/constants';
+import { DEFAULT_GAP } from '@common/constants';
+import { ACCOUNT_SELECT_ITEM_MINIMUM_HEIGHT } from '@extension/constants';
 
 // errors
-import { BaseExtensionError } from '@extension/errors';
+import { BaseExtensionError } from '@common/errors';
 
 // features
 import { create as createNotification } from '@extension/features/notifications';
@@ -43,6 +41,9 @@ import AuthenticationModal from '@extension/modals/AuthenticationModal';
 import {
   useSelectActiveAccount,
   useSelectNonWatchAccounts,
+  useSelectSettingsColorMode,
+  useSelectSettingsSelectedNetwork,
+  useSelectSystemInfo,
 } from '@extension/selectors';
 
 // types
@@ -66,6 +67,9 @@ const ViewSeedPhrasePage: FC = () => {
   // selectors
   const accounts = useSelectNonWatchAccounts();
   const activeAccount = useSelectActiveAccount();
+  const colorMode = useSelectSettingsColorMode();
+  const network = useSelectSettingsSelectedNetwork();
+  const systemInfo = useSelectSystemInfo();
   // hooks
   const defaultTextColor = useDefaultTextColor();
   const primaryColorScheme = usePrimaryColorScheme();
@@ -178,6 +182,7 @@ const ViewSeedPhrasePage: FC = () => {
 
       {/*page title*/}
       <PageHeader
+        colorMode={colorMode}
         title={t<string>('titles.page', { context: 'viewSeedPhrase' })}
       />
 
@@ -208,11 +213,13 @@ const ViewSeedPhrasePage: FC = () => {
             />
           ) : (
             <AccountSelect
-              _context={_context}
               accounts={accounts}
               allowWatchAccounts={false}
+              colorMode={colorMode}
+              network={network}
               onSelect={handleAccountSelect}
               required={true}
+              systemInfo={systemInfo}
               value={value.account}
             />
           )}
@@ -240,6 +247,7 @@ const ViewSeedPhrasePage: FC = () => {
         {!value || value.masked ? (
           // view button
           <Button
+            colorMode={colorMode}
             isLoading={decrypting}
             onClick={handleViewClick}
             rightIcon={<IoEyeOutline />}
@@ -253,6 +261,7 @@ const ViewSeedPhrasePage: FC = () => {
           <HStack justifyContent="center" spacing={DEFAULT_GAP / 3} w="full">
             {/*hide button*/}
             <Button
+              colorMode={colorMode}
               isLoading={decrypting}
               onClick={handleHideClick}
               rightIcon={<IoEyeOffOutline />}
@@ -265,6 +274,7 @@ const ViewSeedPhrasePage: FC = () => {
 
             {/*copy button*/}
             <CopyButton
+              colorMode={colorMode}
               colorScheme={primaryColorScheme}
               size="lg"
               value={value.seedPhrase}

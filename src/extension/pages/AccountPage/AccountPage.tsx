@@ -14,7 +14,7 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import BigNumber from 'bignumber.js';
-import React, { type FC } from 'react';
+import React, { type FC, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { BsFolderMinus, BsFolderPlus } from 'react-icons/bs';
 import {
@@ -35,13 +35,14 @@ import { useNavigate } from 'react-router-dom';
 import ActivityTab from '@extension/components/ActivityTab';
 import AssetsTab from '@extension/components/AssetsTab';
 import CopyIconButton from '@extension/components/CopyIconButton';
-import EmptyState from '@extension/components/EmptyState';
-import IconButton from '@extension/components/IconButton';
+import EmptyState from '@common/components/EmptyState';
+import IconButton from '@common/components/IconButton';
 import OpenTabIconButton from '@extension/components/OpenTabIconButton';
 import OverflowMenu from '@extension/components/OverflowMenu';
 import NativeBalance from '@extension/components/NativeBalance';
 import NetworkSelect from '@extension/components/NetworkSelect';
 import NFTsTab from '@extension/components/NFTsTab';
+import PasskeysTab from '@extension/components/PasskeysTab';
 import PolisAccountBadge from '@extension/components/PolisAccountBadge';
 import ReKeyedAccountBadge from '@extension/components/RekeyedAccountBadge';
 import WatchAccountBadge from '@extension/components/WatchAccountBadge';
@@ -51,10 +52,12 @@ import AccountPageSkeletonContent from './AccountPageSkeletonContent';
 import GroupBadge from '@extension/components/GroupBadge';
 
 // constants
+import { DEFAULT_GAP } from '@common/constants';
 import {
   ACCOUNT_PAGE_HEADER_ITEM_HEIGHT,
+  ACCOUNTS_ROUTE,
   ADD_ACCOUNT_ROUTE,
-  DEFAULT_GAP,
+  PASSKEY_ROUTE,
 } from '@extension/constants';
 
 // enums
@@ -64,6 +67,7 @@ import { AccountTabEnum } from '@extension/enums';
 import {
   removeFromGroupThunk,
   removeAccountByIdThunk,
+  removeAccountPasskeyByIDThunk,
   saveActiveAccountDetails,
   updateAccountsThunk,
 } from '@extension/features/accounts';
@@ -98,10 +102,12 @@ import {
   useSelectActiveAccountGroup,
   useSelectActiveAccountInformation,
   useSelectActiveAccountTransactions,
+  useSelectActiveAccountTransactionsUpdating,
   useSelectAccountsFetching,
   useSelectSettingsFetching,
   useSelectIsOnline,
   useSelectNetworks,
+  useSelectSettingsColorMode,
   useSelectSettingsPreferredBlockExplorer,
   useSelectSettingsSelectedNetwork,
   useSelectSettings,
@@ -118,8 +124,8 @@ import type {
 } from '@extension/types';
 
 // utils
-import convertPublicKeyToAVMAddress from '@extension/utils/convertPublicKeyToAVMAddress';
-import ellipseAddress from '@extension/utils/ellipseAddress';
+import convertPublicKeyToAVMAddress from '@common/utils/convertPublicKeyToAVMAddress';
+import ellipseAddress from '@common/utils/ellipseAddress';
 import isReKeyedAuthAccountAvailable from '@extension/utils/isReKeyedAuthAccountAvailable';
 
 const AccountPage: FC = () => {
@@ -142,6 +148,7 @@ const AccountPage: FC = () => {
   const accounts = useSelectAccounts();
   const accountTransactions = useSelectActiveAccountTransactions();
   const activeAccountDetails = useSelectActiveAccountDetails();
+  const colorMode = useSelectSettingsColorMode();
   const fetchingAccounts = useSelectAccountsFetching();
   const fetchingSettings = useSelectSettingsFetching();
   const group = useSelectActiveAccountGroup();
@@ -151,12 +158,13 @@ const AccountPage: FC = () => {
   const explorer = useSelectSettingsPreferredBlockExplorer();
   const settings = useSelectSettings();
   const systemInfo = useSelectSystemInfo();
+  const updatingActiveAccountTransactions =
+    useSelectActiveAccountTransactionsUpdating();
   // hooks
   const defaultTextColor = useDefaultTextColor();
   const primaryColorScheme = usePrimaryColorScheme();
   const subTextColor = useSubTextColor();
   // misc
-  const _context = 'account-page';
   const canReKeyAccount = () => {
     if (!account || !accountInformation) {
       return false;
@@ -189,7 +197,8 @@ const AccountPage: FC = () => {
   const handleOnEditAccountClick = () => onEditAccountModalOpen();
   const handleOnMakePrimaryClick = () =>
     account && dispatch(savePolisAccountIDThunk(account.id));
-  const handleOnWhatsNewClick = () => dispatch(setWhatsNewModal(true));
+  const handleOnMoveGroupClick = () =>
+    account && dispatch(openMoveGroupModal(account.id));
   const handleOnRefreshActivityClick = () => {
     dispatch(
       updateAccountsThunk({
@@ -200,8 +209,6 @@ const AccountPage: FC = () => {
       })
     );
   };
-  const handleOnMoveGroupClick = () =>
-    account && dispatch(openMoveGroupModal(account.id));
   const handleOnRemoveGroupClick = async () => {
     let _account: IAccountWithExtendedProps | null;
 
@@ -223,6 +230,51 @@ const AccountPage: FC = () => {
       })
     );
   };
+  const handleOnRemovePasskeyClick = useCallback(
+    (id: string) => {
+      const passkey =
+        account?.passkeys.find((value) => value.id === id) || null;
+
+      if (!account || !passkey) {
+        return;
+      }
+
+      dispatch(
+        openConfirmModal({
+          description: t<string>('captions.removeAccountPasskeyConfirm', {
+            name: passkey.rp.name,
+          }),
+          onConfirm: async () => {
+            const _account = await dispatch(
+              removeAccountPasskeyByIDThunk({
+                accountID: account.id,
+                passkeyID: passkey.id,
+              })
+            ).unwrap();
+
+            if (!_account) {
+              return;
+            }
+
+            dispatch(
+              createNotification({
+                ephemeral: true,
+                title: t<string>('headings.removedPasskey'),
+                type: 'info',
+              })
+            );
+          },
+          title: t<string>('headings.removePasskey'),
+        })
+      );
+    },
+    [account]
+  );
+  const handleOnViewPasskeyClick = useCallback(
+    (id: string) => navigate(`${ACCOUNTS_ROUTE}${PASSKEY_ROUTE}/${id}`),
+    []
+  );
+  const handleOnWhatsNewClick = () => dispatch(setWhatsNewModal(true));
   const handleNetworkSelect = async (value: INetwork) => {
     await dispatch(
       saveSettingsToStorageThunk({
@@ -341,6 +393,7 @@ const AccountPage: FC = () => {
               <Tooltip label={t<string>('labels.whatsNew')}>
                 <IconButton
                   aria-label={t<string>('ariaLabels.plusIcon')}
+                  colorMode={colorMode}
                   icon={IoGiftOutline}
                   onClick={handleOnWhatsNewClick}
                   size="sm"
@@ -350,7 +403,6 @@ const AccountPage: FC = () => {
 
               {/*network selection*/}
               <NetworkSelect
-                _context={_context}
                 networks={networks}
                 onSelect={handleNetworkSelect}
                 size="xs"
@@ -416,6 +468,7 @@ const AccountPage: FC = () => {
               <Tooltip label={t<string>('labels.editAccount')}>
                 <IconButton
                   aria-label={t<string>('labels.editAccount')}
+                  colorMode={colorMode}
                   icon={IoPencil}
                   onClick={handleOnEditAccountClick}
                   size="sm"
@@ -444,6 +497,7 @@ const AccountPage: FC = () => {
               <Tooltip label={t<string>('labels.shareAddress')}>
                 <IconButton
                   aria-label="Show QR code"
+                  colorMode={colorMode}
                   icon={IoQrCodeOutline}
                   onClick={onShareAddressModalOpen}
                   size="sm"
@@ -453,7 +507,6 @@ const AccountPage: FC = () => {
 
               {/*overflow menu*/}
               <OverflowMenu
-                context={_context}
                 items={[
                   // make primary
                   ...(!account ||
@@ -576,22 +629,38 @@ const AccountPage: FC = () => {
               <Tab>{t<string>('labels.assets')}</Tab>
               <Tab>{t<string>('labels.nfts')}</Tab>
               <Tab>{t<string>('labels.activity')}</Tab>
+              {settings.advanced.allowAccountPasskeys && (
+                <Tab isDisabled={account.watchAccount}>
+                  {t<string>('labels.passkeys')}
+                </Tab>
+              )}
             </TabList>
 
             <TabPanels sx={{ display: 'flex', flexDirection: 'column' }}>
-              <AssetsTab _context={_context} account={account} />
+              <AssetsTab account={account} colorMode={colorMode} />
 
               <NFTsTab account={account} />
 
               <ActivityTab
-                _context={_context}
                 account={account}
                 accounts={accounts}
+                colorMode={colorMode}
                 fetching={fetchingAccounts}
                 network={network}
                 onRefreshClick={handleOnRefreshActivityClick}
                 onScrollEnd={handleActivityScrollEnd}
+                updating={updatingActiveAccountTransactions}
               />
+
+              {settings.advanced.allowAccountPasskeys && (
+                <PasskeysTab
+                  account={account}
+                  colorMode={colorMode}
+                  fetching={fetchingAccounts}
+                  onRemoveClick={handleOnRemovePasskeyClick}
+                  onViewClick={handleOnViewPasskeyClick}
+                />
+              )}
             </TabPanels>
           </Tabs>
         </>
@@ -609,6 +678,7 @@ const AccountPage: FC = () => {
             label: t<string>('buttons.addAccount'),
             onClick: handleAddAccountClick,
           }}
+          colorMode={colorMode}
           description={t<string>('captions.noAccountsFound')}
           text={t<string>('headings.noAccountsFound')}
         />

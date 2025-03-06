@@ -14,7 +14,7 @@ import ModalTextItem from '@extension/components/ModalTextItem';
 import MoreInformationAccordion from '@extension/components/MoreInformationAccordion';
 
 // constants
-import { DEFAULT_GAP, MODAL_ITEM_HEIGHT } from '@extension/constants';
+import { DEFAULT_GAP, MODAL_ITEM_HEIGHT } from '@common/constants';
 
 // enums
 import { TransactionTypeEnum } from '@extension/enums';

@@ -45,7 +45,7 @@ import usePrimaryColorScheme from '../../hooks/usePrimaryColorScheme';
 import useSubTextColor from '../../hooks/useSubTextColor';
 
 // theme
-import { theme } from '@extension/theme';
+import { theme } from '@common/theme';
 
 // types
 import type { IAssetInformation, IBaseTransactionProps } from '../../types';

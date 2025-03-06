@@ -7,7 +7,7 @@ import AssetBadge from '@extension/components/AssetBadge';
 import AssetIcon from '@extension/components/AssetIcon';
 
 // constants
-import { DEFAULT_GAP } from '@extension/constants';
+import { DEFAULT_GAP } from '@common/constants';
 
 // enums
 import { AssetTypeEnum } from '@extension/enums';
@@ -22,7 +22,7 @@ import type { IStandardAsset } from '@extension/types';
 import type { IProps } from './types';
 
 // utils
-import calculateIconSize from '@extension/utils/calculateIconSize';
+import calculateIconSize from '@common/utils/calculateIconSize';
 
 const AssetItem: FC<IProps> = ({ asset, network }) => {
   // hooks

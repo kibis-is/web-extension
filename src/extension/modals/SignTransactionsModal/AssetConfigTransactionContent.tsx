@@ -20,7 +20,7 @@ import OpenTabIconButton from '@extension/components/OpenTabIconButton';
 import Warning from '@extension/components/Warning';
 
 // constants
-import { DEFAULT_GAP } from '@extension/constants';
+import { DEFAULT_GAP } from '@common/constants';
 
 // enums
 import { TransactionTypeEnum } from '@extension/enums';

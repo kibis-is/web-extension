@@ -16,21 +16,22 @@ import {
   Tooltip,
   VStack,
 } from '@chakra-ui/react';
-import React, { type FC, useState } from 'react';
+import { randomString } from '@stablelib/random';
+import React, { type FC, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { IoCheckmarkOutline, IoChevronForward } from 'react-icons/io5';
 
 // components
 import AccountAvatarWithBadges from '@extension/components/AccountAvatarWithBadges';
-import Button from '@extension/components/Button';
-import EmptyState from '@extension/components/EmptyState';
+import Button from '@common/components/Button';
+import EmptyState from '@common/components/EmptyState';
 
 // constants
 import {
   BODY_BACKGROUND_COLOR,
   DEFAULT_GAP,
   TAB_ITEM_HEIGHT,
-} from '@extension/constants';
+} from '@common/constants';
 
 // hooks
 import useButtonHoverBackgroundColor from '@extension/hooks/useButtonHoverBackgroundColor';
@@ -38,45 +39,40 @@ import useDefaultTextColor from '@extension/hooks/useDefaultTextColor';
 import usePrimaryColorScheme from '@extension/hooks/usePrimaryColorScheme';
 import useSubTextColor from '@extension/hooks/useSubTextColor';
 
-// selectors
-import {
-  useSelectSettingsSelectedNetwork,
-  useSelectSystemInfo,
-} from '@extension/selectors';
-
 // theme
-import { theme } from '@extension/theme';
+import { theme } from '@common/theme';
 
 // types
 import type { IAccountWithExtendedProps } from '@extension/types';
 import type { TAccountSelectModalProps } from './types';
 
 // utils
-import calculateIconSize from '@extension/utils/calculateIconSize';
-import convertPublicKeyToAVMAddress from '@extension/utils/convertPublicKeyToAVMAddress';
-import ellipseAddress from '@extension/utils/ellipseAddress';
+import calculateIconSize from '@common/utils/calculateIconSize';
+import convertPublicKeyToAVMAddress from '@common/utils/convertPublicKeyToAVMAddress';
+import ellipseAddress from '@common/utils/ellipseAddress';
 import sortAccountsByPolisAccount from '@extension/utils/sortAccountsByPolisAccount';
 import upsertItemsById from '@extension/utils/upsertItemsById';
 
 const AccountSelectModal: FC<TAccountSelectModalProps> = ({
-  _context,
   accounts,
   allowWatchAccounts = true,
+  colorMode,
   isOpen,
   multiple,
+  network,
   onClose,
   onSelect,
+  systemInfo,
   title,
 }) => {
   const { t } = useTranslation();
-  // selectors
-  const network = useSelectSettingsSelectedNetwork();
-  const systemInfo = useSelectSystemInfo();
   // hooks
   const buttonHoverBackgroundColor = useButtonHoverBackgroundColor();
   const defaultTextColor = useDefaultTextColor();
   const primaryColorScheme = usePrimaryColorScheme();
   const subTextColor = useSubTextColor();
+  // memo
+  const _context = useMemo(() => randomString(8), []);
   // states
   const [selectedAccounts, setSelectedAccounts] = useState<
     IAccountWithExtendedProps[]
@@ -132,7 +128,10 @@ const AccountSelectModal: FC<TAccountSelectModalProps> = ({
           <Spacer />
 
           {/*empty state*/}
-          <EmptyState text={t<string>('headings.noAccountsFound')} />
+          <EmptyState
+            colorMode={colorMode}
+            text={t<string>('headings.noAccountsFound')}
+          />
 
           <Spacer />
         </>
@@ -199,6 +198,7 @@ const AccountSelectModal: FC<TAccountSelectModalProps> = ({
             <AccountAvatarWithBadges
               account={account}
               accounts={accounts}
+              colorMode={colorMode}
               network={network}
               systemInfo={systemInfo}
             />
@@ -328,6 +328,7 @@ const AccountSelectModal: FC<TAccountSelectModalProps> = ({
         <ModalFooter p={DEFAULT_GAP}>
           <HStack spacing={DEFAULT_GAP - 2} w="full">
             <Button
+              colorMode={colorMode}
               onClick={handleCancelClick}
               size="lg"
               variant="outline"
@@ -338,6 +339,7 @@ const AccountSelectModal: FC<TAccountSelectModalProps> = ({
 
             {multiple && (
               <Button
+                colorMode={colorMode}
                 onClick={handleConfirmClick}
                 rightIcon={<IoCheckmarkOutline />}
                 size="lg"

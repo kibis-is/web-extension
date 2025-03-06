@@ -1,6 +1,9 @@
 // hooks
-import useColorModeValue from '@extension/hooks/useColorModeValue';
+import _useTextBackgroundColor from '@common/hooks/useTextBackgroundColor';
+
+// selectors
+import { useSelectSettingsColorMode } from '@extension/selectors';
 
 export default function useTextBackgroundColor(): string {
-  return useColorModeValue('gray.200', 'whiteAlpha.400');
+  return _useTextBackgroundColor(useSelectSettingsColorMode());
 }

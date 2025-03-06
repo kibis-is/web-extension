@@ -21,12 +21,12 @@ import { IoCheckmarkOutline, IoLockClosedOutline } from 'react-icons/io5';
 import browser from 'webextension-polyfill';
 
 // components
-import Button from '@extension/components/Button';
-import CircularProgressWithIcon from '@extension/components/CircularProgressWithIcon';
+import Button from '@common/components/Button';
+import CircularProgressWithIcon from '@common/components/CircularProgressWithIcon';
 import PasswordInput from '@extension/components/PasswordInput';
 
 // constants
-import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@extension/constants';
+import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@common/constants';
 
 // enums
 import { EncryptionMethodEnum } from '@extension/enums';
@@ -47,10 +47,11 @@ import {
   useSelectIsCredentialsRequired,
   useSelectLogger,
   useSelectPasskeysPasskey,
+  useSelectSettingsColorMode,
 } from '@extension/selectors';
 
 // theme
-import { theme } from '@extension/theme';
+import { theme } from '@common/theme';
 
 // types
 import type { IProps } from './types';
@@ -66,6 +67,7 @@ const AuthenticationModal: FC<IProps> = ({
   const { t } = useTranslation();
   const passwordInputRef = useRef<HTMLInputElement | null>(null);
   // selectors
+  const colorMode = useSelectSettingsColorMode();
   const isCredentialsRequired = useSelectIsCredentialsRequired();
   const logger = useSelectLogger();
   const passkey = useSelectPasskeysPasskey();
@@ -155,7 +157,10 @@ const AuthenticationModal: FC<IProps> = ({
           w="full"
         >
           {/*progress*/}
-          <CircularProgressWithIcon icon={IoLockClosedOutline} />
+          <CircularProgressWithIcon
+            colorMode={colorMode}
+            icon={IoLockClosedOutline}
+          />
 
           {/*caption*/}
           <Text color={subTextColor} fontSize="sm" textAlign="center" w="full">
@@ -176,7 +181,7 @@ const AuthenticationModal: FC<IProps> = ({
           w="full"
         >
           {/*passkey loader*/}
-          <CircularProgressWithIcon icon={KbPasskey} />
+          <CircularProgressWithIcon colorMode={colorMode} icon={KbPasskey} />
 
           {/*caption*/}
           <Text color={subTextColor} fontSize="sm" textAlign="center" w="full">
@@ -191,6 +196,7 @@ const AuthenticationModal: FC<IProps> = ({
     return (
       <VStack w="full">
         <PasswordInput
+          colorMode={colorMode}
           disabled={verifying}
           error={passwordError}
           hint={
@@ -284,6 +290,7 @@ const AuthenticationModal: FC<IProps> = ({
           <ModalFooter p={DEFAULT_GAP}>
             <HStack spacing={DEFAULT_GAP - 2} w="full">
               <Button
+                colorMode={colorMode}
                 onClick={handleCancelClick}
                 size="lg"
                 variant="outline"
@@ -293,6 +300,7 @@ const AuthenticationModal: FC<IProps> = ({
               </Button>
 
               <Button
+                colorMode={colorMode}
                 isLoading={verifying}
                 onClick={handleConfirmClick}
                 rightIcon={<IoCheckmarkOutline />}

@@ -20,6 +20,7 @@ enum StoreNameEnum {
   Settings = 'settings',
   StandardAssets = 'standard-assets',
   System = 'system',
+  WebAuthn = 'webauthn',
 }
 
 export default StoreNameEnum;

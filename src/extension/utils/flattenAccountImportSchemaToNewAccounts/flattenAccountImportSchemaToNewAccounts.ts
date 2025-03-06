@@ -12,7 +12,7 @@ import type { INewAccount } from '@extension/types';
 
 // utils
 import convertPrivateKeyToAVMAddress from '@extension/utils/convertPrivateKeyToAVMAddress';
-import convertPublicKeyToAVMAddress from '@extension/utils/convertPublicKeyToAVMAddress';
+import convertPublicKeyToAVMAddress from '@common/utils/convertPublicKeyToAVMAddress';
 
 export default function flattenAccountImportSchemaToNewAccounts({
   accounts,

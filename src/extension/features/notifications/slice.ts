@@ -1,5 +1,5 @@
 import { createSlice, Draft, PayloadAction, Reducer } from '@reduxjs/toolkit';
-import { v4 as uuid } from 'uuid';
+import { generate as generateUUID } from '@agoralabs-sh/uuid';
 
 // enums
 import { StoreNameEnum } from '@extension/enums';
@@ -30,7 +30,7 @@ const slice = createSlice({
         {
           description: action.payload.description || null,
           ephemeral: action.payload.ephemeral || false,
-          id: uuid(),
+          id: generateUUID(),
           title: action.payload.title,
           read: false,
           showing: false,

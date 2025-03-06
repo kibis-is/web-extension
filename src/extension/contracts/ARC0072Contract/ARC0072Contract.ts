@@ -11,7 +11,7 @@ import BaseContract from '../BaseContract';
 import { ARC0072MethodEnum } from './enums';
 
 // errors
-import { InvalidABIContractError } from '@extension/errors';
+import { InvalidABIContractError } from '@common/errors';
 
 // types
 import type { INewOptions } from '../BaseContract';

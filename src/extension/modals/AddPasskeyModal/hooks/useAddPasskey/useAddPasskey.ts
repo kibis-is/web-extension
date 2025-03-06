@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import browser from 'webextension-polyfill';
 
 // errors
-import { BaseExtensionError, InvalidPasswordError } from '@extension/errors';
+import { BaseExtensionError, InvalidPasswordError } from '@common/errors';
 
 // features
 import { saveToStorageThunk as savePasskeyToStorageThunk } from '@extension/features/passkeys';

@@ -12,11 +12,15 @@ import SettingsTextItem from '@extension/components/SettingsTextItem';
 import useSubTextColor from '@extension/hooks/useSubTextColor';
 
 // selectors
-import { useSelectSystemInfo } from '@extension/selectors';
+import {
+  useSelectSettingsColorMode,
+  useSelectSystemInfo,
+} from '@extension/selectors';
 
 const AboutSettingsPage: FC = () => {
   const { t } = useTranslation();
   // selectors
+  const colorMode = useSelectSettingsColorMode();
   const systemInfo = useSelectSystemInfo();
   // hooks
   const subTextColor = useSubTextColor();
@@ -24,7 +28,10 @@ const AboutSettingsPage: FC = () => {
   return (
     <>
       {/*header*/}
-      <PageHeader title={t<string>('titles.page', { context: 'about' })} />
+      <PageHeader
+        colorMode={colorMode}
+        title={t<string>('titles.page', { context: 'about' })}
+      />
 
       <VStack w="full">
         {/*extension id*/}

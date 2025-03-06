@@ -13,23 +13,21 @@ import {
   Wrap,
   WrapItem,
 } from '@chakra-ui/react';
-import React, { type FC, useEffect, useState } from 'react';
+import { randomString } from '@stablelib/random';
+import React, { type FC, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { IoSaveOutline } from 'react-icons/io5';
 import { useDispatch } from 'react-redux';
 
 // components
-import Button from '@extension/components/Button';
+import Button from '@common/components/Button';
 import GenericInput from '@extension/components/GenericInput';
 import ModalSubHeading from '@extension/components/ModalSubHeading';
 import ScrollableContainer from '@extension/components/ScrollableContainer';
 
 // constants
-import {
-  ACCOUNT_NAME_BYTE_LIMIT,
-  BODY_BACKGROUND_COLOR,
-  DEFAULT_GAP,
-} from '@extension/constants';
+import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@common/constants';
+import { ACCOUNT_NAME_BYTE_LIMIT } from '@extension/constants';
 
 // features
 import { saveAccountDetailsThunk } from '@extension/features/accounts';
@@ -46,32 +44,32 @@ import useSubTextColor from '@extension/hooks/useSubTextColor';
 import {
   useSelectActiveAccount,
   useSelectAccountsSaving,
+  useSelectSettingsColorMode,
 } from '@extension/selectors';
 
 // theme
-import { theme } from '@extension/theme';
+import { theme } from '@common/theme';
 
 // types
+import type { TAccountColors, TAccountIcons } from '@common/types';
 import type {
   IAccountWithExtendedProps,
   IAppThunkDispatch,
   IMainRootState,
-  TAccountColors,
-  TAccountIcons,
 } from '@extension/types';
 import type { IProps } from './types';
 
 // utils
-import convertPublicKeyToAVMAddress from '@extension/utils/convertPublicKeyToAVMAddress';
-import ellipseAddress from '@extension/utils/ellipseAddress';
-import parseAccountIcon from '@extension/utils/parseAccountIcon';
+import convertPublicKeyToAVMAddress from '@common/utils/convertPublicKeyToAVMAddress';
+import ellipseAddress from '@common/utils/ellipseAddress';
+import parseAccountIcon from '@common/utils/parseAccountIcon';
 
 const EditAccountModal: FC<IProps> = ({ isOpen, onClose }) => {
-  const _context = 'account-icon-modal';
   const { t } = useTranslation();
   const dispatch = useDispatch<IAppThunkDispatch<IMainRootState>>();
   // selectors
   const account = useSelectActiveAccount();
+  const colorMode = useSelectSettingsColorMode();
   const saving = useSelectAccountsSaving();
   // hooks
   const buttonHoverBackgroundColor = useButtonHoverBackgroundColor();
@@ -96,6 +94,8 @@ const EditAccountModal: FC<IProps> = ({ isOpen, onClose }) => {
   });
   const primaryColor = usePrimaryColor();
   const subTextColor = useSubTextColor();
+  // memos
+  const _context = useMemo(() => randomString(8), []);
   // states
   const [color, setColor] = useState<TAccountColors | null>(
     account?.color || null
@@ -366,6 +366,7 @@ const EditAccountModal: FC<IProps> = ({ isOpen, onClose }) => {
             {/*name*/}
             <GenericInput
               charactersRemaining={nameCharactersRemaining}
+              colorMode={colorMode}
               error={nameError}
               label={nameLabel}
               isDisabled={saving}
@@ -443,6 +444,7 @@ const EditAccountModal: FC<IProps> = ({ isOpen, onClose }) => {
           <HStack spacing={DEFAULT_GAP - 2} w="full">
             {/*cancel button*/}
             <Button
+              colorMode={colorMode}
               onClick={handleCancelClick}
               size="lg"
               variant="outline"
@@ -453,6 +455,7 @@ const EditAccountModal: FC<IProps> = ({ isOpen, onClose }) => {
 
             {/*save button*/}
             <Button
+              colorMode={colorMode}
               isLoading={saving}
               onClick={handleSaveClick}
               rightIcon={<IoSaveOutline />}

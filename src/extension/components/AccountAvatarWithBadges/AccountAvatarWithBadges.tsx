@@ -7,7 +7,7 @@ import {
 } from 'react-icons/io5';
 
 // components
-import AccountAvatar from '../AccountAvatar';
+import AccountAvatar from '@common/components/AccountAvatar';
 
 // repositories
 import AccountRepository from '@extension/repositories/AccountRepository';
@@ -16,12 +16,13 @@ import AccountRepository from '@extension/repositories/AccountRepository';
 import type { IProps } from './types';
 
 // utils
-import calculateIconSize from '@extension/utils/calculateIconSize';
+import calculateIconSize from '@common/utils/calculateIconSize';
 import isReKeyedAuthAccountAvailable from '@extension/utils/isReKeyedAuthAccountAvailable';
 
 const AccountAvatarWithBadges: FC<IProps> = ({
   account,
   accounts,
+  colorMode,
   network,
   systemInfo,
 }) => {
@@ -65,7 +66,7 @@ const AccountAvatarWithBadges: FC<IProps> = ({
   };
 
   return (
-    <AccountAvatar account={account}>
+    <AccountAvatar account={account} colorMode={colorMode}>
       {/*polis account badge*/}
       {systemInfo && systemInfo.polisAccountID === account.id && (
         <AvatarBadge

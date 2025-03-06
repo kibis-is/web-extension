@@ -13,6 +13,7 @@ module.exports = {
   rules: {
     '@typescript-eslint/no-inferrable-types': 'off',
     '@typescript-eslint/no-namespace': ['error', { allowDeclarations: true }],
+    'no-async-promise-executor': 'warn',
     'prefer-const': 'off',
   },
 };

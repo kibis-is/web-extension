@@ -2,10 +2,10 @@ import { AsyncThunk, createAsyncThunk } from '@reduxjs/toolkit';
 import browser from 'webextension-polyfill';
 
 // enums
-import { MessagesThunkEnum } from '@extension/enums';
+import { ThunkEnum } from '../enums';
 
 // messages
-import { ProviderFactoryResetMessage } from '@common/messages';
+import ProviderFactoryResetMessage from '@common/messages/ProviderFactoryResetMessage';
 
 // types
 import type { IBaseAsyncThunkConfig, IMainRootState } from '@extension/types';
@@ -15,7 +15,7 @@ const sendResetFactoryThunk: AsyncThunk<
   undefined, // args
   IBaseAsyncThunkConfig<IMainRootState>
 > = createAsyncThunk<void, undefined, IBaseAsyncThunkConfig<IMainRootState>>(
-  MessagesThunkEnum.SendFactoryReset,
+  ThunkEnum.SendFactoryReset,
   async () => {
     await browser.runtime.sendMessage(new ProviderFactoryResetMessage());
   }

@@ -6,7 +6,7 @@ import {
   CameraError,
   CameraNotAllowedError,
   CameraNotFoundError,
-} from '@extension/errors';
+} from '@common/errors';
 
 // selectors
 import { useSelectLogger } from '@extension/selectors';

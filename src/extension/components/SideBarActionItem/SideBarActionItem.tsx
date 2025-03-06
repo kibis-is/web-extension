@@ -2,11 +2,8 @@ import { Button, Center, HStack, Icon, Text, Tooltip } from '@chakra-ui/react';
 import React, { type FC } from 'react';
 
 // constants
-import {
-  DEFAULT_GAP,
-  SIDEBAR_ITEM_HEIGHT,
-  SIDEBAR_MIN_WIDTH,
-} from '@extension/constants';
+import { DEFAULT_GAP } from '@common/constants';
+import { SIDEBAR_ITEM_HEIGHT, SIDEBAR_MIN_WIDTH } from '@extension/constants';
 
 // hooks
 import useButtonHoverBackgroundColor from '@extension/hooks/useButtonHoverBackgroundColor';
@@ -17,7 +14,7 @@ import useSubTextColor from '@extension/hooks/useSubTextColor';
 import type { IProps } from './types';
 
 // utils
-import calculateIconSize from '@extension/utils/calculateIconSize';
+import calculateIconSize from '@common/utils/calculateIconSize';
 
 const SideBarActionItem: FC<IProps> = ({
   icon,

@@ -21,16 +21,13 @@ import {
 } from 'react-icons/io5';
 
 // components
-import Button from '@extension/components/Button';
-import CircularProgressWithIcon from '@extension/components/CircularProgressWithIcon';
+import Button from '@common/components/Button';
+import CircularProgressWithIcon from '@common/components/CircularProgressWithIcon';
 import QRCodeFrameIcon from './QRCodeFrameIcon';
 
 // constants
-import {
-  BODY_BACKGROUND_COLOR,
-  DEFAULT_GAP,
-  SUPPORT_MAIL_TO_LINK,
-} from '@extension/constants';
+import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@common/constants';
+import { SUPPORT_MAIL_TO_LINK } from '@extension/constants';
 
 // enums
 import { ErrorCodeEnum, ScanModeEnum } from '@extension/enums';
@@ -42,11 +39,13 @@ import useDefaultTextColor from '@extension/hooks/useDefaultTextColor';
 import useSubTextColor from '@extension/hooks/useSubTextColor';
 
 // theme
-import { theme } from '@extension/theme';
+import { theme } from '@common/theme';
 
 // types
 import type { IScanQRCodeModalContentProps } from '@extension/types';
+
 const ScanQRCodeViaCameraModalContent: FC<IScanQRCodeModalContentProps> = ({
+  colorMode,
   onPreviousClick,
   onURI,
   pagination,
@@ -167,7 +166,10 @@ const ScanQRCodeViaCameraModalContent: FC<IScanQRCodeModalContentProps> = ({
     return (
       <>
         {/*progress*/}
-        <CircularProgressWithIcon icon={IoQrCodeOutline} />
+        <CircularProgressWithIcon
+          colorMode={colorMode}
+          icon={IoQrCodeOutline}
+        />
 
         {/*caption*/}
         <Text color={defaultTextColor} fontSize="sm" textAlign="center">
@@ -253,6 +255,7 @@ const ScanQRCodeViaCameraModalContent: FC<IScanQRCodeModalContentProps> = ({
       <ModalFooter p={DEFAULT_GAP} zIndex={1}>
         {/*previous button*/}
         <Button
+          colorMode={colorMode}
           leftIcon={<IoArrowBackOutline />}
           onClick={handlePreviousClick}
           size="lg"

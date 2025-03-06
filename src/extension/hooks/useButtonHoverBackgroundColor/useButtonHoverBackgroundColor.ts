@@ -1,6 +1,9 @@
 // hooks
-import useColorModeValue from '@extension/hooks/useColorModeValue';
+import _useButtonHoverBackgroundColor from '@common/hooks/useButtonHoverBackgroundColor';
+
+// selectors
+import { useSelectSettingsColorMode } from '@extension/selectors';
 
 export default function useButtonHoverBackgroundColor(): string {
-  return useColorModeValue('gray.100', 'whiteAlpha.100');
+  return _useButtonHoverBackgroundColor(useSelectSettingsColorMode());
 }

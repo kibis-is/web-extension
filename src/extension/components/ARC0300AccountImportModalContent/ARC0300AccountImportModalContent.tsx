@@ -17,22 +17,19 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 // components
-import Button from '@extension/components/Button';
-import EmptyState from '@extension/components/EmptyState';
+import Button from '@common/components/Button';
+import EmptyState from '@common/components/EmptyState';
 import NewAccountItem from '@extension/components/NewAccountItem';
 
 // constants
-import {
-  ACCOUNTS_ROUTE,
-  BODY_BACKGROUND_COLOR,
-  DEFAULT_GAP,
-} from '@extension/constants';
+import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@common/constants';
+import { ACCOUNTS_ROUTE } from '@extension/constants';
 
 // enums
 import { AccountTabEnum, EncryptionMethodEnum } from '@extension/enums';
 
 // errors
-import { BaseExtensionError, MalformedDataError } from '@extension/errors';
+import { BaseExtensionError, MalformedDataError } from '@common/errors';
 
 // features
 import {
@@ -55,7 +52,7 @@ import {
 } from '@extension/selectors';
 
 // theme
-import { theme } from '@extension/theme';
+import { theme } from '@common/theme';
 
 // types
 import type {
@@ -69,8 +66,8 @@ import type {
 } from '@extension/types';
 
 // utils
-import convertPublicKeyToAVMAddress from '@extension/utils/convertPublicKeyToAVMAddress';
-import ellipseAddress from '@extension/utils/ellipseAddress';
+import convertPublicKeyToAVMAddress from '@common/utils/convertPublicKeyToAVMAddress';
+import ellipseAddress from '@common/utils/ellipseAddress';
 import flattenAccountImportSchemaToNewAccounts from '@extension/utils/flattenAccountImportSchemaToNewAccounts';
 
 const ARC0300AccountImportModalContent: FC<
@@ -78,6 +75,7 @@ const ARC0300AccountImportModalContent: FC<
 > = ({
   cancelButtonIcon,
   cancelButtonLabel,
+  colorMode,
   onComplete,
   onCancel,
   schemaOrSchemas: schemas,
@@ -197,7 +195,10 @@ const ARC0300AccountImportModalContent: FC<
         >
           <Spacer />
 
-          <EmptyState text={t<string>('captions.noAccountsToImport')} />
+          <EmptyState
+            colorMode={colorMode}
+            text={t<string>('captions.noAccountsToImport')}
+          />
 
           <Spacer />
         </VStack>
@@ -288,6 +289,7 @@ const ARC0300AccountImportModalContent: FC<
           <HStack spacing={DEFAULT_GAP - 2} w="full">
             {/*cancel button*/}
             <Button
+              colorMode={colorMode}
               leftIcon={cancelButtonIcon}
               onClick={handleCancelClick}
               size="lg"
@@ -299,6 +301,7 @@ const ARC0300AccountImportModalContent: FC<
 
             {/*import button*/}
             <Button
+              colorMode={colorMode}
               isLoading={saving}
               onClick={handleImportClick}
               rightIcon={<IoDownloadOutline />}

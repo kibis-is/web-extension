@@ -19,8 +19,8 @@ import { IoKeyOutline } from 'react-icons/io5';
 import { useDispatch } from 'react-redux';
 
 // components
-import Button from '@extension/components/Button';
-import CircularProgressWithIcon from '@extension/components/CircularProgressWithIcon';
+import Button from '@common/components/Button';
+import CircularProgressWithIcon from '@common/components/CircularProgressWithIcon';
 import CopyIconButton from '@extension/components/CopyIconButton';
 import COSEAlgorithmBadge from '@extension/components/COSEAlgorithmBadge';
 import ModalItem from '@extension/components/ModalItem';
@@ -34,7 +34,7 @@ import {
   BODY_BACKGROUND_COLOR,
   DEFAULT_GAP,
   MODAL_ITEM_HEIGHT,
-} from '@extension/constants';
+} from '@common/constants';
 
 // features
 import { create as createNotification } from '@extension/features/notifications';
@@ -51,17 +51,20 @@ import KbPasskey from '@extension/icons/KbPasskey';
 import ConfirmPasswordModal from '@extension/modals/ConfirmPasswordModal';
 
 // selectors
-import { useSelectPasskeysSaving } from '@extension/selectors';
+import {
+  useSelectPasskeysSaving,
+  useSelectSettingsColorMode,
+} from '@extension/selectors';
 
 // theme
-import { theme } from '@extension/theme';
+import { theme } from '@common/theme';
 
 // types
 import type { IAppThunkDispatch, IMainRootState } from '@extension/types';
 import type { IProps } from './types';
 
 // utils
-import calculateIconSize from '@extension/utils/calculateIconSize';
+import calculateIconSize from '@common/utils/calculateIconSize';
 
 const AddPasskeyModal: FC<IProps> = ({ addPasskey, onClose }) => {
   const { t } = useTranslation();
@@ -77,6 +80,7 @@ const AddPasskeyModal: FC<IProps> = ({ addPasskey, onClose }) => {
     onClose: onMoreInformationClose,
   } = useDisclosure();
   // selectors
+  const colorMode = useSelectSettingsColorMode();
   const saving = useSelectPasskeysSaving();
   // hooks
   const {
@@ -150,6 +154,7 @@ const AddPasskeyModal: FC<IProps> = ({ addPasskey, onClose }) => {
         >
           {/*loader*/}
           <ReEncryptKeysLoadingContent
+            colorMode={colorMode}
             encryptionProgressState={encryptionProgressState}
           />
         </VStack>
@@ -166,7 +171,7 @@ const AddPasskeyModal: FC<IProps> = ({ addPasskey, onClose }) => {
           w="full"
         >
           {/*passkey loader*/}
-          <CircularProgressWithIcon icon={KbPasskey} />
+          <CircularProgressWithIcon colorMode={colorMode} icon={KbPasskey} />
 
           {/*caption*/}
           <Text color={subTextColor} fontSize="sm" textAlign="justify" w="full">
@@ -394,6 +399,7 @@ const AddPasskeyModal: FC<IProps> = ({ addPasskey, onClose }) => {
             <HStack spacing={DEFAULT_GAP - 2} w="full">
               {/*cancel*/}
               <Button
+                colorMode={colorMode}
                 isDisabled={isLoading}
                 onClick={handleCancelClick}
                 size="lg"
@@ -405,6 +411,7 @@ const AddPasskeyModal: FC<IProps> = ({ addPasskey, onClose }) => {
 
               {/*encrypt*/}
               <Button
+                colorMode={colorMode}
                 isLoading={isLoading}
                 onClick={handleEncryptClick}
                 rightIcon={<IoKeyOutline />}
