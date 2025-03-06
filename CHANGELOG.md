@@ -1,3 +1,10 @@
+# [2.5.0-beta.2](https://github.com/kibis-is/web-extension/compare/v2.5.0-beta.1...v2.5.0-beta.2) (2025-03-06)
+
+
+### Features
+
+* authenticate account as passkey ([#347](https://github.com/kibis-is/web-extension/issues/347)) ([927f4db](https://github.com/kibis-is/web-extension/commit/927f4dbb71ee0801e95cf3c843af32bbf6192e46))
+
 # [2.5.0-beta.1](https://github.com/kibis-is/web-extension/compare/v2.4.0...v2.5.0-beta.1) (2024-11-21)
 
 
