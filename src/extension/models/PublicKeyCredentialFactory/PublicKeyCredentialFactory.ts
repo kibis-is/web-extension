@@ -175,7 +175,6 @@ export default class PublicKeyCredentialFactory {
       ]),
       this._keyPair.getSecretKey()
     );
-
     const attestationObject = encodeCBOR({
       attStmt: {
         alg: this._passkey.alg,

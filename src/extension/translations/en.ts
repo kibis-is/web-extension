@@ -235,6 +235,7 @@ const translation: IResourceLanguage = {
     optOutFee:
       'Standard assets require an "opt-out" fee. This is a transaction of the asset with a "0" amount sent to yourself.',
     passkeyAdded: 'Passkey {{name}} added!',
+    passkeyNotRequested: 'Passkey not requested',
     passkeyRemoved: 'Passkey {{name}} removed.',
     passkeyNotSupported1:
       'Unfortunately your browser does not support passkeys.',
@@ -319,10 +320,8 @@ const translation: IResourceLanguage = {
     updatingTransactions: 'Updating transactions',
     viewSeedPhrase1: 'Select an account to view the seed phrase.',
     viewSeedPhrase2: 'You will be prompted to enter your password.',
-    webAuthnAuthenticateRequestDescription1:
-      'An app is requesting to authenticate a passkey.',
-    webAuthnAuthenticateRequestDescription2:
-      'Select the registered passkey you would like to use to authenticate with {{rpName}}.',
+    webAuthnAuthenticateRequestDescription:
+      'An app is requesting to authenticate using a passkey.',
     webAuthnAuthenticateRequestWaiting: 'Waiting for passkey selection.',
     webAuthnRegisterRequestDescription1:
       'An app is requesting to register a new passkey.',
@@ -407,6 +406,7 @@ const translation: IResourceLanguage = {
     assetDetails: 'Asset Details',
     authenticateWithPasskey: 'Authenticate with Passkey',
     authentication: 'Authentication',
+    availablePasskeys: 'Available Passkeys',
     beta: 'Beta',
     cameraDenied: 'Camera Denied',
     cameraLoading: 'Camera Loading',

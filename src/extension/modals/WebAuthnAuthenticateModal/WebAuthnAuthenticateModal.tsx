@@ -10,6 +10,7 @@ import {
   ModalHeader,
   Skeleton,
   SkeletonCircle,
+  Spacer,
   Text,
   useDisclosure,
   VStack,
@@ -17,13 +18,15 @@ import {
 import { faker } from '@faker-js/faker';
 import React, { type FC, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { IoCheckmarkOutline } from 'react-icons/io5';
 import { useDispatch } from 'react-redux';
 
 // components
-import AccountSelect from '@extension/components/AccountSelect';
 import Button from '@common/components/Button';
+import EmptyState from '@common/components/EmptyState';
+import AccountSelect from '@extension/components/AccountSelect';
 import ModalSubHeading from '@extension/components/ModalSubHeading';
+import ScrollableContainer from '@extension/components/ScrollableContainer';
+import Item from './Item';
 
 // constants
 import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@common/constants';
@@ -38,19 +41,22 @@ import {
 } from '@common/errors';
 
 // events
-import WebAuthnRegisterRequestEvent from '@extension/events/WebAuthnRegisterRequestEvent';
+import WebAuthnAuthenticateRequestEvent from '@extension/events/WebAuthnAuthenticateRequestEvent';
 
 // features
 import { removeEventByIdThunk } from '@extension/features/events';
 import { create as createNotification } from '@extension/features/notifications';
 import {
+  sendWebAuthnAuthenticateResponseThunk,
   sendWebAuthnErrorResponseThunk,
-  sendWebAuthnRegisterResponseThunk,
 } from '@extension/features/webauthn';
 
 // hooks
 import useDefaultTextColor from '@extension/hooks/useDefaultTextColor';
 import useTextBackgroundColor from '@extension/hooks/useTextBackgroundColor';
+
+// icons
+import KbNoPasskey from '@extension/icons/KbNoPasskey';
 
 // modals
 import AuthenticationModal from '@extension/modals/AuthenticationModal';
@@ -73,6 +79,7 @@ import { theme } from '@common/theme';
 // types
 import type { IClientInformation } from '@common/types';
 import type {
+  IAccountPasskey,
   IAccountWithExtendedProps,
   IAppThunkDispatch,
   IBackgroundRootState,
@@ -80,6 +87,7 @@ import type {
   IModalProps,
   TEncryptionCredentials,
 } from '@extension/types';
+import { randomString } from '@stablelib/random';
 
 const WebAuthnAuthenticateModal: FC<IModalProps> = ({ onClose }) => {
   const { t } = useTranslation();
@@ -103,13 +111,37 @@ const WebAuthnAuthenticateModal: FC<IModalProps> = ({ onClose }) => {
   const defaultTextColor = useDefaultTextColor();
   const textBackgroundColor = useTextBackgroundColor();
   // memos
+  const _context = useMemo(() => randomString(8), []);
   const fakeHostText = useMemo(() => faker.internet.domainName(), []);
   const fakeNameText = useMemo(() => faker.commerce.productName(), []);
   // state
   const [account, setAccount] = useState<IAccountWithExtendedProps | null>(
     activeAccount
   );
-  const [event, setEvent] = useState<WebAuthnRegisterRequestEvent | null>(null);
+  const [event, setEvent] = useState<WebAuthnAuthenticateRequestEvent | null>(
+    null
+  );
+  const [selectedPasskeyID, setSelectedPasskeyID] = useState<string | null>(
+    null
+  );
+  // memos
+  const allowedCredentialIDs = useMemo(
+    () =>
+      event?.payload.message.payload.options.allowCredentials?.map(
+        ({ id }) => id
+      ) || [],
+    [event]
+  );
+  const passkeys = useMemo<IAccountPasskey[]>(() => {
+    if (!account || !event) {
+      return [];
+    }
+
+    // filter the passkeys by their relaying party id
+    return account.passkeys.filter(
+      ({ rp }) => rp.id === event.payload.message.payload.options.rpId
+    );
+  }, [account, event]);
   // handlers
   const handleOnCancelClick = async () => {
     if (event) {
@@ -131,15 +163,16 @@ const WebAuthnAuthenticateModal: FC<IModalProps> = ({ onClose }) => {
   const handleOnAuthenticationModalConfirm = async (
     result: TEncryptionCredentials
   ) => {
-    if (!event || !account) {
+    if (!event || !account || !selectedPasskeyID) {
       return;
     }
 
     // send the response
     await dispatch(
-      sendWebAuthnRegisterResponseThunk({
+      sendWebAuthnAuthenticateResponseThunk({
         accountID: account.id,
         event,
+        passkeyID: selectedPasskeyID,
         ...result,
       })
     ).unwrap();
@@ -150,7 +183,10 @@ const WebAuthnAuthenticateModal: FC<IModalProps> = ({ onClose }) => {
   };
   const handleOnAccountSelect = (value: IAccountWithExtendedProps) =>
     setAccount(value);
-  const handleOnConfirmClick = () => onAuthenticationModalOpen();
+  const handleOnSelectPasskeyClick = (id: string) => () => {
+    setSelectedPasskeyID(id);
+    onAuthenticationModalOpen();
+  };
   const handleOnError = (error: BaseExtensionError) =>
     dispatch(
       createNotification({
@@ -197,66 +233,53 @@ const WebAuthnAuthenticateModal: FC<IModalProps> = ({ onClose }) => {
 
     return (
       <>
-        {/*captions*/}
-        <VStack
-          align="center"
-          justify="center"
-          spacing={DEFAULT_GAP / 3}
-          w="full"
+        {/*caption*/}
+        <Text
+          color={defaultTextColor}
+          fontSize="sm"
+          textAlign="center"
+          width="full"
         >
-          <Text
-            color={defaultTextColor}
-            fontSize="sm"
-            textAlign="center"
-            width="full"
-          >
-            {t<string>('captions.webAuthnAuthenticateRequestDescription1')}
-          </Text>
-
-          <Text
-            color={defaultTextColor}
-            fontSize="sm"
-            textAlign="center"
-            width="full"
-          >
-            {t<string>('captions.webAuthnAuthenticateRequestDescription2', {
-              rpName: clientInfo.appName,
-            })}
-          </Text>
-        </VStack>
+          {t<string>('captions.webAuthnAuthenticateRequestDescription')}
+        </Text>
 
         {/*client details*/}
         <VStack align="center" flexGrow={1} spacing={DEFAULT_GAP / 3} w="full">
-          {/*icon */}
-          <Avatar
-            name={clientInfo.appName}
-            size="lg"
-            {...(clientInfo.iconUrl && {
-              src: clientInfo.iconUrl,
-            })}
-          />
+          <HStack align="center" spacing={DEFAULT_GAP / 2} w="full">
+            {/*icon */}
+            <Avatar
+              name={clientInfo.appName}
+              size="md"
+              {...(clientInfo.iconUrl && {
+                src: clientInfo.iconUrl,
+              })}
+            />
 
-          {/*name*/}
-          <Text
-            color={defaultTextColor}
-            fontSize="md"
-            textAlign="center"
-            width="full"
-          >
-            {clientInfo.appName}
-          </Text>
+            <VStack
+              align="start"
+              flexGrow={1}
+              justify="space-evenly"
+              spacing={DEFAULT_GAP / 3}
+              w="full"
+            >
+              {/*name*/}
+              <Text color={defaultTextColor} fontSize="sm" width="full">
+                {clientInfo.appName}
+              </Text>
 
-          {/*host*/}
-          <Box
-            backgroundColor={textBackgroundColor}
-            borderRadius={theme.radii['3xl']}
-            px={DEFAULT_GAP / 3}
-            py={1}
-          >
-            <Text color={defaultTextColor} fontSize="xs">
-              {clientInfo.host}
-            </Text>
-          </Box>
+              {/*host*/}
+              <Box
+                backgroundColor={textBackgroundColor}
+                borderRadius={theme.radii['3xl']}
+                px={DEFAULT_GAP / 3}
+                py={1}
+              >
+                <Text color={defaultTextColor} fontSize="xs">
+                  {clientInfo.host}
+                </Text>
+              </Box>
+            </VStack>
+          </HStack>
 
           <ModalSubHeading text={t<string>('headings.selectAccount')} />
 
@@ -273,6 +296,37 @@ const WebAuthnAuthenticateModal: FC<IModalProps> = ({ onClose }) => {
             systemInfo={systemInfo}
             value={account}
           />
+
+          <ModalSubHeading text={t<string>('headings.availablePasskeys')} />
+
+          {passkeys.length > 0 ? (
+            <ScrollableContainer>
+              {passkeys.map((passkey, index) => (
+                <Item
+                  disabled={
+                    allowedCredentialIDs.length > 0 &&
+                    !allowedCredentialIDs.some((value) => value === passkey.id)
+                  }
+                  key={`${_context}-passkey-item-${index}`}
+                  onClick={handleOnSelectPasskeyClick}
+                  passkey={passkey}
+                />
+              ))}
+            </ScrollableContainer>
+          ) : (
+            <VStack flexGrow={1} w="full">
+              <Spacer />
+
+              {/*empty state*/}
+              <EmptyState
+                colorMode={colorMode}
+                icon={KbNoPasskey}
+                text={t<string>('headings.noPasskeysFound')}
+              />
+
+              <Spacer />
+            </VStack>
+          )}
         </VStack>
       </>
     );
@@ -281,8 +335,8 @@ const WebAuthnAuthenticateModal: FC<IModalProps> = ({ onClose }) => {
   useEffect(() => {
     setEvent(
       (events.find(
-        ({ type }) => type === EventTypeEnum.WebAuthnRegisterRequest
-      ) as WebAuthnRegisterRequestEvent) || null
+        ({ type }) => type === EventTypeEnum.WebAuthnAuthenticateRequest
+      ) as WebAuthnAuthenticateRequestEvent) || null
     );
   }, [events]);
   useEffect(() => {
@@ -348,18 +402,6 @@ const WebAuthnAuthenticateModal: FC<IModalProps> = ({ onClose }) => {
                 w="full"
               >
                 {t<string>('buttons.cancel')}
-              </Button>
-
-              <Button
-                colorMode={colorMode}
-                isLoading={saving}
-                onClick={handleOnConfirmClick}
-                rightIcon={<IoCheckmarkOutline />}
-                size="lg"
-                variant="solid"
-                w="full"
-              >
-                {t<string>('buttons.confirm')}
               </Button>
             </HStack>
           </ModalFooter>
