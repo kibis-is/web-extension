@@ -6,8 +6,8 @@ import { EncryptionMethodEnum } from '@extension/enums';
 // managers
 import PasswordManager from '@extension/managers/PasswordManager';
 
-// models
-import Ed21559KeyPair from '@extension/models/Ed21559KeyPair';
+// cryptography
+import Ed21559KeyPair from '@extension/cryptography/Ed21559KeyPair';
 
 // services
 import PrivateKeyRepository from './PrivateKeyRepository';

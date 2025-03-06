@@ -36,8 +36,8 @@ import useDefaultTextColor from '@extension/hooks/useDefaultTextColor';
 import usePrimaryColorScheme from '@extension/hooks/usePrimaryColorScheme';
 import useSubTextColor from '@extension/hooks/useSubTextColor';
 
-// models
-import Ed21559KeyPair from '@extension/models/Ed21559KeyPair';
+// cryptography
+import Ed21559KeyPair from '@extension/cryptography/Ed21559KeyPair';
 
 // selectors
 import {

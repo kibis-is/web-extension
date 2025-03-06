@@ -29,8 +29,8 @@ import useDefaultTextColor from '../../hooks/useDefaultTextColor';
 import usePrimaryColorScheme from '../../hooks/usePrimaryColorScheme';
 import useSubTextColor from '../../hooks/useSubTextColor';
 
-// models
-import Ed21559KeyPair from '@extension/models/Ed21559KeyPair';
+// cryptography
+import Ed21559KeyPair from '@extension/cryptography/Ed21559KeyPair';
 
 // theme
 import { theme } from '@common/theme';
