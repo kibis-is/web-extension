@@ -184,7 +184,7 @@ const ExportAccountPage: FC = () => {
               }
 
               return {
-                privateKey: keyPair.privateKey,
+                privateKey: keyPair.privateKey(),
                 ...(name && {
                   name,
                 }),

@@ -169,7 +169,7 @@ export default async function signTransaction({
   }
 
   try {
-    return unsignedTransaction.signTxn(keyPair.getSecretKey());
+    return unsignedTransaction.signTxn(keyPair.secretKey());
   } catch (error) {
     logger?.error(`${_functionName}:`, error);
 

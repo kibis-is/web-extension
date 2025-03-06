@@ -119,7 +119,7 @@ const AddAccountMainRouter: FC = () => {
       accounts.find(
         ({ publicKey }) =>
           convertPublicKeyToAVMAddress(publicKey) ===
-          convertPublicKeyToAVMAddress(keyPair.publicKey)
+          convertPublicKeyToAVMAddress(keyPair.publicKey())
       ) || null;
 
     // if the account is already added
@@ -247,7 +247,7 @@ const AddAccountMainRouter: FC = () => {
         ephemeral: true,
         description: t<string>('captions.addedAccount', {
           address: ellipseAddress(
-            convertPublicKeyToAVMAddress(keyPair.publicKey)
+            convertPublicKeyToAVMAddress(keyPair.publicKey())
           ),
         }),
         title: t<string>('headings.addedAccount'),

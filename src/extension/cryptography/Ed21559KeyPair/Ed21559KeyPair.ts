@@ -1,18 +1,9 @@
 import { sign, type SignKeyPair } from 'tweetnacl';
 
-// types
-import type { INewOptions } from './types';
+// cryptography
+import BaseKeyPair from '@extension/cryptography/BaseKeyPair';
 
-export default class Ed21559KeyPair {
-  // public variables
-  public readonly privateKey: Uint8Array;
-  public readonly publicKey: Uint8Array;
-
-  constructor({ privateKey, publicKey }: INewOptions) {
-    this.privateKey = privateKey;
-    this.publicKey = publicKey;
-  }
-
+export default class Ed21559KeyPair extends BaseKeyPair {
   /**
    * public static functions
    */
@@ -55,16 +46,16 @@ export default class Ed21559KeyPair {
   /**
    * Gets the secret key for signing. The secret key is a 64 byte concatenation of the private key (32 byte) and the
    * public key (32 byte).
-   * @returns {Uint8Array} the secret key used for signing.
+   * @returns {Uint8Array} The secret key used for signing.
    * @public
    */
-  public getSecretKey(): Uint8Array {
+  public secretKey(): Uint8Array {
     const secretKey = new Uint8Array(
-      this.privateKey.length + this.publicKey.length
+      this._privateKey.length + this._publicKey.length
     );
 
-    secretKey.set(this.privateKey);
-    secretKey.set(this.publicKey, this.privateKey.length);
+    secretKey.set(this._privateKey);
+    secretKey.set(this._publicKey, this._privateKey.length);
 
     return secretKey;
   }

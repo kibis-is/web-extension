@@ -55,7 +55,7 @@ const saveNewAccountsThunk: AsyncThunk<
         !credentialLockActive);
 
     for (const { keyPair, name } of accounts) {
-      encodedPublicKey = PrivateKeyRepository.encode(keyPair.publicKey);
+      encodedPublicKey = PrivateKeyRepository.encode(keyPair.publicKey());
 
       try {
         if (encryptionOptions.type === EncryptionMethodEnum.Passkey) {

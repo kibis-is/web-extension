@@ -87,7 +87,7 @@ export default class PublicKeyCredentialFactory {
       [1]: 1, // key type: okp (octet key pair)
       [3]: COSE_ED25519_ALGORITHM, // algorithm: eddsa
       [-1]: 6, // curve: ed25519
-      [-2]: this._keyPair.publicKey, // public key bytes
+      [-2]: this._keyPair.publicKey(), // public key bytes
     });
   }
 
@@ -143,7 +143,7 @@ export default class PublicKeyCredentialFactory {
         ...authenticatorData,
         ...sha256(clientDataJSON), // include the hash of the client json
       ]),
-      this._keyPair.getSecretKey()
+      this._keyPair.secretKey()
     );
 
     return {
@@ -173,7 +173,7 @@ export default class PublicKeyCredentialFactory {
         ...authenticatorData,
         ...sha256(clientDataJSON), // include the hash of the client json
       ]),
-      this._keyPair.getSecretKey()
+      this._keyPair.secretKey()
     );
     const attestationObject = encodeCBOR({
       attStmt: {

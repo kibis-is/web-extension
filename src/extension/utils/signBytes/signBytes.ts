@@ -68,7 +68,7 @@ export default async function signBytes({
   }
 
   try {
-    signature = sign.detached(bytes, keyPair.getSecretKey());
+    signature = sign.detached(bytes, keyPair.secretKey());
 
     return signature;
   } catch (error) {

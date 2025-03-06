@@ -94,7 +94,7 @@ export default function useViewSeedPhrase(): IState {
         masked: false,
         seedPhrase: convertPrivateKeyToSeedPhrase({
           logger,
-          privateKey: keyPair.privateKey,
+          privateKey: keyPair.privateKey(),
         }),
       };
     } catch (error) {

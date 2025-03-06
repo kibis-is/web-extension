@@ -107,8 +107,8 @@ const ImportAccountViaQRCodeTab: FC = () => {
 
       try {
         _uris = createAccountImportURI({
-          accounts: keyPairs.map(({ privateKey }) => ({
-            privateKey,
+          accounts: keyPairs.map((keyPair) => ({
+            privateKey: keyPair.privateKey(),
             ...(addNames && {
               name: encodeHex(randomBytes(16)), // 32-byte string max
             }),
@@ -249,7 +249,7 @@ const ImportAccountViaQRCodeTab: FC = () => {
                 key={`import-account-address-${index}`}
                 wordBreak="break-word"
               >
-                {encodeAddress(value.publicKey)}
+                {encodeAddress(value.publicKey())}
               </Code>
             ))}
           </VStack>

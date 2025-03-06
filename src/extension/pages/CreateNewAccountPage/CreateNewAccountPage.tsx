@@ -93,7 +93,7 @@ const CreateNewAccountPage: FC<IAddAccountPageProps> = ({
   const _context = 'create-new-account-page';
   const seedPhrase = convertPrivateKeyToSeedPhrase({
     logger,
-    privateKey: keyPair.privateKey,
+    privateKey: keyPair.privateKey(),
   });
   const stepsLabels: string[] = [
     t<string>('headings.generateSeedPhrase'),

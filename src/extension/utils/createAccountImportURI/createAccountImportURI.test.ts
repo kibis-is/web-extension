@@ -71,7 +71,7 @@ describe(`${__dirname}#createAccountImportURI`, () => {
       const result = createAccountImportURI({
         accounts: [
           {
-            privateKey: keyPair.privateKey,
+            privateKey: keyPair.privateKey(),
           },
         ],
       });
@@ -90,7 +90,7 @@ describe(`${__dirname}#createAccountImportURI`, () => {
       expect(schema?.query[ARC0300QueryEnum.Name]).toHaveLength(0);
       expect(schema?.query[ARC0300QueryEnum.PrivateKey]).toHaveLength(1);
       expect(schema?.query[ARC0300QueryEnum.PrivateKey][0]).toBe(
-        encodeBase64URLSafe(keyPair.privateKey)
+        encodeBase64URLSafe(keyPair.privateKey())
       );
     });
 
@@ -103,7 +103,7 @@ describe(`${__dirname}#createAccountImportURI`, () => {
         accounts: [
           {
             name,
-            privateKey: keyPair.privateKey,
+            privateKey: keyPair.privateKey(),
           },
         ],
       });
@@ -123,7 +123,7 @@ describe(`${__dirname}#createAccountImportURI`, () => {
       expect(schema?.query[ARC0300QueryEnum.Name]?.includes(name)).toBe(true);
       expect(schema?.query[ARC0300QueryEnum.PrivateKey]).toHaveLength(1);
       expect(schema?.query[ARC0300QueryEnum.PrivateKey][0]).toBe(
-        encodeBase64URLSafe(keyPair.privateKey)
+        encodeBase64URLSafe(keyPair.privateKey())
       );
     });
   });
@@ -134,7 +134,7 @@ describe(`${__dirname}#createAccountImportURI`, () => {
       const accounts: IExportAccount[] = Array.from(
         { length: EXPORT_ACCOUNT_PAGE_LIMIT - 1 },
         () => ({
-          privateKey: Ed21559KeyPair.generate().privateKey,
+          privateKey: Ed21559KeyPair.generate().privateKey(),
         })
       );
       // act
@@ -168,7 +168,7 @@ describe(`${__dirname}#createAccountImportURI`, () => {
         { length: EXPORT_ACCOUNT_PAGE_LIMIT - 1 },
         () => ({
           name: encodeHex(randomBytes(16)), // 32 byte string max
-          privateKey: Ed21559KeyPair.generate().privateKey,
+          privateKey: Ed21559KeyPair.generate().privateKey(),
         })
       );
       // act
@@ -206,7 +206,7 @@ describe(`${__dirname}#createAccountImportURI`, () => {
       const accounts: IExportAccount[] = Array.from(
         { length: EXPORT_ACCOUNT_PAGE_LIMIT - 1 },
         (_, index) => ({
-          privateKey: Ed21559KeyPair.generate().privateKey,
+          privateKey: Ed21559KeyPair.generate().privateKey(),
           // only add evens
           ...(index % 2 === 0 && {
             name: encodeHex(randomBytes(16)), // 32 byte string max
@@ -255,7 +255,7 @@ describe(`${__dirname}#createAccountImportURI`, () => {
       const accounts: IExportAccount[] = Array.from(
         { length: EXPORT_ACCOUNT_PAGE_LIMIT + 1 },
         () => ({
-          privateKey: Ed21559KeyPair.generate().privateKey,
+          privateKey: Ed21559KeyPair.generate().privateKey(),
         })
       );
       // act
@@ -309,7 +309,7 @@ describe(`${__dirname}#createAccountImportURI`, () => {
         { length: EXPORT_ACCOUNT_PAGE_LIMIT + 1 },
         () => ({
           name: encodeHex(randomBytes(16)), // 32 byte string max
-          privateKey: Ed21559KeyPair.generate().privateKey,
+          privateKey: Ed21559KeyPair.generate().privateKey(),
         })
       );
       // act

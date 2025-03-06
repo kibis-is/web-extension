@@ -121,7 +121,7 @@ const ImportAccountViaSeedPhrasePage: FC<IAddAccountPageProps> = ({
       `${
         ImportAccountViaSeedPhrasePage.name
       }#${_functionName}: importing account "${convertPublicKeyToAVMAddress(
-        keyPair.publicKey
+        keyPair.publicKey()
       )}"`
     );
 
