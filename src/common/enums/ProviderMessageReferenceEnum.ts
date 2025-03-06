@@ -5,6 +5,7 @@ enum ProviderMessageReferenceEnum {
   FactoryReset = 'provider:factory_reset',
   RegistrationCompleted = 'provider:registration_completed',
   SessionsUpdated = 'provider:sessions_updated',
+  SettingsUpdated = 'provider:settings_updated',
   ThemeUpdated = 'provider:theme_updated',
 }
 

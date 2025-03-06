@@ -35,13 +35,13 @@ export default class ConfigManager {
    */
 
   private async _onUpdateMessage(): Promise<void> {
-    const _functionName = '_onUpdateMessage';
+    const _function = '_onUpdateMessage';
     let config: IExternalConfig | null;
 
     try {
       config = await this.config(); // fetch the new config details
     } catch (error) {
-      this._logger?.debug(`${ConfigManager.name}#${_functionName}:`, error);
+      this._logger?.debug(`${ConfigManager.name}#${_function}:`, error);
 
       return;
     }

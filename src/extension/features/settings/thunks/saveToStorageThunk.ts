@@ -4,6 +4,9 @@ import { type AsyncThunk, createAsyncThunk } from '@reduxjs/toolkit';
 import { NetworkTypeEnum } from '@extension/enums';
 import { ThunkEnum } from '../enums';
 
+// features
+import { sendSettingsUpdatedThunk } from '@extension/features/messages';
+
 // repositories
 import SettingsRepository from '@extension/repositories/SettingsRepository';
 
@@ -28,7 +31,7 @@ const saveToStorageThunk: AsyncThunk<
   ISettings,
   ISettings,
   IBaseAsyncThunkConfig<IMainRootState>
->(ThunkEnum.SaveToStorage, async (settings, { getState }) => {
+>(ThunkEnum.SaveToStorage, async (settings, { getState, dispatch }) => {
   const networks = getState().networks.items;
   let _settings = serialize(settings); // copy the readonly incoming settings
   let network = selectNetworkFromSettings({
@@ -53,6 +56,9 @@ const saveToStorageThunk: AsyncThunk<
       network.nftExplorers[0]?.id || null;
     _settings.general.selectedNetworkGenesisHash = network.genesisHash;
   }
+
+  // broadcast the settings have updated
+  dispatch(sendSettingsUpdatedThunk());
 
   return await new SettingsRepository().save(_settings);
 });

@@ -14,6 +14,7 @@ import AppWindowManager from '@extension/managers/AppWindowManager';
 // messages
 import BaseProviderMessage from '@common/messages/BaseProviderMessage';
 import ExternalConfigOnUpdateMessage from '@common/messages/ExternalConfigOnUpdateMessage';
+import ProviderSessionsUpdatedMessage from '@common/messages/ProviderSessionsUpdatedMessage';
 import ProviderThemeUpdatedMessage from '@common/messages/ProviderThemeUpdatedMessage';
 
 // repositories
@@ -43,12 +44,12 @@ export default class ProviderMessageHandler extends BaseListener {
   private async _handleFactoryResetMessage({
     reference,
   }: BaseProviderMessage): Promise<void> {
-    const _functionName = '_handleFactoryResetMessage';
+    const _function = '_handleFactoryResetMessage';
     let backgroundAppWindows: IAppWindow[];
     let mainAppWindows: IAppWindow[];
 
     this._logger?.debug(
-      `${ProviderMessageHandler.name}#${_functionName}: message "${reference}" received`
+      `${ProviderMessageHandler.name}#${_function}: message "${reference}" received`
     );
 
     backgroundAppWindows = await this._appWindowRepository.fetchByType(
@@ -91,12 +92,12 @@ export default class ProviderMessageHandler extends BaseListener {
   private async _handleRegistrationCompletedMessage({
     reference,
   }: BaseProviderMessage): Promise<void> {
-    const _functionName = '_handleRegistrationCompletedMessage';
+    const _function = '_handleRegistrationCompletedMessage';
     let mainAppWindows: IAppWindow[];
     let registrationAppWindows: IAppWindow[];
 
     this._logger?.debug(
-      `${ProviderMessageHandler.name}#${_functionName}: message "${reference}" received`
+      `${ProviderMessageHandler.name}#${_function}: message "${reference}" received`
     );
 
     mainAppWindows = await this._appWindowRepository.fetchByType(
@@ -140,13 +141,31 @@ export default class ProviderMessageHandler extends BaseListener {
     );
   }
 
-  private async _handleThemeUpdatedMessage({
+  private async _handleSettingsUpdatedMessage({
     reference,
-  }: BaseProviderMessage): Promise<void> {
-    const _functionName = '_handleThemeUpdatedMessage';
+  }: ProviderSessionsUpdatedMessage): Promise<void> {
+    const _function = '_handleSettingsUpdatedMessage';
 
     this._logger?.debug(
-      `${ProviderMessageHandler.name}#${_functionName}: message "${reference}" received`
+      `${ProviderMessageHandler.name}#${_function}: message "${reference}" received`
+    );
+
+    // proxy an update to the middlewares
+    return this._sendMessageToMiddlewares(
+      new ExternalConfigOnUpdateMessage({
+        id: generateUUID(),
+        reference: ExternalConfigMessageReferenceEnum.OnUpdate,
+      })
+    );
+  }
+
+  private async _handleThemeUpdatedMessage({
+    reference,
+  }: ProviderThemeUpdatedMessage): Promise<void> {
+    const _function = '_handleThemeUpdatedMessage';
+
+    this._logger?.debug(
+      `${ProviderMessageHandler.name}#${_function}: message "${reference}" received`
     );
 
     // proxy an update to the middlewares
@@ -166,6 +185,10 @@ export default class ProviderMessageHandler extends BaseListener {
         return await this._handleFactoryResetMessage(message);
       case ProviderMessageReferenceEnum.RegistrationCompleted:
         return await this._handleRegistrationCompletedMessage(message);
+      case ProviderMessageReferenceEnum.SettingsUpdated:
+        return await this._handleSettingsUpdatedMessage(
+          message as ProviderSessionsUpdatedMessage
+        );
       case ProviderMessageReferenceEnum.ThemeUpdated:
         return await this._handleThemeUpdatedMessage(
           message as ProviderThemeUpdatedMessage
@@ -184,11 +207,11 @@ export default class ProviderMessageHandler extends BaseListener {
   private async _sendMessageToMiddlewares(
     message: IBaseMessage
   ): Promise<void> {
-    const _functionName: string = '_sendMessageToMiddlewares';
+    const _function: string = '_sendMessageToMiddlewares';
     let tabs: Tabs.Tab[];
 
     this._logger?.debug(
-      `${ProviderMessageHandler.name}#${_functionName}: sending "${message.reference}" message to middleware`
+      `${ProviderMessageHandler.name}#${_function}: sending "${message.reference}" message to middleware`
     );
 
     // get all the tabs
