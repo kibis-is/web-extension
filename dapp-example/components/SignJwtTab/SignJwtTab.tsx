@@ -1,5 +1,5 @@
 import { generate as generateUUID } from '@agoralabs-sh/uuid';
-import { IBaseResult, ISignBytesResult } from '@agoralabs-sh/algorand-provider';
+import { IBaseResult, ISignBytesResult } from '@agoralabs-sh/avm-web-provider';
 import {
   Button,
   Code,

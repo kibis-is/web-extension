@@ -1,4 +1,4 @@
-import { IWalletAccount } from '@agoralabs-sh/algorand-provider';
+import { IAccount } from '@agoralabs-sh/avm-web-provider';
 import { Algodv2, IntDecoding } from 'algosdk';
 import BigNumber from 'bignumber.js';
 
@@ -10,7 +10,7 @@ import { IAccountInformation, IAssetInformation } from '../types';
 import getRandomAlgodClient from './getRandomAlgodClient';
 
 export default async function getAccountInformation(
-  account: IWalletAccount,
+  account: IAccount,
   network: INetwork
 ): Promise<IAccountInformation> {
   const client: Algodv2 = getRandomAlgodClient(network);
