@@ -1,4 +1,4 @@
-import { sign } from 'tweetnacl';
+import { signBytes as avmSignBytes } from 'algosdk';
 
 // enums
 import { EncryptionMethodEnum } from '@extension/enums';
@@ -68,7 +68,7 @@ export default async function signBytes({
   }
 
   try {
-    signature = sign.detached(bytes, keyPair.secretKey());
+    signature = avmSignBytes(bytes, keyPair.secretKey());
 
     return signature;
   } catch (error) {

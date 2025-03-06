@@ -6,7 +6,7 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import { encodeURLSafe as encodeBase64URLSafe } from '@stablelib/base64';
-import { randomBytes } from 'tweetnacl';
+import { randomBytes } from '@stablelib/random';
 import React, {
   forwardRef,
   type ForwardRefExoticComponent,

@@ -4,12 +4,14 @@ import { secp256r1 } from '@noble/curves/p256';
 import { COSE_ES256_ALGORITHM } from '@common/constants';
 
 // cryptography
-import BaseKeyPair from '@extension/cryptography/BaseKeyPair';
+import BaseSignKeyPair, {
+  type IVerifyOptions,
+} from '@extension/cryptography/BaseSignKeyPair';
 
 // errors
 import { InvalidKeyPairGenerationError } from '@common/errors';
 
-export default class ES256KeyPair extends BaseKeyPair {
+export default class ES256KeyPair extends BaseSignKeyPair {
   /**
    * public static functions
    */
@@ -61,12 +63,6 @@ export default class ES256KeyPair extends BaseKeyPair {
     return COSE_ES256_ALGORITHM;
   }
 
-  /**
-   * Gets the secret key for signing. The secret key is a 64 byte concatenation of the private key (32 byte) and the
-   * public key (32 byte).
-   * @returns {Uint8Array} The secret key used for signing.
-   * @public
-   */
   public secretKey(): Uint8Array {
     const secretKey = new Uint8Array(
       this._privateKey.length + this._publicKey.length
@@ -76,5 +72,15 @@ export default class ES256KeyPair extends BaseKeyPair {
     secretKey.set(this._publicKey, this._privateKey.length);
 
     return secretKey;
+  }
+
+  public sign(bytes: Uint8Array): Uint8Array {
+    return secp256r1
+      .sign(bytes, this._privateKey, { prehash: true })
+      .toCompactRawBytes();
+  }
+
+  public verify({ bytes, signature }: IVerifyOptions): boolean {
+    return secp256r1.verify(signature, bytes, this._publicKey);
   }
 }

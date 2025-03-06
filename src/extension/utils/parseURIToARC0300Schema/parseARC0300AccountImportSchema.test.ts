@@ -1,7 +1,7 @@
 import { encodeURLSafe as encodeBase64URLSafe } from '@stablelib/base64';
 import { encode as encodeHex } from '@stablelib/hex';
 import SparkMD5 from 'spark-md5';
-import { randomBytes } from 'tweetnacl';
+import { randomBytes } from '@stablelib/random';
 
 // constants
 import { ARC_0026_SCHEME, ARC_0300_SCHEME } from '@extension/constants';

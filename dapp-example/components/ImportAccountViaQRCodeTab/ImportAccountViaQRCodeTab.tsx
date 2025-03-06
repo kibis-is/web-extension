@@ -11,12 +11,12 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import { encode as encodeHex } from '@stablelib/hex';
+import { randomBytes } from '@stablelib/random';
 import { encodeAddress } from 'algosdk';
 import { sanitize } from 'dompurify';
 import { toString } from 'qrcode';
 import React, { ChangeEvent, FC, useEffect, useState } from 'react';
 import { InfinitySpin } from 'react-loader-spinner';
-import { randomBytes } from 'tweetnacl';
 
 // constants
 import {

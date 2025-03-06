@@ -10,7 +10,6 @@ import {
 } from '@stablelib/base64';
 import { encode as encodeCBOR } from '@stablelib/cbor';
 import { encode as encodeUTF8 } from '@stablelib/utf8';
-import { sign } from 'tweetnacl';
 
 // constants
 import { COSE_ED25519_ALGORITHM } from '@common/constants';
@@ -138,12 +137,11 @@ export default class PublicKeyCredentialFactory {
         origin: this._passkey.origin,
       })
     );
-    const signature = sign.detached(
+    const signature = this._keyPair.sign(
       new Uint8Array([
         ...authenticatorData,
         ...sha256(clientDataJSON), // include the hash of the client json
-      ]),
-      this._keyPair.secretKey()
+      ])
     );
 
     return {
@@ -168,12 +166,11 @@ export default class PublicKeyCredentialFactory {
         origin: this._passkey.origin,
       })
     );
-    const signature = sign.detached(
+    const signature = this._keyPair.sign(
       new Uint8Array([
         ...authenticatorData,
         ...sha256(clientDataJSON), // include the hash of the client json
-      ]),
-      this._keyPair.secretKey()
+      ])
     );
     const attestationObject = encodeCBOR({
       attStmt: {

@@ -11,7 +11,7 @@ import { encodeURLSafe as encodeBase64URLSafe } from '@stablelib/base64';
 import BigNumber from 'bignumber.js';
 import React, { type FC, type ReactElement } from 'react';
 import { useTranslation } from 'react-i18next';
-import { randomBytes } from 'tweetnacl';
+import { randomBytes } from '@stablelib/random';
 
 // components
 import Label from '@common/components/Label';

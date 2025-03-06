@@ -7,9 +7,11 @@ import { COSE_ED25519_ALGORITHM } from '@common/constants';
 import { InvalidKeyPairGenerationError } from '@common/errors';
 
 // cryptography
-import BaseKeyPair from '@extension/cryptography/BaseKeyPair';
+import BaseSignKeyPair, {
+  type IVerifyOptions,
+} from '@extension/cryptography/BaseSignKeyPair';
 
-export default class Ed21559KeyPair extends BaseKeyPair {
+export default class Ed21559KeyPair extends BaseSignKeyPair {
   /**
    * public static functions
    */
@@ -62,9 +64,8 @@ export default class Ed21559KeyPair extends BaseKeyPair {
   }
 
   /**
-   * Gets the secret key for signing. The secret key is a 64 byte concatenation of the private key (32 byte) and the
-   * public key (32 byte).
-   * @returns {Uint8Array} The secret key used for signing.
+   * The secret key is the concatenation of the private key (32 byte) + the (uncompressed) public key.
+   * @returns {Uint8Array} The secret key.
    * @public
    */
   public secretKey(): Uint8Array {
@@ -76,5 +77,13 @@ export default class Ed21559KeyPair extends BaseKeyPair {
     secretKey.set(this._publicKey, this._privateKey.length);
 
     return secretKey;
+  }
+
+  public sign(bytes: Uint8Array): Uint8Array {
+    return ed25519.sign(bytes, this._privateKey);
+  }
+
+  public verify({ bytes, signature }: IVerifyOptions): boolean {
+    return ed25519.verify(signature, bytes, this._publicKey);
   }
 }

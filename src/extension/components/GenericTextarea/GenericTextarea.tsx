@@ -2,7 +2,7 @@ import { Text, Textarea, VStack } from '@chakra-ui/react';
 import { encodeURLSafe as encodeBase64URLSafe } from '@stablelib/base64';
 import React, { type FC } from 'react';
 import { useTranslation } from 'react-i18next';
-import { randomBytes } from 'tweetnacl';
+import { randomBytes } from '@stablelib/random';
 
 // components
 import Label from '@common/components/Label';

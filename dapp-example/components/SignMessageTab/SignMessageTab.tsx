@@ -12,9 +12,8 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import { decode as decodeBase64 } from '@stablelib/base64';
-import { decodeAddress } from 'algosdk';
+import { verifyBytes } from 'algosdk';
 import React, { ChangeEvent, FC, useState } from 'react';
-import { sign } from 'tweetnacl';
 
 // hooks
 import useDefaultTextColor from '../../hooks/useDefaultTextColor';
@@ -107,10 +106,10 @@ const SignMessageTab: FC<IProps> = ({ account, signMessageAction }) => {
       return;
     }
 
-    verified = sign.detached.verify(
+    verified = verifyBytes(
       new TextEncoder().encode(message),
       decodeBase64(signature),
-      decodeAddress(signer).publicKey
+      signer
     );
 
     if (!verified) {
