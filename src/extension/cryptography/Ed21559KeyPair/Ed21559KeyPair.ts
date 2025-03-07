@@ -1,8 +1,4 @@
 import { ed25519 } from '@noble/curves/ed25519';
-import { encode as encodeCBOR } from '@stablelib/cbor';
-
-// constants
-import { COSE_ED25519_ALGORITHM } from '@common/constants';
 
 // errors
 import { InvalidKeyPairGenerationError } from '@common/errors';
@@ -19,7 +15,7 @@ export default class Ed21559KeyPair extends BaseSignKeyPair {
 
   /**
    * Generates a new Ed21559 key pair.
-   * @returns {Ed21559KeyPair} a new Ed21559 key pair.
+   * @returns {Ed21559KeyPair} A new Ed21559 key pair.
    * @public
    * @static
    */
@@ -33,9 +29,9 @@ export default class Ed21559KeyPair extends BaseSignKeyPair {
   }
 
   /**
-   * Generates an Ed21559 key pair from a private key.
-   * @param {Uint8Array} privateKey - a 32-byte private key.
-   * @returns {Ed21559KeyPair} a new Ed21559 key pair.
+   * Generates an EdDSA with Ed21559 curve key pair from a private key.
+   * @param {Uint8Array} privateKey - A 32-byte private key.
+   * @returns {Ed21559KeyPair} A new Ed21559 key pair.
    * @public
    * @static
    */
@@ -53,25 +49,6 @@ export default class Ed21559KeyPair extends BaseSignKeyPair {
   /**
    * public functions
    */
-
-  /**
-   * Gets the COSE algorithm value.
-   * @returns {number} The COSE algorithm: -8
-   * @see {@link https://www.iana.org/assignments/cose/cose.xhtml}
-   * @public
-   */
-  public coseAlgorithm(): -8 {
-    return COSE_ED25519_ALGORITHM;
-  }
-
-  public coseEncodedKey(): Uint8Array {
-    return encodeCBOR({
-      [1]: 1, // key type: okp (octet key pair)
-      [3]: this.coseAlgorithm(), // algorithm: eddsa
-      [-1]: 6, // curve: ed25519
-      [-2]: this._publicKey, // public key bytes
-    });
-  }
 
   /**
    * The secret key is the concatenation of the private key (32 byte) + the (uncompressed) public key.

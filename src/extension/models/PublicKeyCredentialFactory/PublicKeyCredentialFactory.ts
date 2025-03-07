@@ -18,6 +18,7 @@ import {
 } from '@common/constants';
 
 // cryptography
+import COSEPublicKey from '@extension/cryptography/COSEPublicKey';
 import Ed21559KeyPair from '@extension/cryptography/Ed21559KeyPair';
 import ES256KeyPair from '@extension/cryptography/ES256KeyPair';
 
@@ -51,7 +52,7 @@ export default class PublicKeyCredentialFactory {
     privateKey,
     publicKeyCreationOptions,
   }: IGenerateOptions): PublicKeyCredentialFactory {
-    const coseAlgorithm = publicKeyCreationOptions.pubKeyCredParams.reduce(
+    let coseAlgorithm = publicKeyCreationOptions.pubKeyCredParams.reduce(
       (acc, value) => {
         // ed21559 is preferred
         if (acc === COSE_ED25519_ALGORITHM) {
@@ -70,10 +71,12 @@ export default class PublicKeyCredentialFactory {
     switch (coseAlgorithm) {
       case COSE_ES256_ALGORITHM:
         keyPair = ES256KeyPair.generateFromPrivateKey(privateKey);
+        coseAlgorithm = COSE_ES256_ALGORITHM;
         break;
       case COSE_ED25519_ALGORITHM:
       default:
         keyPair = Ed21559KeyPair.generateFromPrivateKey(privateKey);
+        coseAlgorithm = COSE_ED25519_ALGORITHM;
         break;
     }
 
@@ -81,7 +84,7 @@ export default class PublicKeyCredentialFactory {
       challenge: publicKeyCreationOptions.challenge,
       keyPair,
       passkey: {
-        alg: keyPair.coseAlgorithm(),
+        alg: coseAlgorithm,
         createdAt: new Date().getTime().toString(10),
         id: generateUUID(),
         lastUsedAt: new Date().getTime().toString(10),
@@ -138,11 +141,15 @@ export default class PublicKeyCredentialFactory {
     const flags = 0x41; // user present and attestation flag
     const rpIDHash = sha256(encodeUTF8(this._passkey.rp.id));
     const signCount = new Uint8Array(4); // default to zero
+    const cosePublicKey: COSEPublicKey = new COSEPublicKey({
+      algorithm: this._passkey.alg,
+      publicKey: this._keyPair.publicKey(),
+    });
     const attestedCredentialData = new Uint8Array([
       ...decodeUUID(__PROVIDER_ID__), // use the provider identifier as the aaguid
       ...credentialIDLength,
       ...decodedCredentialID,
-      ...this._keyPair.coseEncodedKey(),
+      ...cosePublicKey.toCBOR(),
     ]);
 
     return new Uint8Array([
