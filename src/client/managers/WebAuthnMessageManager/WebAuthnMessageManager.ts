@@ -8,6 +8,7 @@ import { decode as decodeCOBOR } from '@stablelib/cbor';
 
 // errors
 import {
+  DecodingError,
   WebAuthnMalformedAuthenticationRequestError,
   WebAuthnMalformedRegistrationRequestError,
 } from '@common/errors';
@@ -36,12 +37,18 @@ import {
   ISerializedPublicKeyCredentialRequestOptions,
   TReplace,
 } from '@common/types';
-import type { IOptions, IResult } from './types';
+import {
+  IOptions,
+  IParsedAttestedCredentialData,
+  IParsedAuthenticatorData,
+  IResult,
+} from './types';
 
 // utils
 import bufferSourceToUint8Array from '@common/utils/bufferSourceToUint8Array';
 import dispatchMessageWithTimeout from '@client/utils/dispatchMessageWithTimeout';
 import uint8ArrayToArrayBuffer from '@common/utils/uint8ArrayToArrayBuffer';
+import COSEPublicKey from '@extension/cryptography/COSEPublicKey';
 
 export default class WebAuthnMessageManager {
   // private variables
@@ -54,6 +61,50 @@ export default class WebAuthnMessageManager {
   /**
    * private functions
    */
+
+  /**
+   * Parses authenticator data of a `PublicKeyCredential`.
+   * @param {Uint8Array} authenticatorData - The raw authenticator data.
+   * @returns {IParsedAuthenticatorData} The parsed authenticator data.
+   * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/Web_Authentication_API/Authenticator_data}
+   * @static
+   * @private
+   */
+  private static _parseAuthenticatorData(
+    authenticatorData: Uint8Array
+  ): IParsedAuthenticatorData {
+    const rpIdHash = authenticatorData.slice(0, 32);
+    const flags = authenticatorData.slice(32, 32 + 1);
+    const signCount = authenticatorData.slice(33, 33 + 4);
+    let attestedCredentialData: IParsedAttestedCredentialData | null = null;
+    let attestationDataView: DataView;
+    let credentialIDLength: number;
+    let encodedAttestedCredentialData: Uint8Array;
+
+    if (authenticatorData.length > 33) {
+      encodedAttestedCredentialData = authenticatorData.slice(33 + 4);
+      attestationDataView = new DataView(encodedAttestedCredentialData.buffer);
+      credentialIDLength = attestationDataView.getUint16(16);
+      attestedCredentialData = {
+        aaguid: encodedAttestedCredentialData.slice(0, 16), // first 16-bytes
+        credentialID: encodedAttestedCredentialData.slice(
+          16 + 2,
+          16 + 2 + credentialIDLength
+        ), // start after aaguid + credential id length for length of credential id
+        credentialIDLength: encodedAttestedCredentialData.slice(16, 16 + 2), // start after aaguid for 2-bytes
+        credentialPublicKey: encodedAttestedCredentialData.slice(
+          16 + 2 + credentialIDLength
+        ), // start after aaguid + credential id length + credential id
+      };
+    }
+
+    return {
+      attestedCredentialData,
+      flags,
+      rpIdHash,
+      signCount,
+    };
+  }
 
   private static _deserializeAssertionCredential(
     credential: ISerializedPublicKeyCredential<ISerializedAuthenticatorAssertionResponse>
@@ -94,6 +145,21 @@ export default class WebAuthnMessageManager {
     );
     const decodedAttestationObject = decodeCOBOR(attestationObject);
     const decodedRawID = decodeBase64(credential.rawId);
+    const { attestedCredentialData } =
+      WebAuthnMessageManager._parseAuthenticatorData(
+        decodedAttestationObject.authData
+      );
+    let cosePublicKey: COSEPublicKey;
+
+    if (!attestedCredentialData) {
+      throw new DecodingError(
+        'failed to decode authenticator attestation credential'
+      );
+    }
+
+    cosePublicKey = COSEPublicKey.fromCBOR(
+      attestedCredentialData.credentialPublicKey
+    );
 
     return {
       ...credential,
@@ -108,7 +174,7 @@ export default class WebAuthnMessageManager {
         getAuthenticatorData: () =>
           uint8ArrayToArrayBuffer(decodedAttestationObject.authData),
         getPublicKey: () => null,
-        getPublicKeyAlgorithm: () => COSE_ED25519_ALGORITHM,
+        getPublicKeyAlgorithm: () => cosePublicKey.algorithm(),
         getTransports: () => ['internal'],
       },
     };

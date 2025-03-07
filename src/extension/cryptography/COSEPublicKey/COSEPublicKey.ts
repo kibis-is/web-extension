@@ -161,22 +161,22 @@ export default class COSEPublicKey {
    */
   public toCBOR(): Uint8Array {
     const value: Record<number, number | Uint8Array> = {
-      [1]: this.keyType(),
-      [3]: this.algorithm(),
-      [-1]: this.curve(),
+      ['1']: this.keyType(),
+      ['3']: this.algorithm(),
+      ['-1']: this.curve(),
     };
 
     switch (this._algorithm) {
       case COSE_ED25519_ALGORITHM:
         return encodeCBOR({
           ...value,
-          [-2]: this._publicKey, // public key bytes
+          ['-2']: this._publicKey, // public key bytes
         });
       case COSE_ES256_ALGORITHM:
         return encodeCBOR({
           ...value,
-          [-2]: this._publicKey.slice(1, 33), // x-coordinate (the first 32 bytes after the prefix)
-          [-3]: this._publicKey.slice(33), // y-coordinate (the remaining 32 bytes after the x-coordinate)
+          ['-2']: this._publicKey.slice(1, 33), // x-coordinate (the first 32 bytes after the prefix)
+          ['-3']: this._publicKey.slice(33), // y-coordinate (the remaining 32 bytes after the x-coordinate)
         });
       default:
         throw new MalformedDataError(

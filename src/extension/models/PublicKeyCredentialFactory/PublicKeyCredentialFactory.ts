@@ -133,31 +133,11 @@ export default class PublicKeyCredentialFactory {
    * @private
    */
   public authenticatorData(): Uint8Array {
-    const decodedCredentialID = decodeUUID(this._passkey.id);
-    const credentialIDLength = new Uint8Array([
-      (decodedCredentialID.length >> 8) & 0xff, // high byte
-      decodedCredentialID.length & 0xff, // low byte
-    ]);
     const flags = 0x41; // user present and attestation flag
     const rpIDHash = sha256(encodeUTF8(this._passkey.rp.id));
     const signCount = new Uint8Array(4); // default to zero
-    const cosePublicKey: COSEPublicKey = new COSEPublicKey({
-      algorithm: this._passkey.alg,
-      publicKey: this._keyPair.publicKey(),
-    });
-    const attestedCredentialData = new Uint8Array([
-      ...decodeUUID(__PROVIDER_ID__), // use the provider identifier as the aaguid
-      ...credentialIDLength,
-      ...decodedCredentialID,
-      ...cosePublicKey.toCBOR(),
-    ]);
 
-    return new Uint8Array([
-      ...rpIDHash,
-      flags,
-      ...signCount,
-      ...attestedCredentialData,
-    ]);
+    return new Uint8Array([...rpIDHash, flags, ...signCount]);
   }
 
   public passkey(): IAccountPasskey {
@@ -194,7 +174,23 @@ export default class PublicKeyCredentialFactory {
   }
 
   public serializedAttestationCredential(): ISerializedPublicKeyCredential<ISerializedAuthenticatorAttestationResponse> {
-    const authenticatorData = this.authenticatorData();
+    const cosePublicKey: COSEPublicKey = new COSEPublicKey({
+      algorithm: this._passkey.alg,
+      publicKey: this._keyPair.publicKey(),
+    });
+    const decodedCredentialID = decodeUUID(this._passkey.id);
+    const credentialIDLength = new Uint8Array([
+      (decodedCredentialID.length >> 8) & 0xff, // high byte
+      decodedCredentialID.length & 0xff, // low byte
+    ]);
+    const authenticatorData = new Uint8Array([
+      ...this.authenticatorData(), // basic authenticator data
+      // attested credential data
+      ...decodeUUID(__PROVIDER_ID__), // use the provider identifier as the aaguid
+      ...credentialIDLength,
+      ...decodedCredentialID,
+      ...cosePublicKey.toCBOR(),
+    ]);
     const clientDataJSON = encodeUTF8(
       JSON.stringify({
         type: 'webauthn.create',
