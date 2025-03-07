@@ -171,8 +171,8 @@ const sendWebAuthnAuthenticateResponseThunk: AsyncThunk<
     }
 
     publicKeyCredentialFactory = PublicKeyCredentialFactory.init({
-      keyPair,
       passkey,
+      privateKey: keyPair.privateKey(),
       publicKeyCredentialRequestOptions: message.payload.options,
     });
 

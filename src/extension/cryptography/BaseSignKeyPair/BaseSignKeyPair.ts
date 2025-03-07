@@ -18,6 +18,14 @@ export default abstract class BaseSignKeyPair {
   public abstract coseAlgorithm(): number;
 
   /**
+   * The COSE key encoded in CBOR as specified in RFC-8152.
+   * @returns {Uint8Array} The COSE public key encoded in CBOR.
+   * @see {@link https://datatracker.ietf.org/doc/html/rfc8152}
+   * @public
+   */
+  public abstract coseEncodedKey(): Uint8Array;
+
+  /**
    * The secret key is the concatenation of the private key (32 byte) + the (uncompressed) public key.
    * @returns {Uint8Array} The secret key.
    * @public

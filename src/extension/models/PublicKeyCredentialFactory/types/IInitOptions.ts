@@ -1,13 +1,10 @@
-// cryptography
-import Ed21559KeyPair from '@extension/cryptography/Ed21559KeyPair';
-
 // types
 import type { ISerializedPublicKeyCredentialRequestOptions } from '@common/types';
 import type { IAccountPasskey } from '@extension/types';
 
 interface IInitOptions {
-  keyPair: Ed21559KeyPair;
   passkey: IAccountPasskey;
+  privateKey: Uint8Array;
   publicKeyCredentialRequestOptions: ISerializedPublicKeyCredentialRequestOptions;
 }
 

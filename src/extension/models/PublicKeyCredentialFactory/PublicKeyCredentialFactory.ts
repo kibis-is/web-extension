@@ -12,10 +12,14 @@ import { encode as encodeCBOR } from '@stablelib/cbor';
 import { encode as encodeUTF8 } from '@stablelib/utf8';
 
 // constants
-import { COSE_ED25519_ALGORITHM } from '@common/constants';
+import {
+  COSE_ED25519_ALGORITHM,
+  COSE_ES256_ALGORITHM,
+} from '@common/constants';
 
 // cryptography
 import Ed21559KeyPair from '@extension/cryptography/Ed21559KeyPair';
+import ES256KeyPair from '@extension/cryptography/ES256KeyPair';
 
 // types
 import type {
@@ -29,7 +33,7 @@ import type { IGenerateOptions, IInitOptions, INewOptions } from './types';
 export default class PublicKeyCredentialFactory {
   // private variables
   private readonly _challenge: string;
-  private readonly _keyPair: Ed21559KeyPair;
+  private readonly _keyPair: Ed21559KeyPair | ES256KeyPair;
   private readonly _passkey: IAccountPasskey;
 
   private constructor({ challenge, keyPair, passkey }: INewOptions) {
@@ -43,15 +47,41 @@ export default class PublicKeyCredentialFactory {
    */
 
   public static generate({
-    keyPair,
     origin,
+    privateKey,
     publicKeyCreationOptions,
   }: IGenerateOptions): PublicKeyCredentialFactory {
+    const coseAlgorithm = publicKeyCreationOptions.pubKeyCredParams.reduce(
+      (acc, value) => {
+        // ed21559 is preferred
+        if (acc === COSE_ED25519_ALGORITHM) {
+          return acc;
+        }
+
+        return value.alg === COSE_ED25519_ALGORITHM ||
+          value.alg === COSE_ES256_ALGORITHM
+          ? value.alg
+          : acc;
+      },
+      null
+    ); // get the cose algorithm type
+    let keyPair: Ed21559KeyPair | ES256KeyPair;
+
+    switch (coseAlgorithm) {
+      case COSE_ES256_ALGORITHM:
+        keyPair = ES256KeyPair.generateFromPrivateKey(privateKey);
+        break;
+      case COSE_ED25519_ALGORITHM:
+      default:
+        keyPair = Ed21559KeyPair.generateFromPrivateKey(privateKey);
+        break;
+    }
+
     return new PublicKeyCredentialFactory({
       challenge: publicKeyCreationOptions.challenge,
       keyPair,
       passkey: {
-        alg: COSE_ED25519_ALGORITHM,
+        alg: keyPair.coseAlgorithm(),
         createdAt: new Date().getTime().toString(10),
         id: generateUUID(),
         lastUsedAt: new Date().getTime().toString(10),
@@ -66,27 +96,26 @@ export default class PublicKeyCredentialFactory {
   }
 
   public static init({
-    keyPair,
     passkey,
+    privateKey,
     publicKeyCredentialRequestOptions,
   }: IInitOptions): PublicKeyCredentialFactory {
+    let keyPair: Ed21559KeyPair | ES256KeyPair;
+
+    switch (passkey.alg) {
+      case COSE_ES256_ALGORITHM:
+        keyPair = ES256KeyPair.generateFromPrivateKey(privateKey);
+        break;
+      case COSE_ED25519_ALGORITHM:
+      default:
+        keyPair = Ed21559KeyPair.generateFromPrivateKey(privateKey);
+        break;
+    }
+
     return new PublicKeyCredentialFactory({
       challenge: publicKeyCredentialRequestOptions.challenge,
       keyPair,
       passkey,
-    });
-  }
-
-  /**
-   * private functions
-   */
-
-  private _coseEncodedKey(): Uint8Array {
-    return encodeCBOR({
-      [1]: 1, // key type: okp (octet key pair)
-      [3]: COSE_ED25519_ALGORITHM, // algorithm: eddsa
-      [-1]: 6, // curve: ed25519
-      [-2]: this._keyPair.publicKey(), // public key bytes
     });
   }
 
@@ -113,7 +142,7 @@ export default class PublicKeyCredentialFactory {
       ...decodeUUID(__PROVIDER_ID__), // use the provider identifier as the aaguid
       ...credentialIDLength,
       ...decodedCredentialID,
-      ...this._coseEncodedKey(),
+      ...this._keyPair.coseEncodedKey(),
     ]);
 
     return new Uint8Array([

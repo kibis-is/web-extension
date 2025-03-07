@@ -1,4 +1,5 @@
 import { ed25519 } from '@noble/curves/ed25519';
+import { encode as encodeCBOR } from '@stablelib/cbor';
 
 // constants
 import { COSE_ED25519_ALGORITHM } from '@common/constants';
@@ -59,8 +60,17 @@ export default class Ed21559KeyPair extends BaseSignKeyPair {
    * @see {@link https://www.iana.org/assignments/cose/cose.xhtml}
    * @public
    */
-  public coseAlgorithm(): number {
+  public coseAlgorithm(): -8 {
     return COSE_ED25519_ALGORITHM;
+  }
+
+  public coseEncodedKey(): Uint8Array {
+    return encodeCBOR({
+      [1]: 1, // key type: okp (octet key pair)
+      [3]: this.coseAlgorithm(), // algorithm: eddsa
+      [-1]: 6, // curve: ed25519
+      [-2]: this._publicKey, // public key bytes
+    });
   }
 
   /**

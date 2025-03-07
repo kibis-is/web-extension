@@ -141,8 +141,8 @@ const sendWebAuthnRegisterResponseThunk: AsyncThunk<
     }
 
     publicKeyCredentialFactory = PublicKeyCredentialFactory.generate({
-      keyPair,
       origin: new URL(message.payload.clientInfo.host).origin,
+      privateKey: keyPair.privateKey(),
       publicKeyCreationOptions: message.payload.options,
     });
 
