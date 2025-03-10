@@ -1,4 +1,4 @@
-import { decode as decodeCBOR, encode as encodeCBOR } from '@stablelib/cbor';
+import { decode as decodeCBOR, encode as encodeCBOR } from 'cbor2';
 
 // constants
 import {
@@ -35,18 +35,18 @@ export default class COSEPublicKey {
    * @public
    */
   public static fromCBOR(value: Uint8Array): COSEPublicKey {
-    const decoded = decodeCBOR(value);
+    const decoded = decodeCBOR<Map<number, number | Uint8Array>>(value);
     let publicKey: Uint8Array;
 
-    switch (decoded['3']) {
+    switch (decoded.get(3)) {
       case COSE_ED25519_ALGORITHM:
-        if (!decoded['-2']) {
+        if (!decoded.get(-2)) {
           throw new MalformedDataError(
             `malformed cose key: ${JSON.stringify(decoded)}`
           );
         }
 
-        publicKey = decoded['-2'];
+        publicKey = decoded.get(-2) as Uint8Array;
 
         if (publicKey.length !== 32) {
           throw new MalformedDataError(
@@ -56,29 +56,33 @@ export default class COSEPublicKey {
 
         break;
       case COSE_ES256_ALGORITHM:
-        if (!decoded['-2'] || !decoded['-3']) {
+        if (!decoded.get(-2) || !decoded.get(-3)) {
           throw new MalformedDataError(
             `malformed cose key: ${JSON.stringify(decoded)}`
           );
         }
 
-        if (decoded['-2'].length !== 32) {
+        if ((decoded.get(-2) as Uint8Array).length !== 32) {
           throw new MalformedDataError(
-            `invalid cose key public key length for "${COSE_ES256_ALGORITHM}" x-coordinate, expected 32-bytes found ${decoded['-2'].length}-bytes`
+            `invalid cose key public key length for "${COSE_ES256_ALGORITHM}" x-coordinate, expected 32-bytes found ${
+              (decoded.get(-2) as Uint8Array).length
+            }-bytes`
           );
         }
 
-        if (decoded['-3'].length !== 32) {
+        if ((decoded.get(-3) as Uint8Array).length !== 32) {
           throw new MalformedDataError(
-            `invalid cose key public key length for "${COSE_ES256_ALGORITHM}" y-coordinate, expected 32-bytes found ${decoded['-3'].length}-bytes`
+            `invalid cose key public key length for "${COSE_ES256_ALGORITHM}" y-coordinate, expected 32-bytes found ${
+              (decoded.get(-3) as Uint8Array).length
+            }-bytes`
           );
         }
 
         publicKey = new Uint8Array(65);
 
         publicKey[0] = 0x04; // uncompressed key prefix
-        publicKey.set(decoded['-2'], 1); // x-coordinate
-        publicKey.set(decoded['-3'], 33); // y-coordinate
+        publicKey.set(decoded.get(-2) as Uint8Array, 1); // x-coordinate
+        publicKey.set(decoded.get(-3) as Uint8Array, 33); // y-coordinate
         break;
       default:
         throw new MalformedDataError(
@@ -87,7 +91,7 @@ export default class COSEPublicKey {
     }
 
     return new COSEPublicKey({
-      algorithm: decoded['3'],
+      algorithm: decoded[3],
       publicKey,
     });
   }
@@ -160,28 +164,26 @@ export default class COSEPublicKey {
    * @public
    */
   public toCBOR(): Uint8Array {
-    const value: Record<number, number | Uint8Array> = {
-      ['1']: this.keyType(),
-      ['3']: this.algorithm(),
-      ['-1']: this.curve(),
-    };
+    const value = new Map<number, number | Uint8Array>();
+
+    value.set(1, this.keyType());
+    value.set(3, this.algorithm());
+    value.set(-1, this.curve());
 
     switch (this._algorithm) {
       case COSE_ED25519_ALGORITHM:
-        return encodeCBOR({
-          ...value,
-          ['-2']: this._publicKey, // public key bytes
-        });
+        value.set(-2, this._publicKey); // public key bytes
+        break;
       case COSE_ES256_ALGORITHM:
-        return encodeCBOR({
-          ...value,
-          ['-2']: this._publicKey.slice(1, 33), // x-coordinate (the first 32 bytes after the prefix)
-          ['-3']: this._publicKey.slice(33), // y-coordinate (the remaining 32 bytes after the x-coordinate)
-        });
+        value.set(-2, this._publicKey.slice(1, 33)); // x-coordinate (the first 32 bytes after the prefix)
+        value.set(-3, this._publicKey.slice(33)); // y-coordinate (the remaining 32 bytes after the x-coordinate)
+        break;
       default:
         throw new MalformedDataError(
           `unsupported cose algorithm: "${this._algorithm}"`
         );
     }
+
+    return encodeCBOR(value);
   }
 }

@@ -8,7 +8,7 @@ import {
   encode as encodeBase64,
   encodeURLSafe as encodeBase64URLSafe,
 } from '@stablelib/base64';
-import { encode as encodeCBOR } from '@stablelib/cbor';
+import { encode as encodeCBOR } from 'cbor2';
 import { encode as encodeUTF8 } from '@stablelib/utf8';
 
 // constants
@@ -194,7 +194,10 @@ export default class PublicKeyCredentialFactory {
     const clientDataJSON = encodeUTF8(
       JSON.stringify({
         type: 'webauthn.create',
-        challenge: encodeBase64URLSafe(decodeBase64(this._challenge)), // convert the base64 encoded challenge to url safe
+        challenge: encodeBase64URLSafe(decodeBase64(this._challenge)).replace(
+          /=/g,
+          ''
+        ), // convert the base64 encoded challenge to url safe with padding removed
         origin: this._passkey.origin,
       })
     );

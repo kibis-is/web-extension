@@ -4,7 +4,10 @@ import {
   encode as encodeBase64,
   encodeURLSafe as encodeBase64URLSafe,
 } from '@stablelib/base64';
-import { decode as decodeCOBOR } from '@stablelib/cbor';
+import { decode as decodeCOBOR } from 'cbor2';
+
+// cryptography
+import COSEPublicKey from '@extension/cryptography/COSEPublicKey';
 
 // errors
 import {
@@ -48,7 +51,6 @@ import {
 import bufferSourceToUint8Array from '@common/utils/bufferSourceToUint8Array';
 import dispatchMessageWithTimeout from '@client/utils/dispatchMessageWithTimeout';
 import uint8ArrayToArrayBuffer from '@common/utils/uint8ArrayToArrayBuffer';
-import COSEPublicKey from '@extension/cryptography/COSEPublicKey';
 
 export default class WebAuthnMessageManager {
   // private variables
@@ -143,7 +145,8 @@ export default class WebAuthnMessageManager {
     const attestationObject = decodeBase64(
       credential.response.attestationObject
     );
-    const decodedAttestationObject = decodeCOBOR(attestationObject);
+    const decodedAttestationObject =
+      decodeCOBOR<Record<string, Uint8Array>>(attestationObject);
     const decodedRawID = decodeBase64(credential.rawId);
     const { attestedCredentialData } =
       WebAuthnMessageManager._parseAuthenticatorData(
