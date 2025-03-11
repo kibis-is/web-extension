@@ -45,6 +45,7 @@ export default class WebAuthnInterceptor {
     initialConfig,
     logger,
     navigatorCredentialsCreateFn,
+    navigatorCredentialsGetFn,
     webAuthnMessageManager,
   }: INewOptions) {
     this._config = initialConfig || {
@@ -60,6 +61,7 @@ export default class WebAuthnInterceptor {
     this._i18next = null;
     this._logger = logger || null;
     this._navigatorCredentialsCreateFn = navigatorCredentialsCreateFn;
+    this._navigatorCredentialsGetFn = navigatorCredentialsGetFn;
     this._webAuthnMessageManager =
       webAuthnMessageManager || new WebAuthnMessageManager({ logger });
 
@@ -73,6 +75,7 @@ export default class WebAuthnInterceptor {
 
   public static async initialize({
     navigatorCredentialsCreateFn,
+    navigatorCredentialsGetFn,
   }: IInitializeOptions): Promise<WebAuthnInterceptor> {
     let logger = createLogger(__ENV__ === 'development' ? 'debug' : 'error');
     const configManager = new ConfigManager({ logger });
@@ -89,6 +92,7 @@ export default class WebAuthnInterceptor {
       configManager,
       logger,
       navigatorCredentialsCreateFn,
+      navigatorCredentialsGetFn,
       webAuthnMessageManager,
       ...(config && { initialConfig: config }),
     });
@@ -135,7 +139,7 @@ export default class WebAuthnInterceptor {
     rootElement.style.position = 'fixed';
     rootElement.style.top = '0';
     rootElement.style.right = '0';
-    rootElement.style.zIndex = '9999px';
+    rootElement.style.zIndex = '99999px';
 
     return createRoot(rootElement);
   }

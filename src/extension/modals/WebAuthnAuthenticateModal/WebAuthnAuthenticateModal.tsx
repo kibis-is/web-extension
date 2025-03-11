@@ -1,3 +1,4 @@
+import { encode as encodeUUID } from '@agoralabs-sh/uuid';
 import {
   Avatar,
   Box,
@@ -16,6 +17,7 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import { faker } from '@faker-js/faker';
+import { decode as decodeBase64 } from '@stablelib/base64';
 import React, { type FC, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
@@ -127,11 +129,13 @@ const WebAuthnAuthenticateModal: FC<IModalProps> = ({ onClose }) => {
   // memos
   const allowedCredentialIDs = useMemo(
     () =>
-      event?.payload.message.payload.options.allowCredentials?.map(
-        ({ id }) => id
+      event?.payload.message.payload.options.allowCredentials?.map(({ id }) =>
+        encodeUUID(decodeBase64(id))
       ) || [],
     [event]
   );
+  console.log('allowedCredentialIDs:', allowedCredentialIDs);
+  console.log('account.passkeys:', account?.passkeys);
   const passkeys = useMemo<IAccountPasskey[]>(() => {
     if (!account || !event) {
       return [];

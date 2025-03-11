@@ -9,6 +9,7 @@ interface INewOptions extends IBaseOptions {
   configManager?: ConfigManager;
   initialConfig?: IExternalConfig;
   navigatorCredentialsCreateFn: typeof navigator.credentials.create;
+  navigatorCredentialsGetFn: typeof navigator.credentials.get;
   webAuthnMessageManager?: WebAuthnMessageManager;
 }
 

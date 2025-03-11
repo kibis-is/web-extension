@@ -38,7 +38,10 @@ const Item: FC<IItemProps> = ({ disabled = false, onClick, passkey }) => {
   // memos
   const iconSize = useMemo(() => calculateIconSize('sm'), []);
   // handlers
-  const handleOnClick = useCallback(() => onClick(passkey.id), []);
+  const handleOnClick = useCallback(
+    () => onClick(passkey.id),
+    [passkey, onClick]
+  );
   // renders
   const renderContent = () => (
     <HStack
