@@ -126,26 +126,31 @@ export default class PublicKeyCredentialFactory {
    * public functions
    */
 
-  /**
-   * Creates the authenticated data.
-   * @returns {Uint8Array} The authenticated data.
-   * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/Web_Authentication_API/Authenticator_data#data_structure}
-   * @private
-   */
-  public authenticatorData(): Uint8Array {
-    const flags = 0x41; // user present and attestation flag
-    const rpIDHash = sha256(encodeUTF8(this._passkey.rp.id));
-    const signCount = new Uint8Array(4); // default to zero
-
-    return new Uint8Array([...rpIDHash, flags, ...signCount]);
-  }
-
   public passkey(): IAccountPasskey {
     return this._passkey;
   }
 
+  /**
+   * Creates the serialized public key credential with an assertion response that is used in a
+   * `navigator.credential.get()` response.
+   *
+   * **NOTE:** The flag byte is calculated as:
+   * * Bit 0 (User Presence, UP): Set to 1 since "userPresent" is true.
+   * * Bit 2 (User Verification, UV): Set to 1 since "userVerified" is true.
+   * * Bit 3 (Backup Eligibility, BE): Set to 1 since "backupEligibility" is true.
+   * * Bit 4 (Backup State, BS): Set to 1 since "backupState" is true.
+   * * Bit 6 (Attested Credential Data, AT): Set to 0 since "attestedData" is false.
+   * *Bit 7 (Extension Data, ED): Set to 0 since "extensionsIncluded" is false.
+   * @returns {ISerializedPublicKeyCredential<ISerializedAuthenticatorAssertionResponse>} A public key credential
+   * with an assertion response.
+   * @public
+   */
   public serializedAssertionCredential(): ISerializedPublicKeyCredential<ISerializedAuthenticatorAssertionResponse> {
-    const authenticatorData = this.authenticatorData();
+    const authenticatorData = new Uint8Array([
+      ...sha256(encodeUTF8(this._passkey.rp.id)), // rp hash
+      0x1d, // flags
+      ...new Uint8Array(4), // sign count
+    ]);
     const clientDataJSON = encodeUTF8(
       JSON.stringify({
         type: 'webauthn.get',
@@ -173,6 +178,21 @@ export default class PublicKeyCredentialFactory {
     };
   }
 
+  /**
+   * Creates the serialized public key credential with an attestation response that is used in a
+   * `navigator.credential.create()` response.
+   *
+   * **NOTE:** The flag byte is calculated as:
+   * * Bit 0 (User Presence, UP): Set to 1 since "userPresent" is true.
+   * * Bit 2 (User Verification, UV): Set to 1 since "userVerified" is true.
+   * * Bit 3 (Backup Eligibility, BE): Set to 1 since "backupEligibility" is true.
+   * * Bit 4 (Backup State, BS): Set to 0 since "backupState" is false.
+   * * Bit 6 (Attested Credential Data, AT): Set to 1 since "attestedData" is true.
+   * *Bit 7 (Extension Data, ED): Set to 0 since "extensionsIncluded" is false.
+   * @returns {ISerializedPublicKeyCredential<ISerializedAuthenticatorAttestationResponse>} A public key credential
+   * with an attestation response.
+   * @public
+   */
   public serializedAttestationCredential(): ISerializedPublicKeyCredential<ISerializedAuthenticatorAttestationResponse> {
     const cosePublicKey: COSEPublicKey = new COSEPublicKey({
       algorithm: this._passkey.alg,
@@ -184,12 +204,13 @@ export default class PublicKeyCredentialFactory {
       decodedCredentialID.length & 0xff, // low byte
     ]);
     const authenticatorData = new Uint8Array([
-      ...this.authenticatorData(), // basic authenticator data
-      // attested credential data
-      ...decodeUUID(__PROVIDER_ID__), // use the provider identifier as the aaguid
-      ...credentialIDLength,
-      ...decodedCredentialID,
-      ...cosePublicKey.toCBOR(),
+      ...sha256(encodeUTF8(this._passkey.rp.id)), // rp hash
+      0x4d, // flags
+      ...new Uint8Array(4), // sign count
+      ...decodeUUID(__PROVIDER_ID__), // aaguid (use the provider identifier)
+      ...credentialIDLength, // credential id length
+      ...decodedCredentialID, // credential id
+      ...cosePublicKey.toCBOR(), // cbor encoded cose public key
     ]);
     const clientDataJSON = encodeUTF8(
       JSON.stringify({

@@ -178,7 +178,7 @@ export default class WebAuthnMessageManager {
           uint8ArrayToArrayBuffer(decodedAttestationObject.authData),
         getPublicKey: () => null,
         getPublicKeyAlgorithm: () => cosePublicKey.algorithm(),
-        getTransports: () => ['internal'],
+        getTransports: () => ['hybrid', 'internal'],
       },
     };
   }

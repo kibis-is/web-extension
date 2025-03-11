@@ -185,7 +185,7 @@ const WebAuthnAuthenticateModal: FC<IModalProps> = ({ onClose }) => {
   };
   const handleOnAccountSelect = (value: IAccountWithExtendedProps) =>
     setAccount(value);
-  const handleOnSelectPasskeyClick = (id: string) => () => {
+  const handleOnSelectPasskeyClick = (id: string) => {
     setSelectedPasskeyID(id);
     onAuthenticationModalOpen();
   };
