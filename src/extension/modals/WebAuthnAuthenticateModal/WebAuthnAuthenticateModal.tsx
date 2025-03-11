@@ -143,7 +143,7 @@ const WebAuthnAuthenticateModal: FC<IModalProps> = ({ onClose }) => {
     return account.passkeys.filter(
       ({ rp }) => rp.id === event.payload.message.payload.options.rpId
     );
-  }, [account, event]);
+  }, [account?.passkeys, event]);
   // handlers
   const handleOnCancelClick = async () => {
     if (event) {
@@ -152,7 +152,7 @@ const WebAuthnAuthenticateModal: FC<IModalProps> = ({ onClose }) => {
           error: new WebAuthnAuthenticationCanceledError(
             `user dismissed webauthn request modal`
           ),
-          event: event,
+          event,
         })
       ).unwrap();
       // remove the event
@@ -252,8 +252,8 @@ const WebAuthnAuthenticateModal: FC<IModalProps> = ({ onClose }) => {
             <Avatar
               name={clientInfo.appName}
               size="md"
-              {...(clientInfo.iconUrl && {
-                src: clientInfo.iconUrl,
+              {...(clientInfo.iconURL && {
+                src: clientInfo.iconURL,
               })}
             />
 

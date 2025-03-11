@@ -289,7 +289,7 @@ const SignTransactionsModal: FC<IModalProps> = ({ onClose }) => {
                     undefined
                   }
                   iconUrl={
-                    event.payload.message.payload.clientInfo.iconUrl ||
+                    event.payload.message.payload.clientInfo.iconURL ||
                     undefined
                   }
                   host={

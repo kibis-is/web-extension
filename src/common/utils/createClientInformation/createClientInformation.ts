@@ -23,6 +23,6 @@ export default function createClientInformation(): IClientInformation {
         .querySelector('meta[name="description"]')
         ?.getAttribute('content') || null,
     host: `${window.location.protocol}//${window.location.host}`,
-    iconUrl: extractFaviconURL(),
+    iconURL: extractFaviconURL(),
   };
 }

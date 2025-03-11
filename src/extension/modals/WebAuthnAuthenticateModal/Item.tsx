@@ -7,7 +7,7 @@ import {
   Tooltip,
   VStack,
 } from '@chakra-ui/react';
-import React, { FC, useCallback, useMemo } from 'react';
+import React, { type FC, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { IoChevronForward } from 'react-icons/io5';
 
@@ -52,9 +52,17 @@ const Item: FC<IItemProps> = ({ disabled = false, onClick, passkey }) => {
       w="full"
     >
       <Avatar
-        bg="green.500"
-        icon={<Icon as={KbPasskey} color="white" h={iconSize} w={iconSize} />}
         size="sm"
+        {...(passkey.iconURL
+          ? {
+              src: passkey.iconURL,
+            }
+          : {
+              bg: 'green.500',
+              icon: (
+                <Icon as={KbPasskey} color="white" h={iconSize} w={iconSize} />
+              ),
+            })}
       />
 
       <VStack

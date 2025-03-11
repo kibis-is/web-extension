@@ -20,7 +20,7 @@ export default function mapSessionFromEnableRequest({
     genesisHash: network.genesisHash,
     genesisId: network.genesisId,
     host: clientInfo.host,
-    iconUrl: clientInfo.iconUrl,
+    iconUrl: clientInfo.iconURL,
     id,
     usedAt: now.getTime(),
   };

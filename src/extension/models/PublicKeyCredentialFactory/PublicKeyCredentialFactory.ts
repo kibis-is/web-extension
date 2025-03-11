@@ -48,10 +48,11 @@ export default class PublicKeyCredentialFactory {
    */
 
   public static generate({
-    origin,
+    clientInformation,
     privateKey,
     publicKeyCreationOptions,
   }: IGenerateOptions): PublicKeyCredentialFactory {
+    const origin = new URL(clientInformation.host).origin;
     let coseAlgorithm = publicKeyCreationOptions.pubKeyCredParams.reduce(
       (acc, value) => {
         // ed21559 is preferred
@@ -86,12 +87,13 @@ export default class PublicKeyCredentialFactory {
       passkey: {
         alg: coseAlgorithm,
         createdAt: new Date().getTime().toString(10),
+        iconURL: clientInformation.iconURL,
         id: generateUUID(),
         lastUsedAt: new Date().getTime().toString(10),
         origin,
         rp: {
-          ...publicKeyCreationOptions.rp,
           id: publicKeyCreationOptions.rp.id || origin,
+          name: publicKeyCreationOptions.rp.name,
         },
         user: publicKeyCreationOptions.user,
       },

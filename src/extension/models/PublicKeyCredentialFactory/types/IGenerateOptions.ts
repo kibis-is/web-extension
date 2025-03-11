@@ -1,8 +1,11 @@
 // types
-import type { ISerializedPublicKeyCredentialCreationOptions } from '@common/types';
+import type {
+  IClientInformation,
+  ISerializedPublicKeyCredentialCreationOptions,
+} from '@common/types';
 
 interface IGenerateOptions {
-  origin: string;
+  clientInformation: IClientInformation;
   privateKey: Uint8Array;
   publicKeyCreationOptions: ISerializedPublicKeyCredentialCreationOptions;
 }

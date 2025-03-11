@@ -310,7 +310,7 @@ const EnableModal: FC<IModalProps> = ({ onClose }) => {
             event.payload.message.payload.clientInfo.description || undefined
           }
           iconUrl={
-            event.payload.message.payload.clientInfo.iconUrl || undefined
+            event.payload.message.payload.clientInfo.iconURL || undefined
           }
           host={event.payload.message.payload.clientInfo.host || 'unknown host'}
           name={event.payload.message.payload.clientInfo.appName || 'Unknown'}
