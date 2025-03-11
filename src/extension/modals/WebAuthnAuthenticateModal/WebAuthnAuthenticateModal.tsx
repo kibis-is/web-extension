@@ -134,8 +134,6 @@ const WebAuthnAuthenticateModal: FC<IModalProps> = ({ onClose }) => {
       ) || [],
     [event]
   );
-  console.log('allowedCredentialIDs:', allowedCredentialIDs);
-  console.log('account.passkeys:', account?.passkeys);
   const passkeys = useMemo<IAccountPasskey[]>(() => {
     if (!account || !event) {
       return [];
