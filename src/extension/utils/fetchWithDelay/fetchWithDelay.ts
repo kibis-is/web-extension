@@ -1,16 +1,14 @@
-interface IOptions {
-  delay: number;
-  url: string;
-}
+// types
+import type { IParams } from './types';
 
-/**Convenient function that simply wraps a fetch in a delay.
- * @param {IOptions} options - options needed to send the request.
+/** Simply wraps a fetch in a delay.
+ * @param {IParams} parms - The URL and a delay.
  * @returns {Response} the response.
  */
 export default async function fetchWithDelay({
   delay,
   url,
-}: IOptions): Promise<Response> {
+}: IParams): Promise<Response> {
   return new Promise((resolve, reject) =>
     setTimeout(async () => {
       let response: Response;
