@@ -218,7 +218,7 @@ const ARC0300AccountImportModalContent: FC<
             w="full"
           >
             <NewAccountItem
-              address={convertPublicKeyToAVMAddress(keyPair.publicKey)}
+              address={convertPublicKeyToAVMAddress(keyPair.publicKey())}
               {...(name && { name })}
             />
 

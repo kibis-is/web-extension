@@ -229,8 +229,8 @@ const WebAuthnRegisterModal: FC<IModalProps> = ({ onClose }) => {
           <Avatar
             name={clientInfo.appName}
             size="lg"
-            {...(clientInfo.iconUrl && {
-              src: clientInfo.iconUrl,
+            {...(clientInfo.iconURL && {
+              src: clientInfo.iconURL,
             })}
           />
 

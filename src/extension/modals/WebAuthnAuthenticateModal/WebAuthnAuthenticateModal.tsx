@@ -1,3 +1,4 @@
+import { encode as encodeUUID } from '@agoralabs-sh/uuid';
 import {
   Avatar,
   Box,
@@ -16,6 +17,7 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import { faker } from '@faker-js/faker';
+import { decode as decodeBase64 } from '@stablelib/base64';
 import React, { type FC, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
@@ -127,8 +129,8 @@ const WebAuthnAuthenticateModal: FC<IModalProps> = ({ onClose }) => {
   // memos
   const allowedCredentialIDs = useMemo(
     () =>
-      event?.payload.message.payload.options.allowCredentials?.map(
-        ({ id }) => id
+      event?.payload.message.payload.options.allowCredentials?.map(({ id }) =>
+        encodeUUID(decodeBase64(id))
       ) || [],
     [event]
   );
@@ -141,7 +143,7 @@ const WebAuthnAuthenticateModal: FC<IModalProps> = ({ onClose }) => {
     return account.passkeys.filter(
       ({ rp }) => rp.id === event.payload.message.payload.options.rpId
     );
-  }, [account, event]);
+  }, [account?.passkeys, event]);
   // handlers
   const handleOnCancelClick = async () => {
     if (event) {
@@ -150,7 +152,7 @@ const WebAuthnAuthenticateModal: FC<IModalProps> = ({ onClose }) => {
           error: new WebAuthnAuthenticationCanceledError(
             `user dismissed webauthn request modal`
           ),
-          event: event,
+          event,
         })
       ).unwrap();
       // remove the event
@@ -183,7 +185,7 @@ const WebAuthnAuthenticateModal: FC<IModalProps> = ({ onClose }) => {
   };
   const handleOnAccountSelect = (value: IAccountWithExtendedProps) =>
     setAccount(value);
-  const handleOnSelectPasskeyClick = (id: string) => () => {
+  const handleOnSelectPasskeyClick = (id: string) => {
     setSelectedPasskeyID(id);
     onAuthenticationModalOpen();
   };
@@ -250,8 +252,8 @@ const WebAuthnAuthenticateModal: FC<IModalProps> = ({ onClose }) => {
             <Avatar
               name={clientInfo.appName}
               size="md"
-              {...(clientInfo.iconUrl && {
-                src: clientInfo.iconUrl,
+              {...(clientInfo.iconURL && {
+                src: clientInfo.iconURL,
               })}
             />
 

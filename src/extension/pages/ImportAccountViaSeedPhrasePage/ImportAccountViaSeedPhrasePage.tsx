@@ -17,6 +17,9 @@ import Steps from '@extension/components/Steps';
 import { DEFAULT_GAP } from '@common/constants';
 import { ACCOUNT_NAME_BYTE_LIMIT } from '@extension/constants';
 
+// cryptography
+import Ed21559KeyPair from '@extension/cryptography/Ed21559KeyPair';
+
 // enums
 import { StepsEnum } from './enums';
 
@@ -28,9 +31,6 @@ import useDefaultTextColor from '@extension/hooks/useDefaultTextColor';
 import useGenericInput from '@extension/hooks/useGenericInput';
 import usePrimaryColorScheme from '@extension/hooks/usePrimaryColorScheme';
 import useSubTextColor from '@extension/hooks/useSubTextColor';
-
-// models
-import Ed21559KeyPair from '@extension/models/Ed21559KeyPair';
 
 // selectors
 import {
@@ -121,7 +121,7 @@ const ImportAccountViaSeedPhrasePage: FC<IAddAccountPageProps> = ({
       `${
         ImportAccountViaSeedPhrasePage.name
       }#${_functionName}: importing account "${convertPublicKeyToAVMAddress(
-        keyPair.publicKey
+        keyPair.publicKey()
       )}"`
     );
 

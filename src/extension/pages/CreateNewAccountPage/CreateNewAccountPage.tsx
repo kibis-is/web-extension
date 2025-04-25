@@ -36,8 +36,8 @@ import useDefaultTextColor from '@extension/hooks/useDefaultTextColor';
 import usePrimaryColorScheme from '@extension/hooks/usePrimaryColorScheme';
 import useSubTextColor from '@extension/hooks/useSubTextColor';
 
-// models
-import Ed21559KeyPair from '@extension/models/Ed21559KeyPair';
+// cryptography
+import Ed21559KeyPair from '@extension/cryptography/Ed21559KeyPair';
 
 // selectors
 import {
@@ -93,7 +93,7 @@ const CreateNewAccountPage: FC<IAddAccountPageProps> = ({
   const _context = 'create-new-account-page';
   const seedPhrase = convertPrivateKeyToSeedPhrase({
     logger,
-    privateKey: keyPair.privateKey,
+    privateKey: keyPair.privateKey(),
   });
   const stepsLabels: string[] = [
     t<string>('headings.generateSeedPhrase'),

@@ -45,8 +45,8 @@ import qrCodePlaceholderImage from '@extension/images/placeholder_qr_code.png';
 import { AccountSelectModal } from '@extension/components/AccountSelect';
 import AuthenticationModal from '@extension/modals/AuthenticationModal';
 
-// models
-import Ed21559KeyPair from '@extension/models/Ed21559KeyPair';
+// cryptography
+import Ed21559KeyPair from '@extension/cryptography/Ed21559KeyPair';
 
 // selectors
 import {
@@ -184,7 +184,7 @@ const ExportAccountPage: FC = () => {
               }
 
               return {
-                privateKey: keyPair.privateKey,
+                privateKey: keyPair.privateKey(),
                 ...(name && {
                   name,
                 }),

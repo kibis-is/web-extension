@@ -18,14 +18,14 @@ export default async function dispatchMessageWithTimeout<
   responseReference,
 }: IOptions<Message>): Promise<Result | null> {
   return new Promise((resolve, reject) => {
-    const _functionName = 'dispatchMessageWithTimeout';
+    const _function = 'dispatchMessageWithTimeout';
     const listener = (event: CustomEvent<string>) => {
       let detail: IBaseResponseMessage<Result>;
 
       try {
         detail = JSON.parse(event.detail); // the event.detail should be a stringified message object
       } catch (error) {
-        logger?.debug(`${_functionName}:`, error);
+        logger?.debug(`${_function}:`, error);
 
         // clear the timeout and remove the listener - we failed to parse the message
         window.clearTimeout(timerId);
@@ -52,7 +52,7 @@ export default async function dispatchMessageWithTimeout<
       }
 
       logger?.debug(
-        `${_functionName}: received response "${detail.reference}" for request "${detail.requestID}"`
+        `${_function}: received response "${detail.reference}" for request "${detail.requestID}"`
       );
 
       // return the result
@@ -76,7 +76,7 @@ export default async function dispatchMessageWithTimeout<
     );
 
     logger?.debug(
-      `${_functionName}: posted request message "${message.reference}" with id "${message.id}"`
+      `${_function}: posted request message "${message.reference}" with id "${message.id}"`
     );
   });
 }

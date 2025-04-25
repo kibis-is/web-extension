@@ -1,9 +1,9 @@
 /**
- * Utility function to extract the favicon URL.
+ * Extracts the favicon URL.
  * @returns {string} the favicon URL or null if no favicon is found.
  * @see {@link https://stackoverflow.com/a/16844961}
  */
-export default function extractFaviconUrl(): string | null {
+export default function extractFaviconURL(): string | null {
   const links: HTMLCollectionOf<HTMLElementTagNameMap['link']> =
     document.getElementsByTagName('link');
   const iconUrls: string[] = [];

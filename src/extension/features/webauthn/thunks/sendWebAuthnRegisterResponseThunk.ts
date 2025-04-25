@@ -19,8 +19,8 @@ import { saveAccountsThunk } from '@extension/features/accounts';
 // messages
 import WebAuthnRegisterResponseMessage from '@common/messages/WebAuthnRegisterResponseMessage';
 
-// models
-import Ed21559KeyPair from '@extension/models/Ed21559KeyPair';
+// cryptography
+import Ed21559KeyPair from '@extension/cryptography/Ed21559KeyPair';
 
 // types
 import type {
@@ -141,8 +141,8 @@ const sendWebAuthnRegisterResponseThunk: AsyncThunk<
     }
 
     publicKeyCredentialFactory = PublicKeyCredentialFactory.generate({
-      keyPair,
-      origin: new URL(message.payload.clientInfo.host).origin,
+      clientInformation: message.payload.clientInfo,
+      privateKey: keyPair.privateKey(),
       publicKeyCreationOptions: message.payload.options,
     });
 

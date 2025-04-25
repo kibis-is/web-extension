@@ -90,13 +90,13 @@ const saveCredentialsThunk: AsyncThunk<
     for (const { keyPair, name } of accounts) {
       privateKeyItem = PrivateKeyRepository.create({
         encryptedPrivateKey: await PasswordManager.encryptBytes({
-          bytes: keyPair.privateKey,
+          bytes: keyPair.privateKey(),
           logger,
           password,
         }),
         encryptionID: passwordTagItem.id,
         encryptionMethod: EncryptionMethodEnum.Password,
-        publicKey: keyPair.publicKey,
+        publicKey: keyPair.publicKey(),
       });
 
       privateKeyItems.push(privateKeyItem);

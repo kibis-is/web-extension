@@ -11,12 +11,12 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import { encode as encodeHex } from '@stablelib/hex';
+import { randomBytes } from '@stablelib/random';
 import { encodeAddress } from 'algosdk';
 import { sanitize } from 'dompurify';
 import { toString } from 'qrcode';
 import React, { ChangeEvent, FC, useEffect, useState } from 'react';
 import { InfinitySpin } from 'react-loader-spinner';
-import { randomBytes } from 'tweetnacl';
 
 // constants
 import {
@@ -29,8 +29,8 @@ import useDefaultTextColor from '../../hooks/useDefaultTextColor';
 import usePrimaryColorScheme from '../../hooks/usePrimaryColorScheme';
 import useSubTextColor from '../../hooks/useSubTextColor';
 
-// models
-import Ed21559KeyPair from '@extension/models/Ed21559KeyPair';
+// cryptography
+import Ed21559KeyPair from '@extension/cryptography/Ed21559KeyPair';
 
 // theme
 import { theme } from '@common/theme';
@@ -107,8 +107,8 @@ const ImportAccountViaQRCodeTab: FC = () => {
 
       try {
         _uris = createAccountImportURI({
-          accounts: keyPairs.map(({ privateKey }) => ({
-            privateKey,
+          accounts: keyPairs.map((keyPair) => ({
+            privateKey: keyPair.privateKey(),
             ...(addNames && {
               name: encodeHex(randomBytes(16)), // 32-byte string max
             }),
@@ -249,7 +249,7 @@ const ImportAccountViaQRCodeTab: FC = () => {
                 key={`import-account-address-${index}`}
                 wordBreak="break-word"
               >
-                {encodeAddress(value.publicKey)}
+                {encodeAddress(value.publicKey())}
               </Code>
             ))}
           </VStack>

@@ -1,12 +1,12 @@
-// models
-import Ed21559KeyPair from '@extension/models/Ed21559KeyPair';
-
 // types
-import type { ISerializedPublicKeyCredentialCreationOptions } from '@common/types';
+import type {
+  IClientInformation,
+  ISerializedPublicKeyCredentialCreationOptions,
+} from '@common/types';
 
 interface IGenerateOptions {
-  keyPair: Ed21559KeyPair;
-  origin: string;
+  clientInformation: IClientInformation;
+  privateKey: Uint8Array;
   publicKeyCreationOptions: ISerializedPublicKeyCredentialCreationOptions;
 }
 

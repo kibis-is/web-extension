@@ -6,8 +6,8 @@ import { EncryptionMethodEnum } from '@extension/enums';
 // errors
 import { DecryptionError } from '@common/errors';
 
-// models
-import Ed21559KeyPair from '@extension/models/Ed21559KeyPair';
+// cryptography
+import Ed21559KeyPair from '@extension/cryptography/Ed21559KeyPair';
 
 // selectors
 import { useSelectLogger } from '@extension/selectors';
@@ -94,7 +94,7 @@ export default function useViewSeedPhrase(): IState {
         masked: false,
         seedPhrase: convertPrivateKeyToSeedPhrase({
           logger,
-          privateKey: keyPair.privateKey,
+          privateKey: keyPair.privateKey(),
         }),
       };
     } catch (error) {

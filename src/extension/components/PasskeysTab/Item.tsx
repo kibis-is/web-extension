@@ -51,9 +51,17 @@ const Item: FC<IItemProps> = ({ onRemoveClick, onViewClick, passkey }) => {
       w="full"
     >
       <Avatar
-        bg="green.500"
-        icon={<Icon as={KbPasskey} color="white" h={iconSize} w={iconSize} />}
         size="sm"
+        {...(passkey.iconURL
+          ? {
+              src: passkey.iconURL,
+            }
+          : {
+              bg: 'green.500',
+              icon: (
+                <Icon as={KbPasskey} color="white" h={iconSize} w={iconSize} />
+              ),
+            })}
       />
 
       <VStack

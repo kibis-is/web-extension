@@ -9,7 +9,10 @@ import WebAuthnAuthenticateApp from '@client/apps/WebAuthnAuthenticateApp';
 import WebAuthnRegisterApp from '@client/apps/WebAuthnRegisterApp';
 
 // constants
-import { COSE_ED25519_ALGORITHM } from '@common/constants';
+import {
+  COSE_ED25519_ALGORITHM,
+  COSE_ES256_ALGORITHM,
+} from '@common/constants';
 
 // managers
 import ConfigManager from '@client/managers/ConfigManager';
@@ -42,6 +45,7 @@ export default class WebAuthnInterceptor {
     initialConfig,
     logger,
     navigatorCredentialsCreateFn,
+    navigatorCredentialsGetFn,
     webAuthnMessageManager,
   }: INewOptions) {
     this._config = initialConfig || {
@@ -57,6 +61,7 @@ export default class WebAuthnInterceptor {
     this._i18next = null;
     this._logger = logger || null;
     this._navigatorCredentialsCreateFn = navigatorCredentialsCreateFn;
+    this._navigatorCredentialsGetFn = navigatorCredentialsGetFn;
     this._webAuthnMessageManager =
       webAuthnMessageManager || new WebAuthnMessageManager({ logger });
 
@@ -70,6 +75,7 @@ export default class WebAuthnInterceptor {
 
   public static async initialize({
     navigatorCredentialsCreateFn,
+    navigatorCredentialsGetFn,
   }: IInitializeOptions): Promise<WebAuthnInterceptor> {
     let logger = createLogger(__ENV__ === 'development' ? 'debug' : 'error');
     const configManager = new ConfigManager({ logger });
@@ -86,6 +92,7 @@ export default class WebAuthnInterceptor {
       configManager,
       logger,
       navigatorCredentialsCreateFn,
+      navigatorCredentialsGetFn,
       webAuthnMessageManager,
       ...(config && { initialConfig: config }),
     });
@@ -132,7 +139,7 @@ export default class WebAuthnInterceptor {
     rootElement.style.position = 'fixed';
     rootElement.style.top = '0';
     rootElement.style.right = '0';
-    rootElement.style.zIndex = '9999px';
+    rootElement.style.zIndex = '99999px';
 
     return createRoot(rootElement);
   }
@@ -188,7 +195,8 @@ export default class WebAuthnInterceptor {
       if (
         options.publicKey.pubKeyCredParams.length > 0 &&
         !options.publicKey.pubKeyCredParams.find(
-          ({ alg }) => alg === COSE_ED25519_ALGORITHM
+          ({ alg }) =>
+            alg === COSE_ED25519_ALGORITHM || alg === COSE_ES256_ALGORITHM
         )
       ) {
         this._logger?.debug(
@@ -196,7 +204,9 @@ export default class WebAuthnInterceptor {
             WebAuthnInterceptor.name
           }#${__function}: public key credentials requested [${options.publicKey.pubKeyCredParams
             .map(({ alg }) => alg)
-            .join(',')}], but provider only supports: "-8" (Ed25519)`
+            .join(
+              ','
+            )}], but provider only supports: "-8" (Ed25519) and "-7" (ES256)`
         );
 
         return resolve(this._navigatorCredentialsCreateFn.call(this, options));

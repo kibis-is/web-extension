@@ -11,7 +11,7 @@ import { encodeURLSafe as encodeBase64URLSafe } from '@stablelib/base64';
 import React, { type FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { IoArrowForwardOutline } from 'react-icons/io5';
-import { randomBytes } from 'tweetnacl';
+import { randomBytes } from '@stablelib/random';
 
 // components
 import IconButton from '@common/components/IconButton';

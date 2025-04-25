@@ -9,7 +9,7 @@ import { encodeURLSafe as encodeBase64URLSafe } from '@stablelib/base64';
 import React, { type FC, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { IoEye, IoEyeOff } from 'react-icons/io5';
-import { randomBytes } from 'tweetnacl';
+import { randomBytes } from '@stablelib/random';
 
 // components
 import IconButton from '@common/components/IconButton';

@@ -136,7 +136,6 @@ const AccountPasskeyPage: FC = () => {
   if (!account || !passkey) {
     return <SkeletonPage />;
   }
-  console.log('passkey', passkey);
 
   accountAddress = convertPublicKeyToAVMAddress(
     AccountRepository.decode(account.publicKey)
@@ -166,11 +165,22 @@ const AccountPasskeyPage: FC = () => {
         >
           {/*icon*/}
           <Avatar
-            bg="green.500"
-            icon={
-              <Icon as={KbPasskey} color="white" h={iconSize} w={iconSize} />
-            }
-            size="md"
+            size="sm"
+            {...(passkey.iconURL
+              ? {
+                  src: passkey.iconURL,
+                }
+              : {
+                  bg: 'green.500',
+                  icon: (
+                    <Icon
+                      as={KbPasskey}
+                      color="white"
+                      h={iconSize}
+                      w={iconSize}
+                    />
+                  ),
+                })}
           />
 
           <VStack spacing={0} w="full">

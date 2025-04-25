@@ -36,8 +36,8 @@ import { create as createNotification } from '@extension/features/notifications'
 // modals
 import AuthenticationModal from '@extension/modals/AuthenticationModal';
 
-// models
-import Ed21559KeyPair from '@extension/models/Ed21559KeyPair';
+// cryptography
+import Ed21559KeyPair from '@extension/cryptography/Ed21559KeyPair';
 
 // pages
 import AddAccountTypePage from '@extension/pages/AddAccountTypePage';
@@ -119,7 +119,7 @@ const AddAccountMainRouter: FC = () => {
       accounts.find(
         ({ publicKey }) =>
           convertPublicKeyToAVMAddress(publicKey) ===
-          convertPublicKeyToAVMAddress(keyPair.publicKey)
+          convertPublicKeyToAVMAddress(keyPair.publicKey())
       ) || null;
 
     // if the account is already added
@@ -247,7 +247,7 @@ const AddAccountMainRouter: FC = () => {
         ephemeral: true,
         description: t<string>('captions.addedAccount', {
           address: ellipseAddress(
-            convertPublicKeyToAVMAddress(keyPair.publicKey)
+            convertPublicKeyToAVMAddress(keyPair.publicKey())
           ),
         }),
         title: t<string>('headings.addedAccount'),

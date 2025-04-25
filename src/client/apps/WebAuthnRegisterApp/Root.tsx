@@ -160,8 +160,8 @@ const Root: FC<IRootProps> = ({
             fontFamily={fontFamily}
             name={clientInfo.appName}
             size="md"
-            {...(clientInfo.iconUrl && {
-              src: clientInfo.iconUrl,
+            {...(clientInfo.iconURL && {
+              src: clientInfo.iconURL,
             })}
           />
 
