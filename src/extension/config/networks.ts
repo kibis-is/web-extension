@@ -7,6 +7,9 @@ import {
   VOI_LISTING_ICON_URI,
 } from '@extension/constants';
 
+// decorators
+import EnVoiClient from '@extension/decorators/EnVoiClient';
+
 // enums
 import { AssetTypeEnum, NetworkTypeEnum } from '@extension/enums';
 
@@ -56,6 +59,7 @@ const networks: INetwork[] = [
         id: 'voi-network',
       }),
     ],
+    enVoi: new EnVoiClient('https://api.envoi.sh'),
     feeSunkAddress:
       'TBEIGCNK4UCN3YDP2NODK3MJHTUZMYS3TABRM2MVSI2MPUR2V36E5JYHSY',
     genesisId: 'voimain-v1.0',
@@ -107,6 +111,7 @@ const networks: INetwork[] = [
         baseURL: 'https://testnet.block.voi.network',
       }),
     ],
+    enVoi: null,
     feeSunkAddress:
       'TBEIGCNK4UCN3YDP2NODK3MJHTUZMYS3TABRM2MVSI2MPUR2V36E5JYHSY',
     genesisId: 'voitest',
@@ -160,6 +165,7 @@ const networks: INetwork[] = [
         baseURL: 'https://allo.info',
       }),
     ],
+    enVoi: null,
     feeSunkAddress:
       'Y76M3MSY6DKBRHBL7C3NNDXGS5IIMQVQVUAB6MP4XEMMGVF2QWNPL226CA',
     genesisId: 'mainnet-v1.0',
@@ -203,6 +209,7 @@ const networks: INetwork[] = [
     canonicalName: 'Algorand',
     chakraTheme: 'algorand',
     blockExplorers: [],
+    enVoi: null,
     feeSunkAddress:
       'A7NMWS3NT3IUDMLVO26ULGXGIIOUQ3ND2TXSER6EBGRZNOBOUIQXHIBGDE',
     genesisId: 'betanet-v1.0',
@@ -250,6 +257,7 @@ const networks: INetwork[] = [
         baseURL: 'https://testnet.explorer.perawallet.app',
       }),
     ],
+    enVoi: null,
     feeSunkAddress:
       'A7NMWS3NT3IUDMLVO26ULGXGIIOUQ3ND2TXSER6EBGRZNOBOUIQXHIBGDE',
     genesisId: 'testnet-v1.0',

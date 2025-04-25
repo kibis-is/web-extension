@@ -1,5 +1,8 @@
 import { ARC0027MethodEnum } from '@agoralabs-sh/avm-web-provider';
 
+// decorators
+import EnVoiClient from '@extension/decorators/EnVoiClient';
+
 // enums
 import { NetworkTypeEnum } from '@extension/enums';
 
@@ -19,6 +22,7 @@ interface INetwork {
   blockExplorers: BaseBlockExplorer[];
   canonicalName: string;
   chakraTheme: string;
+  enVoi: EnVoiClient | null;
   feeSunkAddress: string;
   genesisHash: string;
   genesisId: string;
