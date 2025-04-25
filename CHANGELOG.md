@@ -1,3 +1,10 @@
+# [2.5.0-beta.3](https://github.com/kibis-is/web-extension/compare/v2.5.0-beta.2...v2.5.0-beta.3) (2025-04-25)
+
+
+### Features
+
+* accept p256 keys for webauthn ([#348](https://github.com/kibis-is/web-extension/issues/348)) ([57dcbde](https://github.com/kibis-is/web-extension/commit/57dcbde8d56ea79e825eb1a0e4649472c3e9e48c))
+
 # [2.5.0-beta.2](https://github.com/kibis-is/web-extension/compare/v2.5.0-beta.1...v2.5.0-beta.2) (2025-03-06)
 
 
