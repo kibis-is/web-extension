@@ -59,7 +59,9 @@ const networks: INetwork[] = [
         id: 'voi-network',
       }),
     ],
-    enVoi: new EnVoiClient('https://api.envoi.sh'),
+    enVoi: new EnVoiClient({
+      url: 'https://api.envoi.sh',
+    }),
     feeSunkAddress:
       'TBEIGCNK4UCN3YDP2NODK3MJHTUZMYS3TABRM2MVSI2MPUR2V36E5JYHSY',
     genesisId: 'voimain-v1.0',

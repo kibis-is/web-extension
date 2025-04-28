@@ -1,7 +1,4 @@
-// types
-import type { IBaseOptions } from '@common/types';
-
-interface IEnVoiClientParameters extends IBaseOptions {
+interface IEnVoiClientParameters {
   url: string;
 }
 

@@ -1,5 +1,4 @@
 // types
-import type { ILogger } from '@common/types';
 import type {
   IEnVoiClientParameters,
   IEnVoiResponse,
@@ -10,11 +9,9 @@ export default class EnVoiClient {
   // public static variables
   public static displayName = 'EnVoiClient';
   // private variables
-  private readonly _logger: ILogger | undefined;
-  private _url: string;
+  private readonly _url: string;
 
-  public constructor({ logger, url }: IEnVoiClientParameters) {
-    this._logger = logger;
+  public constructor({ url }: IEnVoiClientParameters) {
     this._url = url;
   }
 
@@ -23,9 +20,9 @@ export default class EnVoiClient {
    */
 
   private async _request<Response>(path: string): Promise<Response> {
-    const { json } = await fetch(`${this._url}/api/${path}`);
+    const response = await fetch(`${this._url}/api/${path}`);
 
-    return (await json()) as Response;
+    return (await response.json()) as Response;
   }
 
   /**
@@ -33,19 +30,11 @@ export default class EnVoiClient {
    */
 
   public async names(address: string): Promise<string[]> {
-    const __logPrefix = `${EnVoiClient.displayName}#names`;
+    const result = await this._request<IEnVoiResponse<INameResolutionResult>>(
+      `/name/${address}`
+    );
 
-    try {
-      const result = await this._request<IEnVoiResponse<INameResolutionResult>>(
-        `/name/${address}`
-      );
-
-      return result.results.map(({ name }) => name);
-    } catch (error) {
-      this._logger?.error(`${__logPrefix}:`, error);
-
-      return [];
-    }
+    return result.results.map(({ name }) => name);
   }
 
   public url(): string {
