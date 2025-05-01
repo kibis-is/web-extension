@@ -1,5 +1,4 @@
-import axios, { AxiosResponse } from 'axios';
-import { createReadStream } from 'node:fs';
+import axios from 'axios';
 
 // constants
 import { BASE_URL } from '../constants';
@@ -20,8 +19,8 @@ export default async function publish(
   clientID: string,
   apiKey: string
 ): Promise<string> {
-  const url: string = `${BASE_URL}/v1/products/${productID}/submissions`;
-  const response: AxiosResponse = await axios.post(
+  const url = `${BASE_URL}/v1/products/${productID}/submissions`;
+  const response = await axios.post(
     url,
     { notes: '' },
     {

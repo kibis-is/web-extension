@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from 'axios';
+import axios, { type AxiosResponse } from 'axios';
 import { createReadStream } from 'node:fs';
 
 // constants
@@ -11,7 +11,7 @@ import { ErrorCodeEnum, UploadStatusEnum } from '../enums';
 import { ActionError } from '../errors';
 
 // types
-import { IUploadStatusResponse } from '../types';
+import type { IUploadStatusResponse } from '../types';
 
 // utils
 import authorizationHeaders from './authorizationHeaders';
