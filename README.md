@@ -55,15 +55,15 @@
 * [2. Development](#-3-development)
   - [3.1. Requirements](#31-requirements)
   - [3.2. Setup](#32-setup)
-  - [3.3. Install Local Browsers](#33-install-local-browsers-optional)
+  - [3.3. Install local browsers](#33-install-local-browsers-optional)
     - [3.3.1. Chrome](#331-chrome)
     - [3.3.2. Firefox](#332-firefox)
   - [3.4. Run](#34-run)
 * [4. Appendix](#-4-appendix)
-  - [4.1. Useful Commands](#41-useful-commands)
+  - [4.1. Useful commands](#41-useful-commands)
   - [4.2. Demo application](#42-demo-application)
-  - [4.3. Manifest Permissions](#43-manifest-permissions)
-* [5. How To Contribute](#-5-how-to-contribute)
+  - [4.3. Manifest permissions](#43-manifest-permissions)
+* [5. How to contribute](#-5-how-to-contribute)
 * [6. License](#-6-license)
 
 ## 🔭 1. Overview
@@ -84,9 +84,9 @@ Refer to the [documentation](https://kibis.is/overview) for information on how t
 
 ### 3.1. Requirements
 
-* Install [Yarn v1.22.5+][yarn]
-* Install [Node v20.9.0+][node]
-* Install [jq][jq] (optional - if you are installing the local Chrome browser)
+* Install [Yarn v1.22.5+](https://yarnpkg.com/)
+* Install [Node v20.9.0+](https://nodejs.org/en/)
+* Install [jq](https://github.com/jqlang/jq) (optional - if you are installing the local Chrome browser)
 
 <sup>[Back to top ^][table-of-contents]</sup>
 
@@ -103,7 +103,7 @@ $ yarn install
 
 <sup>[Back to top ^][table-of-contents]</sup>
 
-### 3.3. Install Local Browsers (Optional)
+### 3.3. Install local browsers (optional)
 
 If you are want to run a standalone browser for development, you can install developer versions of Chrome and Firefox. If these are installed, these will be used as the installation of the temporary extensions that are built in step [3.4.](#34-run)
 
@@ -146,7 +146,7 @@ $ yarn start:<chrome|firefox>
 
 ## 📑 4. Appendix
 
-### 4.1. Useful Commands
+### 4.1. Useful commands
 
 | Command                   | Description                                                                                                                                                                                            |
 |---------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -173,38 +173,30 @@ You can test Kibisis' features by going to [https://kibis-is.github.io/web-exten
 
 <sup>[Back to top ^][table-of-contents]</sup>
 
-### 4.23. Manifest permissions
+### 4.3. Manifest permissions
 
-| Value              | Version | Justification                                                                                                                                         |
-|--------------------|---------|-------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `<all_urls>`       | 2       | When the extension attempts to scan the QR code of a WalletConnect dapp, the [`tabs.captureVisibleTab()`][capture-visible-tab-api] function is used.  |
-| `activeTab`        | 3       | As above, the extension requires access to the [`tabs.captureVisibleTab()`][capture-visible-tab-api].                                                 |
-| `alarms`           | 3       | A user can switch on a password lock. This feature utilizes the Alarms API as a timeout to lock the extension behind a password.                      |
-| `storage`          | 2 and 3 | The [storage][storage-api] API is used to maintain the state of the extension. It saves encrypted private keys, settings and the lists of AVM assets. |
-| `unlimitedStorage` | 2 and 3 | As an n number of accounts/private keys are saved to storage, users that have a lot of accounts will most likely exceed the storage limit.            |
+| Value              | Version | Justification                                                                                                                                                                                                                |
+|--------------------|---------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `<all_urls>`       | 2       | When the extension attempts to scan the QR code of a WalletConnect dapp, the [`tabs.captureVisibleTab()`][capture-visible-tab-api] function is used.                                                                         |
+| `activeTab`        | 3       | As above, the extension requires access to the [`tabs.captureVisibleTab()`][capture-visible-tab-api].                                                                                                                        |
+| `alarms`           | 3       | A user can switch on a password lock. This feature utilizes the Alarms API as a timeout to lock the extension behind a password.                                                                                             |
+| `storage`          | 2 and 3 | The [storage](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/storage) API is used to maintain the state of the extension. It saves encrypted private keys, settings and the lists of AVM assets. |
+| `unlimitedStorage` | 2 and 3 | As an n number of accounts/private keys are saved to storage, users that have a lot of accounts will most likely exceed the storage limit.                                                                                   |
 
 <sup>[Back to top ^][table-of-contents]</sup>
 
-## 👏 5. How To Contribute
+## 👏 5. How to contribute
 
-Please read the [**Contributing Guide**][contribute] to learn about the development process.
+Please read the [**contributing guide**](./CONTRIBUTING.md) to learn about the development process.
 
 <sup>[Back to top ^][table-of-contents]</sup>
 
 ## 📄 6. License
 
-Please refer to the [COPYING][license] file.
+Please refer to the [COPYING](./COPYING) file.
 
 <sup>[Back to top ^][table-of-contents]</sup>
 
 <!-- links -->
 [capture-visible-tab-api]: https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/tabs/captureVisibleTab
-[contribute]: ./CONTRIBUTING.md
-[download-api]: https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/downloads/download
-[jq]: https://github.com/jqlang/jq
-[license]: ./COPYING
-[node]: https://nodejs.org/en/
-[storage-api]: https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/storage
 [table-of-contents]: #table-of-contents
-[use-web-ext]: https://extensionworkshop.com/documentation/develop/getting-started-with-web-ext/#using-web-ext-section
-[yarn]: https://yarnpkg.com/
