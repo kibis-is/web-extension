@@ -1,3 +1,33 @@
+<div align="center">
+
+[![Chrome extension](https://img.shields.io/chrome-web-store/v/hcgejekffjilpgbommjoklpneekbkajb?logo=googlechrome&logoColor=%23FFCE44&color=%23FFCE44)](https://chromewebstore.google.com/detail/kibisis/hcgejekffjilpgbommjoklpneekbkajb)
+[![Microsoft Edge add-on](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fmicrosoftedge.microsoft.com%2Faddons%2Fgetproductdetailsbycrxid%2Fbajncpocmkioafbijldokfbjajelkbmc%3Fhl%3Den-GB%26gl%3DGB&query=%24.version&prefix=v&logo=microsoftedge&logoColor=%230078D7&label=microsoft%20edge%20add-on&color=%230078D7)](https://microsoftedge.microsoft.com/addons/detail/kibisis/bajncpocmkioafbijldokfbjajelkbmc)
+[![Firefox add-on](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Faddons.mozilla.org%2Fapi%2Fv5%2Faddons%2Faddon%2Fkibisis%2F&query=%24.current_version.version&logo=firefox&logoColor=%23FF7139&label=firefox%20add-on&color=%23FF7139)](https://addons.mozilla.org/en-GB/firefox/addon/kibisis)
+
+</div>
+
+<div align="center">
+
+[![License: AGPL-3.0](https://img.shields.io/github/license/kibis-is/web-extension
+)](https://github.com/kibis-is/web-extension/blob/main/COPYING)
+
+</div>
+
+<div align="center">
+
+![GitHub release](https://img.shields.io/github/v/release/kibis-is/web-extension)
+![GitHub release date](https://img.shields.io/github/release-date/kibis-is/web-extension?logo=github)
+
+</div>
+
+<div align="center">
+
+![GitHub pre-release](https://img.shields.io/github/v/release/kibis-is/web-extension?include_prereleases&label=pre-release)
+![GitHub pre-release date](https://img.shields.io/github/release-date-pre/kibis-is/web-extension?label=pre-release&date&logo=github)
+
+</div>
+
+
 <p align="center">
   <a href="https://kibis.is">
     <img alt="Kibisis & Browser logos" src=".github/assets/logo@637x128.png" style="padding-top: 15px" height="64" />
@@ -13,48 +43,12 @@
 </h4>
 
 <p align="center">
-  <a href="https://github.com/kibis-is/web-extension/releases/latest">
-    <img alt="GitHub Release" src="https://img.shields.io/github/v/release/kibis-is/web-extension?&logo=github">
-  </a>
-  <a href="https://github.com/kibis-is/web-extension/releases/latest">
-    <img alt="GitHub Release Date - Published At" src="https://img.shields.io/github/release-date/kibis-is/web-extension?logo=github">
-  </a>
-</p>
-
-<p align="center">
-  <a href="https://github.com/kibis-is/web-extension/releases">
-    <img alt="GitHub Pre-release" src="https://img.shields.io/github/v/release/kibis-is/web-extension?include_prereleases&label=pre-release&logo=github">
-  </a>
-  <a href="https://github.com/kibis-is/web-extension/releases">
-    <img alt="GitHub Pre-release Date - Published At" src="https://img.shields.io/github/release-date-pre/kibis-is/web-extension?label=pre-release date&logo=github">
-  </a>
-</p>
-
-<p align="center">
-  <a href="https://chromewebstore.google.com/detail/kibisis/hcgejekffjilpgbommjoklpneekbkajb" target="_blank">
-    <img alt="Chrome Web Store Version" src="https://img.shields.io/chrome-web-store/v/hcgejekffjilpgbommjoklpneekbkajb?logo=googlechrome&logoColor=%23FFCE44&color=%23FFCE44">
-  </a>
-
-  <a href="https://microsoftedge.microsoft.com/addons/detail/kibisis/bajncpocmkioafbijldokfbjajelkbmc" target="_blank">
-    <img alt="Microsoft Edge Add-on Version" src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fmicrosoftedge.microsoft.com%2Faddons%2Fgetproductdetailsbycrxid%2Fbajncpocmkioafbijldokfbjajelkbmc%3Fhl%3Den-GB%26gl%3DGB&query=%24.version&prefix=v&logo=microsoftedge&logoColor=%230078D7&label=microsoft%20edge%20add-on&color=%230078D7" />
-  </a>
-
-  <a href="https://addons.mozilla.org/en-GB/firefox/addon/kibisis" target="_blank">
-    <img alt="Mozilla Add-on Version" src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Faddons.mozilla.org%2Fapi%2Fv5%2Faddons%2Faddon%2Fkibisis%2F&query=%24.current_version.version&logo=firefox&logoColor=%23FF7139&label=firefox%20add-on&color=%23FF7139" />
-  </a>
-</p>
-
-<p align="center">
-  <a href="https://github.com/kibis-is/web-extension/blob/main/COPYING">
-    <img alt="GitHub License" src="https://img.shields.io/github/license/kibis-is/web-extension">
-  </a>
-</p>
-
-<p align="center">
   This is the Kibisis web extension built in React, TypeScript and Webpack.
 </p>
 
-### Table Of Contents
+---
+
+### Table of contents
 
 * [1. Overview](#-1-overview)
 * [2. Usage](#-2-usage)

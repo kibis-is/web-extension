@@ -49,6 +49,9 @@ export default class NetworksRepository extends BaseRepository {
       blockExplorers:
         networks.find((_value) => _value.genesisHash === value.genesisHash)
           ?.blockExplorers || [],
+      enVoi:
+        networks.find((_value) => _value.genesisHash === value.genesisHash)
+          ?.enVoi || null,
       nftExplorers:
         networks.find((_value) => _value.genesisHash === value.genesisHash)
           ?.nftExplorers || [],
@@ -85,6 +88,7 @@ export default class NetworksRepository extends BaseRepository {
         canonicalName,
         id,
       })),
+      enVoi: value.enVoi?.url() || null,
       nftExplorers: value.nftExplorers.map(({ canonicalName, id }) => ({
         canonicalName,
         id,

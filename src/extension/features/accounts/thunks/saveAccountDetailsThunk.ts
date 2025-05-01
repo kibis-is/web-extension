@@ -19,7 +19,7 @@ import isWatchAccount from '@extension/utils/isWatchAccount/isWatchAccount';
 import serialize from '@extension/utils/serialize';
 import { findAccountWithoutExtendedProps } from '../utils';
 
-const saveAccountNameThunk: AsyncThunk<
+const saveAccountDetailsThunk: AsyncThunk<
   IAccountWithExtendedProps | null, // return
   ISaveAccountDetailsPayload, // args
   IBaseAsyncThunkConfig<IMainRootState>
@@ -64,4 +64,4 @@ const saveAccountNameThunk: AsyncThunk<
   }
 );
 
-export default saveAccountNameThunk;
+export default saveAccountDetailsThunk;

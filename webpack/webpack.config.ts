@@ -408,7 +408,7 @@ const configs: (
         path: DAPP_EXAMPLE_BUILD_PATH,
         pathinfo: false,
         ...(environment === EnvironmentEnum.Production && {
-          publicPath: '/kibisis-web-extension/', // as this is being deployed to github pages, the public path needs to be set the path in the default github pages: https://<your-username>.github.io/<your-repository>/
+          publicPath: '/web-extension/', // as this is being deployed to github pages, the public path needs to be set the path in the default github pages: https://<your-username>.github.io/<your-repository>/
         }),
       },
       plugins: [

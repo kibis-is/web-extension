@@ -23,7 +23,7 @@ jobs:
 
   deploy:
     name: "Deploy"
-    needs: build
+    needs: [build]
     permissions:
       pages: write # to deploy to pages
       id-token: write # to verify the deployment originates from an appropriate source

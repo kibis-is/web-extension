@@ -1,5 +1,4 @@
 import {
-  Heading,
   HStack,
   Icon,
   Spacer,
@@ -8,7 +7,6 @@ import {
   TabList,
   TabPanels,
   Tabs,
-  Text,
   Tooltip,
   useDisclosure,
   VStack,
@@ -32,6 +30,7 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 // components
+import AccountPageAddressDisplay from '@extension/components/accounts/AccountPageAddressDisplay';
 import ActivityTab from '@extension/components/ActivityTab';
 import AssetsTab from '@extension/components/AssetsTab';
 import CopyIconButton from '@extension/components/CopyIconButton';
@@ -68,6 +67,7 @@ import {
   removeFromGroupThunk,
   removeAccountByIdThunk,
   removeAccountPasskeyByIDThunk,
+  saveAccountsThunk,
   saveActiveAccountDetails,
   updateAccountsThunk,
 } from '@extension/features/accounts';
@@ -80,9 +80,7 @@ import { saveToStorageThunk as saveSettingsToStorageThunk } from '@extension/fea
 import { savePolisAccountIDThunk } from '@extension/features/system';
 
 // hooks
-import useDefaultTextColor from '@extension/hooks/useDefaultTextColor';
 import usePrimaryColorScheme from '@extension/hooks/usePrimaryColorScheme';
-import useSubTextColor from '@extension/hooks/useSubTextColor';
 
 // icons
 import BsFolderMove from '@extension/icons/BsFolderMove';
@@ -127,6 +125,7 @@ import type {
 import convertPublicKeyToAVMAddress from '@common/utils/convertPublicKeyToAVMAddress';
 import ellipseAddress from '@common/utils/ellipseAddress';
 import isReKeyedAuthAccountAvailable from '@extension/utils/isReKeyedAuthAccountAvailable';
+import convertGenesisHashToHex from '@extension/utils/convertGenesisHashToHex';
 
 const AccountPage: FC = () => {
   const { t } = useTranslation();
@@ -161,9 +160,7 @@ const AccountPage: FC = () => {
   const updatingActiveAccountTransactions =
     useSelectActiveAccountTransactionsUpdating();
   // hooks
-  const defaultTextColor = useDefaultTextColor();
   const primaryColorScheme = usePrimaryColorScheme();
-  const subTextColor = useSubTextColor();
   // misc
   const canReKeyAccount = () => {
     if (!account || !accountInformation) {
@@ -195,6 +192,37 @@ const AccountPage: FC = () => {
   };
   const handleAddAccountClick = () => navigate(ADD_ACCOUNT_ROUTE);
   const handleOnEditAccountClick = () => onEditAccountModalOpen();
+  const handleOnEnVoiSelect = useCallback(
+    (index: number) => {
+      if (
+        !account ||
+        !accountInformation ||
+        !network ||
+        accountInformation.enVoi.preferredIndex === index
+      ) {
+        return;
+      }
+
+      dispatch(
+        saveAccountsThunk([
+          {
+            ...account,
+            networkInformation: {
+              ...account.networkInformation,
+              [convertGenesisHashToHex(network.genesisHash)]: {
+                ...accountInformation,
+                enVoi: {
+                  ...accountInformation.enVoi,
+                  preferredIndex: index,
+                },
+              },
+            },
+          },
+        ])
+      );
+    },
+    [account, accountInformation, network]
+  );
   const handleOnMakePrimaryClick = () =>
     account && dispatch(savePolisAccountIDThunk(account.id));
   const handleOnMoveGroupClick = () =>
@@ -410,35 +438,12 @@ const AccountPage: FC = () => {
               />
             </HStack>
 
-            {/*name/address*/}
-            <VStack alignItems="flex-start" spacing={DEFAULT_GAP / 3} w="full">
-              <Tooltip label={account.name || address}>
-                <Heading
-                  color={defaultTextColor}
-                  maxW="650px" // full address length
-                  noOfLines={1}
-                  size="md"
-                  textAlign="left"
-                  w="full"
-                >
-                  {account.name || address}
-                </Heading>
-              </Tooltip>
-
-              {/*address*/}
-              {account.name && (
-                <Tooltip label={address}>
-                  <Text
-                    color={subTextColor}
-                    fontSize="xs"
-                    textAlign="left"
-                    w="full"
-                  >
-                    {ellipseAddress(address, { end: 15, start: 15 })}
-                  </Text>
-                </Tooltip>
-              )}
-            </VStack>
+            {/*name/envoi/address*/}
+            <AccountPageAddressDisplay
+              account={account}
+              network={network}
+              onEnVoiSelect={handleOnEnVoiSelect}
+            />
 
             {/*balance*/}
             <HStack

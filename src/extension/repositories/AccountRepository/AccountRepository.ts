@@ -123,6 +123,10 @@ export default class AccountRepository extends BaseRepository {
       arc200AssetHoldings: [],
       atomicBalance: '0',
       authAddress: null,
+      enVoi: {
+        items: [],
+        preferredIndex: 0,
+      },
       minAtomicBalance: '0',
       standardAssetHoldings: [],
       updatedAt: null,
@@ -241,6 +245,7 @@ export default class AccountRepository extends BaseRepository {
       arc200AssetHoldings: accountInformation.arc200AssetHoldings,
       atomicBalance: accountInformation.atomicBalance,
       authAddress: accountInformation.authAddress,
+      enVoi: accountInformation.enVoi,
       minAtomicBalance: accountInformation.minAtomicBalance,
       standardAssetHoldings: accountInformation.standardAssetHoldings,
       updatedAt: accountInformation.updatedAt,

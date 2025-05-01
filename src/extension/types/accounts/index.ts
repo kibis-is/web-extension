@@ -1,4 +1,5 @@
 export type { default as IAccount } from './IAccount';
+export type { default as IAccountEnVoi } from './IAccountEnVoi';
 export type { default as IAccountGroup } from './IAccountGroup';
 export type { default as IAccountInformation } from './IAccountInformation';
 export type { default as IAccountPasskey } from './IAccountPasskey';

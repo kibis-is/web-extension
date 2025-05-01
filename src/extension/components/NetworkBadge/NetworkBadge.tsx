@@ -8,7 +8,8 @@ import { DEFAULT_GAP } from '@common/constants';
 import { NetworkTypeEnum } from '@extension/enums';
 
 // hooks
-import useColorModeValue from '@extension/hooks/useColorModeValue';
+import usePrimaryColor from '@extension/hooks/usePrimaryColor';
+import useSubTextColor from '@extension/hooks/useSubTextColor';
 
 // theme
 import { theme } from '@common/theme';
@@ -23,18 +24,10 @@ import parsePadding from './utils/parsePadding';
 
 const NetworkBadge: FC<IProps> = ({ network, size = 'sm' }) => {
   // hooks
-  const primaryColorCode = useColorModeValue(
-    theme.colors.primaryLight['500'],
-    theme.colors.primaryDark['500']
-  );
-  const textColorColorCode = useColorModeValue(
-    theme.colors.gray['500'],
-    theme.colors.whiteAlpha['700']
-  );
+  const primaryColor = usePrimaryColor();
+  const subTextColor = useSubTextColor();
   // misc
-  const fontColor = theme.colors[network.chakraTheme]
-    ? 'white'
-    : textColorColorCode;
+  const fontColor = theme.colors[network.chakraTheme] ? 'white' : subTextColor;
   const nativeCurrencyIcon = createIconFromDataUri(
     network.nativeCurrency.iconUrl,
     {
@@ -80,8 +73,7 @@ const NetworkBadge: FC<IProps> = ({ network, size = 'sm' }) => {
   const renderTags = () => {
     const typeTag = renderTypeTag();
     const defaultProps: StackProps = {
-      backgroundColor:
-        theme.colors[network.chakraTheme]['500'] || primaryColorCode,
+      backgroundColor: theme.colors[network.chakraTheme]['500'] || primaryColor,
       py: padding - 1,
       spacing: DEFAULT_GAP / 3,
     };

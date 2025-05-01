@@ -49,6 +49,7 @@
       "@extension/config": ["src/extension/config"],
       "@extension/constants": ["src/extension/constants"],
       "@extension/contracts/*": ["src/extension/contracts/*"],
+      "@extension/decorators/*": ["src/extension/decorators/*"],
       "@extension/enums": ["src/extension/enums"],
       "@extension/events/*": ["src/extension/events/*"],
       "@extension/features/*": ["src/extension/features/*"],
