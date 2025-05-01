@@ -1,8 +1,8 @@
 interface INameResolutionResult {
   address: string;
   cached: boolean;
-  name: string;
-  type: 'addr';
+  name: string | null;
+  type?: 'addr';
 }
 
 export default INameResolutionResult;

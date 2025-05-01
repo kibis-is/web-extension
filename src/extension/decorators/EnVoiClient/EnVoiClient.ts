@@ -29,12 +29,21 @@ export default class EnVoiClient {
    * public methods
    */
 
+  /**
+   * Gets the names for a given address.
+   * @param {string} address - The address to find the names of.
+   * @returns {Promise<string[]>} A promise that resolves to the names for the given address.
+   * @public
+   */
   public async names(address: string): Promise<string[]> {
     const result = await this._request<IEnVoiResponse<INameResolutionResult>>(
       `/name/${address}`
     );
 
-    return result.results.map(({ name }) => name);
+    return result.results.reduce(
+      (acc, { name }) => (name ? [...acc, name] : acc),
+      []
+    );
   }
 
   public url(): string {

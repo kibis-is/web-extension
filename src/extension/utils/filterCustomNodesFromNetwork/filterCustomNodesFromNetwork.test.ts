@@ -31,6 +31,7 @@ describe('filterCustomNodesFromNetwork', () => {
       canonicalName: 'Voi',
       chakraTheme: 'voi',
       blockExplorers: [],
+      enVoi: null,
       feeSunkAddress:
         'FEES3ZW52HQ7U7LB3OGLUFQX2DCCWPJ2LIMXAH75KYROBZBQRN3Q5OR3GI',
       genesisId: 'voitest-v1',
