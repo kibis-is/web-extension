@@ -1,3 +1,10 @@
+# [2.5.0-beta.4](https://github.com/kibis-is/web-extension/compare/v2.5.0-beta.3...v2.5.0-beta.4) (2025-05-01)
+
+
+### Features
+
+* display envoi names ([#350](https://github.com/kibis-is/web-extension/issues/350)) ([391e214](https://github.com/kibis-is/web-extension/commit/391e214eb1f493150a8e2f2ad00b74f8ff6e2657))
+
 # [2.5.0-beta.3](https://github.com/kibis-is/web-extension/compare/v2.5.0-beta.2...v2.5.0-beta.3) (2025-04-25)
 
 
