@@ -2,8 +2,8 @@ name: "Deploy dApp Example"
 
 on:
   push:
-#    branches:
-#      - beta
+    branches:
+      - beta
 
 jobs:
   build:
