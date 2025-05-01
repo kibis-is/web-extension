@@ -14,59 +14,60 @@ import { ActionError } from '../errors';
 import { IUploadStatusResponse } from '../types';
 
 // utils
+import authorizationHeaders from './authorizationHeaders';
 import waitInMilliseconds from './waitInMilliseconds';
 
 /**
  * Uploads the zip file to as a draft submission.
- * @param {string} productId - the extension's product ID.
+ * @param {string} productID - The extension's product ID.
+ * @param {string} clientID - The client ID.
+ * @param {string} apiKey - The API key.
  * @param {string} zipPath - path to the zip file.
- * @param {string} accessToken - the access token to authorize the request.
- * @returns {string} the operation ID associated with this upload.
+ * @returns {Promise<string>} A promise that resolves to the operation ID associated with this upload.
  * @see {@link https://learn.microsoft.com/en-us/microsoft-edge/extensions-chromium/publish/api/using-addons-api#uploading-a-package-to-update-an-existing-submission}
  */
-export default async function uploadZipFile(
-  productId: string,
-  zipPath: string,
-  accessToken: string
+export default async function upload(
+  productID: string,
+  clientID: string,
+  apiKey: string,
+  zipPath: string
 ): Promise<string> {
-  const authorizationHeader: Record<'Authorization', string> = {
-    Authorization: `Bearer ${accessToken}`,
-  };
-  const pollTime: number = 3000; // 3 seconds
-  const retries: number = 5;
-  const uploadUrl: string = `${BASE_URL}/v1/products/${productId}/submissions/draft/package`;
-  const uploadResponse: AxiosResponse = await axios.post(
-    uploadUrl,
+  const _authorizationHeaders = authorizationHeaders(clientID, apiKey);
+  const pollTime = 3000; // 3 seconds
+  const retries = 5;
+  const uploadURL = `${BASE_URL}/v1/products/${productID}/submissions/draft/package`;
+  const uploadResponse = await axios.post(
+    uploadURL,
     createReadStream(zipPath),
     {
       headers: {
-        ...authorizationHeader,
+        ..._authorizationHeaders,
         'Content-Type': 'application/zip',
       },
     }
   );
-  let attempts: number = 0;
-  let operationId: string;
-  let uploadStatusUrl: string;
+  let attempts = 0;
+  let operationID: string;
+  let uploadStatusURL: string;
   let uploadStatusResponse: AxiosResponse<IUploadStatusResponse>;
   let uploadStatus: UploadStatusEnum | null = null;
 
-  operationId = uploadResponse.headers.location;
+  operationID = uploadResponse.headers.location;
 
-  if (!operationId) {
+  if (!operationID) {
     throw new ActionError(
       ErrorCodeEnum.UploadError,
       `failed to get location header from upload response`
     );
   }
 
-  uploadStatusUrl = `${uploadUrl}/operations/${operationId}`;
+  uploadStatusURL = `${uploadURL}/operations/${operationID}`;
 
   // poll the upload status check
   while (uploadStatus !== UploadStatusEnum.Succeeded && attempts < retries) {
-    uploadStatusResponse = await axios.get(uploadStatusUrl, {
+    uploadStatusResponse = await axios.get(uploadStatusURL, {
       headers: {
-        ...authorizationHeader,
+        ..._authorizationHeaders,
       },
     });
 
@@ -103,5 +104,5 @@ export default async function uploadZipFile(
     );
   }
 
-  return operationId;
+  return operationID;
 }
