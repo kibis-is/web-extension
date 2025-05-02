@@ -1,9 +1,6 @@
 import { Heading, HStack, Text, Tooltip, VStack } from '@chakra-ui/react';
 import React, { type FC, useCallback, useMemo } from 'react';
 
-// components
-import EnVoiSelect from '@extension/components/accounts/EnVoiSelect';
-
 // constants
 import { DEFAULT_GAP } from '@common/constants';
 
@@ -36,8 +33,8 @@ const AccountPageAddressDisplay: FC<IProps> = ({
     () => convertPublicKeyToAVMAddress(account.publicKey),
     [account]
   );
-  const hasEnVoi = useMemo(
-    () => !!accountInformation && accountInformation.enVoi.items.length > 0,
+  const enVoiName = useMemo(
+    () => accountInformation?.enVoi.primaryName || null,
     [accountInformation]
   );
   // hooks
@@ -69,12 +66,8 @@ const AccountPageAddressDisplay: FC<IProps> = ({
             </Tooltip>
 
             {/*envoi*/}
-            {accountInformation && hasEnVoi && (
-              <EnVoiSelect
-                names={accountInformation.enVoi.items}
-                onSelect={onEnVoiSelect}
-                selectedIndex={accountInformation.enVoi.preferredIndex}
-              />
+            {accountInformation && enVoiName && (
+              <Text color={subTextColor}>{enVoiName}</Text>
             )}
           </HStack>
 
@@ -89,16 +82,13 @@ const AccountPageAddressDisplay: FC<IProps> = ({
     }
 
     // if there is no name, but there is an envoi, display the envoi
-    if (accountInformation && hasEnVoi) {
+    if (accountInformation && enVoiName) {
       return (
         <>
           {/*envoi*/}
-          <EnVoiSelect
-            names={accountInformation.enVoi.items}
-            onSelect={onEnVoiSelect}
-            selectedIndex={accountInformation.enVoi.preferredIndex}
-            size="lg"
-          />
+          <Text color={subTextColor} fontSize="lg">
+            {enVoiName}
+          </Text>
 
           {/*address*/}
           <Tooltip label={address}>
@@ -130,7 +120,7 @@ const AccountPageAddressDisplay: FC<IProps> = ({
         </Heading>
       </Tooltip>
     );
-  }, [account, accountInformation, hasEnVoi]);
+  }, [account, accountInformation, enVoiName]);
 
   return (
     <VStack alignItems="flex-start" spacing={DEFAULT_GAP / 3} w="full">

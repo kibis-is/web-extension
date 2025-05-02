@@ -1,9 +1,9 @@
 import { AssetTypeEnum } from '@extension/enums';
 
 /**
- * @property {string} amount - the amount, in atomic units, the asset.
- * @property {string} id - the asset ID.
- * @property {AssetTypeEnum} type - the type of asset.
+ * @property {string} amount - The amount, in atomic units, the asset.
+ * @property {string} id - The asset ID i.e. the contract ID.
+ * @property {AssetTypeEnum} type - The type of asset.
  */
 interface IBaseAssetHolding {
   amount: string;

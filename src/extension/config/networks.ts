@@ -61,6 +61,7 @@ const networks: INetwork[] = [
       }),
     ],
     enVoi: new EnVoiClient({
+      contractID: '797609',
       url: 'https://api.envoi.sh',
     }),
     feeSunkAddress:

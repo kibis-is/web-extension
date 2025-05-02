@@ -1,4 +1,5 @@
 interface IEnVoiClientParameters {
+  contractID: string;
   url: string;
 }
 
