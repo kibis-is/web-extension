@@ -4,6 +4,7 @@ import React, { type FC, type ReactNode, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 // components
+import EmptyPasskeyIcon from '@common/components/EmptyPasskeyIcon';
 import EmptyState from '@common/components/EmptyState';
 import Item from './Item';
 import ScrollableContainer from '@extension/components/ScrollableContainer';
@@ -11,9 +12,6 @@ import TabLoadingItem from '@extension/components/TabLoadingItem';
 
 // constants
 import { ACCOUNT_PAGE_TAB_CONTENT_HEIGHT } from '@extension/constants';
-
-// icons
-import KbNoPasskey from '@extension/icons/KbNoPasskey';
 
 // types
 import type { IProps } from './types';
@@ -69,7 +67,7 @@ const PasskeysTab: FC<IProps> = ({
         {/*empty state*/}
         <EmptyState
           colorMode={colorMode}
-          icon={KbNoPasskey}
+          icon={<EmptyPasskeyIcon colorMode={colorMode} />}
           text={t<string>('headings.noPasskeysFound')}
         />
 

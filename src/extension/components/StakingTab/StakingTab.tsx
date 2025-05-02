@@ -4,10 +4,10 @@ import React, { type FC, type ReactNode, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 // components
-// import AssetTabLoadingItem from '@extension/components/AssetTabLoadingItem';
 import EmptyState from '@common/components/EmptyState';
 import ScrollableContainer from '@extension/components/ScrollableContainer';
 import TabControlBar from '@extension/components/TabControlBar';
+import TabLoadingItem from '@extension/components/TabLoadingItem';
 import Item from './Item';
 
 // constants
@@ -48,8 +48,7 @@ const StakingTab: FC<IProps> = ({ account, colorMode, fetching, network }) => {
 
     if (fetching) {
       return Array.from({ length: 3 }, (_, index) => (
-        // <AssetTabLoadingItem key={`${_context}-loading-item-${index}`} />
-        <div></div>
+        <TabLoadingItem key={`${_context}-loading-item-${index}`} />
       ));
     }
 
