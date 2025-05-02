@@ -1,3 +1,10 @@
+# [2.5.0-beta.5](https://github.com/kibis-is/web-extension/compare/v2.5.0-beta.4...v2.5.0-beta.5) (2025-05-02)
+
+
+### Features
+
+* add staking contracts tab ([#353](https://github.com/kibis-is/web-extension/issues/353)) ([26e351c](https://github.com/kibis-is/web-extension/commit/26e351c5852d26b7259ac5a90efff983e1576418))
+
 # [2.5.0-beta.4](https://github.com/kibis-is/web-extension/compare/v2.5.0-beta.3...v2.5.0-beta.4) (2025-05-01)
 
 
