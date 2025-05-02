@@ -1,3 +1,10 @@
+# [2.5.0-beta.7](https://github.com/kibis-is/web-extension/compare/v2.5.0-beta.6...v2.5.0-beta.7) (2025-05-02)
+
+
+### Features
+
+* update whats new content for 2.5.0 ([#355](https://github.com/kibis-is/web-extension/issues/355)) ([09c2e2c](https://github.com/kibis-is/web-extension/commit/09c2e2cd00b5f208954d51decfa74e1387c07388))
+
 # [2.5.0-beta.6](https://github.com/kibis-is/web-extension/compare/v2.5.0-beta.5...v2.5.0-beta.6) (2025-05-02)
 
 
