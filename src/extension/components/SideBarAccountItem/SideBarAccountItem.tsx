@@ -5,12 +5,11 @@ import {
   Center,
   HStack,
   Icon,
-  type StackProps,
   Text,
   Tooltip,
   VStack,
 } from '@chakra-ui/react';
-import React, { type FC } from 'react';
+import React, { type FC, useCallback, useMemo } from 'react';
 import { BsFolderMinus, BsFolderPlus } from 'react-icons/bs';
 import { IoReorderTwoOutline } from 'react-icons/io5';
 
@@ -26,6 +25,9 @@ import useButtonHoverBackgroundColor from '@extension/hooks/useButtonHoverBackgr
 import useColorModeValue from '@extension/hooks/useColorModeValue';
 import useDefaultTextColor from '@extension/hooks/useDefaultTextColor';
 import useSubTextColor from '@extension/hooks/useSubTextColor';
+
+// repositories
+import AccountRepository from '@extension/repositories/AccountRepository';
 
 // types
 import type { IProps } from './types';
@@ -62,21 +64,37 @@ const SideBarAccountItem: FC<IProps> = ({
   const defaultTextColor = useDefaultTextColor();
   const subTextColor = useSubTextColor();
   const activeBackground = useColorModeValue('gray.200', 'whiteAlpha.200');
-  // misc
-  const address = convertPublicKeyToAVMAddress(account.publicKey);
-  const activeProps: Partial<StackProps> = active
-    ? {
-        _hover: {
-          bg: activeBackground,
-        },
-        bg: activeBackground,
-      }
-    : {
-        _hover: {
-          bg: buttonHoverBackgroundColor,
-        },
-        bg: BODY_BACKGROUND_COLOR,
-      };
+  // memos
+  const accountInformation = useMemo(
+    () =>
+      AccountRepository.extractAccountInformationForNetwork(account, network),
+    [account, network]
+  );
+  const activeProps = useMemo(
+    () =>
+      active
+        ? {
+            _hover: {
+              bg: activeBackground,
+            },
+            bg: activeBackground,
+          }
+        : {
+            _hover: {
+              bg: buttonHoverBackgroundColor,
+            },
+            bg: BODY_BACKGROUND_COLOR,
+          },
+    [active, activeBackground, buttonHoverBackgroundColor]
+  );
+  const address = useMemo(
+    () => convertPublicKeyToAVMAddress(account.publicKey),
+    [account]
+  );
+  const enVoiName = useMemo(
+    () => accountInformation?.enVoi.primaryName || null,
+    [accountInformation]
+  );
   // handlers
   const handleOnAddToGroupClick = () =>
     onAddToGroupClick && onAddToGroupClick(account.id);
@@ -85,6 +103,83 @@ const SideBarAccountItem: FC<IProps> = ({
     account.groupID &&
     onRemoveFromGroupClick &&
     onRemoveFromGroupClick(account.id);
+  // renders
+  const renderNameAddress = useCallback(() => {
+    if (account.name) {
+      return (
+        <VStack
+          alignItems="flex-start"
+          justifyContent="space-evenly"
+          spacing={0}
+          {...(isShortForm && {
+            display: 'none',
+          })}
+        >
+          <Text
+            color={defaultTextColor}
+            fontSize="sm"
+            maxW={195}
+            noOfLines={1}
+            textAlign="left"
+          >
+            {account.name}
+          </Text>
+
+          <Text color={subTextColor} fontSize="xs" textAlign="left">
+            {enVoiName ?? ellipseAddress(address)}
+          </Text>
+        </VStack>
+      );
+    }
+
+    // if there is no name, but there is an envoi, display the envoi
+    if (enVoiName) {
+      return (
+        <VStack
+          alignItems="flex-start"
+          justifyContent="space-evenly"
+          spacing={0}
+          {...(isShortForm && {
+            display: 'none',
+          })}
+        >
+          <Text
+            color={defaultTextColor}
+            fontSize="sm"
+            maxW={195}
+            noOfLines={1}
+            textAlign="left"
+          >
+            {enVoiName}
+          </Text>
+
+          <Text color={subTextColor} fontSize="xs" textAlign="left">
+            {ellipseAddress(address)}
+          </Text>
+        </VStack>
+      );
+    }
+
+    return (
+      <Text
+        color={defaultTextColor}
+        fontSize="sm"
+        textAlign="left"
+        {...(isShortForm && {
+          display: 'none',
+        })}
+      >
+        {ellipseAddress(address)}
+      </Text>
+    );
+  }, [
+    account,
+    address,
+    defaultTextColor,
+    enVoiName,
+    isShortForm,
+    subTextColor,
+  ]);
 
   return (
     <Tooltip
@@ -132,42 +227,8 @@ const SideBarAccountItem: FC<IProps> = ({
               />
             </Center>
 
-            {/*name/address*/}
-            {account.name ? (
-              <VStack
-                alignItems="flex-start"
-                justifyContent="space-evenly"
-                spacing={0}
-                {...(isShortForm && {
-                  display: 'none',
-                })}
-              >
-                <Text
-                  color={defaultTextColor}
-                  fontSize="sm"
-                  maxW={195}
-                  noOfLines={1}
-                  textAlign="left"
-                >
-                  {account.name}
-                </Text>
-
-                <Text color={subTextColor} fontSize="xs" textAlign="left">
-                  {ellipseAddress(address)}
-                </Text>
-              </VStack>
-            ) : (
-              <Text
-                color={defaultTextColor}
-                fontSize="sm"
-                textAlign="left"
-                {...(isShortForm && {
-                  display: 'none',
-                })}
-              >
-                {ellipseAddress(address)}
-              </Text>
-            )}
+            {/*name/envoi/address*/}
+            {renderNameAddress()}
           </HStack>
         </Button>
 

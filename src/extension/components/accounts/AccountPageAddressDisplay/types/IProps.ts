@@ -7,7 +7,6 @@ import type {
 interface IProps {
   account: IAccountWithExtendedProps;
   network: INetworkWithTransactionParams;
-  onEnVoiSelect: (index: number) => void;
 }
 
 export default IProps;

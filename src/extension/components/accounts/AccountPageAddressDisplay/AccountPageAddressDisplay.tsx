@@ -18,11 +18,7 @@ import type { IProps } from './types';
 import convertPublicKeyToAVMAddress from '@common/utils/convertPublicKeyToAVMAddress';
 import ellipseAddress from '@common/utils/ellipseAddress';
 
-const AccountPageAddressDisplay: FC<IProps> = ({
-  account,
-  network,
-  onEnVoiSelect,
-}) => {
+const AccountPageAddressDisplay: FC<IProps> = ({ account, network }) => {
   // memos
   const accountInformation = useMemo(
     () =>
