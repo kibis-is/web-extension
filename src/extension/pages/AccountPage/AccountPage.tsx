@@ -35,23 +35,22 @@ import { useNavigate } from 'react-router-dom';
 import AccountPageAddressDisplay from '@extension/components/accounts/AccountPageAddressDisplay';
 import ActivityTab from '@extension/components/ActivityTab';
 import AssetsTab from '@extension/components/AssetsTab';
+import AVMNamesTab from '@extension/components/avm-names/AVMNamesTab';
 import CopyIconButton from '@extension/components/CopyIconButton';
 import EmptyState from '@common/components/EmptyState';
 import IconButton from '@common/components/IconButton';
-import OpenTabIconButton from '@extension/components/OpenTabIconButton';
-import OverflowMenu from '@extension/components/OverflowMenu';
+import GroupBadge from '@extension/components/GroupBadge';
 import NativeBalance from '@extension/components/NativeBalance';
 import NetworkSelect from '@extension/components/NetworkSelect';
-import NFTsTab from '@extension/components/NFTsTab';
+import NFTsTab from '@extension/components/nfts/NFTsTab';
+import OpenTabIconButton from '@extension/components/OpenTabIconButton';
+import OverflowMenu from '@extension/components/OverflowMenu';
 import PasskeysTab from '@extension/components/PasskeysTab';
 import PolisAccountBadge from '@extension/components/PolisAccountBadge';
 import ReKeyedAccountBadge from '@extension/components/RekeyedAccountBadge';
 import StakingTab from '@extension/components/StakingTab';
 import WatchAccountBadge from '@extension/components/WatchAccountBadge';
 import AccountPageSkeletonContent from './AccountPageSkeletonContent';
-
-// components
-import GroupBadge from '@extension/components/GroupBadge';
 
 // constants
 import { DEFAULT_GAP } from '@common/constants';
@@ -89,6 +88,7 @@ import usePrimaryColorScheme from '@extension/hooks/usePrimaryColorScheme';
 import BsFolderMove from '@extension/icons/BsFolderMove';
 
 // modals
+import AVMNameModal from '@extension/modals/avm-names/AVMNameModal';
 import EditAccountModal from '@extension/modals/EditAccountModal';
 import ShareAddressModal from '@extension/modals/ShareAddressModal';
 
@@ -102,16 +102,18 @@ import {
   useSelectActiveAccountDetails,
   useSelectActiveAccountGroup,
   useSelectActiveAccountInformation,
+  useSelectActiveAccountStakingApps,
   useSelectActiveAccountTransactions,
   useSelectActiveAccountTransactionsUpdating,
   useSelectAccountsFetching,
-  useSelectSettingsFetching,
+  useSelectARC0072AssetsFetching,
   useSelectIsOnline,
   useSelectNetworks,
   useSelectSettingsColorMode,
   useSelectSettingsPreferredBlockExplorer,
   useSelectSettingsSelectedNetwork,
   useSelectSettings,
+  useSelectSettingsFetching,
   useSelectSystemInfo,
 } from '@extension/selectors';
 
@@ -121,6 +123,7 @@ import type {
   IAccountStakingApp,
   IAccountWithExtendedProps,
   IAppThunkDispatch,
+  IARC0072AssetHolding,
   IMainRootState,
   INetwork,
 } from '@extension/types';
@@ -129,7 +132,7 @@ import type {
 import convertPublicKeyToAVMAddress from '@common/utils/convertPublicKeyToAVMAddress';
 import ellipseAddress from '@common/utils/ellipseAddress';
 import isReKeyedAuthAccountAvailable from '@extension/utils/isReKeyedAuthAccountAvailable';
-import convertGenesisHashToHex from '@extension/utils/convertGenesisHashToHex';
+import StakingAppModal from '@extension/modals/StakingAppModal';
 
 const AccountPage: FC = () => {
   const { t } = useTranslation();
@@ -154,17 +157,25 @@ const AccountPage: FC = () => {
   const colorMode = useSelectSettingsColorMode();
   const fetchingAccounts = useSelectAccountsFetching();
   const fetchingSettings = useSelectSettingsFetching();
+  const fetchingARC0072AssetHoldings = useSelectARC0072AssetsFetching();
   const group = useSelectActiveAccountGroup();
   const online = useSelectIsOnline();
   const network = useSelectSettingsSelectedNetwork();
   const networks = useSelectNetworks();
   const explorer = useSelectSettingsPreferredBlockExplorer();
   const settings = useSelectSettings();
+  const stakingApps = useSelectActiveAccountStakingApps();
   const systemInfo = useSelectSystemInfo();
   const updatingActiveAccountTransactions =
     useSelectActiveAccountTransactionsUpdating();
   // hooks
   const primaryColorScheme = usePrimaryColorScheme();
+  // states
+  const [selectedName, setSelectedName] = useState<IARC0072AssetHolding | null>(
+    null
+  );
+  const [selectedStakingApp, setSelectedStakingApp] =
+    useState<IAccountStakingApp | null>(null);
   // misc
   const canReKeyAccount = () => {
     if (!account || !accountInformation) {
@@ -195,38 +206,11 @@ const AccountPage: FC = () => {
     }
   };
   const handleAddAccountClick = () => navigate(ADD_ACCOUNT_ROUTE);
-  const handleOnEditAccountClick = () => onEditAccountModalOpen();
-  const handleOnEnVoiSelect = useCallback(
-    (index: number) => {
-      if (
-        !account ||
-        !accountInformation ||
-        !network ||
-        accountInformation.enVoi.preferredIndex === index
-      ) {
-        return;
-      }
-
-      dispatch(
-        saveAccountsThunk([
-          {
-            ...account,
-            networkInformation: {
-              ...account.networkInformation,
-              [convertGenesisHashToHex(network.genesisHash)]: {
-                ...accountInformation,
-                enVoi: {
-                  ...accountInformation.enVoi,
-                  preferredIndex: index,
-                },
-              },
-            },
-          },
-        ])
-      );
-    },
-    [account, accountInformation, network]
+  const handleOnAVMNameModalClose = useCallback(
+    () => setSelectedName(null),
+    [setSelectedName]
   );
+  const handleOnEditAccountClick = () => onEditAccountModalOpen();
   const handleOnMakePrimaryClick = () =>
     account && dispatch(savePolisAccountIDThunk(account.id));
   const handleOnMoveGroupClick = () =>
@@ -302,9 +286,28 @@ const AccountPage: FC = () => {
     },
     [account]
   );
+  const handleOnStakingAppModalClose = useCallback(
+    () => setSelectedStakingApp(null),
+    [setSelectedStakingApp]
+  );
+  const handleOnViewAVMNameClick = useCallback(
+    (id: string) =>
+      setSelectedName(
+        accountInformation?.enVoi.items.find(({ tokenId }) => id === tokenId) ||
+          null
+      ),
+    [accountInformation, setSelectedName]
+  );
   const handleOnViewPasskeyClick = useCallback(
     (id: string) => navigate(`${ACCOUNTS_ROUTE}${PASSKEY_ROUTE}/${id}`),
     []
+  );
+  const handleOnViewStakingApp = useCallback(
+    (id: string) =>
+      setSelectedStakingApp(
+        stakingApps.find(({ appID }) => appID === id) || null
+      ),
+    [stakingApps, setSelectedStakingApp]
   );
   const handleOnWhatsNewClick = () => dispatch(setWhatsNewModal(true));
   const handleNetworkSelect = async (value: INetwork) => {
@@ -443,11 +446,7 @@ const AccountPage: FC = () => {
             </HStack>
 
             {/*name/envoi/address*/}
-            <AccountPageAddressDisplay
-              account={account}
-              network={network}
-              onEnVoiSelect={handleOnEnVoiSelect}
-            />
+            <AccountPageAddressDisplay account={account} network={network} />
 
             {/*balance*/}
             <HStack
@@ -622,7 +621,7 @@ const AccountPage: FC = () => {
 
           <Spacer />
 
-          {/*assets/nfts/activity tabs*/}
+          {/*tabs*/}
           <Tabs
             colorScheme={primaryColorScheme}
             defaultIndex={
@@ -634,9 +633,10 @@ const AccountPage: FC = () => {
             sx={{ display: 'flex', flexDirection: 'column' }}
             w="full"
           >
-            <TabList>
+            <TabList sx={{ overflowX: 'scroll' }}>
               <Tab>{t<string>('labels.assets')}</Tab>
               <Tab>{t<string>('labels.nfts')}</Tab>
+              <Tab>{t<string>('labels.names')}</Tab>
               <Tab>{t<string>('labels.activity')}</Tab>
               {settings.advanced.allowAccountPasskeys && (
                 <Tab isDisabled={account.watchAccount}>
@@ -649,7 +649,22 @@ const AccountPage: FC = () => {
             <TabPanels sx={{ display: 'flex', flexDirection: 'column' }}>
               <AssetsTab account={account} colorMode={colorMode} />
 
-              <NFTsTab account={account} />
+              <NFTsTab
+                account={account}
+                colorMode={colorMode}
+                fetching={fetchingARC0072AssetHoldings}
+                network={network}
+              />
+
+              {accountInformation && (
+                <AVMNamesTab
+                  accountInformation={accountInformation}
+                  colorMode={colorMode}
+                  fetching={fetchingARC0072AssetHoldings}
+                  network={network}
+                  onViewClick={handleOnViewAVMNameClick}
+                />
+              )}
 
               <ActivityTab
                 account={account}
@@ -673,10 +688,11 @@ const AccountPage: FC = () => {
               )}
 
               <StakingTab
-                account={account}
                 colorMode={colorMode}
                 fetching={fetchingAccounts}
                 network={network}
+                stakingApps={stakingApps}
+                onViewClick={handleOnViewStakingApp}
               />
             </TabPanels>
           </Tabs>
@@ -762,6 +778,16 @@ const AccountPage: FC = () => {
           <EditAccountModal
             isOpen={isEditAccountModalOpen}
             onClose={onEditAccountModalClose}
+          />
+          <AVMNameModal
+            item={selectedName}
+            network={network}
+            onClose={handleOnAVMNameModalClose}
+          />
+          <StakingAppModal
+            app={selectedStakingApp}
+            network={network}
+            onClose={handleOnStakingAppModalClose}
           />
           <ShareAddressModal
             address={convertPublicKeyToAVMAddress(

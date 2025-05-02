@@ -8,6 +8,7 @@ export { default as useSelectActiveAccount } from './useSelectActiveAccount';
 export { default as useSelectActiveAccountDetails } from './useSelectActiveAccountDetails';
 export { default as useSelectActiveAccountGroup } from './useSelectActiveAccountGroup';
 export { default as useSelectActiveAccountInformation } from './useSelectActiveAccountInformation';
+export { default as useSelectActiveAccountStakingApps } from './useSelectActiveAccountStakingApps';
 export { default as useSelectActiveAccountTransactions } from './useSelectActiveAccountTransactions';
 export { default as useSelectActiveAccountTransactionsUpdating } from './useSelectActiveAccountTransactionsUpdating';
 export { default as useSelectAvailableAccountsForSelectedNetwork } from './useSelectAvailableAccountsForSelectedNetwork';

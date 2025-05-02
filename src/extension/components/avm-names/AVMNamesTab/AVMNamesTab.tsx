@@ -6,7 +6,6 @@ import { useTranslation } from 'react-i18next';
 // components
 import EmptyState from '@common/components/EmptyState';
 import ScrollableContainer from '@extension/components/ScrollableContainer';
-import TabControlBar from '@extension/components/TabControlBar';
 import TabLoadingItem from '@extension/components/TabLoadingItem';
 import Item from './Item';
 
@@ -16,12 +15,12 @@ import { ACCOUNT_PAGE_TAB_CONTENT_HEIGHT } from '@extension/constants';
 // types
 import type { TProps } from './types';
 
-const StakingTab: FC<TProps> = ({
+const AVMNamesTab: FC<TProps> = ({
+  accountInformation,
   colorMode,
   fetching,
   network,
   onViewClick,
-  stakingApps,
 }) => {
   const { t } = useTranslation();
   // memos
@@ -32,36 +31,34 @@ const StakingTab: FC<TProps> = ({
 
     if (fetching) {
       return Array.from({ length: 3 }, (_, index) => (
-        <TabLoadingItem key={`${context}-loading-item-${index}`} />
+        <TabLoadingItem key={`${context}-names-tab-loading-item-${index}`} />
       ));
     }
 
-    if (stakingApps.length > 0) {
-      nodes = stakingApps.map((value, index) => (
+    if (network && accountInformation) {
+      nodes = accountInformation.enVoi.items.map((value, index) => (
         <Item
-          app={value}
           colorMode={colorMode}
-          key={`${context}-item-${index}`}
-          network={network}
-          onClick={onViewClick}
+          item={value}
+          key={`${context}-names-tab-item-${index}`}
+          onViewClick={onViewClick}
         />
       ));
     }
 
     return nodes.length > 0 ? (
-      <>
-        <ScrollableContainer
-          direction="column"
-          m={0}
-          pb={8}
-          pt={0}
-          px={0}
-          spacing={0}
-          w="full"
-        >
-          {nodes}
-        </ScrollableContainer>
-      </>
+      // asset list
+      <ScrollableContainer
+        direction="column"
+        m={0}
+        pb={8}
+        pt={0}
+        px={0}
+        spacing={0}
+        w="full"
+      >
+        {nodes}
+      </ScrollableContainer>
     ) : (
       <VStack flexGrow={1} w="full">
         <Spacer />
@@ -69,7 +66,7 @@ const StakingTab: FC<TProps> = ({
         {/*empty state*/}
         <EmptyState
           colorMode={colorMode}
-          text={t<string>('headings.noStakingAppsFound')}
+          text={t<string>('headings.noNamesFound')}
         />
 
         <Spacer />
@@ -85,17 +82,9 @@ const StakingTab: FC<TProps> = ({
       sx={{ display: 'flex', flexDirection: 'column' }}
       w="full"
     >
-      {/*controls*/}
-      <TabControlBar
-        colorMode={colorMode}
-        buttons={[]}
-        isLoading={fetching}
-        loadingTooltipLabel={t<string>('captions.updatingStakingApps')}
-      />
-
       {renderContent()}
     </TabPanel>
   );
 };
 
-export default StakingTab;
+export default AVMNamesTab;
