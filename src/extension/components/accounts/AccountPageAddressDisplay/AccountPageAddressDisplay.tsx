@@ -52,7 +52,7 @@ const AccountPageAddressDisplay: FC<IProps> = ({ account, network }) => {
             <Tooltip label={account.name}>
               <Heading
                 color={defaultTextColor}
-                maxW="650px" // full address length
+                maxW="650px"
                 noOfLines={1}
                 size="md"
                 textAlign="left"
@@ -82,19 +82,19 @@ const AccountPageAddressDisplay: FC<IProps> = ({ account, network }) => {
       return (
         <>
           {/*envoi*/}
-          <Text color={subTextColor} fontSize="lg">
+          <Heading
+            color={defaultTextColor}
+            maxW="650px"
+            noOfLines={1}
+            size="md"
+            textAlign="left"
+          >
             {enVoiName}
-          </Text>
+          </Heading>
 
           {/*address*/}
           <Tooltip label={address}>
-            <Text
-              color={subTextColor}
-              fontSize="xs"
-              pl={DEFAULT_GAP / 3}
-              textAlign="left"
-              w="full"
-            >
+            <Text color={subTextColor} fontSize="xs" textAlign="left" w="full">
               {ellipseAddress(address, { end: 15, start: 15 })}
             </Text>
           </Tooltip>

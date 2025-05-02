@@ -1,6 +1,4 @@
 import {
-  ColorMode,
-  Heading,
   HStack,
   Icon,
   Spacer,
@@ -633,7 +631,12 @@ const AccountPage: FC = () => {
             sx={{ display: 'flex', flexDirection: 'column' }}
             w="full"
           >
-            <TabList sx={{ overflowX: 'scroll' }}>
+            <TabList
+              sx={{
+                overflowX: 'scroll',
+                paddingBottom: '2px', // compensate for the added scrollbar
+              }}
+            >
               <Tab>{t<string>('labels.assets')}</Tab>
               <Tab>{t<string>('labels.nfts')}</Tab>
               <Tab>{t<string>('labels.names')}</Tab>
