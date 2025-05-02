@@ -2,30 +2,27 @@
 
 ### Features
 
-* 💅 Change account icon.
-* 💅 Change account background color.
-* 🗃️ Group accounts.
-* 🔁 Switch to new Voi testnet.
+* 🔤 enVoi support - you can now see your enVoi names alongside your accounts.
+* 💰 Staking contract support - a new tab displays your account's linked staking contracts.
+* 🔑 Authenticate using your AVM account - you can now sign in to websites that allow passkey authentication and use your accounts
 
 ## Community Highlights
 
-### Kibisis Launches On Android!
+### It has been a while...
 
-After a lot of hard work, we are very proud to announce that Kibisis has officially launched on Android. You can download from the Play Store from [here](https://play.google.com/store/apps/details?id=is.kibis.kibisis).
+Kibisis has been on a bit of a sabbatical - life is full of surprises, and it tends to catch us all off-guard at some point.
 
-For more information or alternative installation methods, see the [Getting Started](https://kibis.is/android/getting-started) guide.
+However, we have picked up the torch once more and are working to support some of the brilliant community-driven projects that have been gaining traction.
 
-> ⚠️ **NOTE:** Please be aware that the Android version is in open beta and there maybe some bugs, but rest assured we will be updating regularly. There may also be some missing features, these will be implemented over the coming updates.
+We will continue to add support for these projects to provide you with the richest experience possible. 😊
 
-### Airdrops Have Dropped!
+### Voi Improvement Proposals - VIPs
 
-On the 28th October 2024, all those that participated in the Testnet Phase 1 & 2 and Staking programs will have received their airdrops. For the Testnet program, 3.67% of the total token supply (367 million VOI) was allocated and 1.4% of the total token supply (140 million VOI) was allocated to the Staking program. Each program had an optional lock-up period, with the Testnet program having a higher lock-up period of upto 5 years, and, notably, 55% of the participants chose to lock-up for the full 5 years.
+Like most Layer 1 blockchains, standards and specifications begin to develop as the chain grows in popularity. It benefits all current and future builders to have these standards and specifications well documented.
 
-These effort-based airdrops are testament to Voi's commitment to being a truly community-driven blockchain.
+We are pleased to introduce a community-driven effort to create a consolidated source for standards and specifications - focused on, but not limited to, the Voi blockchain: [Voi Improvement Proposals (VIPs)](https://vips.voi.community).
 
-You can check the state of your airdrop contracts using the beautifully crafted airdrop tool [https://staking.voi.network/](https://staking.voi.network/).
-
-For more information relating to the airdrops, check [this](https://medium.com/@voifoundation/airdrop-programs-everything-you-need-to-know-a84706bd8599) blog post.
+The VIP process is open to everyone who shares Voi’s community-driven vision (and even those who don’t 😉).
 
 ## Closing Words
 
