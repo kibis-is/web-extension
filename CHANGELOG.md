@@ -1,3 +1,10 @@
+# [2.5.0-beta.6](https://github.com/kibis-is/web-extension/compare/v2.5.0-beta.5...v2.5.0-beta.6) (2025-05-02)
+
+
+### Features
+
+* add avm names tab ([#354](https://github.com/kibis-is/web-extension/issues/354)) ([2a327fc](https://github.com/kibis-is/web-extension/commit/2a327fc2e9869f50bdcb9b28ee07faa0dae7710b))
+
 # [2.5.0-beta.5](https://github.com/kibis-is/web-extension/compare/v2.5.0-beta.4...v2.5.0-beta.5) (2025-05-02)
 
 
