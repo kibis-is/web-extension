@@ -136,7 +136,7 @@ export default class AccountRepository extends BaseRepository {
       authAddress: null,
       enVoi: {
         items: [],
-        preferredIndex: 0,
+        primaryName: null,
       },
       minAtomicBalance: '0',
       standardAssetHoldings: [],

@@ -1,6 +1,9 @@
+// types
+import type { IARC0072AssetHolding } from '@extension/types';
+
 interface IAccountEnVoi {
-  items: string[];
-  preferredIndex: number;
+  items: IARC0072AssetHolding[];
+  primaryName: string | null;
 }
 
 export default IAccountEnVoi;

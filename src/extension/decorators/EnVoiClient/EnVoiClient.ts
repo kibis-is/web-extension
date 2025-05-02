@@ -9,9 +9,11 @@ export default class EnVoiClient {
   // public static variables
   public static displayName = 'EnVoiClient';
   // private variables
+  private readonly _contractID: string;
   private readonly _url: string;
 
-  public constructor({ url }: IEnVoiClientParameters) {
+  public constructor({ contractID, url }: IEnVoiClientParameters) {
+    this._contractID = contractID;
     this._url = url;
   }
 
@@ -29,21 +31,22 @@ export default class EnVoiClient {
    * public methods
    */
 
+  public contractID(): string {
+    return this._contractID;
+  }
+
   /**
-   * Gets the names for a given address.
+   * Gets the name for a given address.
    * @param {string} address - The address to find the names of.
-   * @returns {Promise<string[]>} A promise that resolves to the names for the given address.
+   * @returns {Promise<string | null>} A promise that resolves to the primary name for the given address.
    * @public
    */
-  public async names(address: string): Promise<string[]> {
+  public async name(address: string): Promise<string | null> {
     const result = await this._request<IEnVoiResponse<INameResolutionResult>>(
       `/name/${address}`
     );
 
-    return result.results.reduce(
-      (acc, { name }) => (name ? [...acc, name] : acc),
-      []
-    );
+    return result.results[0]?.name ?? null;
   }
 
   public url(): string {

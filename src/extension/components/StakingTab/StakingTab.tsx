@@ -1,6 +1,6 @@
 import { Spacer, TabPanel, VStack } from '@chakra-ui/react';
 import { randomString } from '@stablelib/random';
-import React, { type FC, type ReactNode, useMemo, useState } from 'react';
+import React, { type FC, type ReactNode, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 // components
@@ -13,42 +13,26 @@ import Item from './Item';
 // constants
 import { ACCOUNT_PAGE_TAB_CONTENT_HEIGHT } from '@extension/constants';
 
-// modals
-import StakingAppModal from '@extension/modals/StakingAppModal';
-
 // types
-import type { IAccountStakingApp } from '@extension/types';
-import type { IProps } from './types';
+import type { TProps } from './types';
 
-// utils
-import convertGenesisHashToHex from '@extension/utils/convertGenesisHashToHex';
-
-const StakingTab: FC<IProps> = ({ account, colorMode, fetching, network }) => {
+const StakingTab: FC<TProps> = ({
+  colorMode,
+  fetching,
+  network,
+  onViewClick,
+  stakingApps,
+}) => {
   const { t } = useTranslation();
   // memos
-  const _context = useMemo(() => randomString(8), []);
-  const stakingApps = useMemo(
-    () =>
-      account.networkStakingApps[convertGenesisHashToHex(network.genesisHash)]
-        ?.apps || null,
-    [account, network]
-  );
-  // states
-  const [selectedStakingApp, setSelectedStakingApp] =
-    useState<IAccountStakingApp | null>(null);
-  // handlers
-  const handleOnSelectStakingApp = (id: string) =>
-    setSelectedStakingApp(
-      stakingApps?.find(({ appID }) => appID === id) || null
-    );
-  const handleOnStakingAppModalClose = () => setSelectedStakingApp(null);
+  const context = useMemo(() => randomString(8), []);
   // renders
   const renderContent = () => {
     let nodes: ReactNode[] = [];
 
     if (fetching) {
       return Array.from({ length: 3 }, (_, index) => (
-        <TabLoadingItem key={`${_context}-loading-item-${index}`} />
+        <TabLoadingItem key={`${context}-loading-item-${index}`} />
       ));
     }
 
@@ -57,9 +41,9 @@ const StakingTab: FC<IProps> = ({ account, colorMode, fetching, network }) => {
         <Item
           app={value}
           colorMode={colorMode}
-          key={`${_context}-item-${index}`}
+          key={`${context}-item-${index}`}
           network={network}
-          onClick={handleOnSelectStakingApp}
+          onClick={onViewClick}
         />
       ));
     }
@@ -94,31 +78,23 @@ const StakingTab: FC<IProps> = ({ account, colorMode, fetching, network }) => {
   };
 
   return (
-    <>
-      <StakingAppModal
-        app={selectedStakingApp}
-        network={network}
-        onClose={handleOnStakingAppModalClose}
+    <TabPanel
+      height={ACCOUNT_PAGE_TAB_CONTENT_HEIGHT}
+      m={0}
+      p={0}
+      sx={{ display: 'flex', flexDirection: 'column' }}
+      w="full"
+    >
+      {/*controls*/}
+      <TabControlBar
+        colorMode={colorMode}
+        buttons={[]}
+        isLoading={fetching}
+        loadingTooltipLabel={t<string>('captions.updatingStakingApps')}
       />
 
-      <TabPanel
-        height={ACCOUNT_PAGE_TAB_CONTENT_HEIGHT}
-        m={0}
-        p={0}
-        sx={{ display: 'flex', flexDirection: 'column' }}
-        w="full"
-      >
-        {/*controls*/}
-        <TabControlBar
-          colorMode={colorMode}
-          buttons={[]}
-          isLoading={fetching}
-          loadingTooltipLabel={t<string>('captions.updatingStakingApps')}
-        />
-
-        {renderContent()}
-      </TabPanel>
-    </>
+      {renderContent()}
+    </TabPanel>
   );
 };
 

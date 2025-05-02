@@ -1,9 +1,6 @@
 import { Heading, HStack, Text, Tooltip, VStack } from '@chakra-ui/react';
 import React, { type FC, useCallback, useMemo } from 'react';
 
-// components
-import EnVoiSelect from '@extension/components/accounts/EnVoiSelect';
-
 // constants
 import { DEFAULT_GAP } from '@common/constants';
 
@@ -21,11 +18,7 @@ import type { IProps } from './types';
 import convertPublicKeyToAVMAddress from '@common/utils/convertPublicKeyToAVMAddress';
 import ellipseAddress from '@common/utils/ellipseAddress';
 
-const AccountPageAddressDisplay: FC<IProps> = ({
-  account,
-  network,
-  onEnVoiSelect,
-}) => {
+const AccountPageAddressDisplay: FC<IProps> = ({ account, network }) => {
   // memos
   const accountInformation = useMemo(
     () =>
@@ -36,8 +29,8 @@ const AccountPageAddressDisplay: FC<IProps> = ({
     () => convertPublicKeyToAVMAddress(account.publicKey),
     [account]
   );
-  const hasEnVoi = useMemo(
-    () => !!accountInformation && accountInformation.enVoi.items.length > 0,
+  const enVoiName = useMemo(
+    () => accountInformation?.enVoi.primaryName || null,
     [accountInformation]
   );
   // hooks
@@ -59,7 +52,7 @@ const AccountPageAddressDisplay: FC<IProps> = ({
             <Tooltip label={account.name}>
               <Heading
                 color={defaultTextColor}
-                maxW="650px" // full address length
+                maxW="650px"
                 noOfLines={1}
                 size="md"
                 textAlign="left"
@@ -69,12 +62,8 @@ const AccountPageAddressDisplay: FC<IProps> = ({
             </Tooltip>
 
             {/*envoi*/}
-            {accountInformation && hasEnVoi && (
-              <EnVoiSelect
-                names={accountInformation.enVoi.items}
-                onSelect={onEnVoiSelect}
-                selectedIndex={accountInformation.enVoi.preferredIndex}
-              />
+            {accountInformation && enVoiName && (
+              <Text color={subTextColor}>{enVoiName}</Text>
             )}
           </HStack>
 
@@ -89,26 +78,23 @@ const AccountPageAddressDisplay: FC<IProps> = ({
     }
 
     // if there is no name, but there is an envoi, display the envoi
-    if (accountInformation && hasEnVoi) {
+    if (accountInformation && enVoiName) {
       return (
         <>
           {/*envoi*/}
-          <EnVoiSelect
-            names={accountInformation.enVoi.items}
-            onSelect={onEnVoiSelect}
-            selectedIndex={accountInformation.enVoi.preferredIndex}
-            size="lg"
-          />
+          <Heading
+            color={defaultTextColor}
+            maxW="650px"
+            noOfLines={1}
+            size="md"
+            textAlign="left"
+          >
+            {enVoiName}
+          </Heading>
 
           {/*address*/}
           <Tooltip label={address}>
-            <Text
-              color={subTextColor}
-              fontSize="xs"
-              pl={DEFAULT_GAP / 3}
-              textAlign="left"
-              w="full"
-            >
+            <Text color={subTextColor} fontSize="xs" textAlign="left" w="full">
               {ellipseAddress(address, { end: 15, start: 15 })}
             </Text>
           </Tooltip>
@@ -130,7 +116,7 @@ const AccountPageAddressDisplay: FC<IProps> = ({
         </Heading>
       </Tooltip>
     );
-  }, [account, accountInformation, hasEnVoi]);
+  }, [account, accountInformation, enVoiName]);
 
   return (
     <VStack alignItems="flex-start" spacing={DEFAULT_GAP / 3} w="full">

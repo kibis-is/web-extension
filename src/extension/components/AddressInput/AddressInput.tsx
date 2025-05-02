@@ -23,7 +23,7 @@ import { DEFAULT_GAP, INPUT_HEIGHT } from '@common/constants';
 import usePrimaryColor from '@common/hooks/usePrimaryColor';
 
 // modals
-import { AccountSelectModal } from '@extension/components/AccountSelect';
+import { AccountSelectModal } from '@extension/components/accounts/AccountSelect';
 
 // types
 import type { IAccountWithExtendedProps } from '@extension/types';

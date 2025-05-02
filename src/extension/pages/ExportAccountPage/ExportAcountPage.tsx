@@ -42,7 +42,7 @@ import useSubTextColor from '@extension/hooks/useSubTextColor';
 import qrCodePlaceholderImage from '@extension/images/placeholder_qr_code.png';
 
 // modals
-import { AccountSelectModal } from '@extension/components/AccountSelect';
+import { AccountSelectModal } from '@extension/components/accounts/AccountSelect';
 import AuthenticationModal from '@extension/modals/AuthenticationModal';
 
 // cryptography

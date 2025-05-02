@@ -52,7 +52,7 @@ const networks: INetwork[] = [
     chakraTheme: 'voi',
     blockExplorers: [
       new VoiBlockExplorer({
-        baseURL: 'https://block.voi.network',
+        baseURL: 'https://block.voi.network/explorer',
       }),
       new VoiObserverBlockExplorer({
         baseURL: 'https://explorer.voi.network/explorer',
@@ -61,6 +61,7 @@ const networks: INetwork[] = [
       }),
     ],
     enVoi: new EnVoiClient({
+      contractID: '797609',
       url: 'https://api.envoi.sh',
     }),
     feeSunkAddress:
@@ -116,7 +117,7 @@ const networks: INetwork[] = [
     chakraTheme: 'voi',
     blockExplorers: [
       new VoiBlockExplorer({
-        baseURL: 'https://testnet.block.voi.network',
+        baseURL: 'https://testnet.block.voi.network/explorer',
       }),
     ],
     enVoi: null,

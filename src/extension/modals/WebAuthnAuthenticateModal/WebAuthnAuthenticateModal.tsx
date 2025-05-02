@@ -26,7 +26,7 @@ import { useDispatch } from 'react-redux';
 import Button from '@common/components/Button';
 import EmptyPasskeyIcon from '@common/components/EmptyPasskeyIcon';
 import EmptyState from '@common/components/EmptyState';
-import AccountSelect from '@extension/components/AccountSelect';
+import AccountSelect from '@extension/components/accounts/AccountSelect';
 import ModalSubHeading from '@extension/components/ModalSubHeading';
 import ScrollableContainer from '@extension/components/ScrollableContainer';
 import Item from './Item';
@@ -203,7 +203,7 @@ const WebAuthnAuthenticateModal: FC<IModalProps> = ({ onClose }) => {
   const renderContent = () => {
     let clientInfo: IClientInformation;
 
-    if (!event) {
+    if (!event || !network) {
       return (
         <VStack
           align="center"

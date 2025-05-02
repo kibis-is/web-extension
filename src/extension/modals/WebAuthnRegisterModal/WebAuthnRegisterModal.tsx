@@ -21,7 +21,7 @@ import { IoCheckmarkOutline } from 'react-icons/io5';
 import { useDispatch } from 'react-redux';
 
 // components
-import AccountSelect from '@extension/components/AccountSelect';
+import AccountSelect from '@extension/components/accounts/AccountSelect';
 import Button from '@common/components/Button';
 import ModalSubHeading from '@extension/components/ModalSubHeading';
 
@@ -167,7 +167,7 @@ const WebAuthnRegisterModal: FC<IModalProps> = ({ onClose }) => {
   const renderContent = () => {
     let clientInfo: IClientInformation;
 
-    if (!event) {
+    if (!event || !network) {
       return (
         <VStack
           align="center"

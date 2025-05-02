@@ -11,7 +11,7 @@ import { IoEyeOffOutline, IoEyeOutline } from 'react-icons/io5';
 import { useDispatch } from 'react-redux';
 
 // components
-import AccountSelect from '@extension/components/AccountSelect';
+import AccountSelect from '@extension/components/accounts/AccountSelect';
 import Button from '@common/components/Button';
 import CopyButton from '@extension/components/CopyButton';
 import PageHeader from '@extension/components/PageHeader';
@@ -205,7 +205,7 @@ const ViewSeedPhrasePage: FC = () => {
           </Text>
 
           {/*account select*/}
-          {!value ? (
+          {!value || !network ? (
             <SkeletonText
               height={`${ACCOUNT_SELECT_ITEM_MINIMUM_HEIGHT}px`}
               noOfLines={1}

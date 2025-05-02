@@ -34,7 +34,8 @@ export default async function updateAccountInformation({
   let avmAccountInformation: IAVMAccountInformation;
   let arc0072AssetHoldings: IARC0072AssetHolding[];
   let arc200AssetHoldings: IARC0200AssetHolding[];
-  let enVoiNames: string[] = [];
+  let enVoiHoldings: IARC0072AssetHolding[] = [];
+  let enVoiPrimaryName: string | null = null;
   let networkClient: NetworkClient;
 
   // if the account information is not out-of-date just return the account
@@ -94,13 +95,23 @@ export default async function updateAccountInformation({
     return currentAccountInformation;
   }
 
-  try {
-    enVoiNames = network.enVoi ? await network.enVoi.names(address) : [];
-  } catch (error) {
-    logger?.error(
-      `${__function}: failed to get envoi data for "${address}" on ${network.genesisId}:`,
-      error
+  // if we have an envoi client, filter any envoi names from the arc0072 asset holdings
+  if (network.enVoi) {
+    enVoiHoldings = arc0072AssetHoldings.filter(
+      ({ id }) => id === network.enVoi?.contractID()
     );
+    arc0072AssetHoldings = arc0072AssetHoldings.filter(
+      ({ id }) => id !== network.enVoi?.contractID()
+    );
+
+    try {
+      enVoiPrimaryName = await network.enVoi.name(address);
+    } catch (error) {
+      logger?.error(
+        `${__function}: failed to get envoi name for "${address}" on ${network.genesisId}:`,
+        error
+      );
+    }
   }
 
   return mapAVMAccountInformationToAccount(avmAccountInformation, {
@@ -109,10 +120,8 @@ export default async function updateAccountInformation({
     arc200AssetHoldings,
     enVoi: {
       ...currentAccountInformation.enVoi,
-      items: enVoiNames,
-      ...(enVoiNames.length <= 0 && {
-        preferredIndex: 0, // reset
-      }),
+      items: enVoiHoldings,
+      primaryName: enVoiPrimaryName,
     },
   });
 }
