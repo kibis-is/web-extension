@@ -23,10 +23,10 @@ import Divider from '@extension/components/Divider';
 import IconButton from '@common/components/IconButton';
 import KibisisIcon from '@extension/components/KibisisIcon';
 import ScrollableContainer from '@extension/components/ScrollableContainer';
-import SideBarAccountList from '@extension/components/SideBarAccountList';
-import SideBarActionItem from '@extension/components/SideBarActionItem';
-import SideBarGroupList from '@extension/components/SideBarGroupList';
-import SideBarSkeletonItem from '@extension/components/SideBarSkeletonItem';
+import SideBarAccountList from '@extension/components/sidebar/SideBarAccountList';
+import SideBarActionItem from '@extension/components/sidebar/SideBarActionItem';
+import SideBarGroupList from '@extension/components/sidebar/SideBarGroupList';
+import SideBarSkeletonItem from '@extension/components/sidebar/SideBarSkeletonItem';
 
 // constants
 import { BODY_BACKGROUND_COLOR } from '@common/constants';

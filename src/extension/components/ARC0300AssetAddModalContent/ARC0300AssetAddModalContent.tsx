@@ -23,7 +23,7 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 // components
-import AccountSelect from '@extension/components/AccountSelect';
+import AccountSelect from '@extension/components/accounts/AccountSelect';
 import AssetAvatar from '@extension/components/AssetAvatar';
 import AssetBadge from '@extension/components/AssetBadge';
 import AssetIcon from '@extension/components/AssetIcon';

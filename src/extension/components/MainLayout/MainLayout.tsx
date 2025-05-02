@@ -2,7 +2,7 @@ import { Center, HStack, VStack } from '@chakra-ui/react';
 import React, { type FC, type PropsWithChildren } from 'react';
 
 // components
-import SideBar from '@extension/components/SideBar';
+import SideBar from '@extension/components/sidebar/SideBar';
 
 // constants
 import { BODY_BACKGROUND_COLOR } from '@common/constants';

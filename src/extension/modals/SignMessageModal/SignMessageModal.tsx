@@ -21,8 +21,8 @@ import { IoCreateOutline } from 'react-icons/io5';
 import { useDispatch } from 'react-redux';
 
 // components
-import AccountSelect from '@extension/components/AccountSelect';
-import AccountItem from '@extension/components/AccountItem';
+import AccountItem from '@extension/components/accounts/AccountItem';
+import AccountSelect from '@extension/components/accounts/AccountSelect';
 import Button from '@common/components/Button';
 import ClientHeader, {
   ClientHeaderSkeleton,
@@ -211,6 +211,7 @@ const SignMessageModal: FC<IModalProps> = ({ onClose }) => {
       fetching ||
       !event?.payload.message.payload.params ||
       !authorizedAccounts ||
+      !network ||
       !signer
     ) {
       return <SignMessageContentSkeleton />;
@@ -226,7 +227,11 @@ const SignMessageModal: FC<IModalProps> = ({ onClose }) => {
                 'labels.addressToSign'
               )}:`}</Text>
 
-              <AccountItem account={signer} colorMode={colorMode} />
+              <AccountItem
+                account={signer}
+                colorMode={colorMode}
+                network={network}
+              />
             </>
           ) : (
             <>

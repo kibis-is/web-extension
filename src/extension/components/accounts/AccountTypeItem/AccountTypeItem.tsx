@@ -1,5 +1,5 @@
 import { Box, Icon, Text, Tooltip, VStack } from '@chakra-ui/react';
-import React, { type FC } from 'react';
+import React, { type FC, useMemo } from 'react';
 
 // constants
 import { DEFAULT_GAP } from '@common/constants';
@@ -13,12 +13,12 @@ import usePrimaryButtonTextColor from '@extension/hooks/usePrimaryButtonTextColo
 import usePrimaryColor from '@extension/hooks/usePrimaryColor';
 
 // types
-import type { IItemProps } from './types';
+import type { IProps } from './types';
 
 // utils
 import calculateIconSize from '@common/utils/calculateIconSize';
 
-const AccountTypeItem: FC<IItemProps> = ({
+const AccountTypeItem: FC<IProps> = ({
   description,
   icon,
   isDisabled = false,
@@ -26,7 +26,6 @@ const AccountTypeItem: FC<IItemProps> = ({
   title,
   tooltipText,
 }) => {
-  const width = 32;
   // hooks
   const borderColor = useBorderColor();
   const buttonHoverBackgroundColor = useButtonHoverBackgroundColor();
@@ -34,14 +33,18 @@ const AccountTypeItem: FC<IItemProps> = ({
   const primaryButtonHoverColor = usePrimaryButtonHoverColor();
   const primaryButtonTextColor = usePrimaryButtonTextColor();
   const primaryColor = usePrimaryColor();
-  // misc
-  const textColor = isDisabled ? defaultTextColor : primaryButtonTextColor;
+  // memos
+  const width = useMemo(() => 32, []);
+  const textColor = useMemo(
+    () => (isDisabled ? defaultTextColor : primaryButtonTextColor),
+    [defaultTextColor, isDisabled, primaryButtonTextColor]
+  );
   //renders
   const renderContent = () => {
     return (
       <VStack
-        alignItems="center"
-        justifyContent="center"
+        align="center"
+        justify="center"
         minH={width}
         spacing={DEFAULT_GAP / 3}
         w={width}

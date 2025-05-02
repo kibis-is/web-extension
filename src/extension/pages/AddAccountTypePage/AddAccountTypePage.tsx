@@ -5,10 +5,10 @@ import { IoEyeOutline, IoQrCodeOutline } from 'react-icons/io5';
 import { useNavigate } from 'react-router-dom';
 
 // components
+import AccountTypeItem from '@extension/components/accounts/AccountTypeItem';
 import CreateNewAccountIcon from '@extension/components/CreateNewAccountIcon';
 import ImportAccountIcon from '@extension/components/ImportAccountIcon';
 import PageHeader from '@extension/components/PageHeader';
-import AccountTypeItem from './AccountTypeItem';
 
 // constants
 import { DEFAULT_GAP } from '@common/constants';
@@ -26,7 +26,8 @@ import { AddAccountTypeEnum } from './enums';
 import { useSelectSettingsColorMode } from '@extension/selectors';
 
 // types
-import type { IItemProps, IProps } from './types';
+import type { IProps as IItemProps } from '@extension/components/accounts/AccountTypeItem';
+import type { IProps } from './types';
 
 const AddAccountTypePage: FC<IProps> = ({
   allowAddWatchAccount,

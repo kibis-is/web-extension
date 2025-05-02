@@ -40,7 +40,7 @@ import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@common/constants';
 import { SIDEBAR_ITEM_HEIGHT, SIDEBAR_MIN_WIDTH } from '@extension/constants';
 
 // components
-import SideBarAccountItem from '@extension/components/SideBarAccountItem';
+import SideBarAccountItem from '@extension/components/sidebar/SideBarAccountItem';
 
 // hooks
 import useButtonHoverBackgroundColor from '@extension/hooks/useButtonHoverBackgroundColor';

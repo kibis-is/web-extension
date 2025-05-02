@@ -1,6 +1,6 @@
 import { ElementType } from 'react';
 
-interface IItemProps {
+interface IProps {
   description: string;
   icon: ElementType;
   isDisabled?: boolean;
@@ -9,4 +9,4 @@ interface IItemProps {
   tooltipText?: string;
 }
 
-export default IItemProps;
+export default IProps;

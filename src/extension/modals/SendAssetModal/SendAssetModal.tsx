@@ -21,7 +21,7 @@ import {
 import { useDispatch } from 'react-redux';
 
 // components
-import AccountSelect from '@extension/components/AccountSelect';
+import AccountSelect from '@extension/components/accounts/AccountSelect';
 import AddressInput from '@extension/components/AddressInput';
 import AmountInput from '@extension/components/AmountInput';
 import AssetSelect from '@extension/components/AssetSelect';

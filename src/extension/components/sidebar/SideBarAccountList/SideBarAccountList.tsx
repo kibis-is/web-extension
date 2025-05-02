@@ -16,7 +16,7 @@ import {
 import React, { type FC, useEffect, useMemo, useState } from 'react';
 
 // components
-import SideBarAccountItem from '@extension/components/SideBarAccountItem';
+import SideBarAccountItem from '@extension/components/sidebar/SideBarAccountItem';
 
 // types
 import type { IAccountWithExtendedProps } from '@extension/types';

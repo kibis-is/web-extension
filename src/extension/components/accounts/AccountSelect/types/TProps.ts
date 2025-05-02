@@ -6,12 +6,12 @@ import type {
   ISystemInfo,
 } from '@extension/types';
 
-interface IProps extends IBaseComponentProps {
+interface IProps {
   accounts: IAccountWithExtendedProps[];
   allowWatchAccounts?: boolean;
   disabled?: boolean;
   label?: string;
-  network: INetworkWithTransactionParams | null;
+  network: INetworkWithTransactionParams;
   onSelect: (account: IAccountWithExtendedProps) => void;
   required?: boolean;
   selectModalTitle?: string;
@@ -19,4 +19,6 @@ interface IProps extends IBaseComponentProps {
   value: IAccountWithExtendedProps | null;
 }
 
-export default IProps;
+type TProps = IBaseComponentProps & IProps;
+
+export default TProps;

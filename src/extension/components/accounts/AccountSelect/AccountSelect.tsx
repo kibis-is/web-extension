@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { IoChevronDownOutline } from 'react-icons/io5';
 
 // components
-import AccountItem from '@extension/components/AccountItem';
+import AccountItem from '@extension/components/accounts/AccountItem';
 import Label from '@common/components/Label';
 
 // constants
@@ -33,12 +33,12 @@ import { theme } from '@common/theme';
 
 // types
 import type { IAccountWithExtendedProps } from '@extension/types';
-import type { IProps } from './types';
+import type { TProps } from './types';
 
 // utils
 import calculateIconSize from '@common/utils/calculateIconSize';
 
-const AccountSelect: FC<IProps> = ({
+const AccountSelect: FC<TProps> = ({
   accounts,
   allowWatchAccounts,
   colorMode,
@@ -129,7 +129,11 @@ const AccountSelect: FC<IProps> = ({
         >
           <Stack flexGrow={1} justifyContent="center" w="full">
             {value ? (
-              <AccountItem colorMode={colorMode} account={value} />
+              <AccountItem
+                account={value}
+                colorMode={colorMode}
+                network={network}
+              />
             ) : (
               <Text
                 color={defaultTextColor}

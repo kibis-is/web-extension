@@ -16,7 +16,7 @@ import {
 import React, { type FC, useEffect, useMemo, useState } from 'react';
 
 // components
-import SideBarGroupItem from '@extension/components/SideBarGroupItem';
+import SideBarGroupItem from '@extension/components/sidebar/SideBarGroupItem';
 
 // types
 import type { IAccountGroup } from '@extension/types';

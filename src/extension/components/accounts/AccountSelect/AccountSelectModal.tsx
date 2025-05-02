@@ -17,7 +17,7 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import { randomString } from '@stablelib/random';
-import React, { type FC, useMemo, useState } from 'react';
+import React, { type FC, useMemo, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { IoCheckmarkOutline, IoChevronForward } from 'react-icons/io5';
 
@@ -38,6 +38,9 @@ import useButtonHoverBackgroundColor from '@extension/hooks/useButtonHoverBackgr
 import useDefaultTextColor from '@extension/hooks/useDefaultTextColor';
 import usePrimaryColorScheme from '@extension/hooks/usePrimaryColorScheme';
 import useSubTextColor from '@extension/hooks/useSubTextColor';
+
+// repositories
+import AccountRepository from '@extension/repositories/AccountRepository';
 
 // theme
 import { theme } from '@common/theme';
@@ -72,7 +75,7 @@ const AccountSelectModal: FC<TAccountSelectModalProps> = ({
   const primaryColorScheme = usePrimaryColorScheme();
   const subTextColor = useSubTextColor();
   // memo
-  const _context = useMemo(() => randomString(8), []);
+  const context = useMemo(() => randomString(8), []);
   // states
   const [selectedAccounts, setSelectedAccounts] = useState<
     IAccountWithExtendedProps[]
@@ -121,6 +124,99 @@ const AccountSelectModal: FC<TAccountSelectModalProps> = ({
     setSelectedAccounts([]);
   };
   // renders
+  const renderNameAddress = useCallback(
+    (account: IAccountWithExtendedProps) => {
+      const accountInformation = network
+        ? AccountRepository.extractAccountInformationForNetwork(
+            account,
+            network
+          )
+        : null;
+      const address = ellipseAddress(
+        convertPublicKeyToAVMAddress(account.publicKey),
+        {
+          end: 10,
+          start: 10,
+        }
+      );
+      const enVoiName = accountInformation?.enVoi.primaryName || null;
+
+      if (account.name) {
+        return (
+          <VStack
+            align="flex-start"
+            flexGrow={1}
+            justify="space-evenly"
+            spacing={0}
+          >
+            <Text
+              color={
+                allowWatchAccounts || !account.watchAccount
+                  ? defaultTextColor
+                  : subTextColor
+              }
+              fontSize="md"
+              maxW={400}
+              noOfLines={1}
+              textAlign="left"
+            >
+              {account.name}
+            </Text>
+
+            <Text color={subTextColor} fontSize="sm" textAlign="left">
+              {enVoiName ?? address}
+            </Text>
+          </VStack>
+        );
+      }
+
+      // if there is no name, but there is an envoi, display the envoi
+      if (enVoiName) {
+        return (
+          <VStack
+            alignItems="flex-start"
+            flexGrow={1}
+            justifyContent="space-evenly"
+            spacing={0}
+          >
+            <Text
+              color={
+                allowWatchAccounts || !account.watchAccount
+                  ? defaultTextColor
+                  : subTextColor
+              }
+              fontSize="md"
+              maxW={400}
+              noOfLines={1}
+              textAlign="left"
+            >
+              {enVoiName}
+            </Text>
+
+            <Text color={subTextColor} fontSize="sm" textAlign="left">
+              {address}
+            </Text>
+          </VStack>
+        );
+      }
+
+      return (
+        <Text
+          color={
+            allowWatchAccounts || !account.watchAccount
+              ? defaultTextColor
+              : subTextColor
+          }
+          flexGrow={1}
+          fontSize="md"
+          textAlign="left"
+        >
+          {address}
+        </Text>
+      );
+    },
+    [allowWatchAccounts, defaultTextColor, network, subTextColor]
+  );
   const renderContent = () => {
     if (accounts.length <= 0 || !network) {
       return (
@@ -146,8 +242,6 @@ const AccountSelectModal: FC<TAccountSelectModalProps> = ({
           })
         : accounts
     ).map((account, index) => {
-      const address = convertPublicKeyToAVMAddress(account.publicKey);
-
       return (
         <ChakraButton
           _hover={{
@@ -158,7 +252,7 @@ const AccountSelectModal: FC<TAccountSelectModalProps> = ({
           fontSize="md"
           h={TAB_ITEM_HEIGHT}
           justifyContent="start"
-          key={`${_context}-account-select-modal-item-${index}`}
+          key={`${context}-account-select-modal-item-${index}`}
           px={DEFAULT_GAP / 2}
           py={0}
           sx={{
@@ -204,50 +298,7 @@ const AccountSelectModal: FC<TAccountSelectModalProps> = ({
             />
 
             {/*name/address*/}
-            {account.name ? (
-              <VStack
-                alignItems="flex-start"
-                flexGrow={1}
-                justifyContent="space-evenly"
-                spacing={0}
-              >
-                <Text
-                  color={
-                    allowWatchAccounts || !account.watchAccount
-                      ? defaultTextColor
-                      : subTextColor
-                  }
-                  fontSize="md"
-                  maxW={400}
-                  noOfLines={1}
-                  textAlign="left"
-                >
-                  {account.name}
-                </Text>
-                <Text color={subTextColor} fontSize="sm" textAlign="left">
-                  {ellipseAddress(address, {
-                    end: 10,
-                    start: 10,
-                  })}
-                </Text>
-              </VStack>
-            ) : (
-              <Text
-                color={
-                  allowWatchAccounts || !account.watchAccount
-                    ? defaultTextColor
-                    : subTextColor
-                }
-                flexGrow={1}
-                fontSize="md"
-                textAlign="left"
-              >
-                {ellipseAddress(address, {
-                  end: 10,
-                  start: 10,
-                })}
-              </Text>
-            )}
+            {renderNameAddress(account)}
           </HStack>
         </ChakraButton>
       );
