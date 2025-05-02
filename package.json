@@ -1,6 +1,6 @@
 {
   "name": "@kibis-is/web-extension",
-  "version": "2.5.0-beta.7",
+  "version": "2.5.0",
   "description": "An AVM wallet that goes beyond just DeFi.",
   "main": "build/main.js",
   "repository": {

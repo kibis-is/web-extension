@@ -1,3 +1,16 @@
+# [2.5.0](https://github.com/kibis-is/web-extension/compare/v2.4.0...v2.5.0) (2025-05-02)
+
+
+### Features
+
+* accept p256 keys for webauthn ([#348](https://github.com/kibis-is/web-extension/issues/348)) ([57dcbde](https://github.com/kibis-is/web-extension/commit/57dcbde8d56ea79e825eb1a0e4649472c3e9e48c))
+* add avm names tab ([#354](https://github.com/kibis-is/web-extension/issues/354)) ([2a327fc](https://github.com/kibis-is/web-extension/commit/2a327fc2e9869f50bdcb9b28ee07faa0dae7710b))
+* add new loading icons ([#345](https://github.com/kibis-is/web-extension/issues/345)) ([f52ca54](https://github.com/kibis-is/web-extension/commit/f52ca5468acc988e26b3dde2b68370662aff109f))
+* add staking contracts tab ([#353](https://github.com/kibis-is/web-extension/issues/353)) ([26e351c](https://github.com/kibis-is/web-extension/commit/26e351c5852d26b7259ac5a90efff983e1576418))
+* authenticate account as passkey ([#347](https://github.com/kibis-is/web-extension/issues/347)) ([927f4db](https://github.com/kibis-is/web-extension/commit/927f4dbb71ee0801e95cf3c843af32bbf6192e46))
+* display envoi names ([#350](https://github.com/kibis-is/web-extension/issues/350)) ([391e214](https://github.com/kibis-is/web-extension/commit/391e214eb1f493150a8e2f2ad00b74f8ff6e2657))
+* update whats new content for 2.5.0 ([#355](https://github.com/kibis-is/web-extension/issues/355)) ([09c2e2c](https://github.com/kibis-is/web-extension/commit/09c2e2cd00b5f208954d51decfa74e1387c07388))
+
 # [2.5.0-beta.7](https://github.com/kibis-is/web-extension/compare/v2.5.0-beta.6...v2.5.0-beta.7) (2025-05-02)
 
 
