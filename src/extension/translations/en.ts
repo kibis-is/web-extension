@@ -144,7 +144,7 @@ const translation: IResourceLanguage = {
     disconnectAllSessions: 'Are you sure you want to disconnect all sessions?',
     displayingCountOfTotal: 'Displaying {{count}} of {{total}}',
     enableCredentialsLock:
-      'Credentials will only be needed to be entered due to inactivity.',
+      'Credentials will only be required due to inactivity.',
     enableRequest:
       'An application is requesting to connect. Select which accounts you would like to enable:',
     encryptWithPasskeyInstruction1: `1. You will be asked to enter your password to decrypt your private keys.`,
@@ -630,7 +630,7 @@ const translation: IResourceLanguage = {
     disconnect: 'Disconnect',
     editAccount: 'Edit Account',
     editGroup: 'Edit Group',
-    enableCredentialsLock: 'Enable Credential Lock?',
+    enableCredentialsLock: 'Enable credential lock timeout?',
     enabled: 'Enabled',
     experimental: 'Experimental',
     expirationDate: 'Expiration Date',
