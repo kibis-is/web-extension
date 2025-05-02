@@ -1,4 +1,6 @@
 import {
+  ColorMode,
+  Heading,
   HStack,
   Icon,
   Spacer,
@@ -12,7 +14,7 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import BigNumber from 'bignumber.js';
-import React, { type FC, useCallback } from 'react';
+import React, { type FC, useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { BsFolderMinus, BsFolderPlus } from 'react-icons/bs';
 import {
@@ -44,6 +46,7 @@ import NFTsTab from '@extension/components/NFTsTab';
 import PasskeysTab from '@extension/components/PasskeysTab';
 import PolisAccountBadge from '@extension/components/PolisAccountBadge';
 import ReKeyedAccountBadge from '@extension/components/RekeyedAccountBadge';
+import StakingTab from '@extension/components/StakingTab';
 import WatchAccountBadge from '@extension/components/WatchAccountBadge';
 import AccountPageSkeletonContent from './AccountPageSkeletonContent';
 
@@ -115,6 +118,7 @@ import {
 // types
 import type { TReKeyType } from '@extension/features/re-key-account';
 import type {
+  IAccountStakingApp,
   IAccountWithExtendedProps,
   IAppThunkDispatch,
   IMainRootState,
@@ -639,6 +643,7 @@ const AccountPage: FC = () => {
                   {t<string>('labels.passkeys')}
                 </Tab>
               )}
+              <Tab>{t<string>('labels.staking')}</Tab>
             </TabList>
 
             <TabPanels sx={{ display: 'flex', flexDirection: 'column' }}>
@@ -666,6 +671,13 @@ const AccountPage: FC = () => {
                   onViewClick={handleOnViewPasskeyClick}
                 />
               )}
+
+              <StakingTab
+                account={account}
+                colorMode={colorMode}
+                fetching={fetchingAccounts}
+                network={network}
+              />
             </TabPanels>
           </Tabs>
         </>

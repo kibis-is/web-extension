@@ -59,6 +59,7 @@ describe('filterCustomNodesFromNetwork', () => {
         verified: true,
       },
       nftExplorers: [],
+      scsIndexers: [],
       type: NetworkTypeEnum.Test,
     };
   });

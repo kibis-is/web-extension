@@ -24,6 +24,7 @@ import { useDispatch } from 'react-redux';
 
 // components
 import Button from '@common/components/Button';
+import EmptyPasskeyIcon from '@common/components/EmptyPasskeyIcon';
 import EmptyState from '@common/components/EmptyState';
 import AccountSelect from '@extension/components/AccountSelect';
 import ModalSubHeading from '@extension/components/ModalSubHeading';
@@ -56,9 +57,6 @@ import {
 // hooks
 import useDefaultTextColor from '@extension/hooks/useDefaultTextColor';
 import useTextBackgroundColor from '@extension/hooks/useTextBackgroundColor';
-
-// icons
-import KbNoPasskey from '@extension/icons/KbNoPasskey';
 
 // modals
 import AuthenticationModal from '@extension/modals/AuthenticationModal';
@@ -322,7 +320,7 @@ const WebAuthnAuthenticateModal: FC<IModalProps> = ({ onClose }) => {
               {/*empty state*/}
               <EmptyState
                 colorMode={colorMode}
-                icon={KbNoPasskey}
+                icon={<EmptyPasskeyIcon colorMode={colorMode} />}
                 text={t<string>('headings.noPasskeysFound')}
               />
 

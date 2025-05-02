@@ -1,21 +1,21 @@
 import { Icon, Tooltip } from '@chakra-ui/react';
-import React, { FC } from 'react';
+import React, { type FC } from 'react';
+import { useTranslation } from 'react-i18next';
 import { IoInformationCircleOutline } from 'react-icons/io5';
 
 // hooks
 import useDefaultTextColor from '@extension/hooks/useDefaultTextColor';
 
-interface IProps {
-  color?: string;
-  label: string;
-}
+// types
+import type { IProps } from './types';
 
-const InfoIconTooltip: FC<IProps> = ({ color, label }: IProps) => {
+const InfoIconTooltip: FC<IProps> = ({ color, label }) => {
+  const { t } = useTranslation();
   // hooks
-  const defaultTextColor: string = useDefaultTextColor();
+  const defaultTextColor = useDefaultTextColor();
 
   return (
-    <Tooltip aria-label={label} label={label}>
+    <Tooltip label={label}>
       <span
         style={{
           height: '1em',
@@ -23,6 +23,7 @@ const InfoIconTooltip: FC<IProps> = ({ color, label }: IProps) => {
         }}
       >
         <Icon
+          aria-label={t<string>('ariaLabels.informationIcon')}
           as={IoInformationCircleOutline}
           color={color || defaultTextColor}
         />

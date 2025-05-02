@@ -10,6 +10,7 @@ import { NetworkTypeEnum } from '@extension/enums';
 import BaseBlockExplorer from '@extension/models/BaseBlockExplorer';
 import BaseARC0072Indexer from '@extension/models/BaseARC0072Indexer';
 import BaseNFTExplorer from '@extension/models/BaseNFTExplorer';
+import BaseSCSIndexer from '@extension/models/BaseSCSIndexer';
 
 // types
 import type { INativeCurrency } from '../assets';
@@ -31,6 +32,7 @@ interface INetwork {
   namespace: IChainNamespace;
   nativeCurrency: INativeCurrency;
   nftExplorers: BaseNFTExplorer[];
+  scsIndexers: BaseSCSIndexer[];
   type: NetworkTypeEnum;
 }
 

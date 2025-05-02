@@ -14,6 +14,7 @@ const translation: IResourceLanguage = {
     informationIcon: 'An "i" icon for information.',
     pencilIcon: 'A pencil icon.',
     plusIcon: 'A plus icon.',
+    walletIcon: 'A wallet icon.',
   },
   buttons: {
     add: 'Add',
@@ -237,6 +238,8 @@ const translation: IResourceLanguage = {
       'Standard assets require an "opt-in" fee. This is a transaction of the asset with a "0" amount sent to yourself.',
     optOutFee:
       'Standard assets require an "opt-out" fee. This is a transaction of the asset with a "0" amount sent to yourself.',
+    participationKeyExpiresAtWarning:
+      'This is an estimated date based on the current block time.',
     passkeyAdded: 'Passkey {{name}} added!',
     passkeyNotRequested: 'Passkey not requested',
     passkeyRemoved: 'Passkey {{name}} removed.',
@@ -308,6 +311,14 @@ const translation: IResourceLanguage = {
       'An application is requesting to sign a transaction.',
     signTransactionsRequest:
       'An application is requesting to sign multiple transactions.',
+    stakingAppAvailableBalanceInfo:
+      'This is the balance that you are able to withdraw.',
+    stakingAppBalanceInfo:
+      'This is the total balance. The locked-up balance + the available balance (rewards e.t.c).',
+    stakingAppStatusOffline:
+      'This staking app is not participating in staking rewards.',
+    stakingAppStatusOnline:
+      'This staking app is participating and receiving staking rewards.',
     support:
       'Please <2>contact us</2> for further assistance so we can resolve this issue for you.',
     transactionIdCopied: 'Transaction ID copied!',
@@ -320,6 +331,7 @@ const translation: IResourceLanguage = {
     unknownAVMNetwork: 'Network "{{genesisID}}" not supported.',
     unknownQRCode: 'The QR code provided is not recognized.',
     updatingAssetInformation: 'Updating asset information',
+    updatingStakingApps: 'Updating staking information',
     updatingTransactions: 'Updating transactions',
     viewSeedPhrase1: 'Select an account to view the seed phrase.',
     viewSeedPhrase2: 'You will be prompted to enter your password.',
@@ -454,6 +466,7 @@ const translation: IResourceLanguage = {
     noNetworksFound: 'No networks found',
     noNFTsFound: 'No NFTs found',
     noPasskeysFound: 'No passkeys found',
+    noStakingAppsFound: 'No staking contracts found',
     noTransactionsFound: 'No transactions found',
     noSessionsFound: 'No sessions found',
     numberOfTransactions: '{{number}} transaction',
@@ -497,6 +510,7 @@ const translation: IResourceLanguage = {
     sessionsDisconnected: '{{amount}} Sessions Disconnected',
     shareAddress: 'Share Address',
     signInWithAccount: 'Sign In With Account',
+    stakingApplication: 'Staking Application',
     transaction: 'Unknown Transaction 💀',
     [`transaction_${TransactionTypeEnum.AccountReKey}`]: 'Re-Key Account 🔒',
     [`transaction_${TransactionTypeEnum.AccountUndoReKey}`]:
@@ -642,6 +656,8 @@ const translation: IResourceLanguage = {
     lastRound: 'Last Round',
     lastUsed: 'Last Used',
     light: 'Light',
+    lockUpExpiresAt: 'Lock-up Expires At',
+    lockUpYears: 'Lock-up Years',
     debugLogging: 'Debug Logging',
     makePrimary: 'Make Primary',
     manage: 'Manage',
@@ -663,6 +679,7 @@ const translation: IResourceLanguage = {
     openSelectModal: 'Open select modal',
     optional: '(optional)',
     origin: 'Origin',
+    participationKeyExpiresAt: 'Participation Key Renewal Due',
     passkeyName: 'Passkey name',
     passkeys: 'Passkeys',
     password: 'Password',
@@ -694,6 +711,7 @@ const translation: IResourceLanguage = {
     selectAllAccounts: 'Select All Accounts',
     selectAllAssets: 'Select All Assets',
     selectAsset: 'Select Asset',
+    staking: 'Staking',
     selectionKey: 'VRF Public Key',
     selectWalletAccount: 'Select wallet account',
     sendAsset: 'Send {{nativeCurrency}}/Asset',
@@ -701,6 +719,7 @@ const translation: IResourceLanguage = {
     shareAddress: 'Share Address',
     showHidePassword: 'Show/hide Password',
     signingMethod: 'Signing Method',
+    stakingPhase: 'Phase {{number}}',
     stateProofKey: 'State Proof Public Key',
     symbol: 'Symbol',
     theme: 'Theme',

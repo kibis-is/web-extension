@@ -20,6 +20,7 @@ import type {
   IBaseAsyncThunkConfig,
   IMainRootState,
   INetwork,
+  INetworkWithTransactionParams,
 } from '@extension/types';
 import type { IUpdateAccountsPayload } from '../types';
 
@@ -35,6 +36,7 @@ import updateAccountInformation from '@extension/utils/updateAccountInformation'
 import updateAccountTransactions from '@extension/utils/updateAccountTransactions';
 import isAccountInformationUpdating from '../utils/isAccountInformationUpdating';
 import isAccountTransactionsUpdating from '../utils/isAccountTransactionsUpdating';
+import updateAccountStakingApps from '@extension/utils/updateAccountStakingApps/updateAccountStakingApps';
 
 const updateAccountsThunk: AsyncThunk<
   IAccountWithExtendedProps[], // return
@@ -70,7 +72,7 @@ const updateAccountsThunk: AsyncThunk<
     );
     let currentTransactionsLength: number;
     let encodedGenesisHash: string;
-    let network: INetwork | null;
+    let network: INetworkWithTransactionParams | null;
     let numberOfNewTransactions: number;
     let nodeID: string | null;
 
@@ -198,11 +200,40 @@ const updateAccountsThunk: AsyncThunk<
       }
     }
 
+    // get any staking contracts
+    for (let i = 0; i < accounts.length; i++) {
+      account = serialize(accounts[i]);
+
+      try {
+        account.networkStakingApps[encodedGenesisHash] =
+          await updateAccountStakingApps({
+            address: convertPublicKeyToAVMAddress(account.publicKey),
+            currentNetworkStakingApps:
+              account.networkStakingApps[encodedGenesisHash],
+            delay: i * NODE_REQUEST_DELAY, // delay each request by 100ms from the last one, see https://algonode.io/api/#limits
+            logger,
+            network,
+            nodeID,
+          });
+      } catch (error) {
+        logger.error(
+          `${ThunkEnum.UpdateAccounts}: failed to get staking apps for "${account.id}" on "${encodedGenesisHash}":`,
+          error
+        );
+
+        continue;
+      }
+
+      accounts = accounts.map((value) =>
+        value.id === account.id ? account : value
+      );
+    }
+
     // save accounts to storage
     accounts = await new AccountRepository().saveMany(accounts);
 
     logger.debug(
-      `${ThunkEnum.AddStandardAssetHoldings}: saved accounts [${accounts
+      `${ThunkEnum.UpdateAccounts}: saved accounts [${accounts
         .map(({ publicKey }) => `"${convertPublicKeyToAVMAddress(publicKey)}"`)
         .join(',')}] to storage`
     );

@@ -4,6 +4,7 @@ import { DelimiterEnum } from '@extension/enums';
 // types
 import type { TAccountColors, TAccountIcons } from '@common/types';
 import type IAccountInformation from './IAccountInformation';
+import type IAccountNetworkStakingApps from './IAccountNetworkStakingApps';
 import type IAccountTransactions from './IAccountTransactions';
 import IAccountPasskey from './IAccountPasskey';
 
@@ -18,7 +19,9 @@ import IAccountPasskey from './IAccountPasskey';
  * @property {string | null} name - A canonical name given to this account.
  * @property {Record<string, IAccountInformation>} networkInformation - Information specific for each network, indexed by
  * their hex encoded genesis hash.
- * @property {Record<string, IAccountTransactions>} networkInformation - Transactions specific for each network, indexed
+ * @property {Record<string, IAccountNetworkStakingApps>} networkStakingApps - The staking apps specific for each
+ * network, indexed by their hex encoded genesis hash.
+ * @property {Record<string, IAccountTransactions>} networkTransactions - Transactions specific for each network, indexed
  * by their hex encoded genesis hash.
  * @property {IAccountPasskey[]} passkeys - Registered passkeys associated with this account.
  * @property {string} publicKey - The hexadecimal encoded public key.
@@ -35,6 +38,7 @@ interface IAccount {
   index: number | null;
   name: string | null;
   networkInformation: Record<string, IAccountInformation>;
+  networkStakingApps: Record<string, IAccountNetworkStakingApps>;
   networkTransactions: Record<string, IAccountTransactions>;
   passkeys: IAccountPasskey[];
   publicKey: string;

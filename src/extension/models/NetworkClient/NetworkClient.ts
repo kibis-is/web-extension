@@ -22,10 +22,11 @@ import BaseARC0072Indexer from '@extension/models/BaseARC0072Indexer';
 
 // types
 import type { ILogger } from '@common/types';
-import type {
+import {
   IAVMAccountInformation,
   IAVMAccountTransaction,
   IAVMAsset,
+  IAVMBlock,
   IAVMPendingTransactionResponse,
   IAVMSearchApplicationsResult,
   IAVMSearchAssetsResult,
@@ -36,6 +37,7 @@ import type {
   IARC0200AssetInformation,
   INetwork,
   INode,
+  IAVMStatus,
 } from '@extension/types';
 import {
   IByAddressWithDelayOptions,
@@ -47,6 +49,7 @@ import {
   ISendRequestWithDelayOptions,
   ISendTransactionOptions,
   ISearchApplicationsWithDelayOptions,
+  IBlockWithDelayOptions,
 } from './types';
 
 // utils
@@ -268,6 +271,31 @@ export default class NetworkClient {
   }
 
   /**
+   * Returns the block info for a given round.
+   * @param {IBlockWithDelayOptions} options - The round, an optional delay and a specific node ID.
+   * @returns {Promise<IAVMBlock>} A promise that resolves to the block information for a specific round.
+   * @public
+   */
+  public async block({
+    delay = 0,
+    nodeID,
+    round,
+  }: IBlockWithDelayOptions): Promise<IAVMBlock> {
+    const indexer = this.indexerByID(nodeID);
+
+    return await this._sendRequestWithDelay({
+      delay,
+      request: async () => {
+        const requestBuilder = indexer.lookupBlock(parseInt(round));
+
+        return (await requestBuilder
+          .setIntDecoding(IntDecoding.BIGINT)
+          .do()) as IAVMBlock;
+      },
+    });
+  }
+
+  /**
    * Gets the fee sink address for the network.
    * @returns {string} the fee sink address for the network.
    */
@@ -484,6 +512,15 @@ export default class NetworkClient {
           .setIntDecoding(IntDecoding.BIGINT)
           .do()) as IAVMAsset,
     });
+  }
+
+  public async status(nodeID: string | null): Promise<IAVMStatus> {
+    const algod = this.algodByID(nodeID);
+
+    return (await algod
+      .status()
+      .setIntDecoding(IntDecoding.BIGINT)
+      .do()) as IAVMStatus;
   }
 
   public async suggestedParams(

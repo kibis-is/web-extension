@@ -1,15 +1,8 @@
 import BigNumber from 'bignumber.js';
 import numbro from 'numbro';
 
-/**
- * @property {number} decimals - [optional] decimals that will be displayed after the whole number. Defaults to 2.
- * @property {boolean} thousandSeparatedOnly - [optional] whether to use a thousand separated only for big numbers.
- * Defaults to false.
- */
-interface IOptions {
-  decimals?: number;
-  thousandSeparatedOnly?: boolean;
-}
+// types
+import type { IOptions } from './types';
 
 /**
  * Formats a given unit to display on the frontend.
@@ -21,9 +14,8 @@ export default function formatCurrencyUnit(
   input: BigNumber,
   options?: IOptions
 ): string {
-  const decimals: number = options?.decimals || 2;
-  const thousandSeparatedOnly: boolean =
-    options?.thousandSeparatedOnly || false;
+  const decimals = options?.decimals || 2;
+  const thousandSeparatedOnly = options?.thousandSeparatedOnly || false;
 
   if (input.gte(1)) {
     // numbers >= 1m+
@@ -38,7 +30,7 @@ export default function formatCurrencyUnit(
       });
     }
 
-    // numbers <= 999,999.99
+    // numbers >= 1 && <= 999,999.99
     return numbro(input.toString()).format({
       mantissa: decimals,
       thousandSeparated: true,

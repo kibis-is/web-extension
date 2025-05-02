@@ -1,5 +1,5 @@
 import { HStack, Text, Tooltip } from '@chakra-ui/react';
-import React, { type FC } from 'react';
+import React, { type FC, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 // components
@@ -32,14 +32,14 @@ const NativeBalance: FC<IProps> = ({
   // hooks
   const defaultTextColor = useDefaultTextColor();
   const textBackgroundColor = useTextBackgroundColor();
-  // misc
-  const balanceStandardUnit = convertToStandardUnit(
-    atomicBalance,
-    nativeCurrency.decimals
+  // memos
+  const balanceStandardUnit = useMemo(
+    () => convertToStandardUnit(atomicBalance, nativeCurrency.decimals),
+    [atomicBalance, nativeCurrency]
   );
-  const minimumStandardUnit = convertToStandardUnit(
-    minAtomicBalance,
-    nativeCurrency.decimals
+  const minimumStandardUnit = useMemo(
+    () => convertToStandardUnit(minAtomicBalance, nativeCurrency.decimals),
+    [atomicBalance, nativeCurrency]
   );
 
   return (
@@ -64,7 +64,7 @@ const NativeBalance: FC<IProps> = ({
 
           <Text color={defaultTextColor} fontSize="sm">
             {formatCurrencyUnit(balanceStandardUnit, {
-              decimals: nativeCurrency.decimals,
+              decimals: balanceStandardUnit.gt(1) ? 2 : nativeCurrency.decimals,
             })}
           </Text>
 

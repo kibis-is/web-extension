@@ -1,4 +1,4 @@
-import { ButtonProps, Heading, Icon, Text, VStack } from '@chakra-ui/react';
+import { ButtonProps, Heading, Text, VStack } from '@chakra-ui/react';
 import React, { cloneElement, type FC, useMemo } from 'react';
 
 // components
@@ -65,7 +65,10 @@ const EmptyState: FC<TProps> = ({
       {...stackProps}
     >
       {icon ? (
-        <Icon as={icon} boxSize={iconSize} color={subTextColor} />
+        cloneElement(icon, {
+          boxSize: iconSize,
+          colorMode,
+        })
       ) : (
         <EmptyIcon boxSize={iconSize} colorMode={colorMode} />
       )}

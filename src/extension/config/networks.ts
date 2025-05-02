@@ -16,6 +16,7 @@ import { AssetTypeEnum, NetworkTypeEnum } from '@extension/enums';
 // models
 import AlloBlockExplorer from '@extension/models/AlloBlockExplorer';
 import NautilusARC0072Indexer from '@extension/models/NautilusARC0072Indexer';
+import NautilusSCSIndexer from '@extension/models/NautilusSCSIndexer';
 import NFTNavigatorARC0072Indexer from '@extension/models/NFTNavigatorARC0072Indexer';
 import NFTNavigatorNFTExplorer from '@extension/models/NFTNavigatorNFTExplorer';
 import PeraBlockExplorer from '@extension/models/PeraBlockExplorer';
@@ -93,6 +94,11 @@ const networks: INetwork[] = [
         baseURL: 'https://nftnavigator.xyz',
       }),
     ],
+    scsIndexers: [
+      new NautilusSCSIndexer({
+        baseURL: 'https://mainnet-idx.nautilus.sh',
+      }),
+    ],
     type: NetworkTypeEnum.Stable,
   },
   {
@@ -141,6 +147,7 @@ const networks: INetwork[] = [
       verified: true,
     },
     nftExplorers: [],
+    scsIndexers: [],
     type: NetworkTypeEnum.Test,
   },
   /**
@@ -195,6 +202,7 @@ const networks: INetwork[] = [
       verified: true,
     },
     nftExplorers: [],
+    scsIndexers: [],
     type: NetworkTypeEnum.Stable,
   },
   {
@@ -239,6 +247,7 @@ const networks: INetwork[] = [
       verified: true,
     },
     nftExplorers: [],
+    scsIndexers: [],
     type: NetworkTypeEnum.Beta,
   },
   {
@@ -287,6 +296,7 @@ const networks: INetwork[] = [
       verified: true,
     },
     nftExplorers: [],
+    scsIndexers: [],
     type: NetworkTypeEnum.Test,
   },
 ];

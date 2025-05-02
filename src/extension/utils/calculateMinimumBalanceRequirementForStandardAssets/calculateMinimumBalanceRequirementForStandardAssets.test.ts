@@ -39,8 +39,11 @@ describe(`${__dirname}/calculateMinimumBalanceRequirementForStandardAssets`, () 
     });
     network = {
       ...networks[0],
+      currentBlockTime: '0',
       fee: '1000',
       minFee: '1000',
+      lastSeenBlock: '0',
+      lastSeenBlockTimestamp: '0',
       updatedAt: new Date().getTime(),
     };
     encodedGenesisHash = convertGenesisHashToHex(network.genesisHash);

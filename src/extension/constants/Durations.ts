@@ -9,6 +9,7 @@ export const CREDENTIALS_LOCK_DURATION_HIGHEST = 1800000; // 30 minutes in milli
 export const DEFAULT_NOTIFICATION_DURATION = 6000; // 6 seconds in milliseconds
 export const EXPORT_ACCOUNT_QR_CODE_DURATION = 1500; // 1.5 seconds in milliseconds
 export const HEARTBEAT_DURATION = 20000; // 20 seconds in milliseconds
+export const NETWORK_STAKING_APPS_ANTIQUATED_TIMEOUT = 1800000; // 30 minutes in milliseconds
 export const NETWORK_TRANSACTION_PARAMS_REFRESH_INTERVAL = 1800000; // 30 minutes in milliseconds
 export const NETWORK_TRANSACTION_PARAMS_ANTIQUATED_TIMEOUT = 900000; // 15 minutes in milliseconds
 export const NETWORK_CONNECTIVITY_CHECK_INTERVAL = 36000; // 36 seconds in milliseconds
