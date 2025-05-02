@@ -11,16 +11,19 @@ import PageHeader from '@extension/components/PageHeader';
 import AccountTypeItem from './AccountTypeItem';
 
 // constants
+import { DEFAULT_GAP } from '@common/constants';
 import {
   ADD_ACCOUNT_ROUTE,
   ADD_WATCH_ACCOUNT_ROUTE,
   CREATE_NEW_ACCOUNT_ROUTE,
-  DEFAULT_GAP,
   IMPORT_ACCOUNT_VIA_SEED_PHRASE_ROUTE,
 } from '@extension/constants';
 
 // enums
 import { AddAccountTypeEnum } from './enums';
+
+// selectors
+import { useSelectSettingsColorMode } from '@extension/selectors';
 
 // types
 import type { IItemProps, IProps } from './types';
@@ -32,6 +35,8 @@ const AddAccountTypePage: FC<IProps> = ({
   const _context = 'account-type-page';
   const { t } = useTranslation();
   const navigate = useNavigate();
+  // selectors
+  const colorMode = useSelectSettingsColorMode();
   // handlers
   const handleAccountTypeClick = (type: AddAccountTypeEnum) => () => {
     switch (type) {
@@ -131,6 +136,7 @@ const AddAccountTypePage: FC<IProps> = ({
   return (
     <>
       <PageHeader
+        colorMode={colorMode}
         title={t<string>('titles.page', { context: 'accountSetup' })}
       />
 

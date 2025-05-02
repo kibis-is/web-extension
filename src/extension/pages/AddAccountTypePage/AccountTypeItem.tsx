@@ -2,7 +2,7 @@ import { Box, Icon, Text, Tooltip, VStack } from '@chakra-ui/react';
 import React, { type FC } from 'react';
 
 // constants
-import { DEFAULT_GAP } from '@extension/constants';
+import { DEFAULT_GAP } from '@common/constants';
 
 // hooks
 import useButtonHoverBackgroundColor from '@extension/hooks/useButtonHoverBackgroundColor';
@@ -16,7 +16,7 @@ import usePrimaryColor from '@extension/hooks/usePrimaryColor';
 import type { IItemProps } from './types';
 
 // utils
-import calculateIconSize from '@extension/utils/calculateIconSize';
+import calculateIconSize from '@common/utils/calculateIconSize';
 
 const AccountTypeItem: FC<IItemProps> = ({
   description,

@@ -26,7 +26,7 @@ import { useTranslation } from 'react-i18next';
 import { IoFlagOutline } from 'react-icons/io5';
 
 // components
-import Button from '@extension/components/Button';
+import Button from '@common/components/Button';
 import InfoIconTooltip from '@extension/components/InfoIconTooltip';
 import ModalAccountItem from '@extension/components/ModalAccountItem';
 import ModalItem from '@extension/components/ModalItem';
@@ -39,7 +39,7 @@ import {
   BODY_BACKGROUND_COLOR,
   DEFAULT_GAP,
   MODAL_ITEM_HEIGHT,
-} from '@extension/constants';
+} from '@common/constants';
 
 // hooks
 import useDefaultAvatarBackgroundColor from '@extension/hooks/useDefaultAvatarBackgroundColor';
@@ -55,18 +55,18 @@ import {
 } from '@extension/selectors';
 
 // theme
-import { theme } from '@extension/theme';
+import { theme } from '@common/theme';
 
 // types
 import type { IProps } from './types';
 
 // utils
-import calculateIconSize from '@extension/utils/calculateIconSize';
-import convertPublicKeyToAVMAddress from '@extension/utils/convertPublicKeyToAVMAddress';
+import calculateIconSize from '@common/utils/calculateIconSize';
+import convertPublicKeyToAVMAddress from '@common/utils/convertPublicKeyToAVMAddress';
 import convertToStandardUnit from '@common/utils/convertToStandardUnit';
-import createIconFromDataUri from '@extension/utils/createIconFromDataUri';
-import ellipseAddress from '@extension/utils/ellipseAddress';
+import ellipseAddress from '@common/utils/ellipseAddress';
 import formatCurrencyUnit from '@common/utils/formatCurrencyUnit';
+import createIconFromDataUri from '@extension/utils/createIconFromDataUri';
 
 const StakingAppModal: FC<IProps> = ({ onClose, app, network }) => {
   const { t } = useTranslation();
@@ -388,6 +388,7 @@ const StakingAppModal: FC<IProps> = ({ onClose, app, network }) => {
         {/*footer*/}
         <ModalFooter p={DEFAULT_GAP}>
           <Button
+            colorMode={colorMode}
             onClick={handleOnDoneClick}
             ref={initialRef}
             size="lg"

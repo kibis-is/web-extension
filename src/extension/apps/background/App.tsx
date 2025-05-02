@@ -20,6 +20,7 @@ import { reducer as sessionsReducer } from '@extension/features/sessions';
 import { reducer as settingsReducer } from '@extension/features/settings';
 import { reducer as standardAssetsReducer } from '@extension/features/standard-assets';
 import { reducer as systemReducer } from '@extension/features/system';
+import { reducer as webauthnReducer } from '@extension/features/webauthn';
 
 // types
 import type { IAppProps, IBackgroundRootState } from '@extension/types';
@@ -42,6 +43,7 @@ const App: FC<IAppProps> = ({ i18n, initialColorMode, initialFontFamily }) => {
       settings: settingsReducer,
       standardAssets: standardAssetsReducer,
       system: systemReducer,
+      webauthn: webauthnReducer,
     })
   );
 

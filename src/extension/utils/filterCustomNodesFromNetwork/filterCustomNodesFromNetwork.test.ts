@@ -1,4 +1,4 @@
-import { v4 as uuid } from 'uuid';
+import { generate as generateUUID } from '@agoralabs-sh/uuid';
 
 // constants
 import { SUPPORTED_METHODS } from '@common/constants';
@@ -31,6 +31,7 @@ describe('filterCustomNodesFromNetwork', () => {
       canonicalName: 'Voi',
       chakraTheme: 'voi',
       blockExplorers: [],
+      enVoi: null,
       feeSunkAddress:
         'FEES3ZW52HQ7U7LB3OGLUFQX2DCCWPJ2LIMXAH75KYROBZBQRN3Q5OR3GI',
       genesisId: 'voitest-v1',
@@ -58,6 +59,7 @@ describe('filterCustomNodesFromNetwork', () => {
         verified: true,
       },
       nftExplorers: [],
+      scsIndexers: [],
       type: NetworkTypeEnum.Test,
     };
   });
@@ -90,7 +92,7 @@ describe('filterCustomNodesFromNetwork', () => {
       algods: [
         {
           canonicalName: 'Algod',
-          id: uuid(),
+          id: generateUUID(),
           port: null,
           token: null,
           url: 'https://algod.node',
@@ -112,7 +114,7 @@ describe('filterCustomNodesFromNetwork', () => {
       indexers: [
         {
           canonicalName: 'Index',
-          id: uuid(),
+          id: generateUUID(),
           port: null,
           token: null,
           url: 'https://indexer.node',
@@ -128,7 +130,7 @@ describe('filterCustomNodesFromNetwork', () => {
 
   it('should add both the indexer and algod node', () => {
     // arrange
-    const id = uuid();
+    const id = generateUUID();
     const canonicalName = 'A Node';
     // act
     const result = filterCustomNodesFromNetwork({

@@ -6,22 +6,28 @@ import { useNavigate } from 'react-router-dom';
 
 // components
 import AnimatedKibisisIcon from '@extension/components/AnimatedKibisisIcon';
-import Button from '@extension/components/Button';
+import Button from '@common/components/Button';
 
 // constants
-import { CREATE_PASSWORD_ROUTE, DEFAULT_GAP } from '@extension/constants';
+import { DEFAULT_GAP } from '@common/constants';
+import { CREATE_PASSWORD_ROUTE } from '@extension/constants';
 
 // hooks
 import useDefaultTextColor from '@extension/hooks/useDefaultTextColor';
 import usePrimaryColor from '@extension/hooks/usePrimaryColor';
 import useSubTextColor from '@extension/hooks/useSubTextColor';
 
+// selectors
+import { useSelectSettingsColorMode } from '@extension/selectors';
+
 // utils
-import calculateIconSize from '@extension/utils/calculateIconSize';
+import calculateIconSize from '@common/utils/calculateIconSize';
 
 const GetStartedPage: FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  // selectors
+  const colorMode = useSelectSettingsColorMode();
   // hooks
   const defaultTextColor = useDefaultTextColor();
   const primaryColor = usePrimaryColor();
@@ -55,6 +61,7 @@ const GetStartedPage: FC = () => {
       </VStack>
 
       <Button
+        colorMode={colorMode}
         onClick={handleGetStartedClick}
         rightIcon={<IoArrowForwardOutline />}
         size="lg"

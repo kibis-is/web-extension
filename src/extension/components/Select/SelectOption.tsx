@@ -2,7 +2,7 @@ import { HStack, Icon, Text } from '@chakra-ui/react';
 import React, { type FC } from 'react';
 
 // constants
-import { DEFAULT_GAP } from '@extension/constants';
+import { DEFAULT_GAP } from '@common/constants';
 
 // hooks
 import useSubTextColor from '@extension/hooks/useSubTextColor';
@@ -11,7 +11,7 @@ import useSubTextColor from '@extension/hooks/useSubTextColor';
 import type { ISelectOptionProps } from './types';
 
 // utils
-import calculateIconSize from '@extension/utils/calculateIconSize';
+import calculateIconSize from '@common/utils/calculateIconSize';
 
 const SelectOption: FC<ISelectOptionProps> = ({
   color,

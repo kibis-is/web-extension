@@ -22,7 +22,7 @@ import { IoArrowBackOutline, IoCreateOutline } from 'react-icons/io5';
 import { useDispatch } from 'react-redux';
 
 // components
-import Button from '@extension/components/Button';
+import Button from '@common/components/Button';
 import ClientHeader, {
   ClientHeaderSkeleton,
 } from '@extension/components/ClientHeader';
@@ -31,13 +31,13 @@ import GroupOfTransactionsContent from './GroupOfTransactionsContent';
 import SingleTransactionContent from './SingleTransactionContent';
 
 // constants
-import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@extension/constants';
+import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@common/constants';
 
 // contexts
 import { MultipleTransactionsContext } from './contexts';
 
 // errors
-import { BaseExtensionError } from '@extension/errors';
+import { BaseExtensionError } from '@common/errors';
 
 // features
 import { removeEventByIdThunk } from '@extension/features/events';
@@ -57,10 +57,11 @@ import {
   useSelectLogger,
   useSelectNetworks,
   useSelectSessions,
+  useSelectSettingsColorMode,
 } from '@extension/selectors';
 
 // theme
-import { theme } from '@extension/theme';
+import { theme } from '@common/theme';
 
 // types
 import type {
@@ -89,6 +90,7 @@ const SignTransactionsModal: FC<IModalProps> = ({ onClose }) => {
   } = useDisclosure();
   // selectors
   const accounts = useSelectAccounts();
+  const colorMode = useSelectSettingsColorMode();
   const logger = useSelectLogger();
   const networks = useSelectNetworks();
   const sessions = useSelectSessions();
@@ -133,7 +135,7 @@ const SignTransactionsModal: FC<IModalProps> = ({ onClose }) => {
     let authorizedAccounts: IAccountWithExtendedProps[];
     let stxns: (string | null)[];
 
-    if (!event || !event.payload.message.params) {
+    if (!event || !event.payload.message.payload.params) {
       return;
     }
 
@@ -149,7 +151,7 @@ const SignTransactionsModal: FC<IModalProps> = ({ onClose }) => {
       });
       stxns = await signTransactions({
         accounts: authorizedAccounts,
-        arc0001Transactions: event.payload.message.params.txns,
+        arc0001Transactions: event.payload.message.payload.params.txns,
         authAccounts: accounts,
         logger,
         networks,
@@ -210,12 +212,12 @@ const SignTransactionsModal: FC<IModalProps> = ({ onClose }) => {
     let decodedTransactions: Transaction[];
     let groupsOfTransactions: Transaction[][];
 
-    if (!event || !event.payload.message.params) {
+    if (!event || !event.payload.message.payload.params) {
       return <VStack spacing={DEFAULT_GAP - 2} w="full"></VStack>;
     }
 
-    decodedTransactions = event.payload.message.params.txns.map((value) =>
-      decodeUnsignedTransaction(decodeBase64(value.txn))
+    decodedTransactions = event.payload.message.payload.params.txns.map(
+      (value) => decodeUnsignedTransaction(decodeBase64(value.txn))
     );
     groupsOfTransactions = groupTransactions(decodedTransactions);
 
@@ -257,9 +259,9 @@ const SignTransactionsModal: FC<IModalProps> = ({ onClose }) => {
         onConfirm={handleOnAuthenticationModalConfirm}
         onError={handleOnError}
         {...(event &&
-          event.payload.message.params && {
+          event.payload.message.payload.params && {
             passwordHint: t<string>(
-              event.payload.message.params.txns.length > 1
+              event.payload.message.payload.params.txns.length > 1
                 ? 'captions.mustEnterPasswordToSignTransactions'
                 : 'captions.mustEnterPasswordToSignTransaction'
             ),
@@ -279,23 +281,31 @@ const SignTransactionsModal: FC<IModalProps> = ({ onClose }) => {
           borderBottomRadius={0}
         >
           <ModalHeader justifyContent="center" px={DEFAULT_GAP}>
-            {event && event.payload.message.params ? (
+            {event && event.payload.message.payload.params ? (
               <VStack alignItems="center" spacing={DEFAULT_GAP - 2} w="full">
                 <ClientHeader
                   description={
-                    event.payload.message.clientInfo.description || undefined
+                    event.payload.message.payload.clientInfo.description ||
+                    undefined
                   }
                   iconUrl={
-                    event.payload.message.clientInfo.iconUrl || undefined
+                    event.payload.message.payload.clientInfo.iconURL ||
+                    undefined
                   }
-                  host={event.payload.message.clientInfo.host || 'unknown host'}
-                  name={event.payload.message.clientInfo.appName || 'Unknown'}
+                  host={
+                    event.payload.message.payload.clientInfo.host ||
+                    'unknown host'
+                  }
+                  name={
+                    event.payload.message.payload.clientInfo.appName ||
+                    'Unknown'
+                  }
                 />
 
                 {/*caption*/}
                 <Text color={subTextColor} fontSize="sm" textAlign="center">
                   {t<string>(
-                    event.payload.message.params.txns.length > 1
+                    event.payload.message.payload.params.txns.length > 1
                       ? 'captions.signTransactionsRequest'
                       : 'captions.signTransactionRequest'
                   )}
@@ -313,6 +323,7 @@ const SignTransactionsModal: FC<IModalProps> = ({ onClose }) => {
               {moreDetailsTransactions && moreDetailsTransactions.length > 0 ? (
                 // previous button
                 <Button
+                  colorMode={colorMode}
                   leftIcon={<IoArrowBackOutline />}
                   onClick={handlePreviousClick}
                   size="lg"
@@ -324,6 +335,7 @@ const SignTransactionsModal: FC<IModalProps> = ({ onClose }) => {
               ) : (
                 // cancel button
                 <Button
+                  colorMode={colorMode}
                   onClick={handleCancelClick}
                   size="lg"
                   variant="outline"
@@ -335,6 +347,7 @@ const SignTransactionsModal: FC<IModalProps> = ({ onClose }) => {
 
               {/*sign button*/}
               <Button
+                colorMode={colorMode}
                 isLoading={signing}
                 onClick={handleSignClick}
                 rightIcon={<IoCreateOutline />}

@@ -2,15 +2,16 @@ import {
   ARC0027MethodEnum,
   ISignMessageResult,
 } from '@agoralabs-sh/avm-web-provider';
+import { generate as generateUUID } from '@agoralabs-sh/uuid';
 import { AsyncThunk, createAsyncThunk } from '@reduxjs/toolkit';
-import { v4 as uuid } from 'uuid';
 import browser from 'webextension-polyfill';
 
 // enums
-import { MessagesThunkEnum } from '@extension/enums';
+import { AVMWebProviderMessageReferenceEnum } from '@common/enums';
+import { ThunkEnum } from '../enums';
 
 // messages
-import { ClientResponseMessage } from '@common/messages';
+import AVMWebProviderResponseMessage from '@common/messages/AVMWebProviderResponseMessage';
 
 // types
 import type {
@@ -29,23 +30,25 @@ const sendSignMessageResponseThunk: AsyncThunk<
   ISignMessageResponseThunkPayload,
   IBaseAsyncThunkConfig<IBackgroundRootState | IMainRootState>
 >(
-  MessagesThunkEnum.SendSignMessageResponse,
+  ThunkEnum.SendSignMessageResponse,
   async ({ error, event, signature, signer }, { getState }) => {
     const logger = getState().system.logger;
 
     logger.debug(
-      `${MessagesThunkEnum.SendSignMessageResponse}: sending "${ARC0027MethodEnum.SignMessage}" message to content script`
+      `${ThunkEnum.SendSignMessageResponse}: sending "${ARC0027MethodEnum.SignMessage}" message to content script`
     );
 
     // send the error the webpage (via the content script)
     if (error) {
       await browser.tabs.sendMessage(
-        event.payload.originTabId,
-        new ClientResponseMessage<ISignMessageResult>({
+        event.payload.originTabID,
+        new AVMWebProviderResponseMessage<ISignMessageResult>({
           error,
-          id: uuid(),
-          method: event.payload.message.method,
-          requestId: event.payload.message.id,
+          id: generateUUID(),
+          method: event.payload.message.payload.method,
+          reference: AVMWebProviderMessageReferenceEnum.Response,
+          requestID: event.payload.message.id,
+          result: null,
         })
       );
 
@@ -55,11 +58,13 @@ const sendSignMessageResponseThunk: AsyncThunk<
     // if there is a signature, send it back to the webpage (via the content script)
     if (signature && signer) {
       await browser.tabs.sendMessage(
-        event.payload.originTabId,
-        new ClientResponseMessage<ISignMessageResult>({
-          id: uuid(),
-          method: event.payload.message.method,
-          requestId: event.payload.message.id,
+        event.payload.originTabID,
+        new AVMWebProviderResponseMessage<ISignMessageResult>({
+          error: null,
+          id: generateUUID(),
+          method: event.payload.message.payload.method,
+          reference: AVMWebProviderMessageReferenceEnum.Response,
+          requestID: event.payload.message.id,
           result: {
             providerId: __PROVIDER_ID__,
             signature,

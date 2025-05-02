@@ -10,13 +10,19 @@ import PageHeader from '@extension/components/PageHeader';
 import SettingsSelectItem from '@extension/components/SettingsSelectItem';
 
 // constants
-import { DEFAULT_GAP } from '@extension/constants';
+import { DEFAULT_GAP } from '@common/constants';
 
 // features
-import { saveToStorageThunk as saveSettingsToStorageThunk } from '@extension/features/settings';
+import {
+  saveToStorageThunk as saveSettingsToStorageThunk,
+  sendThemeUpdatedMessageThunk,
+} from '@extension/features/settings';
 
 // selectors
-import { useSelectSettings } from '@extension/selectors';
+import {
+  useSelectSettings,
+  useSelectSettingsColorMode,
+} from '@extension/selectors';
 
 // types
 import type { IOption } from '@extension/components/Select';
@@ -26,9 +32,9 @@ const AppearanceSettingsPage: FC = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch<IAppThunkDispatch<IMainRootState>>();
   // selectors
+  const colorMode = useSelectSettingsColorMode();
   const settings = useSelectSettings();
   // misc
-  const _context = 'appearance-settings-page';
   const themeOptions: IOption<ColorMode>[] = [
     {
       icon: IoMoonOutline,
@@ -52,8 +58,10 @@ const AppearanceSettingsPage: FC = () => {
     },
   ];
   // handlers
-  const handleOnFontChange = ({ value }: IOption<CSS.Property.FontFamily>) => {
-    dispatch(
+  const handleOnFontChange = async ({
+    value,
+  }: IOption<CSS.Property.FontFamily>) => {
+    await dispatch(
       saveSettingsToStorageThunk({
         ...settings,
         appearance: {
@@ -61,10 +69,12 @@ const AppearanceSettingsPage: FC = () => {
           font: value,
         },
       })
-    );
+    ).unwrap();
+    // send a message
+    dispatch(sendThemeUpdatedMessageThunk());
   };
-  const handleOnThemeChange = ({ value }: IOption<ColorMode>) => {
-    dispatch(
+  const handleOnThemeChange = async ({ value }: IOption<ColorMode>) => {
+    await dispatch(
       saveSettingsToStorageThunk({
         ...settings,
         appearance: {
@@ -72,17 +82,22 @@ const AppearanceSettingsPage: FC = () => {
           theme: value,
         },
       })
-    );
+    ).unwrap();
+    // send a message
+    dispatch(sendThemeUpdatedMessageThunk());
   };
 
   return (
     <>
-      <PageHeader title={t<string>('titles.page', { context: 'appearance' })} />
+      <PageHeader
+        colorMode={colorMode}
+        title={t<string>('titles.page', { context: 'appearance' })}
+      />
 
       <VStack spacing={DEFAULT_GAP - 2} w="full">
         {/*color*/}
         <SettingsSelectItem
-          _context={_context}
+          colorMode={colorMode}
           description={t<string>('captions.changeTheme')}
           emptyOptionLabel={t<string>('captions.noThemesAvailable')}
           label={t<string>('labels.theme')}
@@ -97,7 +112,7 @@ const AppearanceSettingsPage: FC = () => {
 
         {/*font*/}
         <SettingsSelectItem
-          _context={_context}
+          colorMode={colorMode}
           description={t<string>('captions.changeFont')}
           emptyOptionLabel={t<string>('captions.noFontsAvailable')}
           label={t<string>('labels.font')}

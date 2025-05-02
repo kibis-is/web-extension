@@ -1,9 +1,10 @@
 import { Spacer, TabPanel, VStack } from '@chakra-ui/react';
-import React, { type FC, type ReactNode } from 'react';
+import { randomString } from '@stablelib/random';
+import React, { type FC, type ReactNode, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 // components
-import EmptyState from '@extension/components/EmptyState';
+import EmptyState from '@common/components/EmptyState';
 import ScrollableContainer from '@extension/components/ScrollableContainer';
 import TabControlBar from '@extension/components/TabControlBar';
 import TransactionItem, {
@@ -16,25 +17,22 @@ import { ACCOUNT_PAGE_TAB_CONTENT_HEIGHT } from '@extension/constants';
 // repositories
 import AccountRepository from '@extension/repositories/AccountRepository';
 
-// selectors
-import { useSelectActiveAccountTransactionsUpdating } from '@extension/selectors';
-
 // types
 import type { IProps } from './types';
 
 const ActivityTab: FC<IProps> = ({
-  _context,
   account,
   accounts,
+  colorMode,
   fetching,
   network,
   onRefreshClick,
   onScrollEnd,
+  updating,
 }) => {
   const { t } = useTranslation();
-  // selectors
-  const updatingActiveAccountTransactions =
-    useSelectActiveAccountTransactionsUpdating();
+  // memos
+  const _context = useMemo(() => randomString(8), []);
   // misc
   const transactions =
     AccountRepository.extractAccountTransactionsForNetwork(account, network)
@@ -63,7 +61,7 @@ const ActivityTab: FC<IProps> = ({
           ...nodes,
           ...Array.from({ length: 3 }, (_, index) => (
             <TransactionItemSkeleton
-              key={`${_context}-activity-tab-fetching-item-${index}`}
+              key={`${_context}-loading-item-${index}`}
             />
           )),
         ];
@@ -88,7 +86,10 @@ const ActivityTab: FC<IProps> = ({
         <Spacer />
 
         {/* empty state */}
-        <EmptyState text={t<string>('headings.noTransactionsFound')} />
+        <EmptyState
+          colorMode={colorMode}
+          text={t<string>('headings.noTransactionsFound')}
+        />
 
         <Spacer />
       </VStack>
@@ -105,9 +106,9 @@ const ActivityTab: FC<IProps> = ({
     >
       {/*controls*/}
       <TabControlBar
-        _context={`${_context}-activity-tab`}
         buttons={[]}
-        isLoading={updatingActiveAccountTransactions}
+        colorMode={colorMode}
+        isLoading={updating}
         loadingTooltipLabel={t<string>('captions.updatingTransactions')}
         onRefresh={handleOnRefreshClick}
       />

@@ -16,11 +16,11 @@ import PageHeader from '@extension/components/PageHeader';
 import SettingsLinkItem from '@extension/components/SettingsLinkItem';
 
 // constants
+import { DEFAULT_GAP } from '@common/constants';
 import {
   ABOUT_ROUTE,
   ADVANCED_ROUTE,
   APPEARANCE_ROUTE,
-  DEFAULT_GAP,
   GENERAL_ROUTE,
   PRIVACY_ROUTE,
   SECURITY_ROUTE,
@@ -28,12 +28,18 @@ import {
   SETTINGS_ROUTE,
 } from '@extension/constants';
 
+// selectors
+import { useSelectSettingsColorMode } from '@extension/selectors';
+
 const SettingsIndexPage: FC = () => {
   const { t } = useTranslation();
+  // selectors
+  const colorMode = useSelectSettingsColorMode();
 
   return (
     <>
       <PageHeader
+        colorMode={colorMode}
         hideBackButton={true}
         title={t<string>('titles.page', { context: 'settings' })}
       />

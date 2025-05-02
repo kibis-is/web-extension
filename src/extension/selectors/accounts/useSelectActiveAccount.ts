@@ -15,8 +15,7 @@ export default function useSelectActiveAccount(): IAccountWithExtendedProps | nu
   return useSelector<IMainRootState, IAccountWithExtendedProps | null>(
     (state) => {
       const accounts = state.accounts.items;
-      const activeAccountDetails: IActiveAccountDetails | null =
-        state.accounts.activeAccountDetails;
+      const activeAccountDetails = state.accounts.activeAccountDetails;
       let account: IAccountWithExtendedProps | null = null;
 
       // if we have the active account details, use them to get the account

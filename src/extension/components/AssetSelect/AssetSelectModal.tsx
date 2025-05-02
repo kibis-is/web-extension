@@ -15,21 +15,22 @@ import {
   Tooltip,
   VStack,
 } from '@chakra-ui/react';
-import React, { type FC, useState } from 'react';
+import { randomString } from '@stablelib/random';
+import React, { type FC, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { IoCheckmarkOutline, IoChevronForward } from 'react-icons/io5';
 
 // components
 import AssetItem from '@extension/components/AssetItem';
-import Button from '@extension/components/Button';
-import EmptyState from '@extension/components/EmptyState';
+import Button from '@common/components/Button';
+import EmptyState from '@common/components/EmptyState';
 
 // constants
 import {
   BODY_BACKGROUND_COLOR,
   DEFAULT_GAP,
   TAB_ITEM_HEIGHT,
-} from '@extension/constants';
+} from '@common/constants';
 
 // enums
 import { AssetTypeEnum } from '@extension/enums';
@@ -43,18 +44,18 @@ import usePrimaryColorScheme from '@extension/hooks/usePrimaryColorScheme';
 import { useSelectSettingsSelectedNetwork } from '@extension/selectors';
 
 // theme
-import { theme } from '@extension/theme';
+import { theme } from '@common/theme';
 
 // types
 import type { IAssetTypes, INativeCurrency } from '@extension/types';
 import type { TAssetSelectModalProps } from './types';
 
 // utils
-import calculateIconSize from '@extension/utils/calculateIconSize';
+import calculateIconSize from '@common/utils/calculateIconSize';
 
 const AssetSelectModal: FC<TAssetSelectModalProps> = ({
-  _context,
   assets,
+  colorMode,
   isOpen,
   multiple,
   onClose,
@@ -67,6 +68,8 @@ const AssetSelectModal: FC<TAssetSelectModalProps> = ({
   const buttonHoverBackgroundColor = useButtonHoverBackgroundColor();
   const defaultTextColor = useDefaultTextColor();
   const primaryColorScheme = usePrimaryColorScheme();
+  // memos
+  const _context = useMemo(() => randomString(8), []);
   // states
   const [selectedAssets, setSelectedAssets] = useState<
     (IAssetTypes | INativeCurrency)[]
@@ -136,7 +139,10 @@ const AssetSelectModal: FC<TAssetSelectModalProps> = ({
           <Spacer />
 
           {/*empty state*/}
-          <EmptyState text={t<string>('headings.noAccountsFound')} />
+          <EmptyState
+            colorMode={colorMode}
+            text={t<string>('headings.noAccountsFound')}
+          />
 
           <Spacer />
         </>
@@ -271,6 +277,7 @@ const AssetSelectModal: FC<TAssetSelectModalProps> = ({
         <ModalFooter p={DEFAULT_GAP}>
           <HStack spacing={DEFAULT_GAP - 2} w="full">
             <Button
+              colorMode={colorMode}
               onClick={handleCancelClick}
               size="lg"
               variant="outline"
@@ -281,6 +288,7 @@ const AssetSelectModal: FC<TAssetSelectModalProps> = ({
 
             {multiple && (
               <Button
+                colorMode={colorMode}
                 onClick={handleConfirmClick}
                 rightIcon={<IoCheckmarkOutline />}
                 size="lg"

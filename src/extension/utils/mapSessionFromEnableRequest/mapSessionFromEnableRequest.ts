@@ -1,4 +1,4 @@
-import { v4 as uuid } from 'uuid';
+import { generate as generateUUID } from '@agoralabs-sh/uuid';
 
 // types
 import type { ISession } from '@extension/types';
@@ -9,7 +9,7 @@ export default function mapSessionFromEnableRequest({
   clientInfo,
   network,
 }: IOptions): ISession {
-  const id: string = uuid();
+  const id: string = generateUUID();
   const now: Date = new Date();
 
   return {
@@ -20,7 +20,7 @@ export default function mapSessionFromEnableRequest({
     genesisHash: network.genesisHash,
     genesisId: network.genesisId,
     host: clientInfo.host,
-    iconUrl: clientInfo.iconUrl,
+    iconUrl: clientInfo.iconURL,
     id,
     usedAt: now.getTime(),
   };

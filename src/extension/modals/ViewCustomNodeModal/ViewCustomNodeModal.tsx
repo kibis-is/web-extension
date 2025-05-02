@@ -11,20 +11,23 @@ import { useTranslation } from 'react-i18next';
 import { IoCheckmarkOutline } from 'react-icons/io5';
 
 // components
-import Button from '@extension/components/Button';
+import Button from '@common/components/Button';
 import CustomNodeSummaryModalContent from '@extension/components/CustomNodeSummaryModalContent';
 
 // constants
-import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@extension/constants';
+import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@common/constants';
 
 // hooks
 import useDefaultTextColor from '@extension/hooks/useDefaultTextColor';
 
 // selectors
-import { useSelectNetworks } from '@extension/selectors';
+import {
+  useSelectNetworks,
+  useSelectSettingsColorMode,
+} from '@extension/selectors';
 
 // theme
-import { theme } from '@extension/theme';
+import { theme } from '@common/theme';
 
 // types
 import type { INetwork } from '@extension/types';
@@ -33,6 +36,7 @@ import type { IProps } from './types';
 const ViewCustomNodeModal: FC<IProps> = ({ item, onClose }) => {
   const { t } = useTranslation();
   // selectors
+  const colorMode = useSelectSettingsColorMode();
   const networks = useSelectNetworks();
   // hooks
   const defaultTextColor = useDefaultTextColor();
@@ -83,6 +87,7 @@ const ViewCustomNodeModal: FC<IProps> = ({ item, onClose }) => {
         <ModalFooter p={DEFAULT_GAP}>
           {/*ok button*/}
           <Button
+            colorMode={colorMode}
             onClick={handleOKClick}
             rightIcon={<IoCheckmarkOutline />}
             size="lg"

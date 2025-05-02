@@ -1,4 +1,5 @@
 // types
+import type { IBaseComponentProps } from '@common/types';
 import type {
   IAccountGroup,
   IAccountWithExtendedProps,
@@ -6,7 +7,7 @@ import type {
   ISystemInfo,
 } from '@extension/types';
 
-interface IProps {
+interface IProps extends IBaseComponentProps {
   accounts: IAccountWithExtendedProps[];
   activeAccountID: string | null;
   groups: IAccountGroup[];

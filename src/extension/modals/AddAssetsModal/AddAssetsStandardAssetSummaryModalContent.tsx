@@ -18,7 +18,7 @@ import OpenTabIconButton from '@extension/components/OpenTabIconButton';
 import Warning from '@extension/components/Warning';
 
 // constants
-import { DEFAULT_GAP, MODAL_ITEM_HEIGHT } from '@extension/constants';
+import { DEFAULT_GAP, MODAL_ITEM_HEIGHT } from '@common/constants';
 
 // enums
 import { AssetTypeEnum } from '@extension/enums';
@@ -38,7 +38,7 @@ import type { IAddAssetsModalStandardAssetSummaryContentProps } from './types';
 // utils
 import convertToStandardUnit from '@common/utils/convertToStandardUnit';
 import formatCurrencyUnit from '@common/utils/formatCurrencyUnit';
-import convertPublicKeyToAVMAddress from '@extension/utils/convertPublicKeyToAVMAddress';
+import convertPublicKeyToAVMAddress from '@common/utils/convertPublicKeyToAVMAddress';
 import createIconFromDataUri from '@extension/utils/createIconFromDataUri';
 import isAccountKnown from '@extension/utils/isAccountKnown';
 

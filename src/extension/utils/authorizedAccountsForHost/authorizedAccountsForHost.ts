@@ -6,7 +6,7 @@ import type { IAccountWithExtendedProps } from '@extension/types';
 import type { IOptions } from './types';
 
 // utils
-import convertPublicKeyToAVMAddress from '../convertPublicKeyToAVMAddress';
+import convertPublicKeyToAVMAddress from '@common/utils/convertPublicKeyToAVMAddress';
 
 /**
  * Convenience function that gets a list of authorized accounts for sessions matching the host.

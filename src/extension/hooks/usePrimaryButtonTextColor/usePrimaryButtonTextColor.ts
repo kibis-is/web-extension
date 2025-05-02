@@ -1,6 +1,9 @@
 // hooks
-import useColorModeValue from '@extension/hooks/useColorModeValue';
+import _usePrimaryButtonTextColor from '@common/hooks/usePrimaryButtonTextColor';
+
+// selectors
+import { useSelectSettingsColorMode } from '@extension/selectors';
 
 export default function usePrimaryButtonTextColor(): string {
-  return useColorModeValue('white', 'gray.800');
+  return _usePrimaryButtonTextColor(useSelectSettingsColorMode());
 }

@@ -1,7 +1,7 @@
 // types
-import type { IPropsWithContext } from '@extension/types';
+import type { IBaseComponentProps } from '@common/types';
 
-interface IProps extends IPropsWithContext {
+interface IProps extends IBaseComponentProps {
   disabled?: boolean;
   error: string | null;
   onChange: (phrases: string[]) => void;

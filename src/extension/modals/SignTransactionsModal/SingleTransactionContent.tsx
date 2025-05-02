@@ -37,7 +37,7 @@ import type { ISingleTransactionContentProps } from './types';
 
 // utils
 import convertGenesisHashToHex from '@extension/utils/convertGenesisHashToHex';
-import convertPublicKeyToAVMAddress from '@extension/utils/convertPublicKeyToAVMAddress';
+import convertPublicKeyToAVMAddress from '@common/utils/convertPublicKeyToAVMAddress';
 import parseTransactionType from '@extension/utils/parseTransactionType';
 import updateAccountInformation from '@extension/utils/updateAccountInformation';
 

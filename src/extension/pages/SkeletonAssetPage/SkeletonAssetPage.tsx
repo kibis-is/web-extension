@@ -12,12 +12,17 @@ import React, { type FC, useMemo } from 'react';
 import PageHeader from '@extension/components/PageHeader';
 
 // constants
-import { DEFAULT_GAP } from '@extension/constants';
+import { DEFAULT_GAP } from '@common/constants';
 
 // hooks
 import useDefaultTextColor from '@extension/hooks/useDefaultTextColor';
 
+// selectors
+import { useSelectSettingsColorMode } from '@extension/selectors';
+
 const SkeletonAssetPage: FC = () => {
+  // selectors
+  const colorMode = useSelectSettingsColorMode();
   // hooks
   const defaultTextColor = useDefaultTextColor();
   // memos
@@ -27,7 +32,7 @@ const SkeletonAssetPage: FC = () => {
 
   return (
     <>
-      <PageHeader loading={true} title={title} />
+      <PageHeader colorMode={colorMode} loading={true} title={title} />
 
       <VStack
         alignItems="center"

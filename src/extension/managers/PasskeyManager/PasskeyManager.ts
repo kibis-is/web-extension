@@ -1,5 +1,5 @@
 import { decode as decodeHex } from '@stablelib/hex';
-import { randomBytes } from 'tweetnacl';
+import { randomBytes } from '@stablelib/random';
 
 // constants
 import {
@@ -17,7 +17,7 @@ import {
   PasskeyCreationError,
   PasskeyNotSupportedError,
   UnableToFetchPasskeyError,
-} from '@extension/errors';
+} from '@common/errors';
 
 // repositories
 import PasskeyCredentialRepository from '@extension/repositories/PasskeyCredentialRepository';

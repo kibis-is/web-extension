@@ -1,4 +1,4 @@
-import { v4 as uuid } from 'uuid';
+import { generate as generateUUID } from '@agoralabs-sh/uuid';
 
 // config
 import { networks } from '@extension/config';
@@ -91,7 +91,7 @@ export default class AccountRepository extends BaseRepository {
       groupID: null,
       groupIndex: null,
       icon: null,
-      id: id || uuid(),
+      id: id || generateUUID(),
       name: name || null,
       networkInformation: networks.reduce<Record<string, IAccountInformation>>(
         (acc, { genesisHash }) => ({
@@ -122,6 +122,7 @@ export default class AccountRepository extends BaseRepository {
         {}
       ),
       index: null,
+      passkeys: [],
       publicKey,
       updatedAt: createdAtOrNow,
     };
@@ -133,6 +134,10 @@ export default class AccountRepository extends BaseRepository {
       arc200AssetHoldings: [],
       atomicBalance: '0',
       authAddress: null,
+      enVoi: {
+        items: [],
+        preferredIndex: 0,
+      },
       minAtomicBalance: '0',
       standardAssetHoldings: [],
       updatedAt: null,
@@ -239,6 +244,7 @@ export default class AccountRepository extends BaseRepository {
         {}
       ),
       index: typeof account.index === 'number' ? account.index : null, // if 0, this is "falsy" in the js world, so let's be specific
+      passkeys: account.passkeys,
       publicKey: account.publicKey,
       updatedAt: account.updatedAt,
     };
@@ -258,6 +264,7 @@ export default class AccountRepository extends BaseRepository {
       arc200AssetHoldings: accountInformation.arc200AssetHoldings,
       atomicBalance: accountInformation.atomicBalance,
       authAddress: accountInformation.authAddress,
+      enVoi: accountInformation.enVoi,
       minAtomicBalance: accountInformation.minAtomicBalance,
       standardAssetHoldings: accountInformation.standardAssetHoldings,
       updatedAt: accountInformation.updatedAt,
@@ -293,20 +300,15 @@ export default class AccountRepository extends BaseRepository {
       ACCOUNTS_ITEM_KEY_PREFIX
     );
 
-    accounts = accounts.map((value) => {
-      const account = {
-        ...AccountRepository.initializeDefaultAccount({
-          publicKey: value.publicKey,
-        }),
-        ...value,
-      };
-
-      return {
-        ...account,
-        // if there are new networks in the config, create default account information and transactions for these new networks
-        networkInformation: networks.reduce<
-          Record<string, IAccountInformation>
-        >((acc, { genesisHash }) => {
+    accounts = accounts.map((account) => ({
+      ...AccountRepository.initializeDefaultAccount({
+        publicKey: account.publicKey,
+      }),
+      ...account,
+      _delimiter: DelimiterEnum.Account,
+      // if there are new networks in the config, create default account information and transactions for these new networks
+      networkInformation: networks.reduce<Record<string, IAccountInformation>>(
+        (acc, { genesisHash }) => {
           const encodedGenesisHash = convertGenesisHashToHex(genesisHash);
           const accountInformation = {
             ...AccountRepository.initializeDefaultAccountInformation(), // initialize with any new values
@@ -333,35 +335,36 @@ export default class AccountRepository extends BaseRepository {
               }),
             },
           };
-        }, {}),
-        networkStakingApps: networks.reduce<
-          Record<string, IAccountNetworkStakingApps>
-        >((acc, { genesisHash }) => {
-          const encodedGenesisHash = convertGenesisHashToHex(genesisHash);
+        },
+        {}
+      ),
+      networkStakingApps: networks.reduce<
+        Record<string, IAccountNetworkStakingApps>
+      >((acc, { genesisHash }) => {
+        const encodedGenesisHash = convertGenesisHashToHex(genesisHash);
 
-          return {
-            ...acc,
-            [encodedGenesisHash]: {
-              ...AccountRepository.initializeDefaultNetworkStakingApps(), // initialize with any new values
-              ...account.networkStakingApps[encodedGenesisHash],
-            },
-          };
-        }, {}),
-        networkTransactions: networks.reduce<
-          Record<string, IAccountTransactions>
-        >((acc, { genesisHash }) => {
-          const encodedGenesisHash = convertGenesisHashToHex(genesisHash);
+        return {
+          ...acc,
+          [encodedGenesisHash]: {
+            ...AccountRepository.initializeDefaultNetworkStakingApps(), // initialize with any new values
+            ...account.networkStakingApps[encodedGenesisHash],
+          },
+        };
+      }, {}),
+      networkTransactions: networks.reduce<
+        Record<string, IAccountTransactions>
+      >((acc, { genesisHash }) => {
+        const encodedGenesisHash = convertGenesisHashToHex(genesisHash);
 
-          return {
-            ...acc,
-            [encodedGenesisHash]: {
-              ...AccountRepository.initializeDefaultAccountTransactions(), // initialize with any new values
-              ...account.networkTransactions[encodedGenesisHash],
-            },
-          };
-        }, {}),
-      };
-    });
+        return {
+          ...acc,
+          [encodedGenesisHash]: {
+            ...AccountRepository.initializeDefaultAccountTransactions(), // initialize with any new values
+            ...account.networkTransactions[encodedGenesisHash],
+          },
+        };
+      }, {}),
+    }));
 
     return sortByIndex(accounts);
   }
@@ -373,7 +376,7 @@ export default class AccountRepository extends BaseRepository {
    * @public
    */
   public async fetchByPublicKey(publicKey: string): Promise<IAccount | null> {
-    const accounts: IAccount[] = await this.fetchAll();
+    const accounts = await this.fetchAll();
 
     return (
       accounts.find(

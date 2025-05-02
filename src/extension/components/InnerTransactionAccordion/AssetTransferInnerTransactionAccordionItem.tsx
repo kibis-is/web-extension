@@ -36,7 +36,7 @@ import type { IAssetTransferTransaction } from '@extension/types';
 import type { IItemProps } from './types';
 
 // utils
-import convertPublicKeyToAVMAddress from '@extension/utils/convertPublicKeyToAVMAddress';
+import convertPublicKeyToAVMAddress from '@common/utils/convertPublicKeyToAVMAddress';
 import isAccountKnown from '@extension/utils/isAccountKnown';
 
 const AssetTransferInnerTransactionAccordionItem: FC<

@@ -4,11 +4,11 @@ import React, { type FC, type ReactNode, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 // components
-import AssetTabLoadingItem from '@extension/components/AssetTabLoadingItem';
-import EmptyState from '@extension/components/EmptyState';
-import Item from './Item';
+// import AssetTabLoadingItem from '@extension/components/AssetTabLoadingItem';
+import EmptyState from '@common/components/EmptyState';
 import ScrollableContainer from '@extension/components/ScrollableContainer';
 import TabControlBar from '@extension/components/TabControlBar';
+import Item from './Item';
 
 // constants
 import { ACCOUNT_PAGE_TAB_CONTENT_HEIGHT } from '@extension/constants';
@@ -48,7 +48,8 @@ const StakingTab: FC<IProps> = ({ account, colorMode, fetching, network }) => {
 
     if (fetching) {
       return Array.from({ length: 3 }, (_, index) => (
-        <AssetTabLoadingItem key={`${_context}-loading-item-${index}`} />
+        // <AssetTabLoadingItem key={`${_context}-loading-item-${index}`} />
+        <div></div>
       ));
     }
 
@@ -83,7 +84,10 @@ const StakingTab: FC<IProps> = ({ account, colorMode, fetching, network }) => {
         <Spacer />
 
         {/*empty state*/}
-        <EmptyState text={t<string>('headings.noStakingAppsFound')} />
+        <EmptyState
+          colorMode={colorMode}
+          text={t<string>('headings.noStakingAppsFound')}
+        />
 
         <Spacer />
       </VStack>
@@ -107,7 +111,7 @@ const StakingTab: FC<IProps> = ({ account, colorMode, fetching, network }) => {
       >
         {/*controls*/}
         <TabControlBar
-          _context={_context}
+          colorMode={colorMode}
           buttons={[]}
           isLoading={fetching}
           loadingTooltipLabel={t<string>('captions.updatingStakingApps')}

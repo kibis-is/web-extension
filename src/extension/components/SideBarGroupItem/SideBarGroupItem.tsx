@@ -36,12 +36,8 @@ import {
 } from 'react-icons/io5';
 
 // constants
-import {
-  BODY_BACKGROUND_COLOR,
-  DEFAULT_GAP,
-  SIDEBAR_ITEM_HEIGHT,
-  SIDEBAR_MIN_WIDTH,
-} from '@extension/constants';
+import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@common/constants';
+import { SIDEBAR_ITEM_HEIGHT, SIDEBAR_MIN_WIDTH } from '@extension/constants';
 
 // components
 import SideBarAccountItem from '@extension/components/SideBarAccountItem';
@@ -63,11 +59,12 @@ import type { IAccountWithExtendedProps } from '@extension/types';
 import type { IProps } from './types';
 
 // utils
-import calculateIconSize from '@extension/utils/calculateIconSize';
+import calculateIconSize from '@common/utils/calculateIconSize';
 
 const SideBarGroupItem: FC<IProps> = ({
   activeAccountID,
   accounts,
+  colorMode,
   group,
   isShortForm,
   network,
@@ -275,6 +272,7 @@ const SideBarGroupItem: FC<IProps> = ({
                 account={value}
                 accounts={accounts}
                 active={activeAccountID ? value.id === activeAccountID : false}
+                colorMode={colorMode}
                 isShortForm={isShortForm}
                 key={value.id}
                 network={network}

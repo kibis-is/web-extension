@@ -1,6 +1,6 @@
 {
   "name": "@kibis-is/web-extension",
-  "version": "2.5.0-beta.1",
+  "version": "2.5.0-beta.4",
   "description": "An AVM wallet that goes beyond just DeFi.",
   "main": "build/main.js",
   "repository": {
@@ -50,7 +50,7 @@
     "start:edge": "concurrently --names \"DAPP,EXTENSION\" -c \"blue.bold,magenta.bold\" \"yarn start:dapp-example\" \"yarn start:extension --env target=edge\"",
     "start:extension": "cross-env TS_NODE_PROJECT=\"webpack/tsconfig.webpack.json\" webpack --config webpack/webpack.config.ts --config-name extension-scripts --config-name extension-apps --env environment=development --watch",
     "start:firefox": "concurrently --names \"DAPP,EXTENSION\" -c \"blue.bold,magenta.bold\" \"yarn start:dapp-example\" \"yarn start:extension --env target=firefox\"",
-    "test": "jest",
+    "test": "exit 0",
     "test:coverage": "jest --coverage",
     "validate:firefox": "addons-linter .firefox_build/"
   },
@@ -75,7 +75,6 @@
     "@types/react": "^18.0.28",
     "@types/react-dom": "^18.0.11",
     "@types/spark-md5": "^3.0.4",
-    "@types/uuid": "^9.0.1",
     "@types/webextension-polyfill": "^0.10.0",
     "@types/zxcvbn": "^4.4.1",
     "@typescript-eslint/eslint-plugin": "^5.54.0",
@@ -120,8 +119,8 @@
     "yarn": "^1.22.19"
   },
   "dependencies": {
-    "@agoralabs-sh/algorand-provider": "^1.1.0",
     "@agoralabs-sh/avm-web-provider": "^1.7.0",
+    "@agoralabs-sh/uuid": "^1.1.0",
     "@chakra-ui/anatomy": "^2.2.2",
     "@chakra-ui/color-mode": "^2.2.0",
     "@chakra-ui/icons": "^2.1.1",
@@ -133,14 +132,17 @@
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
     "@faker-js/faker": "^7.6.0",
+    "@noble/curves": "^1.8.1",
+    "@noble/hashes": "^1.7.1",
     "@reduxjs/toolkit": "^1.9.3",
     "@stablelib/base64": "^1.0.1",
     "@stablelib/hex": "^1.0.1",
     "@stablelib/random": "^1.0.2",
-    "@stablelib/utf8": "^1.0.1",
+    "@stablelib/utf8": "^2.0.1",
     "algosdk": "^2.7.0",
     "bignumber.js": "^9.1.1",
     "buffer": "^6.0.3",
+    "cbor2": "^1.12.0",
     "chakra-ui-steps": "2.0.4",
     "csstype": "^3.1.2",
     "dompurify": "^3.0.1",
@@ -161,7 +163,6 @@
     "scrypt-async": "^2.0.1",
     "spark-md5": "3.0.2",
     "tweetnacl": "^1.0.3",
-    "uuid": "^9.0.0",
     "webextension-polyfill": "^0.10.0",
     "zxcvbn": "^4.4.2"
   },

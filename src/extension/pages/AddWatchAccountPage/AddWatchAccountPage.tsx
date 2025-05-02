@@ -11,13 +11,14 @@ import {
 import { useNavigate } from 'react-router-dom';
 
 // components
-import Button from '@extension/components/Button';
+import Button from '@common/components/Button';
 import GenericInput from '@extension/components/GenericInput';
 import PageHeader from '@extension/components/PageHeader';
 import Steps from '@extension/components/Steps';
 
 // constants
-import { ACCOUNT_NAME_BYTE_LIMIT, DEFAULT_GAP } from '@extension/constants';
+import { DEFAULT_GAP } from '@common/constants';
+import { ACCOUNT_NAME_BYTE_LIMIT } from '@extension/constants';
 
 // enums
 import { StepsEnum } from './enums';
@@ -28,6 +29,9 @@ import useGenericInput from '@extension/hooks/useGenericInput';
 import usePrimaryColorScheme from '@extension/hooks/usePrimaryColorScheme';
 import useSubTextColor from '@extension/hooks/useSubTextColor';
 
+// selectors
+import { useSelectSettingsColorMode } from '@extension/selectors';
+
 // types
 import type { IProps } from './types';
 
@@ -37,6 +41,8 @@ const AddWatchAccountPage: FC<IProps> = ({ onComplete, saving }) => {
   const { activeStep, nextStep, prevStep } = useSteps({
     initialStep: StepsEnum.Address,
   });
+  // selectors
+  const colorMode = useSelectSettingsColorMode();
   // hooks
   const defaultTextColor = useDefaultTextColor();
   const {
@@ -114,6 +120,7 @@ const AddWatchAccountPage: FC<IProps> = ({ onComplete, saving }) => {
     <>
       {/*page title*/}
       <PageHeader
+        colorMode={colorMode}
         title={t<string>('titles.page', { context: 'addWatchAccount' })}
       />
 
@@ -151,6 +158,7 @@ const AddWatchAccountPage: FC<IProps> = ({ onComplete, saving }) => {
 
               <GenericInput
                 error={addressError}
+                colorMode={colorMode}
                 label={addressLabel}
                 isDisabled={saving}
                 onBlur={addressOnBlur}
@@ -183,6 +191,7 @@ const AddWatchAccountPage: FC<IProps> = ({ onComplete, saving }) => {
 
               <GenericInput
                 charactersRemaining={nameCharactersRemaining}
+                colorMode={colorMode}
                 error={nameError}
                 label={nameLabel}
                 isDisabled={saving}
@@ -216,6 +225,7 @@ const AddWatchAccountPage: FC<IProps> = ({ onComplete, saving }) => {
         <HStack spacing={DEFAULT_GAP - 2} w="full">
           {/*previous button*/}
           <Button
+            colorMode={colorMode}
             isDisabled={saving}
             leftIcon={<IoArrowBackOutline />}
             onClick={handlePreviousClick}
@@ -229,6 +239,7 @@ const AddWatchAccountPage: FC<IProps> = ({ onComplete, saving }) => {
           {hasCompletedAllSteps ? (
             // save button
             <Button
+              colorMode={colorMode}
               isLoading={saving}
               onClick={handleSaveClick}
               rightIcon={<IoSaveOutline />}
@@ -241,6 +252,7 @@ const AddWatchAccountPage: FC<IProps> = ({ onComplete, saving }) => {
           ) : (
             // next button
             <Button
+              colorMode={colorMode}
               onClick={handleNextClick}
               rightIcon={<IoArrowForwardOutline />}
               size="lg"

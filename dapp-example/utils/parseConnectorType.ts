@@ -3,8 +3,6 @@ import { ConnectionTypeEnum } from '../enums';
 
 export default function parseConnectorType(value: ConnectionTypeEnum): string {
   switch (value) {
-    case ConnectionTypeEnum.AlgorandProvider:
-      return 'Alogrand Provider (Legacy)';
     case ConnectionTypeEnum.AVMWebProvider:
       return 'AVM Web Provider';
     case ConnectionTypeEnum.UseWallet:

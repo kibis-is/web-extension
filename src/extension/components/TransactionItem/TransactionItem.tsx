@@ -13,11 +13,8 @@ import DefaultTransactionItemContent from './DefaultTransactionItemContent';
 import PaymentTransactionItemContent from './PaymentTransactionItemContent';
 
 // constants
-import {
-  DEFAULT_GAP,
-  TAB_ITEM_HEIGHT,
-  TRANSACTIONS_ROUTE,
-} from '@extension/constants';
+import { DEFAULT_GAP, TAB_ITEM_HEIGHT } from '@common/constants';
+import { TRANSACTIONS_ROUTE } from '@extension/constants';
 
 // enums
 import { TransactionTypeEnum } from '@extension/enums';

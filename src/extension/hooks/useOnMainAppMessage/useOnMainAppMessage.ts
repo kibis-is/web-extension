@@ -13,27 +13,25 @@ import { create as createNotification } from '@extension/features/notifications'
 import { fetchFromStorageThunk as fetchSessionsFromStorageThunk } from '@extension/features/sessions';
 
 // messages
-import {
-  ProviderEventAddedMessage,
-  ProviderSessionsUpdatedMessage,
-} from '@common/messages';
+import BaseProviderMessage from '@common/messages/BaseProviderMessage';
+import ProviderEventAddedMessage from '@common/messages/ProviderEventAddedMessage';
+import ProviderSessionsUpdatedMessage from '@common/messages/ProviderSessionsUpdatedMessage';
 
 // selectors
 import { useSelectLogger } from '@extension/selectors';
 
 // types
-import type { TProviderMessages } from '@common/types';
 import type { IAppThunkDispatch, IMainRootState } from '@extension/types';
 
 export default function useOnMainAppMessage(): void {
-  const _functionName = 'useOnMainAppMessage';
+  const __function = 'useOnMainAppMessage';
   const { t } = useTranslation();
   const dispatch = useDispatch<IAppThunkDispatch<IMainRootState>>();
   // selectors
   const logger = useSelectLogger();
-  const handleMessage = async (message: TProviderMessages) => {
+  const handleMessage = async (message: BaseProviderMessage) => {
     message.reference &&
-      logger.debug(`${_functionName}: message "${message.reference}" received`);
+      logger.debug(`${__function}: message "${message.reference}" received`);
 
     switch (message.reference) {
       case ProviderMessageReferenceEnum.EventAdded:

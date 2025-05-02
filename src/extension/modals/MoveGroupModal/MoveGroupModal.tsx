@@ -16,17 +16,14 @@ import { useDispatch } from 'react-redux';
 
 // components
 import ActionItem from '@extension/components/ActionItem';
-import Button from '@extension/components/Button';
+import Button from '@common/components/Button';
 import GenericInput from '@extension/components/GenericInput';
 import ModalSubHeading from '@extension/components/ModalSubHeading';
 import ScrollableContainer from '@extension/components/ScrollableContainer';
 
 // constants
-import {
-  ACCOUNT_GROUP_NAME_BYTE_LIMIT,
-  BODY_BACKGROUND_COLOR,
-  DEFAULT_GAP,
-} from '@extension/constants';
+import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@common/constants';
+import { ACCOUNT_GROUP_NAME_BYTE_LIMIT } from '@extension/constants';
 
 // features
 import {
@@ -49,10 +46,11 @@ import {
   useSelectAccountsSaving,
   useSelectAccountGroups,
   useSelectMoveGroupModalAccount,
+  useSelectSettingsColorMode,
 } from '@extension/selectors';
 
 // theme
-import { theme } from '@extension/theme';
+import { theme } from '@common/theme';
 
 // types
 import type {
@@ -64,8 +62,8 @@ import type {
 } from '@extension/types';
 
 // utils
-import convertPublicKeyToAVMAddress from '@extension/utils/convertPublicKeyToAVMAddress';
-import ellipseAddress from '@extension/utils/ellipseAddress';
+import convertPublicKeyToAVMAddress from '@common/utils/convertPublicKeyToAVMAddress';
+import ellipseAddress from '@common/utils/ellipseAddress';
 
 const MoveGroupModal: FC<IModalProps> = ({ onClose }) => {
   const { t } = useTranslation();
@@ -73,6 +71,7 @@ const MoveGroupModal: FC<IModalProps> = ({ onClose }) => {
   // selectors
   const account = useSelectMoveGroupModalAccount();
   const accounts = useSelectAccounts();
+  const colorMode = useSelectSettingsColorMode();
   const groups = useSelectAccountGroups();
   const saving = useSelectAccountsSaving();
   // hooks
@@ -251,9 +250,11 @@ const MoveGroupModal: FC<IModalProps> = ({ onClose }) => {
         <ModalBody display="flex" px={DEFAULT_GAP}>
           <VStack flexGrow={1} spacing={DEFAULT_GAP - 2} w="full">
             <ModalSubHeading text={t<string>('headings.addGroup')} />
+
             {/*add group*/}
             <GenericInput
               charactersRemaining={nameCharactersRemaining}
+              colorMode={colorMode}
               error={nameError}
               label={nameLabel}
               isDisabled={saving}
@@ -280,6 +281,7 @@ const MoveGroupModal: FC<IModalProps> = ({ onClose }) => {
         <ModalFooter p={DEFAULT_GAP}>
           {/*cancel button*/}
           <Button
+            colorMode={colorMode}
             onClick={handleCancelClick}
             size="lg"
             variant="outline"

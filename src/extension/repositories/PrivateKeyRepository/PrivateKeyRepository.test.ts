@@ -1,4 +1,4 @@
-import { v4 as uuid } from 'uuid';
+import { generate as generateUUID } from '@agoralabs-sh/uuid';
 
 // enums
 import { EncryptionMethodEnum } from '@extension/enums';
@@ -6,8 +6,8 @@ import { EncryptionMethodEnum } from '@extension/enums';
 // managers
 import PasswordManager from '@extension/managers/PasswordManager';
 
-// models
-import Ed21559KeyPair from '@extension/models/Ed21559KeyPair';
+// cryptography
+import Ed21559KeyPair from '@extension/cryptography/Ed21559KeyPair';
 
 // services
 import PrivateKeyRepository from './PrivateKeyRepository';
@@ -35,14 +35,14 @@ describe(PrivateKeyRepository.name, () => {
     it('should upgrade a legacy private key item (with no version) using password', async () => {
       // arrange
       const encryptedPrivateKey = await PasswordManager.encryptBytes({
-        bytes: keyPair.getSecretKey(),
+        bytes: keyPair.secretKey(),
         password,
       });
       const legacyItem: Partial<IPrivateKey> = {
         createdAt: legacyCreatedAt,
-        id: uuid(),
+        id: generateUUID(),
         encryptedPrivateKey: PrivateKeyRepository.encode(encryptedPrivateKey), // pre-v1.18.0 (version 2) used the secret key
-        publicKey: PrivateKeyRepository.encode(keyPair.publicKey),
+        publicKey: PrivateKeyRepository.encode(keyPair.publicKey()),
         updatedAt: legacyCreatedAt,
       };
       let decryptedPrivateKey: Uint8Array;
@@ -65,21 +65,21 @@ describe(PrivateKeyRepository.name, () => {
       expect(upgradedItem.version).toBe(PrivateKeyRepository.latestVersion);
       expect(decryptedPrivateKey).toHaveLength(32); // should be a private key (seed) of 32 bytes and not a secret key (private key + public key) of 64 bytes
       expect(PrivateKeyRepository.encode(decryptedPrivateKey)).toBe(
-        PrivateKeyRepository.encode(keyPair.privateKey)
+        PrivateKeyRepository.encode(keyPair.privateKey())
       );
     });
 
     it('should upgrade a legacy private key item (with version 0) using password', async () => {
       // arrange
       const encryptedPrivateKey = await PasswordManager.encryptBytes({
-        bytes: keyPair.getSecretKey(),
+        bytes: keyPair.secretKey(),
         password,
       });
       const legacyItem: Partial<IPrivateKey> = {
         createdAt: legacyCreatedAt,
-        id: uuid(),
+        id: generateUUID(),
         encryptedPrivateKey: PrivateKeyRepository.encode(encryptedPrivateKey), // pre-v1.18.0 (version 2) used the secret key
-        publicKey: PrivateKeyRepository.encode(keyPair.publicKey),
+        publicKey: PrivateKeyRepository.encode(keyPair.publicKey()),
         updatedAt: legacyCreatedAt,
         version: 0,
       };
@@ -103,7 +103,7 @@ describe(PrivateKeyRepository.name, () => {
       expect(upgradedItem.version).toBe(PrivateKeyRepository.latestVersion);
       expect(decryptedPrivateKey).toHaveLength(32); // should be a private key (seed) of 32 bytes and not a secret key (private key + public key) of 64 bytes
       expect(PrivateKeyRepository.encode(decryptedPrivateKey)).toBe(
-        PrivateKeyRepository.encode(keyPair.privateKey)
+        PrivateKeyRepository.encode(keyPair.privateKey())
       );
     });
   });

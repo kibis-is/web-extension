@@ -1,7 +1,7 @@
 import { encodeURLSafe as encodeBase64URLSafe } from '@stablelib/base64';
 import { encode as encodeHex } from '@stablelib/hex';
 import SparkMD5 from 'spark-md5';
-import { randomBytes } from 'tweetnacl';
+import { randomBytes } from '@stablelib/random';
 
 // constants
 import { ARC_0026_SCHEME, ARC_0300_SCHEME } from '@extension/constants';
@@ -16,8 +16,8 @@ import {
   ARC0300QueryEnum,
 } from '@extension/enums';
 
-// models
-import Ed21559KeyPair from '@extension/models/Ed21559KeyPair';
+// cryptography
+import Ed21559KeyPair from '@extension/cryptography/Ed21559KeyPair';
 
 // types
 import type { IARC0300AccountImportSchema } from '@extension/types';
@@ -55,7 +55,7 @@ describe(`${__dirname}#parseARC0300AccountImportSchema`, () => {
 
     queryParams.append(
       ARC0300QueryEnum.PrivateKey,
-      encodeBase64URLSafe(keyPair.privateKey)
+      encodeBase64URLSafe(keyPair.privateKey())
     );
 
     uri = `${uri}?${queryParams.toString()}`;
@@ -73,7 +73,7 @@ describe(`${__dirname}#parseARC0300AccountImportSchema`, () => {
     expect(result.paths).toEqual([ARC0300PathEnum.Import]);
     expect(
       result.query[ARC0300QueryEnum.PrivateKey].includes(
-        encodeBase64URLSafe(keyPair.privateKey)
+        encodeBase64URLSafe(keyPair.privateKey())
       )
     ).toBe(true);
   });
@@ -87,7 +87,7 @@ describe(`${__dirname}#parseARC0300AccountImportSchema`, () => {
 
     queryParams.append(
       ARC0300QueryEnum.PrivateKey,
-      encodeBase64URLSafe(keyPair.privateKey)
+      encodeBase64URLSafe(keyPair.privateKey())
     );
 
     uri = `${uri}?${queryParams.toString()}`;
@@ -105,7 +105,7 @@ describe(`${__dirname}#parseARC0300AccountImportSchema`, () => {
     expect(result.paths).toEqual([ARC0300PathEnum.Import]);
     expect(
       result.query[ARC0300QueryEnum.PrivateKey].includes(
-        encodeBase64URLSafe(keyPair.privateKey)
+        encodeBase64URLSafe(keyPair.privateKey())
       )
     ).toBe(true);
   });
@@ -123,7 +123,7 @@ describe(`${__dirname}#parseARC0300AccountImportSchema`, () => {
 
     queryParams.append(
       ARC0300QueryEnum.PrivateKey,
-      encodeBase64URLSafe(keyPair.privateKey)
+      encodeBase64URLSafe(keyPair.privateKey())
     );
     queryParams.append(ARC0300QueryEnum.Name, name);
     queryParams.append(ARC0300QueryEnum.Checksum, checksum);
@@ -148,7 +148,7 @@ describe(`${__dirname}#parseARC0300AccountImportSchema`, () => {
     expect(result.query[ARC0300QueryEnum.Page]?.total).toBe(pageTotal);
     expect(
       result.query[ARC0300QueryEnum.PrivateKey].includes(
-        encodeBase64URLSafe(keyPair.privateKey)
+        encodeBase64URLSafe(keyPair.privateKey())
       )
     ).toBe(true);
   });

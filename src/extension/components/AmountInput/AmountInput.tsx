@@ -11,14 +11,14 @@ import { encodeURLSafe as encodeBase64URLSafe } from '@stablelib/base64';
 import BigNumber from 'bignumber.js';
 import React, { type FC, type ReactElement } from 'react';
 import { useTranslation } from 'react-i18next';
-import { randomBytes } from 'tweetnacl';
+import { randomBytes } from '@stablelib/random';
 
 // components
-import Label from '@extension/components/Label';
+import Label from '@common/components/Label';
 import InformationIcon from '@extension/components/InformationIcon';
 
 // constants
-import { DEFAULT_GAP, INPUT_HEIGHT } from '@extension/constants';
+import { DEFAULT_GAP, INPUT_HEIGHT } from '@common/constants';
 
 // enums
 import { AssetTypeEnum } from '@extension/enums';
@@ -32,19 +32,20 @@ import useSubTextColor from '@extension/hooks/useSubTextColor';
 import useTextBackgroundColor from '@extension/hooks/useTextBackgroundColor';
 
 // theme
-import { theme } from '@extension/theme';
+import { theme } from '@common/theme';
 
 // types
-import type { IProps } from './types';
+import type { TProps } from './types';
 
 // utils
 import convertToStandardUnit from '@common/utils/convertToStandardUnit';
 import formatCurrencyUnit from '@common/utils/formatCurrencyUnit';
 import convertGenesisHashToHex from '@extension/utils/convertGenesisHashToHex';
 
-const AmountInput: FC<IProps> = ({
+const AmountInput: FC<TProps> = ({
   account,
   asset,
+  colorMode,
   id,
   label,
   network,
@@ -172,6 +173,7 @@ const AmountInput: FC<IProps> = ({
       <HStack justifyContent="space-between" spacing={1} w="full">
         {/*label*/}
         <Label
+          colorMode={colorMode}
           inputID={_id}
           label={label || t<string>('labels.amount')}
           px={DEFAULT_GAP - 2}

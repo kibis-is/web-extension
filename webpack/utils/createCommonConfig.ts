@@ -9,29 +9,50 @@ import { SRC_PATH } from '../constants';
  * @returns {Configuration} a common configuration.
  */
 export default function createCommonConfig(): Configuration {
+  const clientPath = resolve(SRC_PATH, 'client');
   const commonPath = resolve(SRC_PATH, 'common');
   const extensionPath = resolve(SRC_PATH, 'extension');
-  const externalPath = resolve(SRC_PATH, 'external');
+  const middlewarePath = resolve(SRC_PATH, 'middleware');
 
   return {
     node: false,
     resolve: {
       alias: {
+        // client
+        ['@client/apps']: resolve(clientPath, 'apps'),
+        ['@client/components']: resolve(clientPath, 'components'),
+        ['@client/constants']: resolve(clientPath, 'constants'),
+        ['@client/hooks']: resolve(clientPath, 'hooks'),
+        ['@client/interceptors']: resolve(clientPath, 'interceptors'),
+        ['@client/managers']: resolve(clientPath, 'managers'),
+        ['@client/styles']: resolve(clientPath, 'styles'),
+        ['@client/types']: resolve(clientPath, 'types'),
+        ['@client/utils']: resolve(clientPath, 'utils'),
+
         // common
+        ['@common/components']: resolve(commonPath, 'components'),
         ['@common/constants']: resolve(commonPath, 'constants'),
         ['@common/enums']: resolve(commonPath, 'enums'),
         ['@common/errors']: resolve(commonPath, 'errors'),
+        ['@common/hooks']: resolve(commonPath, 'hooks'),
+        ['@common/managers']: resolve(commonPath, 'managers'),
         ['@common/messages']: resolve(commonPath, 'messages'),
+        ['@common/services']: resolve(commonPath, 'services'),
+        ['@common/theme']: resolve(commonPath, 'theme'),
         ['@common/types']: resolve(commonPath, 'types'),
         ['@common/utils']: resolve(commonPath, 'utils'),
+
+        // docs
         ['@docs']: resolve(SRC_PATH, 'docs'),
+
         // extension
         ['@extension/components']: resolve(extensionPath, 'components'),
         ['@extension/config']: resolve(extensionPath, 'config'),
         ['@extension/constants']: resolve(extensionPath, 'constants'),
         ['@extension/contracts']: resolve(extensionPath, 'contracts'),
+        ['@extension/cryptography']: resolve(extensionPath, 'cryptography'),
+        ['@extension/decorators']: resolve(extensionPath, 'decorators'),
         ['@extension/enums']: resolve(extensionPath, 'enums'),
-        ['@extension/errors']: resolve(extensionPath, 'errors'),
         ['@extension/events']: resolve(extensionPath, 'events'),
         ['@extension/features']: resolve(extensionPath, 'features'),
         ['@extension/fonts']: resolve(extensionPath, 'fonts'),
@@ -39,6 +60,10 @@ export default function createCommonConfig(): Configuration {
         ['@extension/icons']: resolve(extensionPath, 'icons'),
         ['@extension/images']: resolve(extensionPath, 'images'),
         ['@extension/managers']: resolve(extensionPath, 'managers'),
+        ['@extension/message-handlers']: resolve(
+          extensionPath,
+          'message-handlers'
+        ),
         ['@extension/modals']: resolve(extensionPath, 'modals'),
         ['@extension/models']: resolve(extensionPath, 'models'),
         ['@extension/pages']: resolve(extensionPath, 'pages'),
@@ -47,15 +72,16 @@ export default function createCommonConfig(): Configuration {
         ['@extension/selectors']: resolve(extensionPath, 'selectors'),
         ['@extension/services']: resolve(extensionPath, 'services'),
         ['@extension/styles']: resolve(extensionPath, 'styles'),
-        ['@extension/theme']: resolve(extensionPath, 'theme'),
         ['@extension/translations']: resolve(extensionPath, 'translations'),
         ['@extension/types']: resolve(extensionPath, 'types'),
         ['@extension/utils']: resolve(extensionPath, 'utils'),
-        // external
-        ['@external/constants']: resolve(externalPath, 'constants'),
-        ['@external/services']: resolve(externalPath, 'services'),
-        ['@external/types']: resolve(externalPath, 'types'),
-        ['@external/utils']: resolve(externalPath, 'utils'),
+
+        // middleware
+        ['@middleware/message-brokers']: resolve(
+          middlewarePath,
+          'message-brokers'
+        ),
+        ['@middleware/utils']: resolve(middlewarePath, 'utils'),
       },
       extensions: ['.css', '.js', '.ts', '.tsx'],
     },

@@ -23,14 +23,11 @@ import { useTranslation } from 'react-i18next';
 import { IoCheckmarkOutline, IoCloseOutline } from 'react-icons/io5';
 
 // components
-import IconButton from '@extension/components/IconButton';
+import IconButton from '@common/components/IconButton';
 
 // constants
-import {
-  ACCOUNT_NAME_BYTE_LIMIT,
-  BODY_BACKGROUND_COLOR,
-  DEFAULT_GAP,
-} from '@extension/constants';
+import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@common/constants';
+import { ACCOUNT_NAME_BYTE_LIMIT } from '@extension/constants';
 
 // hooks
 import useButtonHoverBackgroundColor from '@extension/hooks/useButtonHoverBackgroundColor';
@@ -40,16 +37,17 @@ import useSubTextColor from '@extension/hooks/useSubTextColor';
 import useTextBackgroundColor from '@extension/hooks/useTextBackgroundColor';
 
 // theme
-import { theme } from '@extension/theme';
+import { theme } from '@common/theme';
 
 // types
 import type { IProps } from './types';
 
 // utils
-import ellipseAddress from '@extension/utils/ellipseAddress';
+import ellipseAddress from '@common/utils/ellipseAddress';
 
 const EditableAccountNameField: FC<IProps> = ({
   address,
+  colorMode,
   name,
   isEditing,
   isLoading,
@@ -203,6 +201,7 @@ const EditableAccountNameField: FC<IProps> = ({
             _hover={{ backgroundColor: buttonHoverBackgroundColor }}
             aria-label="Confirm rename account"
             bg={textBackgroundColor}
+            colorMode={colorMode}
             icon={IoCheckmarkOutline}
             onClick={handleSubmitClick}
             size="sm"
@@ -221,6 +220,7 @@ const EditableAccountNameField: FC<IProps> = ({
             _hover={{ backgroundColor: buttonHoverBackgroundColor }}
             aria-label="Cancel rename account"
             bg={textBackgroundColor}
+            colorMode={colorMode}
             icon={IoCloseOutline}
             onClick={handleCancelClick}
             size="sm"

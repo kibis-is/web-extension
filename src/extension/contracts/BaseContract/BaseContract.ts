@@ -22,7 +22,7 @@ import { Buffer } from 'buffer';
 import { SIMULATE_MINIMUM_FEE } from './constants';
 
 // errors
-import { ReadABIContractError } from '@extension/errors';
+import { ReadABIContractError } from '@common/errors';
 
 // types
 import type { ILogger } from '@common/types';

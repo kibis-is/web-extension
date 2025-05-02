@@ -17,7 +17,7 @@ import { NativeBalanceSkeleton } from '@extension/components/NativeBalance';
 import useDefaultTextColor from '@extension/hooks/useDefaultTextColor';
 
 // utils
-import ellipseAddress from '@extension/utils/ellipseAddress';
+import ellipseAddress from '@common/utils/ellipseAddress';
 
 const AccountPageSkeletonContent: FC<StackProps> = (props) => {
   // memos
@@ -30,7 +30,7 @@ const AccountPageSkeletonContent: FC<StackProps> = (props) => {
     []
   );
   // hooks
-  const defaultTextColor: string = useDefaultTextColor();
+  const defaultTextColor = useDefaultTextColor();
 
   return (
     <VStack {...props}>

@@ -23,11 +23,7 @@ import type { IAppProps, IRegistrationRootState } from '@extension/types';
 import makeStore from '@extension/utils/makeStore';
 import createRouter from './utils/createRouter';
 
-const App: FC<IAppProps> = ({
-  i18n,
-  initialColorMode,
-  initialFontFamily,
-}: IAppProps) => {
+const App: FC<IAppProps> = ({ i18n, initialColorMode, initialFontFamily }) => {
   const store: Store<IRegistrationRootState> =
     makeStore<IRegistrationRootState>(
       combineReducers({

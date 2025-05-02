@@ -23,7 +23,7 @@ import {
 import OverflowMenu from '@extension/components/OverflowMenu';
 
 // constants
-import { DEFAULT_GAP } from '@extension/constants';
+import { DEFAULT_GAP } from '@common/constants';
 
 // hooks
 import useDefaultTextColor from '@extension/hooks/useDefaultTextColor';
@@ -123,7 +123,6 @@ const CustomNodeItem: FC<IProps> = ({
 
       {/*overflow menu*/}
       <OverflowMenu
-        context={item.id}
         items={[
           // view
           {

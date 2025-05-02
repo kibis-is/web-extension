@@ -1,4 +1,4 @@
-import { v4 as uuid } from 'uuid';
+import { generate as generateUUID } from '@agoralabs-sh/uuid';
 
 // constants
 import { PASSWORD_TAG_ITEM_KEY } from '@extension/constants';
@@ -28,7 +28,7 @@ export default class PasswordTagRepository extends BaseRepository {
   public static create({ encryptedTag }: ICreateOptions): IPasswordTag {
     return {
       encryptedTag: PasswordTagRepository.encode(encryptedTag),
-      id: uuid(),
+      id: generateUUID(),
       version: PasswordTagRepository.version,
     };
   }

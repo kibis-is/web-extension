@@ -1,14 +1,14 @@
 import { ModalBody, ModalContent, VStack } from '@chakra-ui/react';
-import React, { FC } from 'react';
+import React, { type FC } from 'react';
 
 // components
 import ModalSkeletonItem from '@extension/components/ModalSkeletonItem';
 
 // constants
-import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@extension/constants';
+import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@common/constants';
 
 // theme
-import { theme } from '@extension/theme';
+import { theme } from '@common/theme';
 
 const ARC0300KeyRegistrationTransactionSendModalContentSkeleton: FC = () => {
   return (

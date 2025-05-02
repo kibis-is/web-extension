@@ -20,7 +20,8 @@ import PageHeader from '@extension/components/PageHeader';
 import PageItem from '@extension/components/PageItem';
 
 // constants
-import { DEFAULT_GAP, PAGE_ITEM_HEIGHT } from '@extension/constants';
+import { DEFAULT_GAP } from '@common/constants';
+import { PAGE_ITEM_HEIGHT } from '@extension/constants';
 
 // hooks
 import useDefaultTextColor from '@extension/hooks/useDefaultTextColor';
@@ -32,6 +33,7 @@ import PrivateKeyRepository from '@extension/repositories/PrivateKeyRepository';
 // selectors
 import {
   useSelectAccounts,
+  useSelectSettingsColorMode,
   useSelectSettingsPreferredBlockExplorer,
 } from '@extension/selectors';
 
@@ -40,9 +42,9 @@ import type { IAccountUndoReKeyTransaction } from '@extension/types';
 import type { IProps } from './types';
 
 // utils
-import convertPublicKeyToAVMAddress from '@extension/utils/convertPublicKeyToAVMAddress';
+import convertPublicKeyToAVMAddress from '@common/utils/convertPublicKeyToAVMAddress';
 import createIconFromDataUri from '@extension/utils/createIconFromDataUri';
-import ellipseAddress from '@extension/utils/ellipseAddress';
+import ellipseAddress from '@common/utils/ellipseAddress';
 
 const AccountUndoReKeyTransactionPage: FC<
   IProps<IAccountUndoReKeyTransaction>
@@ -51,6 +53,7 @@ const AccountUndoReKeyTransactionPage: FC<
   const { isOpen, onOpen, onClose } = useDisclosure();
   // selectors
   const accounts = useSelectAccounts();
+  const colorMode = useSelectSettingsColorMode();
   const preferredExplorer = useSelectSettingsPreferredBlockExplorer();
   // hooks
   const defaultTextColor = useDefaultTextColor();
@@ -83,6 +86,7 @@ const AccountUndoReKeyTransactionPage: FC<
   return (
     <>
       <PageHeader
+        colorMode={colorMode}
         title={t<string>('headings.transaction', { context: transaction.type })}
       />
 

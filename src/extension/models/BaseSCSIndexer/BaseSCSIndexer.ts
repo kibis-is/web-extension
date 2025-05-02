@@ -1,5 +1,5 @@
 // errors
-import { NetworkConnectionError, UnknownError } from '@extension/errors';
+import { NetworkConnectionError, UnknownError } from '@common/errors';
 
 // types
 import type { IBaseNetworkServiceProvider } from '@extension/types';

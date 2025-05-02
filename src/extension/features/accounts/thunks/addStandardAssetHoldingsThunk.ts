@@ -20,7 +20,7 @@ import {
   NetworkNotSelectedError,
   NotEnoughMinimumBalanceError,
   OfflineError,
-} from '@extension/errors';
+} from '@common/errors';
 
 // models
 import NetworkClient from '@extension/models/NetworkClient';
@@ -43,7 +43,7 @@ import type {
 
 // utils
 import calculateMinimumBalanceRequirementForStandardAssets from '@extension/utils/calculateMinimumBalanceRequirementForStandardAssets';
-import convertPublicKeyToAVMAddress from '@extension/utils/convertPublicKeyToAVMAddress';
+import convertPublicKeyToAVMAddress from '@common/utils/convertPublicKeyToAVMAddress';
 import isWatchAccount from '@extension/utils/isWatchAccount';
 import signTransaction from '@extension/utils/signTransaction';
 import convertGenesisHashToHex from '@extension/utils/convertGenesisHashToHex';

@@ -17,7 +17,7 @@ import useButtonHoverBackgroundColor from '@extension/hooks/useButtonHoverBackgr
 import useDefaultTextColor from '@extension/hooks/useDefaultTextColor';
 
 // utils
-import ellipseAddress from '@extension/utils/ellipseAddress';
+import ellipseAddress from '@common/utils/ellipseAddress';
 
 const SideBarSkeletonItem: FC = () => {
   // hooks

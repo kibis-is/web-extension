@@ -12,7 +12,7 @@ import {
   MalformedDataError,
   NetworkNotSelectedError,
   OfflineError,
-} from '@extension/errors';
+} from '@common/errors';
 
 // repositories
 import AccountRepository from '@extension/repositories/AccountRepository';
@@ -33,7 +33,7 @@ import createUnsignedPaymentTransactions from '@extension/utils/createUnsignedPa
 import createUnsignedStandardAssetTransferTransactions from '@extension/utils/createUnsignedStandardAssetTransferTransactions';
 import selectNetworkFromSettings from '@extension/utils/selectNetworkFromSettings';
 import selectNodeIDByGenesisHashFromSettings from '@extension/utils/selectNodeIDByGenesisHashFromSettings';
-import convertPublicKeyToAVMAddress from '@extension/utils/convertPublicKeyToAVMAddress';
+import convertPublicKeyToAVMAddress from '@common/utils/convertPublicKeyToAVMAddress';
 
 const createUnsignedTransactionsThunk: AsyncThunk<
   Transaction[], // return

@@ -1,4 +1,5 @@
 // types
+import type { IBaseComponentProps } from '@common/types';
 import type {
   IAccountGroup,
   IAccountWithExtendedProps,
@@ -11,7 +12,7 @@ import type {
  * @property {IAccountGroup} group - The group.
  * @property {boolean} isShortForm - Whether the full item is being shown or just the avatar.
  */
-interface IProps {
+interface IProps extends IBaseComponentProps {
   accounts: IAccountWithExtendedProps[];
   activeAccountID: string | null;
   group: IAccountGroup;

@@ -2,7 +2,7 @@
 import { EncryptionMethodEnum } from '@extension/enums';
 
 // errors
-import { MalformedDataError } from '@extension/errors';
+import { MalformedDataError } from '@common/errors';
 
 // managers
 import PasskeyManager from '@extension/managers/PasskeyManager';
@@ -50,19 +50,19 @@ export default async function savePrivateKeyItemWithPasskey({
   }
 
   privateKeyItem = await _privateKeyRepository.fetchByPublicKey(
-    keyPair.publicKey
+    keyPair.publicKey()
   );
 
   if (!privateKeyItem) {
     logger?.debug(
       `${_functionName}: key for "${PrivateKeyRepository.encode(
-        keyPair.publicKey
+        keyPair.publicKey()
       )}" (public key) doesn't exist, creating a new one`
     );
 
     // encrypt the private key and add it to storage
     encryptedPrivateKey = await PasskeyManager.encryptBytes({
-      bytes: keyPair.privateKey,
+      bytes: keyPair.privateKey(),
       inputKeyMaterial,
       logger,
       passkey,
@@ -72,9 +72,9 @@ export default async function savePrivateKeyItemWithPasskey({
         encryptedPrivateKey,
         encryptionID: passkey.id,
         encryptionMethod: EncryptionMethodEnum.Passkey,
-        publicKey: keyPair.publicKey,
+        publicKey: keyPair.publicKey(),
         ...(saveUnencryptedPrivateKey && {
-          privateKey: keyPair.privateKey,
+          privateKey: keyPair.privateKey(),
         }),
       })
     );

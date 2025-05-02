@@ -1,2 +1,2 @@
-export { default } from './updateAccountInformation';
+export { default } from './updateAccountStakingApps';
 export * from './types';

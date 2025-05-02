@@ -2,10 +2,10 @@ import { AsyncThunk, createAsyncThunk } from '@reduxjs/toolkit';
 import browser from 'webextension-polyfill';
 
 // enums
-import { MessagesThunkEnum } from '@extension/enums';
+import { ThunkEnum } from '../enums';
 
 // messages
-import { ProviderRegistrationCompletedMessage } from '@common/messages';
+import ProviderRegistrationCompletedMessage from '@common/messages/ProviderRegistrationCompletedMessage';
 
 // types
 import type {
@@ -21,7 +21,7 @@ const sendRegistrationCompletedThunk: AsyncThunk<
   void,
   undefined,
   IBaseAsyncThunkConfig<IRegistrationRootState>
->(MessagesThunkEnum.SendRegistrationCompleted, async () => {
+>(ThunkEnum.SendRegistrationCompleted, async () => {
   // send the message
   await browser.runtime.sendMessage(new ProviderRegistrationCompletedMessage());
 });

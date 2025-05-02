@@ -1,4 +1,4 @@
-import { randomBytes } from 'tweetnacl';
+import { randomBytes } from '@stablelib/random';
 
 // repositories
 import AccountRepository from '@extension/repositories/AccountRepository';

@@ -9,7 +9,7 @@ import CopyIconButton from '@extension/components/CopyIconButton';
 import OpenTabIconButton from '@extension/components/OpenTabIconButton';
 
 // constants
-import { DEFAULT_GAP, MODAL_ITEM_HEIGHT } from '@extension/constants';
+import { DEFAULT_GAP, MODAL_ITEM_HEIGHT } from '@common/constants';
 
 // hooks
 import useDefaultTextColor from '@extension/hooks/useDefaultTextColor';

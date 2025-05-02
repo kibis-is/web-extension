@@ -1,3 +1,4 @@
+import { generate as generateUUID } from '@agoralabs-sh/uuid';
 import {
   Checkbox,
   Heading,
@@ -21,10 +22,9 @@ import {
   IoSaveOutline,
 } from 'react-icons/io5';
 import { useDispatch } from 'react-redux';
-import { v4 as uuid } from 'uuid';
 
 // components
-import Button from '@extension/components/Button';
+import Button from '@common/components/Button';
 import CustomNodeSummaryModalContent from '@extension/components/CustomNodeSummaryModalContent';
 import GenericInput from '@extension/components/GenericInput';
 import ModalSubHeading from '@extension/components/ModalSubHeading';
@@ -34,10 +34,10 @@ import AddCustomNodeLoadingModalContent from './AddCustomNodeLoadingModalContent
 // constants
 import {
   BODY_BACKGROUND_COLOR,
-  CUSTOM_NODE_BYTE_LIMIT,
   DEFAULT_GAP,
   MODAL_ITEM_HEIGHT,
-} from '@extension/constants';
+} from '@common/constants';
+import { CUSTOM_NODE_BYTE_LIMIT } from '@extension/constants';
 
 // features
 import { addCustomNodeThunk } from '@extension/features/networks';
@@ -56,10 +56,11 @@ import {
   useSelectNetworks,
   useSelectNetworksSaving,
   useSelectSettings,
+  useSelectSettingsColorMode,
 } from '@extension/selectors';
 
 // theme
-import { theme } from '@extension/theme';
+import { theme } from '@common/theme';
 
 // types
 import type {
@@ -87,6 +88,7 @@ const AddCustomNodeModal: FC<IProps> = ({ isOpen, onClose, onComplete }) => {
     onClose: onAdvancedClose,
   } = useDisclosure();
   // selectors
+  const colorMode = useSelectSettingsColorMode();
   const logger = useSelectLogger();
   const networks = useSelectNetworks();
   const saving = useSelectNetworksSaving();
@@ -329,7 +331,7 @@ const AddCustomNodeModal: FC<IProps> = ({ isOpen, onClose, onComplete }) => {
         url: algodURLValue,
       },
       genesisHash: _network.genesisHash,
-      id: uuid(),
+      id: generateUUID(),
       name: nameValue,
       indexer: indexerURLValue
         ? {
@@ -388,7 +390,7 @@ const AddCustomNodeModal: FC<IProps> = ({ isOpen, onClose, onComplete }) => {
   // renders
   const renderContent = () => {
     if (fetching) {
-      return <AddCustomNodeLoadingModalContent />;
+      return <AddCustomNodeLoadingModalContent colorMode={colorMode} />;
     }
 
     if (customNode && network) {
@@ -405,6 +407,7 @@ const AddCustomNodeModal: FC<IProps> = ({ isOpen, onClose, onComplete }) => {
         {/*name*/}
         <GenericInput
           charactersRemaining={nameCharactersRemaining}
+          colorMode={colorMode}
           error={nameError}
           label={nameLabel}
           isDisabled={fetching}
@@ -437,6 +440,7 @@ const AddCustomNodeModal: FC<IProps> = ({ isOpen, onClose, onComplete }) => {
         {/*algod url*/}
         <GenericInput
           error={algodURLError}
+          colorMode={colorMode}
           label={algodURLLabel}
           isDisabled={fetching}
           onBlur={algodURLOnBlur}
@@ -451,6 +455,7 @@ const AddCustomNodeModal: FC<IProps> = ({ isOpen, onClose, onComplete }) => {
         {/*algod port*/}
         <GenericInput
           error={algodPortError}
+          colorMode={colorMode}
           label={algodPortLabel}
           isDisabled={fetching}
           onBlur={algodPortOnBlur}
@@ -464,6 +469,7 @@ const AddCustomNodeModal: FC<IProps> = ({ isOpen, onClose, onComplete }) => {
         {/*algod token*/}
         <GenericInput
           error={algodTokenError}
+          colorMode={colorMode}
           label={algodTokenLabel}
           informationText={t<string>('captions.algodToken')}
           isDisabled={fetching}
@@ -489,6 +495,7 @@ const AddCustomNodeModal: FC<IProps> = ({ isOpen, onClose, onComplete }) => {
             {/*indexer url*/}
             <GenericInput
               error={indexerURLError}
+              colorMode={colorMode}
               label={indexerURLLabel}
               isDisabled={fetching}
               onBlur={indexerURLOnBlur}
@@ -502,6 +509,7 @@ const AddCustomNodeModal: FC<IProps> = ({ isOpen, onClose, onComplete }) => {
             {/*indexer port*/}
             <GenericInput
               error={indexerPortError}
+              colorMode={colorMode}
               label={indexerPortLabel}
               isDisabled={fetching}
               onBlur={indexerPortOnBlur}
@@ -515,6 +523,7 @@ const AddCustomNodeModal: FC<IProps> = ({ isOpen, onClose, onComplete }) => {
             {/*indexer token*/}
             <GenericInput
               error={indexerTokenError}
+              colorMode={colorMode}
               label={indexerTokenLabel}
               informationText={t<string>('captions.indexerToken')}
               isDisabled={fetching}
@@ -560,6 +569,7 @@ const AddCustomNodeModal: FC<IProps> = ({ isOpen, onClose, onComplete }) => {
                 <>
                   {/*previous button*/}
                   <Button
+                    colorMode={colorMode}
                     isLoading={saving}
                     leftIcon={<IoArrowBackOutline />}
                     onClick={handlePreviousClick}
@@ -572,6 +582,7 @@ const AddCustomNodeModal: FC<IProps> = ({ isOpen, onClose, onComplete }) => {
 
                   {/*save button*/}
                   <Button
+                    colorMode={colorMode}
                     isLoading={saving}
                     onClick={handleSaveClick}
                     rightIcon={<IoSaveOutline />}
@@ -586,6 +597,7 @@ const AddCustomNodeModal: FC<IProps> = ({ isOpen, onClose, onComplete }) => {
                 <>
                   {/*cancel button*/}
                   <Button
+                    colorMode={colorMode}
                     onClick={handleCancelClick}
                     size="lg"
                     variant="outline"
@@ -596,6 +608,7 @@ const AddCustomNodeModal: FC<IProps> = ({ isOpen, onClose, onComplete }) => {
 
                   {/*next button*/}
                   <Button
+                    colorMode={colorMode}
                     isLoading={fetching}
                     onClick={handleNextClick}
                     rightIcon={<IoArrowForwardOutline />}

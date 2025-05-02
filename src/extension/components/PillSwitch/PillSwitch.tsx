@@ -13,7 +13,7 @@ import useBorderColor from '@extension/hooks/useBorderColor';
 import useDefaultTextColor from '@extension/hooks/useDefaultTextColor';
 
 // theme
-import { theme } from '@extension/theme';
+import { theme } from '@common/theme';
 
 interface IProps {
   index: number;

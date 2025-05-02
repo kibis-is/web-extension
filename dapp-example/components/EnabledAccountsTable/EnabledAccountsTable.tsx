@@ -14,7 +14,7 @@ import {
 import React, { type FC } from 'react';
 
 // constants
-import { DEFAULT_GAP } from '@extension/constants';
+import { DEFAULT_GAP } from '@common/constants';
 
 // enums
 import { ConnectionTypeEnum } from '../../enums';

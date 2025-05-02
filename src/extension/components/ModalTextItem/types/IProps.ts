@@ -1,7 +1,7 @@
 import type { StackProps } from '@chakra-ui/react';
 
 // types
-import type { TSizes } from '@extension/types';
+import type { TSizes } from '@common/types';
 
 interface IProps extends StackProps {
   copyButtonLabel?: string;

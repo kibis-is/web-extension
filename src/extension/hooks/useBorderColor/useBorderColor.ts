@@ -1,6 +1,9 @@
 // hooks
-import useColorModeValue from '@extension/hooks/useColorModeValue';
+import _useBorderColor from '@common/hooks/useBorderColor';
+
+// selectors
+import { useSelectSettingsColorMode } from '@extension/selectors';
 
 export default function useBorderColor(): string {
-  return useColorModeValue('gray.300', 'whiteAlpha.400');
+  return _useBorderColor(useSelectSettingsColorMode());
 }

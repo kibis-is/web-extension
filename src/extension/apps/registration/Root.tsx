@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { Outlet } from 'react-router-dom';
 
 // constants
-import { BODY_BACKGROUND_COLOR } from '@extension/constants';
+import { BODY_BACKGROUND_COLOR } from '@common/constants';
 
 // features
 import { fetchARC0200AssetsFromStorageThunk } from '@extension/features/arc0200-assets';

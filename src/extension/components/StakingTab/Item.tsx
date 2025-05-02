@@ -20,7 +20,7 @@ import {
   BODY_BACKGROUND_COLOR,
   DEFAULT_GAP,
   TAB_ITEM_HEIGHT,
-} from '@extension/constants';
+} from '@common/constants';
 
 // hooks
 import useButtonHoverBackgroundColor from '@extension/hooks/useButtonHoverBackgroundColor';
@@ -33,12 +33,12 @@ import useSubTextColor from '@extension/hooks/useSubTextColor';
 import type { IItemProps } from './types';
 
 // utils
-import calculateIconSize from '@extension/utils/calculateIconSize';
-import convertPublicKeyToAVMAddress from '@extension/utils/convertPublicKeyToAVMAddress';
+import calculateIconSize from '@common/utils/calculateIconSize';
+import convertPublicKeyToAVMAddress from '@common/utils/convertPublicKeyToAVMAddress';
 import convertToStandardUnit from '@common/utils/convertToStandardUnit';
-import createIconFromDataUri from '@extension/utils/createIconFromDataUri';
-import ellipseAddress from '@extension/utils/ellipseAddress';
+import ellipseAddress from '@common/utils/ellipseAddress';
 import formatCurrencyUnit from '@common/utils/formatCurrencyUnit';
+import createIconFromDataUri from '@extension/utils/createIconFromDataUri';
 
 const Item: FC<IItemProps> = ({ app, colorMode, network, onClick }) => {
   const { t } = useTranslation();

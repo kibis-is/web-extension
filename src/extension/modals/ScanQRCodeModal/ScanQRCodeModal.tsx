@@ -23,6 +23,7 @@ import {
   useSelectLogger,
   useSelectNetworks,
   useSelectScanQRCodeModal,
+  useSelectSettingsColorMode,
 } from '@extension/selectors';
 
 // types
@@ -44,6 +45,7 @@ import determinePaginationFromARC0300Schemas from '@extension/utils/determinePag
 const ScanQRCodeModal: FC<IModalProps> = ({ onClose }) => {
   const { t } = useTranslation();
   // selectors
+  const colorMode = useSelectSettingsColorMode();
   const logger = useSelectLogger();
   const networks = useSelectNetworks();
   const scanQRCodeModal = useSelectScanQRCodeModal();
@@ -107,6 +109,7 @@ const ScanQRCodeModal: FC<IModalProps> = ({ onClose }) => {
       if (!primeSchema) {
         return (
           <UnknownURIModalContent
+            colorMode={colorMode}
             onPreviousClick={handlePreviousClick}
             uri={uris[0]}
           />
@@ -130,9 +133,9 @@ const ScanQRCodeModal: FC<IModalProps> = ({ onClose }) => {
               if (isARC0300SchemaPaginationComplete(schemas)) {
                 return (
                   <ARC0300AccountImportModalContent
-                    _context={_context}
                     cancelButtonIcon={<IoArrowBackOutline />}
                     cancelButtonLabel={t<string>('buttons.previous')}
+                    colorMode={colorMode}
                     onComplete={handleClose}
                     onCancel={handlePreviousClick}
                     schemaOrSchemas={schemas as IARC0300AccountImportSchema[]}
@@ -161,9 +164,9 @@ const ScanQRCodeModal: FC<IModalProps> = ({ onClose }) => {
             ) {
               return (
                 <ARC0300AssetAddModalContent
-                  _context={_context}
                   cancelButtonIcon={<IoArrowBackOutline />}
                   cancelButtonLabel={t<string>('buttons.previous')}
+                  colorMode={colorMode}
                   onComplete={handleClose}
                   onCancel={handlePreviousClick}
                   schemaOrSchemas={primeSchema as IARC0300AssetAddSchema}
@@ -192,9 +195,9 @@ const ScanQRCodeModal: FC<IModalProps> = ({ onClose }) => {
                 case TransactionType.keyreg:
                   return (
                     <ARC0300KeyRegistrationTransactionSendModalContent
-                      _context={_context}
                       cancelButtonIcon={<IoArrowBackOutline />}
                       cancelButtonLabel={t<string>('buttons.previous')}
+                      colorMode={colorMode}
                       onComplete={handleClose}
                       onCancel={handlePreviousClick}
                       schemaOrSchemas={
@@ -219,6 +222,7 @@ const ScanQRCodeModal: FC<IModalProps> = ({ onClose }) => {
     if (scanViaCamera) {
       return (
         <ScanQRCodeViaCameraModalContent
+          colorMode={colorMode}
           onPreviousClick={handlePreviousClick}
           onURI={handleOnURI}
           {...(pagination && { pagination })}
@@ -229,6 +233,7 @@ const ScanQRCodeModal: FC<IModalProps> = ({ onClose }) => {
     if (scanViaScreenCapture) {
       return (
         <ScanQRCodeViaScreenCaptureModalContent
+          colorMode={colorMode}
           onPreviousClick={handlePreviousClick}
           onURI={handleOnURI}
           {...(pagination && { pagination })}
@@ -239,6 +244,7 @@ const ScanQRCodeModal: FC<IModalProps> = ({ onClose }) => {
     if (scanViaTab) {
       return (
         <ScanQRCodeViaTabModalContent
+          colorMode={colorMode}
           onPreviousClick={handlePreviousClick}
           onURI={handleOnURI}
           {...(pagination && { pagination })}
@@ -248,6 +254,7 @@ const ScanQRCodeModal: FC<IModalProps> = ({ onClose }) => {
 
     return (
       <ScanModeModalContent
+        colorMode={colorMode}
         onCancelClick={handleCancelClick}
         onScanViaCameraClick={handleScanViaCameraClick}
         onScanViaScreenCaptureClick={handleScanViaScreenCaptureClick}

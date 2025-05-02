@@ -4,7 +4,7 @@ import browser from 'webextension-polyfill';
 import { EncryptionMethodEnum } from '@extension/enums';
 
 // errors
-import { InvalidPasswordError, MalformedDataError } from '@extension/errors';
+import { InvalidPasswordError, MalformedDataError } from '@common/errors';
 
 // managers
 import PasswordManager from '@extension/managers/PasswordManager';
@@ -57,13 +57,13 @@ export default async function savePrivateKeyItemWithPassword({
   }
 
   privateKeyItem = await _privateKeyRepository.fetchByPublicKey(
-    keyPair.publicKey
+    keyPair.publicKey()
   );
 
   if (!privateKeyItem) {
     logger?.debug(
       `${_functionName}: key for "${PrivateKeyRepository.encode(
-        keyPair.publicKey
+        keyPair.publicKey()
       )}" (public key) doesn't exist, creating a new one`
     );
 
@@ -79,7 +79,7 @@ export default async function savePrivateKeyItemWithPassword({
 
     // encrypt the private key and add it to storage.
     encryptedPrivateKey = await PasswordManager.encryptBytes({
-      bytes: keyPair.privateKey,
+      bytes: keyPair.privateKey(),
       logger,
       password,
     });
@@ -88,9 +88,9 @@ export default async function savePrivateKeyItemWithPassword({
         encryptedPrivateKey,
         encryptionID: passwordTagItem.id,
         encryptionMethod: EncryptionMethodEnum.Password,
-        publicKey: keyPair.publicKey,
+        publicKey: keyPair.publicKey(),
         ...(saveUnencryptedPrivateKey && {
-          privateKey: keyPair.privateKey,
+          privateKey: keyPair.privateKey(),
         }),
       })
     );

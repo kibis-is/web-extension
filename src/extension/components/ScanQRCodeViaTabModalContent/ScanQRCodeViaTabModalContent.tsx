@@ -12,11 +12,11 @@ import { useTranslation } from 'react-i18next';
 import { IoArrowBackOutline, IoQrCodeOutline } from 'react-icons/io5';
 
 // components
-import Button from '@extension/components/Button';
-import CircularProgressWithIcon from '@extension/components/CircularProgressWithIcon';
+import Button from '@common/components/Button';
+import CircularProgressWithIcon from '@common/components/CircularProgressWithIcon';
 
 // constants
-import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@extension/constants';
+import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@common/constants';
 
 // enums
 import { ScanModeEnum } from '@extension/enums';
@@ -26,11 +26,13 @@ import useCaptureQRCode from '@extension/hooks/useCaptureQRCode';
 import useDefaultTextColor from '@extension/hooks/useDefaultTextColor';
 
 // theme
-import { theme } from '@extension/theme';
+import { theme } from '@common/theme';
 
 // types
 import type { IScanQRCodeModalContentProps } from '@extension/types';
+
 const ScanQRCodeViaTabModalContent: FC<IScanQRCodeModalContentProps> = ({
+  colorMode,
   onPreviousClick,
   onURI,
   pagination,
@@ -84,6 +86,7 @@ const ScanQRCodeViaTabModalContent: FC<IScanQRCodeModalContentProps> = ({
         >
           {/*progress*/}
           <CircularProgressWithIcon
+            colorMode={colorMode}
             icon={IoQrCodeOutline}
             {...(pagination && {
               progress: pagination,
@@ -107,6 +110,7 @@ const ScanQRCodeViaTabModalContent: FC<IScanQRCodeModalContentProps> = ({
       <ModalFooter p={DEFAULT_GAP}>
         {/*previous button*/}
         <Button
+          colorMode={colorMode}
           leftIcon={<IoArrowBackOutline />}
           onClick={handlePreviousClick}
           size="lg"

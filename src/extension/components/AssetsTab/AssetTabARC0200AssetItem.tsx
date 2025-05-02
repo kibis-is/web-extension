@@ -10,11 +10,8 @@ import AssetBadge from '@extension/components/AssetBadge';
 import AssetIcon from '@extension/components/AssetIcon';
 
 // constants
-import {
-  ASSETS_ROUTE,
-  DEFAULT_GAP,
-  TAB_ITEM_HEIGHT,
-} from '@extension/constants';
+import { DEFAULT_GAP, TAB_ITEM_HEIGHT } from '@common/constants';
+import { ASSETS_ROUTE } from '@extension/constants';
 
 // enums
 import { AssetTypeEnum } from '@extension/enums';

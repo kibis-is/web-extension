@@ -28,6 +28,7 @@ import sortByIndex from '@extension/utils/sortByIndex';
 const SideBarAccountList: FC<IProps> = ({
   accounts,
   activeAccountID,
+  colorMode,
   isShortForm,
   network,
   onAccountClick,
@@ -96,6 +97,7 @@ const SideBarAccountList: FC<IProps> = ({
             account={value}
             accounts={accounts}
             active={activeAccountID ? value.id === activeAccountID : false}
+            colorMode={colorMode}
             isShortForm={isShortForm}
             key={value.id}
             network={network}

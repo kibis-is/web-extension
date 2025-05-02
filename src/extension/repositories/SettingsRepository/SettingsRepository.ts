@@ -37,6 +37,7 @@ export default class SettingsRepository extends BaseRepository {
   public static initializeDefaultSettings(): ISettings {
     return {
       advanced: {
+        allowAccountPasskeys: false,
         allowBetaNet: false,
         allowDidTokenFormat: false,
         allowTestNet: false,
@@ -83,6 +84,7 @@ export default class SettingsRepository extends BaseRepository {
 
     return {
       advanced: {
+        allowAccountPasskeys: advanced.allowAccountPasskeys,
         allowBetaNet: advanced.allowBetaNet,
         allowDidTokenFormat: advanced.allowDidTokenFormat,
         allowTestNet: advanced.allowTestNet,

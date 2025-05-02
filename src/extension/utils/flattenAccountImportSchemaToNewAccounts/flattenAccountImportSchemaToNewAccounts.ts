@@ -3,8 +3,8 @@ import { decodeURLSafe as decodeBase64URLSafe } from '@stablelib/base64';
 // enums
 import { ARC0300QueryEnum } from '@extension/enums';
 
-// models
-import Ed21559KeyPair from '@extension/models/Ed21559KeyPair';
+// cryptography
+import Ed21559KeyPair from '@extension/cryptography/Ed21559KeyPair';
 
 // types
 import type { IOptions } from './types';
@@ -12,7 +12,7 @@ import type { INewAccount } from '@extension/types';
 
 // utils
 import convertPrivateKeyToAVMAddress from '@extension/utils/convertPrivateKeyToAVMAddress';
-import convertPublicKeyToAVMAddress from '@extension/utils/convertPublicKeyToAVMAddress';
+import convertPublicKeyToAVMAddress from '@common/utils/convertPublicKeyToAVMAddress';
 
 export default function flattenAccountImportSchemaToNewAccounts({
   accounts,

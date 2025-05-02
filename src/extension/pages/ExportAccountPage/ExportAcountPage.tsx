@@ -14,13 +14,13 @@ import { IoEyeOffOutline, IoListOutline } from 'react-icons/io5';
 import { useDispatch } from 'react-redux';
 
 // components
-import Button from '@extension/components/Button';
-import EmptyState from '@extension/components/EmptyState';
+import Button from '@common/components/Button';
+import EmptyState from '@common/components/EmptyState';
 import PageHeader from '@extension/components/PageHeader';
 
 // constants
+import { DEFAULT_GAP } from '@common/constants';
 import {
-  DEFAULT_GAP,
   EXPORT_ACCOUNT_PAGE_LIMIT,
   EXPORT_ACCOUNT_QR_CODE_DURATION,
 } from '@extension/constants';
@@ -29,7 +29,7 @@ import {
 import { EncryptionMethodEnum } from '@extension/enums';
 
 // errors
-import { BaseExtensionError, DecryptionError } from '@extension/errors';
+import { BaseExtensionError, DecryptionError } from '@common/errors';
 
 // features
 import { create as createNotification } from '@extension/features/notifications';
@@ -45,14 +45,20 @@ import qrCodePlaceholderImage from '@extension/images/placeholder_qr_code.png';
 import { AccountSelectModal } from '@extension/components/AccountSelect';
 import AuthenticationModal from '@extension/modals/AuthenticationModal';
 
-// models
-import Ed21559KeyPair from '@extension/models/Ed21559KeyPair';
+// cryptography
+import Ed21559KeyPair from '@extension/cryptography/Ed21559KeyPair';
 
 // selectors
-import { useSelectAccounts, useSelectLogger } from '@extension/selectors';
+import {
+  useSelectAccounts,
+  useSelectLogger,
+  useSelectSettingsColorMode,
+  useSelectSettingsSelectedNetwork,
+  useSelectSystemInfo,
+} from '@extension/selectors';
 
 // theme
-import { theme } from '@extension/theme';
+import { theme } from '@common/theme';
 
 // types
 import type {
@@ -64,8 +70,8 @@ import type {
 import type { IExportAccount } from '@extension/utils/createAccountImportURI';
 
 // utils
-import calculateIconSize from '@extension/utils/calculateIconSize';
-import convertPublicKeyToAVMAddress from '@extension/utils/convertPublicKeyToAVMAddress';
+import calculateIconSize from '@common/utils/calculateIconSize';
+import convertPublicKeyToAVMAddress from '@common/utils/convertPublicKeyToAVMAddress';
 import createAccountImportURI from '@extension/utils/createAccountImportURI';
 import fetchDecryptedKeyPairFromStorageWithPassword from '@extension/utils/fetchDecryptedKeyPairFromStorageWithPassword';
 import fetchDecryptedKeyPairFromStorageWithPasskey from '@extension/utils/fetchDecryptedKeyPairFromStorageWithPasskey';
@@ -86,7 +92,10 @@ const ExportAccountPage: FC = () => {
   } = useDisclosure();
   // selectors
   const accounts = useSelectAccounts();
+  const colorMode = useSelectSettingsColorMode();
   const logger = useSelectLogger();
+  const network = useSelectSettingsSelectedNetwork();
+  const systemInfo = useSelectSystemInfo();
   // hooks
   const defaultTextColor = useDefaultTextColor();
   const subTextColor = useSubTextColor();
@@ -97,7 +106,6 @@ const ExportAccountPage: FC = () => {
   >(null);
   const [svgStrings, setSvgStrings] = useState<string[] | null>(null);
   // misc
-  const _context = 'export-account-page';
   const placeholderIconSize = calculateIconSize('md');
   const qrCodeSize = 300;
   const reset = () => {
@@ -176,7 +184,7 @@ const ExportAccountPage: FC = () => {
               }
 
               return {
-                privateKey: keyPair.privateKey,
+                privateKey: keyPair.privateKey(),
                 ...(name && {
                   name,
                 }),
@@ -261,16 +269,19 @@ const ExportAccountPage: FC = () => {
 
       {/*account select modal*/}
       <AccountSelectModal
-        _context={_context}
         accounts={accounts}
         allowWatchAccounts={false}
+        colorMode={colorMode}
         isOpen={isAccountSelectModalOpen}
         multiple={true}
+        network={network}
         onClose={onAccountSelectClose}
         onSelect={handleOnAccountSelect}
+        systemInfo={systemInfo}
       />
 
       <PageHeader
+        colorMode={colorMode}
         title={t<string>('titles.page', { context: 'exportAccount' })}
       />
 
@@ -287,7 +298,10 @@ const ExportAccountPage: FC = () => {
               {/*empty state*/}
               <Spacer />
 
-              <EmptyState text={t<string>('headings.noAccountsFound')} />
+              <EmptyState
+                colorMode={colorMode}
+                text={t<string>('headings.noAccountsFound')}
+              />
 
               <Spacer />
             </>
@@ -357,6 +371,7 @@ const ExportAccountPage: FC = () => {
 
         {/*select accounts button*/}
         <Button
+          colorMode={colorMode}
           onClick={handleSelectAccountsClick}
           rightIcon={<IoListOutline />}
           size="lg"

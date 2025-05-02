@@ -1,14 +1,15 @@
 import { Spacer, TabPanel, VStack } from '@chakra-ui/react';
-import React, { type FC, type ReactNode } from 'react';
+import { randomString } from '@stablelib/random';
+import React, { type FC, type ReactNode, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { IoAddCircleOutline } from 'react-icons/io5';
 import { useDispatch } from 'react-redux';
 
 // components
-import AssetTabLoadingItem from '@extension/components/AssetTabLoadingItem';
-import EmptyState from '@extension/components/EmptyState';
+import EmptyState from '@common/components/EmptyState';
 import ScrollableContainer from '@extension/components/ScrollableContainer';
 import TabControlBar from '@extension/components/TabControlBar';
+import TabLoadingItem from '@extension/components/TabLoadingItem';
 import AssetTabARC0200AssetItem from './AssetTabARC0200AssetItem';
 import AssetTabStandardAssetItem from './AssetTabStandardAssetItem';
 
@@ -30,6 +31,7 @@ import {
   useSelectStandardAssetsBySelectedNetwork,
   useSelectSettingsSelectedNetwork,
   useSelectStandardAssetsUpdating,
+  useSelectSettingsColorMode,
 } from '@extension/selectors';
 
 // types
@@ -39,9 +41,9 @@ import type {
   IAppThunkDispatch,
   IMainRootState,
 } from '@extension/types';
-import type { IProps } from './types';
+import type { IAssetHolding, IProps } from './types';
 
-const AssetsTab: FC<IProps> = ({ _context, account }) => {
+const AssetsTab: FC<IProps> = ({ account, colorMode }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch<IAppThunkDispatch<IMainRootState>>();
   // selectors
@@ -54,21 +56,28 @@ const AssetsTab: FC<IProps> = ({ _context, account }) => {
   const updatingStandardAssets = useSelectStandardAssetsUpdating();
   // hooks
   const accountInformation = useAccountInformation(account.id);
-  // misc
-  const allAssetHoldings = accountInformation
-    ? [
-        ...accountInformation.arc200AssetHoldings.map(({ amount, id }) => ({
-          amount,
-          id,
-          isARC0200: true,
-        })),
-        ...accountInformation.standardAssetHoldings.map(({ amount, id }) => ({
-          amount,
-          id,
-          isARC0200: false,
-        })),
-      ]
-    : [];
+  // memos
+  const _context = useMemo(() => randomString(8), []);
+  const assetHoldings = useMemo<IAssetHolding[]>(
+    () =>
+      accountInformation
+        ? [
+            ...accountInformation.arc200AssetHoldings.map(({ amount, id }) => ({
+              amount,
+              id,
+              isARC0200: true,
+            })),
+            ...accountInformation.standardAssetHoldings.map(
+              ({ amount, id }) => ({
+                amount,
+                id,
+                isARC0200: false,
+              })
+            ),
+          ]
+        : [],
+    [accountInformation]
+  );
   // handlers
   const handleAddAssetClick = () => dispatch(setAddAssetAccountId(account.id));
   // renders
@@ -77,16 +86,14 @@ const AssetsTab: FC<IProps> = ({ _context, account }) => {
 
     if (fetchingARC0200Assets || fetchingStandardAssets) {
       return Array.from({ length: 3 }, (_, index) => (
-        <AssetTabLoadingItem
-          key={`${_context}-asset-tab-loading-item-${index}`}
-        />
+        <TabLoadingItem key={`${_context}-loading-item-${index}`} />
       ));
     }
 
-    if (selectedNetwork && accountInformation && allAssetHoldings.length > 0) {
-      assetNodes = allAssetHoldings.reduce<ReactNode[]>(
-        (acc, { amount, id, isARC0200 }, currentIndex) => {
-          const key = `${_context}-asset-tab-item-${currentIndex}`;
+    if (selectedNetwork && accountInformation && assetHoldings.length > 0) {
+      assetNodes = assetHoldings.reduce<ReactNode[]>(
+        (acc, { amount, id, isARC0200 }) => {
+          const key = `${_context}-item-${id}`;
           let arc200Asset: IARC0200Asset | null;
           let standardAsset: IStandardAsset | null;
 
@@ -149,6 +156,7 @@ const AssetsTab: FC<IProps> = ({ _context, account }) => {
 
         {/*empty state*/}
         <EmptyState
+          colorMode={colorMode}
           description={t<string>('captions.noAssetsFound')}
           text={t<string>('headings.noAssetsFound')}
         />
@@ -168,11 +176,11 @@ const AssetsTab: FC<IProps> = ({ _context, account }) => {
     >
       {/*controls*/}
       <TabControlBar
-        _context={`${_context}-asset-tab`}
         buttons={[
           {
             button: {
               ['aria-label']: t<string>('buttons.addAsset'),
+              colorMode,
               icon: IoAddCircleOutline,
               onClick: handleAddAssetClick,
               size: 'sm',
@@ -181,6 +189,7 @@ const AssetsTab: FC<IProps> = ({ _context, account }) => {
             tooltipLabel: t<string>('buttons.addAsset'),
           },
         ]}
+        colorMode={colorMode}
         isLoading={updatingARC0200Assets || updatingStandardAssets}
         loadingTooltipLabel={t<string>('captions.updatingAssetInformation')}
       />

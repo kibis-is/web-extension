@@ -30,10 +30,11 @@ export default async function updateAccountInformation({
   network,
   nodeID,
 }: IOptions): Promise<IAccountInformation> {
-  const _functionName = 'updateAccountInformation';
+  const __function = 'updateAccountInformation';
   let avmAccountInformation: IAVMAccountInformation;
   let arc0072AssetHoldings: IARC0072AssetHolding[];
   let arc200AssetHoldings: IARC0200AssetHolding[];
+  let enVoiNames: string[] = [];
   let networkClient: NetworkClient;
 
   // if the account information is not out-of-date just return the account
@@ -45,7 +46,7 @@ export default async function updateAccountInformation({
       new Date().getTime()
   ) {
     logger?.debug(
-      `${_functionName}: last updated account information for "${address}" on "${new Date(
+      `${__function}: last updated account information for "${address}" on "${new Date(
         currentAccountInformation.updatedAt
       ).toString()}", skipping`
     );
@@ -82,20 +83,36 @@ export default async function updateAccountInformation({
     );
 
     logger?.debug(
-      `${_functionName}: updated account information for account "${address}" for network "${network.genesisId}"`
+      `${__function}: updated account information for account "${address}" for network "${network.genesisId}"`
     );
-
-    return mapAVMAccountInformationToAccount(avmAccountInformation, {
-      ...currentAccountInformation,
-      arc0072AssetHoldings,
-      arc200AssetHoldings,
-    });
   } catch (error) {
     logger?.error(
-      `${_functionName}: failed to get account information for "${address}" on ${network.genesisId}:`,
+      `${__function}: failed to get account information for "${address}" on ${network.genesisId}:`,
       error
     );
 
     return currentAccountInformation;
   }
+
+  try {
+    enVoiNames = network.enVoi ? await network.enVoi.names(address) : [];
+  } catch (error) {
+    logger?.error(
+      `${__function}: failed to get envoi data for "${address}" on ${network.genesisId}:`,
+      error
+    );
+  }
+
+  return mapAVMAccountInformationToAccount(avmAccountInformation, {
+    ...currentAccountInformation,
+    arc0072AssetHoldings,
+    arc200AssetHoldings,
+    enVoi: {
+      ...currentAccountInformation.enVoi,
+      items: enVoiNames,
+      ...(enVoiNames.length <= 0 && {
+        preferredIndex: 0, // reset
+      }),
+    },
+  });
 }

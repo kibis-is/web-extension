@@ -10,35 +10,23 @@ import { ErrorCodeEnum } from './enums';
 import { ActionError } from './errors';
 
 // utils
-import {
-  createAccessToken,
-  handleError,
-  publish,
-  uploadZipFile,
-} from './utils';
+import { handleError, publish, upload } from './utils';
 
 (async () => {
   const styles = (await import('ansi-styles')).default;
-  const infoPrefix: string = `${styles.yellow.open}[INFO]${styles.yellow.close}`;
-  let accessToken: string;
-  let operationId: string;
+  const infoPrefix = `${styles.yellow.open}[INFO]${styles.yellow.close}`;
+  let operationID: string;
   let zipPath: string;
   let zipFileStats: Stats;
 
-  if (!process.env.ACCESS_TOKEN_URL) {
-    setFailed(`invalid input for environment variable "ACCESS_TOKEN_URL"`);
+  if (!process.env.API_KEY) {
+    setFailed(`invalid input for environment variable "API_KEY"`);
 
     process.exit(ErrorCodeEnum.InvalidInputError);
   }
 
   if (!process.env.CLIENT_ID) {
     setFailed(`invalid input for environment variable "CLIENT_ID"`);
-
-    process.exit(ErrorCodeEnum.InvalidInputError);
-  }
-
-  if (!process.env.CLIENT_SECRET) {
-    setFailed(`invalid input for environment variable "CLIENT_SECRET"`);
 
     process.exit(ErrorCodeEnum.InvalidInputError);
   }
@@ -73,34 +61,31 @@ import {
       );
     }
 
-    info(`${infoPrefix} creating access token...`);
-
-    accessToken = await createAccessToken(
-      process.env.ACCESS_TOKEN_URL,
-      process.env.CLIENT_ID,
-      process.env.CLIENT_SECRET
-    );
-
     info(`${infoPrefix} access token created`);
     info(
       `${infoPrefix} uploading add-on "${process.env.PRODUCT_ID}" with zip file "${zipPath}"`
     );
 
-    operationId = await uploadZipFile(
+    operationID = await upload(
       process.env.PRODUCT_ID,
-      zipPath,
-      accessToken
+      process.env.CLIENT_ID,
+      process.env.API_KEY,
+      zipPath
     );
 
     info(
-      `${infoPrefix} successfully uploaded zip file with operation "${operationId}"`
+      `${infoPrefix} successfully uploaded zip file with operation "${operationID}"`
     );
     info(`${infoPrefix} publishing add-on: ${process.env.PRODUCT_ID}`);
 
-    operationId = await publish(process.env.PRODUCT_ID, accessToken);
+    operationID = await publish(
+      process.env.PRODUCT_ID,
+      process.env.CLIENT_ID,
+      process.env.API_KEY
+    );
 
     info(
-      `${infoPrefix} successfully published add-on "${process.env.PRODUCT_ID}" with operation "${operationId}"`
+      `${infoPrefix} successfully published add-on "${process.env.PRODUCT_ID}" with operation "${operationID}"`
     );
   } catch (error) {
     handleError(error);

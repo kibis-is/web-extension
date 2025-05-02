@@ -11,25 +11,26 @@ import { encodeURLSafe as encodeBase64URLSafe } from '@stablelib/base64';
 import React, { type FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { IoArrowForwardOutline } from 'react-icons/io5';
-import { randomBytes } from 'tweetnacl';
+import { randomBytes } from '@stablelib/random';
 
 // components
-import IconButton from '@extension/components/IconButton';
+import IconButton from '@common/components/IconButton';
 import InformationIcon from '@extension/components/InformationIcon';
-import Label from '@extension/components/Label';
+import Label from '@common/components/Label';
 
 // constants
-import { DEFAULT_GAP, INPUT_HEIGHT } from '@extension/constants';
+import { DEFAULT_GAP, INPUT_HEIGHT } from '@common/constants';
 
 // hooks
 import usePrimaryColor from '@extension/hooks/usePrimaryColor';
 import useSubTextColor from '@extension/hooks/useSubTextColor';
 
 // types
-import type { IProps } from './types';
+import type { TProps } from './types';
 
-const GenericInput: FC<IProps> = ({
+const GenericInput: FC<TProps> = ({
   charactersRemaining,
+  colorMode,
   error,
   id,
   informationText,
@@ -73,6 +74,7 @@ const GenericInput: FC<IProps> = ({
               <IconButton
                 aria-label={t<string>('ariaLabels.forwardArrow')}
                 borderRadius="full"
+                colorMode={colorMode}
                 icon={IoArrowForwardOutline}
                 isLoading={isLoading}
                 onClick={handleOnSubmit}
@@ -90,6 +92,7 @@ const GenericInput: FC<IProps> = ({
     <VStack alignItems="flex-start" spacing={DEFAULT_GAP / 3} w="full">
       {/*label*/}
       <Label
+        colorMode={colorMode}
         error={error}
         inputID={_id}
         label={label}

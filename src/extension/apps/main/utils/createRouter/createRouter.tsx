@@ -18,13 +18,13 @@ import Root from '../../Root';
 import { setSideBar } from '@extension/features/layout';
 
 // pages
-import AccountPage from '@extension/pages/AccountPage';
 import AssetPage from '@extension/pages/AssetPage';
 import NFTPage from '@extension/pages/NFTPage';
 import SettingsRouter from '@extension/routers/SettingsRouter';
 import TransactionPage from '@extension/pages/TransactionPage';
 
 // routers
+import AccountRouter from '@extension/routers/AccountRouter';
 import AddAccountRouter from '@extension/routers/AddAccountMainRouter';
 
 // types
@@ -41,7 +41,7 @@ const createRouter = ({ i18n, store }: IOptions) => {
           path: '/',
         },
         {
-          element: <AccountPage />,
+          element: <AccountRouter />,
           loader: () => {
             dispatch(setSideBar(true));
 

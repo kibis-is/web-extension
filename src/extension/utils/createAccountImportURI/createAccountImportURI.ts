@@ -1,6 +1,6 @@
 import { encodeURLSafe as encodeBase64URLSafe } from '@stablelib/base64';
 import SparkMD5 from 'spark-md5';
-import { randomBytes } from 'tweetnacl';
+import { randomBytes } from '@stablelib/random';
 
 // constants
 import {

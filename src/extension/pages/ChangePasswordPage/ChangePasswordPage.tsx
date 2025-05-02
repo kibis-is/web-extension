@@ -5,16 +5,13 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 
 // components
-import Button from '@extension/components/Button';
+import Button from '@common/components/Button';
 import NewPasswordInput from '@extension/components/NewPasswordInput';
 import PageHeader from '@extension/components/PageHeader';
 
 // constants
-import {
-  DEFAULT_GAP,
-  SECURITY_ROUTE,
-  SETTINGS_ROUTE,
-} from '@extension/constants';
+import { DEFAULT_GAP } from '@common/constants';
+import { SECURITY_ROUTE, SETTINGS_ROUTE } from '@extension/constants';
 
 // features
 import { create as createNotification } from '@extension/features/notifications';
@@ -28,6 +25,9 @@ import useSubTextColor from '@extension/hooks/useSubTextColor';
 import ChangePasswordLoadingModal from '@extension/modals/ChangePasswordLoadingModal';
 import ConfirmPasswordModal from '@extension/modals/ConfirmPasswordModal';
 
+// selectors
+import { useSelectSettingsColorMode } from '@extension/selectors';
+
 // types
 import type { IAppThunkDispatch, IMainRootState } from '@extension/types';
 
@@ -40,6 +40,8 @@ const ChangePasswordPage: FC = () => {
     onClose: onConfirmPasswordModalClose,
     onOpen: onConfirmPasswordModalOpen,
   } = useDisclosure();
+  // selectors
+  const colorMode = useSelectSettingsColorMode();
   // hooks
   const {
     changePasswordAction,
@@ -156,6 +158,7 @@ const ChangePasswordPage: FC = () => {
       />
 
       <PageHeader
+        colorMode={colorMode}
         title={t<string>('titles.page', { context: 'changePassword' })}
       />
 
@@ -176,6 +179,7 @@ const ChangePasswordPage: FC = () => {
           </Text>
 
           <NewPasswordInput
+            colorMode={colorMode}
             error={newPasswordError}
             isDisabled={isLoading}
             label={newPasswordLabel}
@@ -188,6 +192,7 @@ const ChangePasswordPage: FC = () => {
         </VStack>
 
         <Button
+          colorMode={colorMode}
           isLoading={isLoading}
           onClick={handleChangeClick}
           size="lg"

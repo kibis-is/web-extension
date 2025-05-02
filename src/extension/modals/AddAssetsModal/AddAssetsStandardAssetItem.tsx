@@ -21,7 +21,7 @@ import {
   BODY_BACKGROUND_COLOR,
   DEFAULT_GAP,
   TAB_ITEM_HEIGHT,
-} from '@extension/constants';
+} from '@common/constants';
 
 // enums
 import { AssetTypeEnum } from '@extension/enums';

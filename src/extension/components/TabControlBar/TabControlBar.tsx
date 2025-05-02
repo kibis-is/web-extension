@@ -1,13 +1,14 @@
 import { HStack, Spacer, Spinner, Tooltip } from '@chakra-ui/react';
-import React, { type FC, ReactElement } from 'react';
+import { randomString } from '@stablelib/random';
+import React, { type FC, ReactElement, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { IoReloadOutline } from 'react-icons/io5';
 
 // components
-import IconButton from '@extension/components/IconButton';
+import IconButton from '@common/components/IconButton';
 
 // constants
-import { DEFAULT_GAP } from '@extension/constants';
+import { DEFAULT_GAP } from '@common/constants';
 
 // hooks
 import useItemBorderColor from '@extension/hooks/useItemBorderColor';
@@ -17,8 +18,8 @@ import usePrimaryColor from '@extension/hooks/usePrimaryColor';
 import type { IProps } from './types';
 
 const TabControlBar: FC<IProps> = ({
-  _context,
   buttons,
+  colorMode,
   isLoading = false,
   loadingTooltipLabel,
   onRefresh,
@@ -27,6 +28,8 @@ const TabControlBar: FC<IProps> = ({
   // hooks
   const itemBorderColor = useItemBorderColor();
   const primaryColor = usePrimaryColor();
+  // memos
+  const _context = useMemo(() => randomString(8), []);
   // renders
   const renderLoader = () => {
     let node: ReactElement;
@@ -48,6 +51,7 @@ const TabControlBar: FC<IProps> = ({
         <Tooltip label={t<string>('buttons.refresh')}>
           <IconButton
             aria-label={t<string>('buttons.refresh')}
+            colorMode={colorMode}
             icon={IoReloadOutline}
             onClick={onRefresh}
             size="sm"

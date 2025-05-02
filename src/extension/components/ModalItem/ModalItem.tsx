@@ -5,7 +5,7 @@ import React, { FC } from 'react';
 import WarningIcon from '@extension/components/WarningIcon';
 
 // constants
-import { DEFAULT_GAP, MODAL_ITEM_HEIGHT } from '@extension/constants';
+import { DEFAULT_GAP, MODAL_ITEM_HEIGHT } from '@common/constants';
 
 // hooks
 import useDefaultTextColor from '@extension/hooks/useDefaultTextColor';

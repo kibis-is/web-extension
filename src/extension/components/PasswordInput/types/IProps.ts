@@ -1,6 +1,9 @@
 import type { ChangeEvent, KeyboardEvent, MutableRefObject } from 'react';
 
-interface IProps {
+// types
+import type { IBaseComponentProps } from '@common/types';
+
+interface IProps extends IBaseComponentProps {
   disabled?: boolean;
   error: string | null;
   hint?: string;

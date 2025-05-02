@@ -5,15 +5,15 @@ import { IoAddOutline } from 'react-icons/io5';
 import { useDispatch } from 'react-redux';
 
 // components
-import Button from '@extension/components/Button';
-import EmptyState from '@extension/components/EmptyState';
+import Button from '@common/components/Button';
+import EmptyState from '@common/components/EmptyState';
 import CustomNodeItem from '@extension/components/CustomNodeItem';
 import NetworkSelect from '@extension/components/NetworkSelect';
 import PageHeader from '@extension/components/PageHeader';
 import ScrollableContainer from '@extension/components/ScrollableContainer';
 
 // constants
-import { DEFAULT_GAP } from '@extension/constants';
+import { DEFAULT_GAP } from '@common/constants';
 
 // features
 import { openConfirmModal } from '@extension/features/layout';
@@ -33,6 +33,7 @@ import ViewCustomNodeModal from '@extension/modals/ViewCustomNodeModal';
 import {
   useSelectNetworks,
   useSelectSettings,
+  useSelectSettingsColorMode,
   useSelectSettingsSelectedNetwork,
 } from '@extension/selectors';
 
@@ -59,13 +60,14 @@ const CustomNodesPage: FC = () => {
     onClose: onAddCustomModalClose,
     onOpen: onAddCustomModalOpen,
   } = useDisclosure();
-  // hooks
-  const borderColor = useBorderColor();
-  const subTextColor = useSubTextColor();
   // selectors
+  const colorMode = useSelectSettingsColorMode();
   const networks = useSelectNetworks();
   const selectedNetwork = useSelectSettingsSelectedNetwork();
   const settings = useSelectSettings();
+  // hooks
+  const borderColor = useBorderColor();
+  const subTextColor = useSubTextColor();
   // states
   const [network, setNetwork] = useState<INetwork>(
     selectedNetwork || selectDefaultNetwork(networks)
@@ -219,7 +221,10 @@ const CustomNodesPage: FC = () => {
         <Spacer />
 
         {/*empty state*/}
-        <EmptyState text={t<string>('headings.noCustomNodesFound')} />
+        <EmptyState
+          colorMode={colorMode}
+          text={t<string>('headings.noCustomNodesFound')}
+        />
 
         <Spacer />
       </VStack>
@@ -253,6 +258,7 @@ const CustomNodesPage: FC = () => {
 
       {/*page title*/}
       <PageHeader
+        colorMode={colorMode}
         title={t<string>('titles.page', { context: 'customNodes' })}
       />
 
@@ -279,7 +285,6 @@ const CustomNodesPage: FC = () => {
         >
           {/*network selection*/}
           <NetworkSelect
-            _context={_context}
             networks={networks}
             onSelect={handleNetworkSelect}
             value={network}
@@ -289,6 +294,7 @@ const CustomNodesPage: FC = () => {
 
           {/*add custom node button*/}
           <Button
+            colorMode={colorMode}
             aria-label={t<string>('buttons.addCustomNode')}
             onClick={handleAddCustomNodeClick}
             rightIcon={<IoAddOutline />}

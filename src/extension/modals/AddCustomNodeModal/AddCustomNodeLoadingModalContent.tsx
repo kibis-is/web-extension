@@ -4,16 +4,21 @@ import { useTranslation } from 'react-i18next';
 import { MdOutlineCallReceived } from 'react-icons/md';
 
 // components
-import CircularProgressWithIcon from '@extension/components/CircularProgressWithIcon';
+import CircularProgressWithIcon from '@common/components/CircularProgressWithIcon';
 
 // constants
-import { DEFAULT_GAP } from '@extension/constants';
+import { DEFAULT_GAP } from '@common/constants';
 
 // hooks
 import useDefaultTextColor from '@extension/hooks/useDefaultTextColor';
 import useSubTextColor from '@extension/hooks/useSubTextColor';
 
-const AddCustomNodeLoadingModalContent: FC = () => {
+// types
+import type { IBaseComponentProps } from '@common/types';
+
+const AddCustomNodeLoadingModalContent: FC<IBaseComponentProps> = ({
+  colorMode,
+}) => {
   const { t } = useTranslation();
   // hooks
   const defaultTextColor = useDefaultTextColor();
@@ -29,6 +34,7 @@ const AddCustomNodeLoadingModalContent: FC = () => {
     >
       {/*progress*/}
       <CircularProgressWithIcon
+        colorMode={colorMode}
         icon={MdOutlineCallReceived}
         iconColor={defaultTextColor}
       />

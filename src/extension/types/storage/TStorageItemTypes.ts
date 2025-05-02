@@ -4,24 +4,22 @@ import type {
   IAccount,
   IAccountGroup,
   IActiveAccountDetails,
-} from '../accounts';
-import type { IARC0072Asset, IARC0200Asset, IStandardAsset } from '../assets';
-import type {
-  IPasskeyCredential,
-  IPasswordTag,
-  IPrivateKey,
-} from '../authentication';
-import type { TEvents } from '../events';
-import type { IAppWindow } from '../layout';
-import type { ISession } from '../sessions';
-import type {
   IAdvancedSettings,
   IAppearanceSettings,
+  IAppWindow,
+  IARC0072Asset,
+  IARC0200Asset,
   IGeneralSettings,
+  IPasskeyCredential,
+  IPasswordTag,
   IPrivacySettings,
+  IPrivateKey,
   ISecuritySettings,
-} from '../settings';
-import type { ISystemInfo } from '../system';
+  ISession,
+  IStandardAsset,
+  ISystemInfo,
+  TEvents,
+} from '@extension/types';
 
 type TStorageItemTypes =
   | IAccount

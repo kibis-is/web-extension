@@ -1,12 +1,14 @@
 import { Icon, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
-import React, { type FC } from 'react';
+import { randomString } from '@stablelib/random';
+import React, { type FC, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { IoEllipsisVerticalOutline } from 'react-icons/io5';
 
 // components
-import IconButton from '@extension/components/IconButton';
+import IconButton from '@common/components/IconButton';
 
 // constants
-import { DEFAULT_GAP } from '@extension/constants';
+import { DEFAULT_GAP } from '@common/constants';
 
 // hooks
 import useDefaultTextColor from '@extension/hooks/useDefaultTextColor';
@@ -15,17 +17,20 @@ import useDefaultTextColor from '@extension/hooks/useDefaultTextColor';
 import type { IProps } from './types';
 
 // utils
-import calculateIconSize from '@extension/utils/calculateIconSize';
+import calculateIconSize from '@common/utils/calculateIconSize';
 
-const OverflowMenu: FC<IProps> = ({ context, items }) => {
+const OverflowMenu: FC<IProps> = ({ items }) => {
+  const { t } = useTranslation();
   // hooks
   const defaultTextColor = useDefaultTextColor();
+  // memos
+  const _context = useMemo(() => randomString(8), []);
 
   return (
     <Menu>
       <MenuButton
         as={IconButton}
-        aria-label="Overflow menu"
+        aria-label={t<string>('ariaLabels.ellipsisIcon')}
         icon={IoEllipsisVerticalOutline}
         variant="ghost"
       />
@@ -35,7 +40,7 @@ const OverflowMenu: FC<IProps> = ({ context, items }) => {
           <MenuItem
             color={defaultTextColor}
             fontSize="sm"
-            key={`${context}-overflow-menu-item-${index}`}
+            key={`${_context}-${index}`}
             minH={DEFAULT_GAP * 2}
             onClick={onSelect}
             {...(icon && {

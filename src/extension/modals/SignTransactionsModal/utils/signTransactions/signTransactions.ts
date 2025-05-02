@@ -6,7 +6,7 @@ import {
 import type { Transaction } from 'algosdk';
 
 // errors
-import { MalformedDataError } from '@extension/errors';
+import { MalformedDataError } from '@common/errors';
 
 // repositories
 import AccountRepository from '@extension/repositories/AccountRepository';
@@ -15,7 +15,7 @@ import AccountRepository from '@extension/repositories/AccountRepository';
 import type { TOptions } from './types';
 
 // utils
-import convertPublicKeyToAVMAddress from '@extension/utils/convertPublicKeyToAVMAddress';
+import convertPublicKeyToAVMAddress from '@common/utils/convertPublicKeyToAVMAddress';
 import decodeUnsignedTransaction from '@extension/utils/decodeUnsignedTransaction';
 import signTransaction from '@extension/utils/signTransaction';
 

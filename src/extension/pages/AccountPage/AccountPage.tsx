@@ -9,13 +9,12 @@ import {
   TabList,
   TabPanels,
   Tabs,
-  Text,
   Tooltip,
   useDisclosure,
   VStack,
 } from '@chakra-ui/react';
 import BigNumber from 'bignumber.js';
-import React, { type FC, useState } from 'react';
+import React, { type FC, useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { BsFolderMinus, BsFolderPlus } from 'react-icons/bs';
 import {
@@ -33,16 +32,18 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 // components
+import AccountPageAddressDisplay from '@extension/components/accounts/AccountPageAddressDisplay';
 import ActivityTab from '@extension/components/ActivityTab';
 import AssetsTab from '@extension/components/AssetsTab';
 import CopyIconButton from '@extension/components/CopyIconButton';
-import EmptyState from '@extension/components/EmptyState';
-import IconButton from '@extension/components/IconButton';
+import EmptyState from '@common/components/EmptyState';
+import IconButton from '@common/components/IconButton';
 import OpenTabIconButton from '@extension/components/OpenTabIconButton';
 import OverflowMenu from '@extension/components/OverflowMenu';
 import NativeBalance from '@extension/components/NativeBalance';
 import NetworkSelect from '@extension/components/NetworkSelect';
 import NFTsTab from '@extension/components/NFTsTab';
+import PasskeysTab from '@extension/components/PasskeysTab';
 import PolisAccountBadge from '@extension/components/PolisAccountBadge';
 import ReKeyedAccountBadge from '@extension/components/RekeyedAccountBadge';
 import StakingTab from '@extension/components/StakingTab';
@@ -53,10 +54,12 @@ import AccountPageSkeletonContent from './AccountPageSkeletonContent';
 import GroupBadge from '@extension/components/GroupBadge';
 
 // constants
+import { DEFAULT_GAP } from '@common/constants';
 import {
   ACCOUNT_PAGE_HEADER_ITEM_HEIGHT,
+  ACCOUNTS_ROUTE,
   ADD_ACCOUNT_ROUTE,
-  DEFAULT_GAP,
+  PASSKEY_ROUTE,
 } from '@extension/constants';
 
 // enums
@@ -66,6 +69,8 @@ import { AccountTabEnum } from '@extension/enums';
 import {
   removeFromGroupThunk,
   removeAccountByIdThunk,
+  removeAccountPasskeyByIDThunk,
+  saveAccountsThunk,
   saveActiveAccountDetails,
   updateAccountsThunk,
 } from '@extension/features/accounts';
@@ -78,9 +83,7 @@ import { saveToStorageThunk as saveSettingsToStorageThunk } from '@extension/fea
 import { savePolisAccountIDThunk } from '@extension/features/system';
 
 // hooks
-import useDefaultTextColor from '@extension/hooks/useDefaultTextColor';
 import usePrimaryColorScheme from '@extension/hooks/usePrimaryColorScheme';
-import useSubTextColor from '@extension/hooks/useSubTextColor';
 
 // icons
 import BsFolderMove from '@extension/icons/BsFolderMove';
@@ -100,15 +103,16 @@ import {
   useSelectActiveAccountGroup,
   useSelectActiveAccountInformation,
   useSelectActiveAccountTransactions,
+  useSelectActiveAccountTransactionsUpdating,
   useSelectAccountsFetching,
   useSelectSettingsFetching,
   useSelectIsOnline,
   useSelectNetworks,
+  useSelectSettingsColorMode,
   useSelectSettingsPreferredBlockExplorer,
   useSelectSettingsSelectedNetwork,
   useSelectSettings,
   useSelectSystemInfo,
-  useSelectSettingsColorMode,
 } from '@extension/selectors';
 
 // types
@@ -122,9 +126,10 @@ import type {
 } from '@extension/types';
 
 // utils
-import convertPublicKeyToAVMAddress from '@extension/utils/convertPublicKeyToAVMAddress';
-import ellipseAddress from '@extension/utils/ellipseAddress';
+import convertPublicKeyToAVMAddress from '@common/utils/convertPublicKeyToAVMAddress';
+import ellipseAddress from '@common/utils/ellipseAddress';
 import isReKeyedAuthAccountAvailable from '@extension/utils/isReKeyedAuthAccountAvailable';
+import convertGenesisHashToHex from '@extension/utils/convertGenesisHashToHex';
 
 const AccountPage: FC = () => {
   const { t } = useTranslation();
@@ -156,12 +161,11 @@ const AccountPage: FC = () => {
   const explorer = useSelectSettingsPreferredBlockExplorer();
   const settings = useSelectSettings();
   const systemInfo = useSelectSystemInfo();
+  const updatingActiveAccountTransactions =
+    useSelectActiveAccountTransactionsUpdating();
   // hooks
-  const defaultTextColor = useDefaultTextColor();
   const primaryColorScheme = usePrimaryColorScheme();
-  const subTextColor = useSubTextColor();
   // misc
-  const _context = 'account-page';
   const canReKeyAccount = () => {
     if (!account || !accountInformation) {
       return false;
@@ -192,9 +196,41 @@ const AccountPage: FC = () => {
   };
   const handleAddAccountClick = () => navigate(ADD_ACCOUNT_ROUTE);
   const handleOnEditAccountClick = () => onEditAccountModalOpen();
+  const handleOnEnVoiSelect = useCallback(
+    (index: number) => {
+      if (
+        !account ||
+        !accountInformation ||
+        !network ||
+        accountInformation.enVoi.preferredIndex === index
+      ) {
+        return;
+      }
+
+      dispatch(
+        saveAccountsThunk([
+          {
+            ...account,
+            networkInformation: {
+              ...account.networkInformation,
+              [convertGenesisHashToHex(network.genesisHash)]: {
+                ...accountInformation,
+                enVoi: {
+                  ...accountInformation.enVoi,
+                  preferredIndex: index,
+                },
+              },
+            },
+          },
+        ])
+      );
+    },
+    [account, accountInformation, network]
+  );
   const handleOnMakePrimaryClick = () =>
     account && dispatch(savePolisAccountIDThunk(account.id));
-  const handleOnWhatsNewClick = () => dispatch(setWhatsNewModal(true));
+  const handleOnMoveGroupClick = () =>
+    account && dispatch(openMoveGroupModal(account.id));
   const handleOnRefreshActivityClick = () => {
     dispatch(
       updateAccountsThunk({
@@ -205,8 +241,6 @@ const AccountPage: FC = () => {
       })
     );
   };
-  const handleOnMoveGroupClick = () =>
-    account && dispatch(openMoveGroupModal(account.id));
   const handleOnRemoveGroupClick = async () => {
     let _account: IAccountWithExtendedProps | null;
 
@@ -228,6 +262,51 @@ const AccountPage: FC = () => {
       })
     );
   };
+  const handleOnRemovePasskeyClick = useCallback(
+    (id: string) => {
+      const passkey =
+        account?.passkeys.find((value) => value.id === id) || null;
+
+      if (!account || !passkey) {
+        return;
+      }
+
+      dispatch(
+        openConfirmModal({
+          description: t<string>('captions.removeAccountPasskeyConfirm', {
+            name: passkey.rp.name,
+          }),
+          onConfirm: async () => {
+            const _account = await dispatch(
+              removeAccountPasskeyByIDThunk({
+                accountID: account.id,
+                passkeyID: passkey.id,
+              })
+            ).unwrap();
+
+            if (!_account) {
+              return;
+            }
+
+            dispatch(
+              createNotification({
+                ephemeral: true,
+                title: t<string>('headings.removedPasskey'),
+                type: 'info',
+              })
+            );
+          },
+          title: t<string>('headings.removePasskey'),
+        })
+      );
+    },
+    [account]
+  );
+  const handleOnViewPasskeyClick = useCallback(
+    (id: string) => navigate(`${ACCOUNTS_ROUTE}${PASSKEY_ROUTE}/${id}`),
+    []
+  );
+  const handleOnWhatsNewClick = () => dispatch(setWhatsNewModal(true));
   const handleNetworkSelect = async (value: INetwork) => {
     await dispatch(
       saveSettingsToStorageThunk({
@@ -346,6 +425,7 @@ const AccountPage: FC = () => {
               <Tooltip label={t<string>('labels.whatsNew')}>
                 <IconButton
                   aria-label={t<string>('ariaLabels.plusIcon')}
+                  colorMode={colorMode}
                   icon={IoGiftOutline}
                   onClick={handleOnWhatsNewClick}
                   size="sm"
@@ -355,7 +435,6 @@ const AccountPage: FC = () => {
 
               {/*network selection*/}
               <NetworkSelect
-                _context={_context}
                 networks={networks}
                 onSelect={handleNetworkSelect}
                 size="xs"
@@ -363,35 +442,12 @@ const AccountPage: FC = () => {
               />
             </HStack>
 
-            {/*name/address*/}
-            <VStack alignItems="flex-start" spacing={DEFAULT_GAP / 3} w="full">
-              <Tooltip label={account.name || address}>
-                <Heading
-                  color={defaultTextColor}
-                  maxW="650px" // full address length
-                  noOfLines={1}
-                  size="md"
-                  textAlign="left"
-                  w="full"
-                >
-                  {account.name || address}
-                </Heading>
-              </Tooltip>
-
-              {/*address*/}
-              {account.name && (
-                <Tooltip label={address}>
-                  <Text
-                    color={subTextColor}
-                    fontSize="xs"
-                    textAlign="left"
-                    w="full"
-                  >
-                    {ellipseAddress(address, { end: 15, start: 15 })}
-                  </Text>
-                </Tooltip>
-              )}
-            </VStack>
+            {/*name/envoi/address*/}
+            <AccountPageAddressDisplay
+              account={account}
+              network={network}
+              onEnVoiSelect={handleOnEnVoiSelect}
+            />
 
             {/*balance*/}
             <HStack
@@ -421,6 +477,7 @@ const AccountPage: FC = () => {
               <Tooltip label={t<string>('labels.editAccount')}>
                 <IconButton
                   aria-label={t<string>('labels.editAccount')}
+                  colorMode={colorMode}
                   icon={IoPencil}
                   onClick={handleOnEditAccountClick}
                   size="sm"
@@ -449,6 +506,7 @@ const AccountPage: FC = () => {
               <Tooltip label={t<string>('labels.shareAddress')}>
                 <IconButton
                   aria-label="Show QR code"
+                  colorMode={colorMode}
                   icon={IoQrCodeOutline}
                   onClick={onShareAddressModalOpen}
                   size="sm"
@@ -458,7 +516,6 @@ const AccountPage: FC = () => {
 
               {/*overflow menu*/}
               <OverflowMenu
-                context={_context}
                 items={[
                   // make primary
                   ...(!account ||
@@ -581,23 +638,39 @@ const AccountPage: FC = () => {
               <Tab>{t<string>('labels.assets')}</Tab>
               <Tab>{t<string>('labels.nfts')}</Tab>
               <Tab>{t<string>('labels.activity')}</Tab>
+              {settings.advanced.allowAccountPasskeys && (
+                <Tab isDisabled={account.watchAccount}>
+                  {t<string>('labels.passkeys')}
+                </Tab>
+              )}
               <Tab>{t<string>('labels.staking')}</Tab>
             </TabList>
 
             <TabPanels sx={{ display: 'flex', flexDirection: 'column' }}>
-              <AssetsTab _context={_context} account={account} />
+              <AssetsTab account={account} colorMode={colorMode} />
 
               <NFTsTab account={account} />
 
               <ActivityTab
-                _context={_context}
                 account={account}
                 accounts={accounts}
+                colorMode={colorMode}
                 fetching={fetchingAccounts}
                 network={network}
                 onRefreshClick={handleOnRefreshActivityClick}
                 onScrollEnd={handleActivityScrollEnd}
+                updating={updatingActiveAccountTransactions}
               />
+
+              {settings.advanced.allowAccountPasskeys && (
+                <PasskeysTab
+                  account={account}
+                  colorMode={colorMode}
+                  fetching={fetchingAccounts}
+                  onRemoveClick={handleOnRemovePasskeyClick}
+                  onViewClick={handleOnViewPasskeyClick}
+                />
+              )}
 
               <StakingTab
                 account={account}
@@ -622,6 +695,7 @@ const AccountPage: FC = () => {
             label: t<string>('buttons.addAccount'),
             onClick: handleAddAccountClick,
           }}
+          colorMode={colorMode}
           description={t<string>('captions.noAccountsFound')}
           text={t<string>('headings.noAccountsFound')}
         />

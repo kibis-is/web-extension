@@ -1,5 +1,5 @@
-// models
-import Ed21559KeyPair from '@extension/models/Ed21559KeyPair';
+// cryptography
+import Ed21559KeyPair from '@extension/cryptography/Ed21559KeyPair';
 
 // repositories
 import PrivateKeyRepository from '@extension/repositories/PrivateKeyRepository';

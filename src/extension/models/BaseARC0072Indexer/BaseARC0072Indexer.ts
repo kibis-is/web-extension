@@ -6,7 +6,7 @@ import {
   MalformedDataError,
   NetworkConnectionError,
   UnknownError,
-} from '@extension/errors';
+} from '@common/errors';
 
 // types
 import type {

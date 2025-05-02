@@ -18,12 +18,8 @@ import { IoReorderTwoOutline } from 'react-icons/io5';
 import AccountAvatarWithBadges from '@extension/components/AccountAvatarWithBadges';
 
 // constants
-import {
-  BODY_BACKGROUND_COLOR,
-  DEFAULT_GAP,
-  SIDEBAR_ITEM_HEIGHT,
-  SIDEBAR_MIN_WIDTH,
-} from '@extension/constants';
+import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@common/constants';
+import { SIDEBAR_ITEM_HEIGHT, SIDEBAR_MIN_WIDTH } from '@extension/constants';
 
 // hooks
 import useButtonHoverBackgroundColor from '@extension/hooks/useButtonHoverBackgroundColor';
@@ -35,14 +31,15 @@ import useSubTextColor from '@extension/hooks/useSubTextColor';
 import type { IProps } from './types';
 
 // utils
-import calculateIconSize from '@extension/utils/calculateIconSize';
-import convertPublicKeyToAVMAddress from '@extension/utils/convertPublicKeyToAVMAddress';
-import ellipseAddress from '@extension/utils/ellipseAddress';
+import calculateIconSize from '@common/utils/calculateIconSize';
+import convertPublicKeyToAVMAddress from '@common/utils/convertPublicKeyToAVMAddress';
+import ellipseAddress from '@common/utils/ellipseAddress';
 
 const SideBarAccountItem: FC<IProps> = ({
   account,
   accounts,
   active,
+  colorMode,
   isShortForm,
   network,
   onAddToGroupClick,
@@ -129,6 +126,7 @@ const SideBarAccountItem: FC<IProps> = ({
               <AccountAvatarWithBadges
                 account={account}
                 accounts={accounts}
+                colorMode={colorMode}
                 network={network}
                 systemInfo={systemInfo}
               />

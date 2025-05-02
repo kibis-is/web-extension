@@ -4,10 +4,10 @@ import { encode as encodeBase64 } from '@stablelib/base64';
 import { EncryptionMethodEnum } from '@extension/enums';
 
 // errors
-import { MalformedDataError } from '@extension/errors';
+import { MalformedDataError } from '@common/errors';
 
-// models
-import Ed21559KeyPair from '@extension/models/Ed21559KeyPair';
+// cryptography
+import Ed21559KeyPair from '@extension/cryptography/Ed21559KeyPair';
 
 // repositories
 import AccountRepository from '@extension/repositories/AccountRepository';
@@ -21,7 +21,7 @@ import type { TOptions } from './types';
 
 // utils
 import convertAVMAddressToPublicKey from '@extension/utils/convertAVMAddressToPublicKey';
-import convertPublicKeyToAVMAddress from '@extension/utils/convertPublicKeyToAVMAddress';
+import convertPublicKeyToAVMAddress from '@common/utils/convertPublicKeyToAVMAddress';
 import fetchDecryptedKeyPairFromStorageWithPasskey from '@extension/utils/fetchDecryptedKeyPairFromStorageWithPasskey';
 import fetchDecryptedKeyPairFromStorageWithPassword from '@extension/utils/fetchDecryptedKeyPairFromStorageWithPassword';
 import fetchDecryptedKeyPairFromStorageWithUnencrypted from '@extension/utils/fetchDecryptedKeyPairFromStorageWithUnencrypted';
@@ -169,7 +169,7 @@ export default async function signTransaction({
   }
 
   try {
-    return unsignedTransaction.signTxn(keyPair.getSecretKey());
+    return unsignedTransaction.signTxn(keyPair.secretKey());
   } catch (error) {
     logger?.error(`${_functionName}:`, error);
 

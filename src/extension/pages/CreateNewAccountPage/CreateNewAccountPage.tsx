@@ -17,7 +17,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 
 // components
-import Button from '@extension/components/Button';
+import Button from '@common/components/Button';
 import CopyButton from '@extension/components/CopyButton';
 import GenericInput from '@extension/components/GenericInput';
 import PageHeader from '@extension/components/PageHeader';
@@ -25,7 +25,8 @@ import SeedPhraseDisplay from '@extension/components/SeedPhraseDisplay';
 import Steps from '@extension/components/Steps';
 
 // constants
-import { ACCOUNT_NAME_BYTE_LIMIT, DEFAULT_GAP } from '@extension/constants';
+import { DEFAULT_GAP } from '@common/constants';
+import { ACCOUNT_NAME_BYTE_LIMIT } from '@extension/constants';
 
 // enums
 import { StepsEnum } from './enums';
@@ -35,11 +36,14 @@ import useDefaultTextColor from '@extension/hooks/useDefaultTextColor';
 import usePrimaryColorScheme from '@extension/hooks/usePrimaryColorScheme';
 import useSubTextColor from '@extension/hooks/useSubTextColor';
 
-// models
-import Ed21559KeyPair from '@extension/models/Ed21559KeyPair';
+// cryptography
+import Ed21559KeyPair from '@extension/cryptography/Ed21559KeyPair';
 
 // selectors
-import { useSelectLogger } from '@extension/selectors';
+import {
+  useSelectLogger,
+  useSelectSettingsColorMode,
+} from '@extension/selectors';
 
 // types
 import type { IAddAccountPageProps } from '@extension/types';
@@ -57,7 +61,8 @@ const CreateNewAccountPage: FC<IAddAccountPageProps> = ({
   const { nextStep, prevStep, activeStep } = useSteps({
     initialStep: StepsEnum.SeedPhrase,
   });
-  // selector
+  // selectors
+  const colorMode = useSelectSettingsColorMode();
   const logger = useSelectLogger();
   // hooks
   const defaultTextColor = useDefaultTextColor();
@@ -88,7 +93,7 @@ const CreateNewAccountPage: FC<IAddAccountPageProps> = ({
   const _context = 'create-new-account-page';
   const seedPhrase = convertPrivateKeyToSeedPhrase({
     logger,
-    privateKey: keyPair.privateKey,
+    privateKey: keyPair.privateKey(),
   });
   const stepsLabels: string[] = [
     t<string>('headings.generateSeedPhrase'),
@@ -139,6 +144,7 @@ const CreateNewAccountPage: FC<IAddAccountPageProps> = ({
     <>
       {/*page title*/}
       <PageHeader
+        colorMode={colorMode}
         title={t<string>('titles.page', { context: 'createNewAccount' })}
       />
 
@@ -197,6 +203,7 @@ const CreateNewAccountPage: FC<IAddAccountPageProps> = ({
 
               {/*copy seed phrase button*/}
               <CopyButton
+                colorMode={colorMode}
                 colorScheme={primaryColorScheme}
                 size="md"
                 value={seedPhrase}
@@ -227,6 +234,7 @@ const CreateNewAccountPage: FC<IAddAccountPageProps> = ({
 
               <GenericInput
                 charactersRemaining={nameCharactersRemaining}
+                colorMode={colorMode}
                 error={nameError}
                 label={nameLabel}
                 isDisabled={saving}
@@ -282,6 +290,7 @@ const CreateNewAccountPage: FC<IAddAccountPageProps> = ({
         <HStack spacing={DEFAULT_GAP - 2} w="full">
           {/*previous button*/}
           <Button
+            colorMode={colorMode}
             onClick={handlePreviousClick}
             leftIcon={<IoArrowBackOutline />}
             isDisabled={saving}
@@ -295,6 +304,7 @@ const CreateNewAccountPage: FC<IAddAccountPageProps> = ({
           {hasCompletedAllSteps ? (
             // save button
             <Button
+              colorMode={colorMode}
               onClick={handleSaveClick}
               isLoading={saving}
               rightIcon={<IoSaveOutline />}
@@ -307,6 +317,7 @@ const CreateNewAccountPage: FC<IAddAccountPageProps> = ({
           ) : (
             // next button
             <Button
+              colorMode={colorMode}
               onClick={handleNextClick}
               rightIcon={<IoArrowForwardOutline />}
               size="lg"

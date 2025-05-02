@@ -7,14 +7,18 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 // components
-import Button from '@extension/components/Button';
+import Button from '@common/components/Button';
 import GenericInput from '@extension/components/GenericInput';
 import PageHeader from '@extension/components/PageHeader';
 import SeedPhraseInput from '@extension/components/SeedPhraseInput';
 import Steps from '@extension/components/Steps';
 
 // constants
-import { ACCOUNT_NAME_BYTE_LIMIT, DEFAULT_GAP } from '@extension/constants';
+import { DEFAULT_GAP } from '@common/constants';
+import { ACCOUNT_NAME_BYTE_LIMIT } from '@extension/constants';
+
+// cryptography
+import Ed21559KeyPair from '@extension/cryptography/Ed21559KeyPair';
 
 // enums
 import { StepsEnum } from './enums';
@@ -28,11 +32,11 @@ import useGenericInput from '@extension/hooks/useGenericInput';
 import usePrimaryColorScheme from '@extension/hooks/usePrimaryColorScheme';
 import useSubTextColor from '@extension/hooks/useSubTextColor';
 
-// models
-import Ed21559KeyPair from '@extension/models/Ed21559KeyPair';
-
 // selectors
-import { useSelectLogger } from '@extension/selectors';
+import {
+  useSelectLogger,
+  useSelectSettingsColorMode,
+} from '@extension/selectors';
 
 // types
 import type {
@@ -44,7 +48,7 @@ import type {
 
 // utils
 import { validate } from '@extension/components/SeedPhraseInput';
-import convertPublicKeyToAVMAddress from '@extension/utils/convertPublicKeyToAVMAddress';
+import convertPublicKeyToAVMAddress from '@common/utils/convertPublicKeyToAVMAddress';
 import convertSeedPhraseToPrivateKey from '@extension/utils/convertSeedPhraseToPrivateKey';
 
 const ImportAccountViaSeedPhrasePage: FC<IAddAccountPageProps> = ({
@@ -56,6 +60,7 @@ const ImportAccountViaSeedPhrasePage: FC<IAddAccountPageProps> = ({
     useDispatch<IAppThunkDispatch<IMainRootState | IRegistrationRootState>>();
   const navigate = useNavigate();
   // selectors
+  const colorMode = useSelectSettingsColorMode();
   const logger = useSelectLogger();
   // hooks
   const defaultTextColor = useDefaultTextColor();
@@ -116,7 +121,7 @@ const ImportAccountViaSeedPhrasePage: FC<IAddAccountPageProps> = ({
       `${
         ImportAccountViaSeedPhrasePage.name
       }#${_functionName}: importing account "${convertPublicKeyToAVMAddress(
-        keyPair.publicKey
+        keyPair.publicKey()
       )}"`
     );
 
@@ -179,6 +184,7 @@ const ImportAccountViaSeedPhrasePage: FC<IAddAccountPageProps> = ({
     <>
       {/*page title*/}
       <PageHeader
+        colorMode={colorMode}
         title={t<string>('titles.page', {
           context: 'importAccountViaSeedPhrase',
         })}
@@ -212,7 +218,7 @@ const ImportAccountViaSeedPhrasePage: FC<IAddAccountPageProps> = ({
               </Text>
 
               <SeedPhraseInput
-                _context={_context}
+                colorMode={colorMode}
                 disabled={saving}
                 error={seedPhraseError}
                 onChange={handleOnMnemonicPhraseChange}
@@ -235,6 +241,7 @@ const ImportAccountViaSeedPhrasePage: FC<IAddAccountPageProps> = ({
 
               <GenericInput
                 charactersRemaining={nameCharactersRemaining}
+                colorMode={colorMode}
                 error={nameError}
                 label={nameLabel}
                 isDisabled={saving}
@@ -268,6 +275,7 @@ const ImportAccountViaSeedPhrasePage: FC<IAddAccountPageProps> = ({
         <HStack spacing={DEFAULT_GAP - 2} w="full">
           {/*previous button*/}
           <Button
+            colorMode={colorMode}
             isDisabled={saving}
             leftIcon={<IoArrowBackOutline />}
             onClick={handlePreviousClick}
@@ -281,6 +289,7 @@ const ImportAccountViaSeedPhrasePage: FC<IAddAccountPageProps> = ({
           {hasCompletedAllSteps ? (
             // import button
             <Button
+              colorMode={colorMode}
               isLoading={saving}
               onClick={handleImportClick}
               rightIcon={<IoDownloadOutline />}
@@ -293,6 +302,7 @@ const ImportAccountViaSeedPhrasePage: FC<IAddAccountPageProps> = ({
           ) : (
             // next button
             <Button
+              colorMode={colorMode}
               isLoading={saving}
               onClick={handleNextClick}
               size="lg"

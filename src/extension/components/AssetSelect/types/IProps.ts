@@ -1,12 +1,12 @@
 // types
+import type { IBaseComponentProps } from '@common/types';
 import type {
   IAssetTypes,
   INativeCurrency,
   INetworkWithTransactionParams,
-  IPropsWithContext,
 } from '@extension/types';
 
-interface IProps extends IPropsWithContext {
+interface IProps extends IBaseComponentProps {
   assets: (IAssetTypes | INativeCurrency)[];
   disabled?: boolean;
   label?: string;

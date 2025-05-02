@@ -1,3 +1,24 @@
+# [2.5.0-beta.4](https://github.com/kibis-is/web-extension/compare/v2.5.0-beta.3...v2.5.0-beta.4) (2025-05-01)
+
+
+### Features
+
+* display envoi names ([#350](https://github.com/kibis-is/web-extension/issues/350)) ([391e214](https://github.com/kibis-is/web-extension/commit/391e214eb1f493150a8e2f2ad00b74f8ff6e2657))
+
+# [2.5.0-beta.3](https://github.com/kibis-is/web-extension/compare/v2.5.0-beta.2...v2.5.0-beta.3) (2025-04-25)
+
+
+### Features
+
+* accept p256 keys for webauthn ([#348](https://github.com/kibis-is/web-extension/issues/348)) ([57dcbde](https://github.com/kibis-is/web-extension/commit/57dcbde8d56ea79e825eb1a0e4649472c3e9e48c))
+
+# [2.5.0-beta.2](https://github.com/kibis-is/web-extension/compare/v2.5.0-beta.1...v2.5.0-beta.2) (2025-03-06)
+
+
+### Features
+
+* authenticate account as passkey ([#347](https://github.com/kibis-is/web-extension/issues/347)) ([927f4db](https://github.com/kibis-is/web-extension/commit/927f4dbb71ee0801e95cf3c843af32bbf6192e46))
+
 # [2.5.0-beta.1](https://github.com/kibis-is/web-extension/compare/v2.4.0...v2.5.0-beta.1) (2024-11-21)
 
 
