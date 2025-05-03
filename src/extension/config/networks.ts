@@ -124,7 +124,7 @@ const networks: INetwork[] = [
     feeSunkAddress:
       'TBEIGCNK4UCN3YDP2NODK3MJHTUZMYS3TABRM2MVSI2MPUR2V36E5JYHSY',
     genesisId: 'voitest',
-    genesisHash: '5pbhGq04byd0AgV/sbP+yITANqazgKBuaATr85n21wY=',
+    genesisHash: 'mufvzhECYAe3WaU075v0z4k1/SNUIuUPCyBTE+Z/08s=',
     indexers: [
       {
         canonicalName: 'Nodely',

@@ -11,26 +11,24 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { ChevronDownIcon } from '@chakra-ui/icons';
-import React, { type FC, Fragment } from 'react';
+import { randomString } from '@stablelib/random';
+import React, { type FC, Fragment, useMemo } from 'react';
 
 // constants
 import { DEFAULT_GAP } from '@common/constants';
-import {
-  ALGORAND_TEST_NET_GENESIS_HASH,
-  VOI_TEST_NET_GENESIS_HASH,
-} from '../../constants';
 
 // config
 import { networks } from '@extension/config';
 
 // enums
+import { NetworkTypeEnum } from '@extension/enums';
 import { ConnectionTypeEnum } from '../../enums';
 
 // hooks
 import useDefaultTextColor from '../../hooks/useDefaultTextColor';
 
 // types
-import type { IProps, IHandleConnectParams } from './types';
+import type { IHandleConnectParams, IProps } from './types';
 
 // utils
 import { parseConnectorType } from '../../utils';
@@ -38,6 +36,12 @@ import { parseConnectorType } from '../../utils';
 const ConnectMenu: FC<IProps> = ({ onConnect, onDisconnect, toast }) => {
   // hooks
   const defaultTextColor = useDefaultTextColor();
+  // memos
+  const _networks = useMemo(
+    () => networks.filter(({ type }) => type === NetworkTypeEnum.Test),
+    []
+  );
+  const context = useMemo(() => randomString(8), []);
   // handlers
   const handleConnect = (params: IHandleConnectParams) => () => {
     const network =
@@ -89,47 +93,38 @@ const ConnectMenu: FC<IProps> = ({ onConnect, onDisconnect, toast }) => {
           ConnectionTypeEnum.AVMWebProvider,
           ConnectionTypeEnum.UseWallet,
           ConnectionTypeEnum.WalletConnect,
-        ].map((connectionType, index, array) => {
+        ].map((connectionType, connectorIndex, array) => {
           const dividerElement =
-            index < array.length - 1 ? <MenuDivider /> : null;
+            connectorIndex < array.length - 1 ? <MenuDivider /> : null;
 
           return (
-            <Fragment key={`connect-menu-item=${index}`}>
-              {index === 0 && dividerElement}
+            <Fragment key={`${context}-connector-item-${connectorIndex}`}>
+              {connectorIndex === 0 && dividerElement}
 
               <MenuGroup
                 color={defaultTextColor}
                 title={parseConnectorType(connectionType)}
               >
-                <MenuItem
-                  onClick={handleConnect({
-                    connectionType,
-                    genesisHash: ALGORAND_TEST_NET_GENESIS_HASH,
-                  })}
-                >
-                  <HStack alignItems="center" w="full">
-                    <Text color={defaultTextColor} size="sm">
-                      Connect to Algorand
-                    </Text>
+                {_networks.map((network, networkIndex) => (
+                  <MenuItem
+                    key={`${context}-${network.genesisHash.slice(
+                      0,
+                      5
+                    )}-network-item-${networkIndex}`}
+                    onClick={handleConnect({
+                      connectionType,
+                      genesisHash: network.genesisHash,
+                    })}
+                  >
+                    <HStack alignItems="center" w="full">
+                      <Text color={defaultTextColor} size="sm">
+                        {`Connect to ${network.canonicalName}`}
+                      </Text>
 
-                    {renderNetworkTag()}
-                  </HStack>
-                </MenuItem>
-
-                <MenuItem
-                  onClick={handleConnect({
-                    connectionType,
-                    genesisHash: VOI_TEST_NET_GENESIS_HASH,
-                  })}
-                >
-                  <HStack alignItems="center" w="full">
-                    <Text color={defaultTextColor} size="sm">
-                      Connect to Voi
-                    </Text>
-
-                    {renderNetworkTag()}
-                  </HStack>
-                </MenuItem>
+                      {renderNetworkTag()}
+                    </HStack>
+                  </MenuItem>
+                ))}
               </MenuGroup>
 
               {dividerElement}
