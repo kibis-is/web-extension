@@ -169,5 +169,11 @@
     "tweetnacl": "^1.0.3",
     "webextension-polyfill": "^0.10.0",
     "zxcvbn": "^4.4.2"
+  },
+  "pnpm": {
+    "overrides": {
+      "ws@>=7.0.0 <7.5.10": ">=7.5.10",
+      "image-size@>=1.1.0 <1.2.1": ">=1.2.1"
+    }
   }
 }
