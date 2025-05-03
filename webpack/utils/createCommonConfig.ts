@@ -19,6 +19,7 @@ export default function createCommonConfig(): Configuration {
     resolve: {
       alias: {
         // client
+        ['@client/adapters']: resolve(clientPath, 'adapters'),
         ['@client/apps']: resolve(clientPath, 'apps'),
         ['@client/components']: resolve(clientPath, 'components'),
         ['@client/constants']: resolve(clientPath, 'constants'),
