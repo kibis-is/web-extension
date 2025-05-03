@@ -13,9 +13,9 @@ jobs:
       - name: "🛎 Checkout"
         uses: actions/checkout@v4
       - name: "🔧 Setup"
-        uses: ./.github/actions/use-dependencies
+        uses: ./.github/actions/use-pnpm-dependencies
       - name: "🏗️ Build"
-        run: yarn build:dapp-example
+        run: pnpm build:dapp-example
       - name: "📤 Upload artifact"
         uses: actions/upload-pages-artifact@v3
         with:

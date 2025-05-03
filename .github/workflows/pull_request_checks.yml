@@ -15,7 +15,7 @@ jobs:
       - name: "🛎 Checkout"
         uses: actions/checkout@v4
       - name: "🔧 Setup"
-        uses: ./.github/actions/use-dependencies
+        uses: ./.github/actions/use-pnpm-dependencies
 
   ##
   # validation
@@ -29,7 +29,7 @@ jobs:
       - name: "🛎 Checkout"
         uses: actions/checkout@v4
       - name: "🔧 Setup"
-        uses: ./.github/actions/use-dependencies
+        uses: ./.github/actions/use-pnpm-dependencies
       - name: "📥 Get PR Title"
         id: get_pr_title
         uses: actions/github-script@v7
@@ -43,7 +43,7 @@ jobs:
             });
             return data.title;
       - name: "✅ Validate"
-        run: echo "${{ steps.get_pr_title.outputs.result }}" | yarn commitlint
+        run: echo "${{ steps.get_pr_title.outputs.result }}" | pnpm commitlint
 
   ##
   # lint, type-check, build and test
@@ -57,9 +57,9 @@ jobs:
       - name: "🛎 Checkout"
         uses: actions/checkout@v4
       - name: "🔧 Setup"
-        uses: ./.github/actions/use-dependencies
+        uses: ./.github/actions/use-pnpm-dependencies
       - name: "👕 Lint"
-        run: yarn lint
+        run: pnpm lint
 
   type_check:
     name: "Type Check"
@@ -69,9 +69,9 @@ jobs:
       - name: "🛎 Checkout"
         uses: actions/checkout@v4
       - name: "🔧 Setup"
-        uses: ./.github/actions/use-dependencies
+        uses: ./.github/actions/use-pnpm-dependencies
       - name: "🔍 Type Check"
-        run: yarn check:types
+        run: pnpm check:types
 
   test:
     name: "Test"
@@ -81,9 +81,9 @@ jobs:
       - name: "🛎 Checkout"
         uses: actions/checkout@v4
       - name: "🔧 Setup"
-        uses: ./.github/actions/use-dependencies
+        uses: ./.github/actions/use-pnpm-dependencies
       - name: "🧪 Test"
-        run: yarn test
+        run: pnpm test
 
   ##
   # build
@@ -98,13 +98,13 @@ jobs:
       - name: "🛎 Checkout"
         uses: actions/checkout@v4
       - name: "🔧 Setup"
-        uses: ./.github/actions/use-dependencies
+        uses: ./.github/actions/use-pnpm-dependencies
       - name: "📝 Create .env file"
         uses: ./.github/actions/create-env-file
         with:
           provider_id: ${{ vars.PROVIDER_ID }}
       - name: "🏗️ Build"
-        run: yarn build:chrome
+        run: pnpm build:chrome
 
   build_edge:
     name: "Build Edge"
@@ -115,13 +115,13 @@ jobs:
       - name: "🛎 Checkout"
         uses: actions/checkout@v4
       - name: "🔧 Setup"
-        uses: ./.github/actions/use-dependencies
+        uses: ./.github/actions/use-pnpm-dependencies
       - name: "📝 Create .env file"
         uses: ./.github/actions/create-env-file
         with:
           provider_id: ${{ vars.PROVIDER_ID }}
       - name: "🏗️ Build"
-        run: yarn build:edge
+        run: pnpm build:edge
 
   build_firefox:
     name: "Build Firefox"
@@ -132,15 +132,15 @@ jobs:
       - name: "🛎 Checkout"
         uses: actions/checkout@v4
       - name: "🔧 Setup"
-        uses: ./.github/actions/use-dependencies
+        uses: ./.github/actions/use-pnpm-dependencies
       - name: "📝 Create .env file"
         uses: ./.github/actions/create-env-file
         with:
           provider_id: ${{ vars.PROVIDER_ID }}
       - name: "🏗️ Build"
-        run: yarn build:firefox
+        run: pnpm build:firefox
       - name: "✅ Validate"
-        run: yarn validate:firefox
+        run: pnpm validate:firefox
 
   build_opera:
     name: "Build Opera"
@@ -151,10 +151,10 @@ jobs:
       - name: "🛎 Checkout"
         uses: actions/checkout@v4
       - name: "🔧 Setup"
-        uses: ./.github/actions/use-dependencies
+        uses: ./.github/actions/use-pnpm-dependencies
       - name: "📝 Create .env file"
         uses: ./.github/actions/create-env-file
         with:
           provider_id: ${{ vars.PROVIDER_ID }}
       - name: "🏗️ Build"
-        run: yarn build:opera
+        run: pnpm build:opera
