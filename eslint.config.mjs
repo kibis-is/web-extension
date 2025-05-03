@@ -40,6 +40,8 @@ export default [
     rules: {
       '@typescript-eslint/no-inferrable-types': 'off',
       '@typescript-eslint/no-namespace': ['error', { allowDeclarations: true }],
+      '@typescript-eslint/no-unused-expressions': 'warn',
+      '@typescript-eslint/no-unused-vars': 'warn',
       'no-async-promise-executor': 'warn',
       'prefer-const': 'off',
     },

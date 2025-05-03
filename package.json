@@ -42,7 +42,7 @@
     "check:types": "tsc --noEmit",
     "install:chrome": "./scripts/install_chrome.sh",
     "install:firefox": "./scripts/install_firefox.sh",
-    "lint": "eslint . --ext .ts --ext .tsx --ext .js",
+    "lint": "eslint .",
     "package:chrome": "./scripts/package.sh chrome",
     "package:edge": "./scripts/package.sh edge",
     "package:firefox": "./scripts/package.sh firefox",
