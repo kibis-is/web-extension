@@ -27,11 +27,11 @@
 
 </div>
 
-<p align="center">
+<div align="center">
   <a href="https://kibis.is">
-    <img alt="Kibisis & browser logos" src="https://github.com/aetheris-nova/regimen-contractus/blob/beta/images/repo_logo@637x128.png" style="padding-top: 15px" height="64" />
+    <img alt="Kibisis & browser logos" src="https://github.com/kibis-is/web-extension/blob/beta/images/repo_logo@637x128.png" height="64" />
   </a>
-</p>
+</div>
 
 <h1 align="center">
   Kibisis Web Extension
