@@ -287,4 +287,5 @@ fabric.properties
 .firefox/
 .firefox_build/
 .firefox_profile/
+.opera_build/
 .tmp/

@@ -20,6 +20,7 @@ import {
   DAPP_EXAMPLE_SRC_PATH,
   EDGE_BUILD_PATH,
   FIREFOX_BUILD_PATH,
+  OPERA_BUILD_PATH,
   SRC_PATH,
 } from './constants';
 
@@ -134,6 +135,7 @@ const configs: (
       manifestPaths = [
         resolve(SRC_PATH, 'manifest.common.json'),
         resolve(SRC_PATH, `manifest.v3.json`),
+        resolve(SRC_PATH, `manifest.chrome.json`),
       ];
       break;
     case TargetEnum.Edge:
@@ -141,6 +143,15 @@ const configs: (
       manifestPaths = [
         resolve(SRC_PATH, 'manifest.common.json'),
         resolve(SRC_PATH, `manifest.v3.json`),
+        resolve(SRC_PATH, `manifest.chrome.json`),
+      ];
+      break;
+    case TargetEnum.Opera:
+      buildPath = OPERA_BUILD_PATH;
+      manifestPaths = [
+        resolve(SRC_PATH, 'manifest.common.json'),
+        resolve(SRC_PATH, `manifest.v2.json`),
+        resolve(SRC_PATH, `manifest.opera.json`),
       ];
       break;
     // default to firefox

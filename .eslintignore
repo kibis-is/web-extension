@@ -9,5 +9,6 @@
 .firefox/
 .firefox_build/
 .firefox_profile/
+.opera_build/
 coverage/
 node_modules/

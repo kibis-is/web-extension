@@ -17,4 +17,5 @@ export const FIREFOX_BUILD_PATH: string = resolve(
   process.cwd(),
   '.firefox_build'
 );
+export const OPERA_BUILD_PATH: string = resolve(process.cwd(), '.opera_build');
 export const SRC_PATH: string = resolve(process.cwd(), 'src');
