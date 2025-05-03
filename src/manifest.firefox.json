@@ -3,5 +3,9 @@
     "gecko": {
       "id": "kibisis@kibis.is"
     }
+  },
+  "icons": {
+    "32": "icons/icon.svg",
+    "64": "icons/icon.svg"
   }
 }

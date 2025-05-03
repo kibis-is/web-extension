@@ -28,6 +28,8 @@ import type { IBaseMessage, IBaseOptions } from '@common/types';
 import type { IAppWindow } from '@extension/types';
 
 export default class ProviderMessageHandler extends BaseListener {
+  // public static variables
+  public static displayName = 'ProviderMessageHandler';
   // private variables
   private readonly _appWindowRepository: AppWindowRepository;
 
@@ -44,12 +46,12 @@ export default class ProviderMessageHandler extends BaseListener {
   private async _handleFactoryResetMessage({
     reference,
   }: BaseProviderMessage): Promise<void> {
-    const _function = '_handleFactoryResetMessage';
+    const __function = '_handleFactoryResetMessage';
     let backgroundAppWindows: IAppWindow[];
     let mainAppWindows: IAppWindow[];
 
     this._logger?.debug(
-      `${ProviderMessageHandler.name}#${_function}: message "${reference}" received`
+      `${ProviderMessageHandler.displayName}#${__function}: message "${reference}" received`
     );
 
     backgroundAppWindows = await this._appWindowRepository.fetchByType(
@@ -92,12 +94,12 @@ export default class ProviderMessageHandler extends BaseListener {
   private async _handleRegistrationCompletedMessage({
     reference,
   }: BaseProviderMessage): Promise<void> {
-    const _function = '_handleRegistrationCompletedMessage';
+    const __function = '_handleRegistrationCompletedMessage';
     let mainAppWindows: IAppWindow[];
     let registrationAppWindows: IAppWindow[];
 
     this._logger?.debug(
-      `${ProviderMessageHandler.name}#${_function}: message "${reference}" received`
+      `${ProviderMessageHandler.displayName}#${__function}: message "${reference}" received`
     );
 
     mainAppWindows = await this._appWindowRepository.fetchByType(
@@ -144,10 +146,10 @@ export default class ProviderMessageHandler extends BaseListener {
   private async _handleSettingsUpdatedMessage({
     reference,
   }: ProviderSessionsUpdatedMessage): Promise<void> {
-    const _function = '_handleSettingsUpdatedMessage';
+    const __function = '_handleSettingsUpdatedMessage';
 
     this._logger?.debug(
-      `${ProviderMessageHandler.name}#${_function}: message "${reference}" received`
+      `${ProviderMessageHandler.displayName}#${__function}: message "${reference}" received`
     );
 
     // proxy an update to the middlewares
@@ -162,10 +164,10 @@ export default class ProviderMessageHandler extends BaseListener {
   private async _handleThemeUpdatedMessage({
     reference,
   }: ProviderThemeUpdatedMessage): Promise<void> {
-    const _function = '_handleThemeUpdatedMessage';
+    const __function = '_handleThemeUpdatedMessage';
 
     this._logger?.debug(
-      `${ProviderMessageHandler.name}#${_function}: message "${reference}" received`
+      `${ProviderMessageHandler.displayName}#${__function}: message "${reference}" received`
     );
 
     // proxy an update to the middlewares
@@ -207,11 +209,11 @@ export default class ProviderMessageHandler extends BaseListener {
   private async _sendMessageToMiddlewares(
     message: IBaseMessage
   ): Promise<void> {
-    const _function: string = '_sendMessageToMiddlewares';
+    const __function: string = '_sendMessageToMiddlewares';
     let tabs: Tabs.Tab[];
 
     this._logger?.debug(
-      `${ProviderMessageHandler.name}#${_function}: sending "${message.reference}" message to middleware`
+      `${ProviderMessageHandler.displayName}#${__function}: sending "${message.reference}" message to middleware`
     );
 
     // get all the tabs

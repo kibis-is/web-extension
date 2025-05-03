@@ -46,6 +46,27 @@ jobs:
           product_id: ${{ vars.MICROSOFT_EDGE_ADD_ON_PRODUCT_ID }}
           zip_file_name: kibisis-edge.zip
 
+# TODO: wait for first release on opera
+#  publish_to_opera_add_ons:
+#    name: "Publish To Opera Add-ons"
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: "🛎 Checkout"
+#        uses: actions/checkout@v4
+#      - name: "📥 Download Latest Release Asset"
+#        uses: ./.github/actions/download-latest-release-asset
+#        with:
+#          asset_prefix: "kibisis-opera"
+#          github_token: ${{ secrets.READ_AND_WRITE_REPOS_TOKEN }}
+#      - name: "🚀 Publish"
+#        uses: ./.github/actions/publish-to-opera-add-ons
+#        with:
+#          # set in the Settings > Secrets and variables > Actions > Secrets
+#          email: ${{ secrets.OPERA_ADD_ONS_EMAIL }}
+#          extension_id: ${{ vars.OPERA_ADD_ON_EXTENSION_ID }}
+#          password: ${{ secrets.OPERA_ADD_ONS_PASSWORD }}
+#          zip_file_name: kibisis-opera.zip
+
 # TODO: ignore until firefox accept add-on submissions
 #  publish_to_firefox_add_ons:
 #    name: "Publish To Firefox Add-ons"

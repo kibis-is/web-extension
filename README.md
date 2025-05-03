@@ -3,6 +3,7 @@
 [![Chrome extension](https://img.shields.io/chrome-web-store/v/hcgejekffjilpgbommjoklpneekbkajb?logo=googlechrome&logoColor=%23FFCE44&color=%23FFCE44)](https://chromewebstore.google.com/detail/kibisis/hcgejekffjilpgbommjoklpneekbkajb)
 [![Microsoft Edge add-on](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fmicrosoftedge.microsoft.com%2Faddons%2Fgetproductdetailsbycrxid%2Fbajncpocmkioafbijldokfbjajelkbmc%3Fhl%3Den-GB%26gl%3DGB&query=%24.version&prefix=v&logo=microsoftedge&logoColor=%230078D7&label=microsoft%20edge%20add-on&color=%230078D7)](https://microsoftedge.microsoft.com/addons/detail/kibisis/bajncpocmkioafbijldokfbjajelkbmc)
 [![Firefox add-on](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Faddons.mozilla.org%2Fapi%2Fv5%2Faddons%2Faddon%2Fkibisis%2F&query=%24.current_version.version&logo=firefox&logoColor=%23FF7139&label=firefox%20add-on&color=%23FF7139)](https://addons.mozilla.org/en-GB/firefox/addon/kibisis)
+[![Opera add-on](https://img.shields.io/badge/opera-FF1B2D?logo=opera)](https://addons.opera.com/en-gb/extensions/details/kibisis/)
 
 </div>
 
@@ -128,7 +129,7 @@ yarn install:chrome
 yarn install:firefox
 ```
 
-> ️ **NOTE:** the binary will be installed to `.firefox/`.
+> ⚠️ **NOTE:** the binary will be installed to `.firefox/`.
 
 <sup>[Back to top ^][table-of-contents]</sup>
 
@@ -152,14 +153,18 @@ $ yarn start:<chrome|firefox>
 | `yarn build:chrome`       | Bundles the source code and Chrome specific assets into the `.chrome_build/` directory.                                                                                                                |
 | `yarn build:edge`         | Bundles the source code and Microsoft Edge specific assets into the `.edge_build/` directory.                                                                                                          |
 | `yarn build:firefox`      | Bundles the source code and Firefox specific assets into the `.firefox_build/` directory.                                                                                                              |
+| `yarn build:opera`        | Bundles the source code and Firefox specific assets into the `.opera_build/` directory.                                                                                                                |
 | `yarn install:chrome`     | Installs/updates the latest version of Chrome For Testing browser to the project root. This removes the existing version if it exists.                                                                 |
 | `yarn install:firefox`    | Installs/updates the latest version of Firefox Developer Edition browser to the project root. This removes the existing version if it exists.                                                          |
 | `yarn package:chrome`     | Packages the contents of the `.chrome_build/` directory into a `kibisis-chrome-{version}.zip` file, ready for submission.                                                                              |
 | `yarn package:edge`       | Packages the contents of the `.edge_build/` directory into a `kibisis-edge-{version}.zip` file, ready for submission.                                                                                  |
 | `yarn package:firefox`    | Packages the contents of the `.firefox_build/` directory into a `kibisis-firefox-{version}.zip` file, ready for submission.                                                                            |
+| `yarn package:opera`      | Packages the contents of the `.opera_build/` directory into a `kibisis-opera-{version}.zip` file, ready for submission.                                                                                |
 | `yarn prettier`           | Runs `prettier` with the same configuration that is run on the pre-commit hooks.                                                                                                                       |
 | `yarn start:chrome`       | Bundles the source code & the add-on assets, starts the local Chrome For Testing Developer edition with the add-on installed. This will watch for changes in the source code and reload the extension. |
+| `yarn start:edge`         | Bundles the source code & the add-on assets. This will watch for changes in the source code and reload the extension.                                                                                  |
 | `yarn start:firefox`      | Bundles the source code & the add-on assets, starts the local Firefox Developer edition with the add-on installed. This will watch for changes in the source code and reload the extension.            |
+| `yarn start:opera`        | Bundles the source code & the add-on assets. This will watch for changes in the source code and reload the extension.                                                                                  |
 | `yarn start:dapp-example` | Starts the example dApp at [http://localhost:8080](http://localhost:8080)                                                                                                                              |
 | `yarn test`               | Runs unit tests.                                                                                                                                                                                       |
 | `yarn test:coverage`      | Runs unit tests with coverage.                                                                                                                                                                         |
