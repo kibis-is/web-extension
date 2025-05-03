@@ -1,3 +1,10 @@
+# [2.6.0-beta.3](https://github.com/kibis-is/web-extension/compare/v2.6.0-beta.2...v2.6.0-beta.3) (2025-05-03)
+
+
+### Bug Fixes
+
+* reinstate algorand provider support ([#358](https://github.com/kibis-is/web-extension/issues/358)) ([f19276f](https://github.com/kibis-is/web-extension/commit/f19276fc5d90e79e8bd51a0f809ddb61f24cac15))
+
 # [2.6.0-beta.2](https://github.com/kibis-is/web-extension/compare/v2.6.0-beta.1...v2.6.0-beta.2) (2025-05-03)
 
 
