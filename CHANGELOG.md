@@ -19,6 +19,13 @@
 
 * update icons ([#356](https://github.com/kibis-is/web-extension/issues/356)) ([6939380](https://github.com/kibis-is/web-extension/commit/693938066990b4791db9da39eaf34f88e0f2c585))
 
+## [2.5.2](https://github.com/kibis-is/web-extension/compare/v2.5.1...v2.5.2) (2025-05-03)
+
+
+### Bug Fixes
+
+* reinstate support for use-wallet v2 ([#361](https://github.com/kibis-is/web-extension/issues/361)) ([62f6dd5](https://github.com/kibis-is/web-extension/commit/62f6dd5688dd0097929d5736f034f29f06ddfb54))
+
 ## [2.5.1](https://github.com/kibis-is/web-extension/compare/v2.5.0...v2.5.1) (2025-05-03)
 
 
