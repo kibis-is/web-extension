@@ -27,10 +27,9 @@
 
 </div>
 
-
 <p align="center">
   <a href="https://kibis.is">
-    <img alt="Kibisis & Browser logos" src=".github/assets/logo@637x128.png" style="padding-top: 15px" height="64" />
+    <img alt="Kibisis & browser logos" src="https://github.com/aetheris-nova/regimen-contractus/blob/beta/images/repo_logo@637x128.png" style="padding-top: 15px" height="64" />
   </a>
 </p>
 
