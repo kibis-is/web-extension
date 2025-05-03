@@ -5,7 +5,7 @@
     }
   },
   "icons": {
-    "32": "icon.svg",
-    "64": "icon.svg"
+    "32": "icons/icon.svg",
+    "64": "icons/icon.svg"
   }
 }

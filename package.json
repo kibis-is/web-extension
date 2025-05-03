@@ -36,6 +36,7 @@
     "build:dapp-example": "cross-env TS_NODE_PROJECT=\"webpack/tsconfig.webpack.json\" webpack --config webpack/webpack.config.ts --config-name dapp-example --env environment=production",
     "build:edge": "cross-env TS_NODE_PROJECT=\"webpack/tsconfig.webpack.json\" webpack --config webpack/webpack.config.ts --config-name extension-scripts --config-name extension-apps --env environment=production --env target=edge",
     "build:firefox": "cross-env TS_NODE_PROJECT=\"webpack/tsconfig.webpack.json\" webpack --config webpack/webpack.config.ts --config-name extension-scripts --config-name extension-apps --env environment=production --env target=firefox",
+    "build:opera": "cross-env TS_NODE_PROJECT=\"webpack/tsconfig.webpack.json\" webpack --config webpack/webpack.config.ts --config-name extension-scripts --config-name extension-apps --env environment=production --env target=opera",
     "check:types": "tsc --noEmit",
     "install:chrome": "./scripts/install_chrome.sh",
     "install:firefox": "./scripts/install_firefox.sh",
