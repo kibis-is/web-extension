@@ -20,7 +20,7 @@ export default {
         prepareCmd:
           './scripts/update_manifest_version.sh ${nextRelease.version} && ./scripts/update_issue_templates.sh ${nextRelease.version}',
         publishCmd:
-          'yarn concurrently --names "CHROME,EDGE,FIREFOX,OPERA" -c "yellow.bold,blue.bold,orange.bold,red.bold" "yarn build:chrome && yarn package:chrome" "yarn build:edge && yarn package:edge" "yarn build:firefox && yarn package:firefox" "yarn build:opera && yarn package:opera"',
+          'pnpm concurrently --names "CHROME,EDGE,FIREFOX,OPERA" -c "yellow.bold,blue.bold,orange.bold,red.bold" "pnpm build:chrome && pnpm package:chrome" "pnpm build:edge && pnpm package:edge" "pnpm build:firefox && pnpm package:firefox" "pnpm build:opera && pnpm package:opera"',
       },
     ],
     [
@@ -32,8 +32,7 @@ export default {
           'package.json',
           'CHANGELOG.md',
         ],
-        message:
-          'chore(release): ${nextRelease.version}\n\n${nextRelease.notes}',
+        message: 'chore(release): ${nextRelease.version}\n\n${nextRelease.notes}',
       },
     ],
     [
