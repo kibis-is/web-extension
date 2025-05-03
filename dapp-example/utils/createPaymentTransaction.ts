@@ -29,8 +29,8 @@ export default async function createPaymentTransaction({
   suggestedParams,
   to,
 }: IOptions): Promise<Transaction> {
-  const client: Algodv2 = getRandomAlgodClient(network);
-  let _suggestedParams: SuggestedParams =
+  const client = getRandomAlgodClient(network);
+  const _suggestedParams =
     suggestedParams || (await client.getTransactionParams().do());
 
   return makePaymentTxnWithSuggestedParams(

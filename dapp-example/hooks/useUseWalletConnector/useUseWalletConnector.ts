@@ -11,7 +11,7 @@ import {
   type WalletAccount,
   WalletManager,
 } from '@txnlab/use-wallet';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 // selectors
 import { useSelectLogger } from '../../selectors';
@@ -31,7 +31,8 @@ import { getAccountInformation } from '../../utils';
 export default function useUseWalletConnector({
   toast,
 }: IConnectorParams): IConnectorState {
-  const _hookName = 'useUseWalletConnector';
+  // memos
+  const __hook = useMemo(() => 'useUseWalletConnector', []);
   // selectors
   const logger = useSelectLogger();
   // states
@@ -43,7 +44,7 @@ export default function useUseWalletConnector({
   );
   // actions
   const connectAction = async (network: INetwork) => {
-    const _functionName = 'connectAction';
+    const __function = 'connectAction';
     const algod = getRandomItem<INode>(network.algods);
     const _walletManager = new WalletManager({
       algod: {
@@ -60,7 +61,7 @@ export default function useUseWalletConnector({
 
     if (!wallet) {
       logger.error(
-        `${_hookName}#${_functionName}: failed to get kibisis wallet in use-wallet`
+        `${__hook}#${__function}: failed to get kibisis wallet in use-wallet`
       );
 
       toast({
@@ -75,7 +76,7 @@ export default function useUseWalletConnector({
     try {
       walletAccounts = await wallet.connect();
     } catch (error) {
-      logger.error(`${_hookName}#${_functionName}:`, error);
+      logger.error(`${__hook}#${__function}:`, error);
 
       if ((error as BaseARC0027Error).code) {
         toast({
@@ -100,7 +101,7 @@ export default function useUseWalletConnector({
         )
       );
     } catch (error) {
-      logger.error(`${_hookName}#${_functionName}:`, error);
+      logger.error(`${__hook}#${__function}:`, error);
 
       toast({
         description: 'Check browser console for more information.',
@@ -122,7 +123,7 @@ export default function useUseWalletConnector({
     return true;
   };
   const disconnectAction = async () => {
-    const _functionName = 'disconnectAction';
+    const __function = 'disconnectAction';
     const wallet =
       walletManager?.wallets.find((value) => value.id === WalletId.KIBISIS) ||
       null;
@@ -131,7 +132,7 @@ export default function useUseWalletConnector({
 
     if (!wallet) {
       logger.error(
-        `${_hookName}#${_functionName}: failed to get wallet from use-wallet wallet manager`
+        `${__hook}#${__function}: failed to get wallet from use-wallet wallet manager`
       );
 
       return;
@@ -157,7 +158,7 @@ export default function useUseWalletConnector({
   const signTransactionsAction = async (
     transactions: IARC0001Transaction[]
   ) => {
-    const _functionName = 'disconnectAction';
+    const __function = 'disconnectAction';
     const wallet =
       walletManager?.wallets.find((value) => value.id === WalletId.KIBISIS) ||
       null;
@@ -165,7 +166,7 @@ export default function useUseWalletConnector({
 
     if (!wallet) {
       logger.error(
-        `${_hookName}#${_functionName}: failed to get wallet from use-wallet wallet manager`
+        `${__hook}#${__function}: failed to get wallet from use-wallet wallet manager`
       );
 
       return [];

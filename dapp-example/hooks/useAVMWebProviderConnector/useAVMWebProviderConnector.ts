@@ -22,7 +22,7 @@ import { getAccountInformation } from '../../utils';
 export default function useAVMWebProviderConnector({
   toast,
 }: IConnectorParams): IConnectorState {
-  const _hookName = 'useAVMWebProviderConnector';
+  const __hook = 'useAVMWebProviderConnector';
   // state
   const [enabledAccounts, setEnabledAccounts] = useState<IAccountInformation[]>(
     []
@@ -30,64 +30,62 @@ export default function useAVMWebProviderConnector({
   const [avmWebClient, setAVMWebClient] = useState<AVMWebClient | null>(null);
   // actions
   const connectAction = (network: INetwork) => {
-    const _functionName = 'connectAction';
+    const __function = 'connectAction';
 
     return new Promise<boolean>((resolve, reject) => {
-      const _avmWebClient: AVMWebClient = getOrInitializeAVMWebClient();
-      const listenerId: string = _avmWebClient.onEnable(
-        async ({ error, result }) => {
-          // remove the listener, it is not needed
-          _avmWebClient.removeListener(listenerId);
+      const _avmWebClient = getOrInitializeAVMWebClient();
+      const listenerId = _avmWebClient.onEnable(async ({ error, result }) => {
+        // remove the listener, it is not needed
+        _avmWebClient.removeListener(listenerId);
 
-          if (error) {
-            console.error(error.message);
-
-            toast({
-              description: error.message,
-              status: 'error',
-              title: 'Failed To Connect',
-            });
-
-            return reject(false);
-          }
-
-          if (!result) {
-            console.error(
-              `${_hookName}#${_functionName}: no result returned from enable request`
-            );
-
-            return reject(false);
-          }
-
-          try {
-            setEnabledAccounts(
-              await Promise.all(
-                result.accounts.map<Promise<IAccountInformation>>(
-                  ({ address, name }) =>
-                    getAccountInformation({ address, name }, network)
-                )
-              )
-            );
-          } catch (error) {
-            console.error(`${_hookName}#${_functionName}:`, error);
-
-            toast({
-              status: 'error',
-              title: 'Failed to get account information for connected wallets',
-            });
-
-            return reject(false);
-          }
+        if (error) {
+          console.error(error.message);
 
           toast({
-            description: `Successfully connected via AVM Web Provider.`,
-            status: 'success',
-            title: 'Connected!',
+            description: error.message,
+            status: 'error',
+            title: 'Failed To Connect',
           });
 
-          return resolve(true);
+          return resolve(false);
         }
-      );
+
+        if (!result) {
+          console.error(
+            `${__hook}#${__function}: no result returned from enable request`
+          );
+
+          return resolve(false);
+        }
+
+        try {
+          setEnabledAccounts(
+            await Promise.all(
+              result.accounts.map<Promise<IAccountInformation>>(
+                ({ address, name }) =>
+                  getAccountInformation({ address, name }, network)
+              )
+            )
+          );
+        } catch (error) {
+          console.error(`${__hook}#${__function}:`, error);
+
+          toast({
+            status: 'error',
+            title: 'Failed to get account information for connected wallets',
+          });
+
+          return resolve(false);
+        }
+
+        toast({
+          description: `Successfully connected via AVM Web Provider.`,
+          status: 'success',
+          title: 'Connected!',
+        });
+
+        return resolve(true);
+      });
 
       _avmWebClient.enable({
         genesisHash: network.genesisHash,
@@ -96,8 +94,8 @@ export default function useAVMWebProviderConnector({
     });
   };
   const disconnectAction = () => {
-    let _avmWebClient: AVMWebClient = getOrInitializeAVMWebClient();
-    let listenerId: string = _avmWebClient.onDisable(({ error }) => {
+    let _avmWebClient = getOrInitializeAVMWebClient();
+    let listenerId = _avmWebClient.onDisable(({ error }) => {
       // remove the listener, it is not needed
       _avmWebClient.removeListener(listenerId);
 
@@ -129,7 +127,7 @@ export default function useAVMWebProviderConnector({
     signer?: string
   ): Promise<ISignMessageActionResult> => {
     return new Promise<ISignMessageActionResult>((resolve, reject) => {
-      let _avmWebClient: AVMWebClient = getOrInitializeAVMWebClient();
+      let _avmWebClient = getOrInitializeAVMWebClient();
       let listenerId: string;
       let timeoutId = window.setTimeout(() => {
         const error = new ARC0027MethodTimedOutError({
@@ -187,7 +185,7 @@ export default function useAVMWebProviderConnector({
     transactions: IARC0001Transaction[]
   ) => {
     return new Promise<(string | null)[]>((resolve, reject) => {
-      let _avmWebClient: AVMWebClient = getOrInitializeAVMWebClient();
+      let _avmWebClient = getOrInitializeAVMWebClient();
       let listenerId: string;
       let timeoutId = window.setTimeout(() => {
         const error = new ARC0027MethodTimedOutError({
@@ -208,6 +206,7 @@ export default function useAVMWebProviderConnector({
 
         return reject(error);
       }, UPPER_REQUEST_TIMEOUT);
+
       listenerId = _avmWebClient.onSignTransactions(({ error, result }) => {
         // remove the listener, it is not needed
         _avmWebClient.removeListener(listenerId);
