@@ -53,6 +53,8 @@ import queueProviderEvent from '@extension/utils/queueProviderEvent';
 import supportedNetworksFromSettings from '@extension/utils/supportedNetworksFromSettings';
 
 export default class ProviderActionListener extends BaseListener {
+  // public static variables
+  public static displayName = 'ProviderActionListener';
   // private variables
   private readonly _appWindowManager: AppWindowManager;
   private readonly _appWindowRepository: AppWindowRepository;
@@ -129,7 +131,7 @@ export default class ProviderActionListener extends BaseListener {
   }
 
   private async _handleCredentialLockActivated(): Promise<void> {
-    const _functionName = '_handleCredentialLockActivated';
+    const __function = '_handleCredentialLockActivated';
     const privateKeyItems = await this._privateKeyRepository.fetchAll();
 
     // remove all the decrypted private keys
@@ -141,7 +143,7 @@ export default class ProviderActionListener extends BaseListener {
     );
 
     this._logger?.debug(
-      `${ProviderActionListener.name}#${_functionName}: removed decrypted private keys`
+      `${ProviderActionListener.displayName}#${__function}: removed decrypted private keys`
     );
 
     // send a message to the popups to lock the screen
@@ -151,10 +153,10 @@ export default class ProviderActionListener extends BaseListener {
   }
 
   private async _onAlarm(alarm: Alarms.Alarm): Promise<void> {
-    const _functionName = 'onAlarm';
+    const __function = 'onAlarm';
 
     this._logger?.debug(
-      `${ProviderActionListener.name}#${_functionName}: alarm "${alarm.name}" fired`
+      `${ProviderActionListener.displayName}#${__function}: alarm "${alarm.name}" fired`
     );
 
     switch (alarm.name) {
@@ -168,13 +170,13 @@ export default class ProviderActionListener extends BaseListener {
   }
 
   private async _onExtensionClick(): Promise<void> {
-    const _functionName = 'onExtensionClick';
+    const __function = 'onExtensionClick';
     const isInitialized = await isProviderInitialized();
     let mainAppWindows: IAppWindow[];
     let registrationAppWindows: IAppWindow[];
 
     this._logger?.debug(
-      `${ProviderActionListener.name}#${_functionName}: browser extension clicked`
+      `${ProviderActionListener.displayName}#${__function}: browser extension clicked`
     );
 
     // remove any closed windows
@@ -188,7 +190,7 @@ export default class ProviderActionListener extends BaseListener {
       // if there is a registration app window open, bring it to focus
       if (registrationAppWindows.length > 0) {
         this._logger?.debug(
-          `${ProviderActionListener.name}#${_functionName}: no account detected and previous registration app window "${registrationAppWindows[0].windowId}" already open, bringing to focus`
+          `${ProviderActionListener.displayName}#${__function}: no account detected and previous registration app window "${registrationAppWindows[0].windowId}" already open, bringing to focus`
         );
 
         await browser.windows.update(registrationAppWindows[0].windowId, {
@@ -199,7 +201,7 @@ export default class ProviderActionListener extends BaseListener {
       }
 
       this._logger?.debug(
-        `${ProviderActionListener.name}#${_functionName}: no account detected and no main app window open, creating an new one`
+        `${ProviderActionListener.displayName}#${__function}: no account detected and no main app window open, creating an new one`
       );
 
       // remove everything from storage
@@ -220,7 +222,7 @@ export default class ProviderActionListener extends BaseListener {
     // if there is a main app window open, bring it to focus
     if (mainAppWindows.length > 0) {
       this._logger?.debug(
-        `${ProviderActionListener.name}#${_functionName}: previous account detected and previous main app window "${mainAppWindows[0].windowId}" already open, bringing to focus`
+        `${ProviderActionListener.displayName}#${__function}: previous account detected and previous main app window "${mainAppWindows[0].windowId}" already open, bringing to focus`
       );
 
       await browser.windows.update(mainAppWindows[0].windowId, {
@@ -231,7 +233,7 @@ export default class ProviderActionListener extends BaseListener {
     }
 
     this._logger?.debug(
-      `${ProviderActionListener.name}#${_functionName}: previous account detected and no main app window open, creating an new one`
+      `${ProviderActionListener.displayName}#${__function}: previous account detected and no main app window open, creating an new one`
     );
 
     // if there is no main app window up, we can open the app and clear the credentials lock alarm
@@ -242,13 +244,13 @@ export default class ProviderActionListener extends BaseListener {
   }
 
   private async _onFocusChanged(windowId: number): Promise<void> {
-    const _functionName = '_onFocusChanged';
+    const __function = '_onFocusChanged';
     const mainWindow = await this._getMainWindow();
 
     if (mainWindow) {
       if (windowId === mainWindow.id) {
         this._logger?.debug(
-          `${ProviderActionListener.name}#${_functionName}: main window with id "${windowId}" has focus`
+          `${ProviderActionListener.displayName}#${__function}: main window with id "${windowId}" has focus`
         );
 
         await this._clearCredentialLockAlarm();
@@ -257,7 +259,7 @@ export default class ProviderActionListener extends BaseListener {
       }
 
       this._logger?.debug(
-        `${ProviderActionListener.name}#${_functionName}: main window has lost focus to window with id "${windowId}"`
+        `${ProviderActionListener.displayName}#${__function}: main window has lost focus to window with id "${windowId}"`
       );
 
       await this._restartCredentialLockAlarm();
@@ -265,7 +267,7 @@ export default class ProviderActionListener extends BaseListener {
   }
 
   private async _onInstalled(): Promise<void> {
-    const _functionName = '_onInstalled';
+    const __function = '_onInstalled';
     let systemInfo = await this._systemInfoRepository.fetch();
 
     // if there is no system info, initialize the default
@@ -273,7 +275,7 @@ export default class ProviderActionListener extends BaseListener {
       systemInfo = SystemInfoRepository.initializeDefaultSystem();
 
       this._logger?.debug(
-        `${ProviderActionListener.name}#${_functionName}: initialize a new system info with device id "${systemInfo.deviceID}"`
+        `${ProviderActionListener.displayName}#${__function}: initialize a new system info with device id "${systemInfo.deviceID}"`
       );
 
       await this._systemInfoRepository.save(systemInfo);
@@ -281,11 +283,11 @@ export default class ProviderActionListener extends BaseListener {
   }
 
   private async _onOmniboxInputEntered(text: string): Promise<void> {
-    const _functionName = '_onOmniboxInputEntered';
+    const __function = '_onOmniboxInputEntered';
     let arc0300Schema: IARC0300BaseSchema | null;
 
     this._logger?.debug(
-      `${ProviderActionListener.name}#${_functionName}: received omnibox input "${text}"`
+      `${ProviderActionListener.displayName}#${__function}: received omnibox input "${text}"`
     );
 
     arc0300Schema = parseURIToARC0300Schema(text, {
@@ -333,13 +335,13 @@ export default class ProviderActionListener extends BaseListener {
   }
 
   private async _onWindowRemove(windowId: number): Promise<void> {
-    const _functionName = '_onWindowRemove';
+    const __function = '_onWindowRemove';
     const appWindow = await this._appWindowRepository.fetchById(windowId);
 
     // remove the app window from storage
     if (appWindow) {
       this._logger?.debug(
-        `${ProviderActionListener.name}#${_functionName}: removed "${appWindow.type}" window`
+        `${ProviderActionListener.displayName}#${__function}: removed "${appWindow.type}" window`
       );
 
       if (appWindow.type === AppTypeEnum.MainApp) {
