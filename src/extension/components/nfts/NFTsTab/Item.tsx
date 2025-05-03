@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 // components
 import AssetBadge from '@extension/components/AssetBadge';
-import AssetIcon from '@extension/components/AssetIcon';
+import AssetIcon from '@extension/components/icons/AssetIcon';
 import NFTAvatar from '@extension/components/nfts/NFTAvatar';
 
 // constants

@@ -23,7 +23,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 // components
 import AddressDisplay from '@extension/components/AddressDisplay';
 import AssetAvatar from '@extension/components/AssetAvatar';
-import AssetIcon from '@extension/components/AssetIcon';
+import AssetIcon from '@extension/components/icons/AssetIcon';
 import AssetBadge from '@extension/components/AssetBadge';
 import Button from '@common/components/Button';
 import CopyIconButton from '@extension/components/CopyIconButton';

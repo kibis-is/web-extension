@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 // components
 import AssetAvatar from '@extension/components/AssetAvatar';
 import AssetBadge from '@extension/components/AssetBadge';
-import AssetIcon from '@extension/components/AssetIcon';
+import AssetIcon from '@extension/components/icons/AssetIcon';
 
 // constants
 import { DEFAULT_GAP, TAB_ITEM_HEIGHT } from '@common/constants';

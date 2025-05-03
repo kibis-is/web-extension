@@ -5,8 +5,8 @@ import { IoArrowForwardOutline } from 'react-icons/io5';
 import { useNavigate } from 'react-router-dom';
 
 // components
-import AnimatedKibisisIcon from '@extension/components/AnimatedKibisisIcon';
 import Button from '@common/components/Button';
+import KibisisIcon from '@extension/components/icons/KibisisIcon';
 
 // constants
 import { DEFAULT_GAP } from '@common/constants';
@@ -51,7 +51,7 @@ const GetStartedPage: FC = () => {
         spacing={DEFAULT_GAP / 3}
         w="full"
       >
-        <AnimatedKibisisIcon color={primaryColor} boxSize={iconSize} />
+        <KibisisIcon color={primaryColor} boxSize={iconSize} />
 
         <Heading color={defaultTextColor}>{__APP_TITLE__}</Heading>
 

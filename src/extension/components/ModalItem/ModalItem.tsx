@@ -2,7 +2,7 @@ import { HStack, Text, Tooltip } from '@chakra-ui/react';
 import React, { FC } from 'react';
 
 // components
-import WarningIcon from '@extension/components/WarningIcon';
+import WarningIcon from '@extension/components/icons/WarningIcon';
 
 // constants
 import { DEFAULT_GAP, MODAL_ITEM_HEIGHT } from '@common/constants';

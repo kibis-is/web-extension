@@ -13,7 +13,7 @@ import React, { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
 // components
-import WarningIcon from '@extension/components/WarningIcon';
+import WarningIcon from '@extension/components/icons/WarningIcon';
 
 // hooks
 import useDefaultTextColor from '@extension/hooks/useDefaultTextColor';
