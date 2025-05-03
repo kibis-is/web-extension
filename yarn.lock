@@ -7,6 +7,13 @@
   resolved "https://registry.npmjs.org/@aashutoshrathi/word-wrap/-/word-wrap-1.2.6.tgz"
   integrity sha512-1Yjs2SvM8TflER/OD3cOjhWWOZb58A2t7wpE2S9XfBYTiIl+XFhQG2bjy4Pu1I+EAlCNUzRDYDdFwFYUKvXcIA==
 
+"@agoralabs-sh/algorand-provider@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@agoralabs-sh/algorand-provider/-/algorand-provider-1.1.0.tgz#4bab3668715131692b37882231d3d023b9c8cd78"
+  integrity sha512-BKXkA7fc7/gE9Vrp6ZBee3QTQfKo+fTNZ0RtfY0gPHw32zLwkMmJCsxtmQwXGJybsNetsMglJT3DCgUPbVlIQA==
+  dependencies:
+    algosdk "^2.1.0"
+
 "@agoralabs-sh/avm-web-provider@^1.7.0":
   version "1.7.0"
   resolved "https://registry.yarnpkg.com/@agoralabs-sh/avm-web-provider/-/avm-web-provider-1.7.0.tgz#735280d0f61dd441552fe586ec8abbd0d6adefaa"
@@ -4332,6 +4339,21 @@ algo-msgpack-with-bigint@^2.1.1:
   version "2.1.1"
   resolved "https://registry.npmjs.org/algo-msgpack-with-bigint/-/algo-msgpack-with-bigint-2.1.1.tgz"
   integrity sha512-F1tGh056XczEaEAqu7s+hlZUDWwOBT70Eq0lfMpBP2YguSQVyxRbprLq5rELXKQOyOaixTWYhMeMQMzP0U5FoQ==
+
+algosdk@^2.1.0:
+  version "2.11.0"
+  resolved "https://registry.yarnpkg.com/algosdk/-/algosdk-2.11.0.tgz#1baae85465c1e12ba963e9754b9fdedd29b06d84"
+  integrity sha512-MJ9xrjBKqG6ItCAR0Z974DG7nvifXsQxlj7HbWkBat4+h/IygwKPEH/v0dQPOYWdTcf5/5lfu+OyEVOsjxvyRQ==
+  dependencies:
+    algo-msgpack-with-bigint "^2.1.1"
+    buffer "^6.0.3"
+    hi-base32 "^0.5.1"
+    js-sha256 "^0.9.0"
+    js-sha3 "^0.8.0"
+    js-sha512 "^0.8.0"
+    json-bigint "^1.0.0"
+    tweetnacl "^1.0.3"
+    vlq "^2.0.4"
 
 algosdk@^2.7.0:
   version "2.7.0"
