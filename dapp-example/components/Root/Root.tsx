@@ -102,7 +102,7 @@ const Root: FC = () => {
     connectionType,
     network,
   }: IOnConnectParams) => {
-    let result: boolean = false;
+    let result = false;
 
     switch (connectionType) {
       case ConnectionTypeEnum.AVMWebProvider:

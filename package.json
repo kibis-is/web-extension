@@ -1,6 +1,6 @@
 {
   "name": "@kibis-is/web-extension",
-  "version": "2.6.0-beta.1",
+  "version": "2.6.0-beta.2",
   "description": "An AVM wallet that goes beyond just DeFi.",
   "main": "build/main.js",
   "repository": {
@@ -120,6 +120,7 @@
     "yarn": "^1.22.19"
   },
   "dependencies": {
+    "@agoralabs-sh/algorand-provider": "^1.1.0",
     "@agoralabs-sh/avm-web-provider": "^1.7.0",
     "@agoralabs-sh/uuid": "^1.1.0",
     "@chakra-ui/anatomy": "^2.2.2",

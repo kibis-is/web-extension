@@ -1,9 +1,23 @@
+# [2.6.0-beta.2](https://github.com/kibis-is/web-extension/compare/v2.6.0-beta.1...v2.6.0-beta.2) (2025-05-03)
+
+
+### Bug Fixes
+
+* update voi testnet genesis hash ([#357](https://github.com/kibis-is/web-extension/issues/357)) ([9502926](https://github.com/kibis-is/web-extension/commit/95029266f2bbe03d624743498efbc5e84d4c3261))
+
 # [2.6.0-beta.1](https://github.com/kibis-is/web-extension/compare/v2.5.0...v2.6.0-beta.1) (2025-05-03)
 
 
 ### Features
 
 * update icons ([#356](https://github.com/kibis-is/web-extension/issues/356)) ([6939380](https://github.com/kibis-is/web-extension/commit/693938066990b4791db9da39eaf34f88e0f2c585))
+
+## [2.5.1](https://github.com/kibis-is/web-extension/compare/v2.5.0...v2.5.1) (2025-05-03)
+
+
+### Bug Fixes
+
+* reinstate algorand provider support ([#358](https://github.com/kibis-is/web-extension/issues/358)) ([f19276f](https://github.com/kibis-is/web-extension/commit/f19276fc5d90e79e8bd51a0f809ddb61f24cac15))
 
 # [2.5.0](https://github.com/kibis-is/web-extension/compare/v2.4.0...v2.5.0) (2025-05-02)
 
