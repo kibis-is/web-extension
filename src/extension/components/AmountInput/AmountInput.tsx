@@ -15,7 +15,7 @@ import { randomBytes } from '@stablelib/random';
 
 // components
 import Label from '@common/components/Label';
-import InformationIcon from '@extension/components/InformationIcon';
+import InformationIcon from '@extension/components/icons/InformationIcon';
 
 // constants
 import { DEFAULT_GAP, INPUT_HEIGHT } from '@common/constants';

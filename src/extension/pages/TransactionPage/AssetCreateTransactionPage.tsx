@@ -13,7 +13,7 @@ import { useTranslation } from 'react-i18next';
 // components
 import AddressDisplay from '@extension/components/AddressDisplay';
 import AssetDisplay from '@extension/components/AssetDisplay';
-import AssetIcon from '@extension/components/AssetIcon';
+import AssetIcon from '@extension/components/icons/AssetIcon';
 import CopyIconButton from '@extension/components/CopyIconButton';
 import MoreInformationAccordion from '@extension/components/MoreInformationAccordion';
 import OpenTabIconButton from '@extension/components/OpenTabIconButton';

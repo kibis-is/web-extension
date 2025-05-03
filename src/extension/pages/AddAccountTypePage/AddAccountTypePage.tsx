@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 // components
 import AccountTypeItem from '@extension/components/accounts/AccountTypeItem';
 import CreateNewAccountIcon from '@extension/components/CreateNewAccountIcon';
-import ImportAccountIcon from '@extension/components/ImportAccountIcon';
+import ImportAccountIcon from '@extension/components/icons/ImportAccountIcon';
 import PageHeader from '@extension/components/PageHeader';
 
 // constants

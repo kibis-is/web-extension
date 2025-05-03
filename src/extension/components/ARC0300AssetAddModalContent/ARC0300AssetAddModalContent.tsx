@@ -26,7 +26,7 @@ import { useNavigate } from 'react-router-dom';
 import AccountSelect from '@extension/components/accounts/AccountSelect';
 import AssetAvatar from '@extension/components/AssetAvatar';
 import AssetBadge from '@extension/components/AssetBadge';
-import AssetIcon from '@extension/components/AssetIcon';
+import AssetIcon from '@extension/components/icons/AssetIcon';
 import Button from '@common/components/Button';
 import NetworkBadge from '@extension/components/NetworkBadge';
 import CopyIconButton from '@extension/components/CopyIconButton';

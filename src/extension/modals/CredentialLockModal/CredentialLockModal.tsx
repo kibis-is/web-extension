@@ -18,7 +18,7 @@ import { useDispatch } from 'react-redux';
 
 // components
 import Button from '@common/components/Button';
-import KibisisIcon from '@extension/components/KibisisIcon';
+import KibisisIcon from '@extension/components/icons/KibisisIcon';
 
 // constants
 import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@common/constants';

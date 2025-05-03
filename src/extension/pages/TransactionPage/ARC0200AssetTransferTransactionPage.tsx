@@ -15,7 +15,7 @@ import AddressDisplay from '@extension/components/AddressDisplay';
 import AssetBadge from '@extension/components/AssetBadge';
 import AssetDisplay from '@extension/components/AssetDisplay';
 import AssetAvatar from '@extension/components/AssetAvatar';
-import AssetIcon from '@extension/components/AssetIcon';
+import AssetIcon from '@extension/components/icons/AssetIcon';
 import CopyIconButton from '@extension/components/CopyIconButton';
 import LoadingTransactionPage from '@extension/pages/TransactionPage/LoadingTransactionPage';
 import MoreInformationAccordion from '@extension/components/MoreInformationAccordion';

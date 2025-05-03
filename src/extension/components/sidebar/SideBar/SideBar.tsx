@@ -21,7 +21,7 @@ import { useNavigate } from 'react-router-dom';
 // components
 import Divider from '@extension/components/Divider';
 import IconButton from '@common/components/IconButton';
-import KibisisIcon from '@extension/components/KibisisIcon';
+import KibisisIcon from '@extension/components/icons/KibisisIcon';
 import ScrollableContainer from '@extension/components/ScrollableContainer';
 import SideBarAccountList from '@extension/components/sidebar/SideBarAccountList';
 import SideBarActionItem from '@extension/components/sidebar/SideBarActionItem';

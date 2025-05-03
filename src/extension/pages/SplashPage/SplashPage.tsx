@@ -2,7 +2,7 @@ import { Center, Flex } from '@chakra-ui/react';
 import React, { type FC } from 'react';
 
 // components
-import AnimatedKibisisIcon from '@extension/components/AnimatedKibisisIcon';
+import KibisisIcon from '@extension/components/icons/KibisisIcon';
 
 // constants
 import { BODY_BACKGROUND_COLOR } from '@common/constants';
@@ -28,7 +28,7 @@ const SplashPage: FC = () => {
         minH="100vh"
         w="full"
       >
-        <AnimatedKibisisIcon color={primaryColor} h={iconSize} w={iconSize} />
+        <KibisisIcon color={primaryColor} h={iconSize} w={iconSize} />
       </Flex>
     </Center>
   );

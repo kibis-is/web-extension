@@ -3,7 +3,7 @@ import React, { type FC, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 // components
-import InformationIcon from '@extension/components/InformationIcon';
+import InformationIcon from '@extension/components/icons/InformationIcon';
 
 // constants
 import { DEFAULT_GAP } from '@common/constants';

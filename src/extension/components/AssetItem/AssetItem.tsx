@@ -4,7 +4,7 @@ import React, { FC } from 'react';
 // components
 import AssetAvatar from '@extension/components/AssetAvatar';
 import AssetBadge from '@extension/components/AssetBadge';
-import AssetIcon from '@extension/components/AssetIcon';
+import AssetIcon from '@extension/components/icons/AssetIcon';
 
 // constants
 import { DEFAULT_GAP } from '@common/constants';

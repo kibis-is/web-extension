@@ -15,7 +15,7 @@ import { randomBytes } from '@stablelib/random';
 
 // components
 import IconButton from '@common/components/IconButton';
-import InformationIcon from '@extension/components/InformationIcon';
+import InformationIcon from '@extension/components/icons/InformationIcon';
 import Label from '@common/components/Label';
 
 // constants

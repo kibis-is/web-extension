@@ -2,8 +2,8 @@ import { Icon, IconProps } from '@chakra-ui/react';
 import React, { FC } from 'react';
 
 // components
-import AlgorandAssetIcon from '@extension/components/AlgorandAssetIcon';
-import VoiAssetIcon from '@extension/components/VoiAssetIcon';
+import AlgorandAssetIcon from '@extension/components/icons/AlgorandAssetIcon';
+import VoiAssetIcon from '@extension/components/icons/VoiAssetIcon';
 
 interface IProps extends IconProps {
   networkTheme?: string;

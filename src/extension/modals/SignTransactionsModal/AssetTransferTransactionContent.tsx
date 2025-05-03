@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 // components
 import AddressDisplay from '@extension/components/AddressDisplay';
 import AssetAvatar from '@extension/components/AssetAvatar';
-import AssetIcon from '@extension/components/AssetIcon';
+import AssetIcon from '@extension/components/icons/AssetIcon';
 import NetworkBadge from '@extension/components/NetworkBadge';
 import CopyIconButton from '@extension/components/CopyIconButton';
 import ModalAssetItem from '@extension/components/ModalAssetItem';

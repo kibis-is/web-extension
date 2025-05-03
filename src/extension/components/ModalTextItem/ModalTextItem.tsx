@@ -3,7 +3,7 @@ import React, { type FC } from 'react';
 
 // components
 import CopyIconButton from '@extension/components/CopyIconButton';
-import WarningIcon from '@extension/components/WarningIcon';
+import WarningIcon from '@extension/components/icons/WarningIcon';
 
 // constants
 import { DEFAULT_GAP, MODAL_ITEM_HEIGHT } from '@common/constants';
