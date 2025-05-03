@@ -92,7 +92,7 @@ jobs:
 
   build_chrome:
     name: "Build Chrome"
-    needs: [install, validate_pr_title, type_check]
+    needs: [install, validate_pr_title]
     runs-on: ubuntu-latest
     environment: development
     steps:
@@ -109,7 +109,7 @@ jobs:
 
   build_edge:
     name: "Build Edge"
-    needs: [install, validate_pr_title, type_check]
+    needs: [install, validate_pr_title]
     runs-on: ubuntu-latest
     environment: development
     steps:
@@ -126,7 +126,7 @@ jobs:
 
   build_firefox:
     name: "Build Firefox"
-    needs: [install, validate_pr_title, type_check]
+    needs: [install, validate_pr_title]
     runs-on: ubuntu-latest
     environment: development
     steps:
@@ -145,7 +145,7 @@ jobs:
 
   build_opera:
     name: "Build Opera"
-    needs: [install, validate_pr_title, type_check]
+    needs: [install, validate_pr_title]
     runs-on: ubuntu-latest
     environment: development
     steps:
