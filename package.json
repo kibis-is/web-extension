@@ -44,6 +44,7 @@
     "package:chrome": "./scripts/package.sh chrome",
     "package:edge": "./scripts/package.sh edge",
     "package:firefox": "./scripts/package.sh firefox",
+    "package:opera": "./scripts/package.sh opera",
     "prepare": "husky && ./scripts/post_install.sh",
     "prettier": "prettier --config .prettierrc --write \"**/*.{js,json,ts,tsx}\"",
     "start:chrome": "concurrently --names \"DAPP,EXTENSION\" -c \"blue.bold,magenta.bold\" \"yarn start:dapp-example\" \"yarn start:extension --env target=chrome\"",

@@ -38,6 +38,9 @@ function main() {
   firefox)
     build_dir="${PWD}/.firefox_build"
     ;;
+  opera)
+    build_dir="${PWD}/.opera_build"
+    ;;
   *)
     printf "%b unknown target specified \"${1}\" \n" "${ERROR_PREFIX}"
     exit 1
@@ -77,5 +80,5 @@ function main() {
   exit 0
 }
 
-# And so, it begins...
+# and so, it begins...
 main "$1"
