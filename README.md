@@ -84,8 +84,8 @@ Refer to the [documentation](https://kibis.is/overview) for information on how t
 
 ### 3.1. Requirements
 
-* Install [Yarn v1.22.5+](https://yarnpkg.com/)
 * Install [Node v20.9.0+](https://nodejs.org/en/)
+* Install [pnpm v10.3.0+](https://pnpm.io/installation)
 * Install [jq](https://github.com/jqlang/jq) (optional - if you are installing the local Chrome browser)
 
 <sup>[Back to top ^][table-of-contents]</sup>
@@ -94,7 +94,7 @@ Refer to the [documentation](https://kibis.is/overview) for information on how t
 
 1. Install the dependencies:
 ```bash
-$ yarn install
+$ pnpm install
 ```
 
 > ⚠️ **NOTE:** a post install script will run that creates a `.env` file.
@@ -115,7 +115,7 @@ If you are want to run a standalone browser for development, you can install dev
 
 1. Simply run:
 ```shell
-yarn install:chrome
+pnpm install:chrome
 ```
 
 > ️ **NOTE:** the binary will be installed to `.chrome/`.
@@ -126,7 +126,7 @@ yarn install:chrome
 
 1. Simply run:
 ```shell
-yarn install:firefox
+pnpm install:firefox
 ```
 
 > ⚠️ **NOTE:** the binary will be installed to `.firefox/`.
@@ -137,7 +137,7 @@ yarn install:firefox
 
 * To run simply use:
 ```bash
-$ yarn start:<chrome|firefox>
+$ pnpm start:<chrome|firefox>
 ```
 
 > ⚠️ **NOTE:** this command will bundle the TypeScript source code and extension assets into the `.<chrome|firefox>_build/` directory and depending on your intended target (you can choose '`chrome`' or '`firefox`') the corresponding browser will start up with the unpacked extension as a temporary extension.
@@ -150,24 +150,24 @@ $ yarn start:<chrome|firefox>
 
 | Command                   | Description                                                                                                                                                                                            |
 |---------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `yarn build:chrome`       | Bundles the source code and Chrome specific assets into the `.chrome_build/` directory.                                                                                                                |
-| `yarn build:edge`         | Bundles the source code and Microsoft Edge specific assets into the `.edge_build/` directory.                                                                                                          |
-| `yarn build:firefox`      | Bundles the source code and Firefox specific assets into the `.firefox_build/` directory.                                                                                                              |
-| `yarn build:opera`        | Bundles the source code and Firefox specific assets into the `.opera_build/` directory.                                                                                                                |
-| `yarn install:chrome`     | Installs/updates the latest version of Chrome For Testing browser to the project root. This removes the existing version if it exists.                                                                 |
-| `yarn install:firefox`    | Installs/updates the latest version of Firefox Developer Edition browser to the project root. This removes the existing version if it exists.                                                          |
-| `yarn package:chrome`     | Packages the contents of the `.chrome_build/` directory into a `kibisis-chrome-{version}.zip` file, ready for submission.                                                                              |
-| `yarn package:edge`       | Packages the contents of the `.edge_build/` directory into a `kibisis-edge-{version}.zip` file, ready for submission.                                                                                  |
-| `yarn package:firefox`    | Packages the contents of the `.firefox_build/` directory into a `kibisis-firefox-{version}.zip` file, ready for submission.                                                                            |
-| `yarn package:opera`      | Packages the contents of the `.opera_build/` directory into a `kibisis-opera-{version}.zip` file, ready for submission.                                                                                |
-| `yarn prettier`           | Runs `prettier` with the same configuration that is run on the pre-commit hooks.                                                                                                                       |
-| `yarn start:chrome`       | Bundles the source code & the add-on assets, starts the local Chrome For Testing Developer edition with the add-on installed. This will watch for changes in the source code and reload the extension. |
-| `yarn start:edge`         | Bundles the source code & the add-on assets. This will watch for changes in the source code and reload the extension.                                                                                  |
-| `yarn start:firefox`      | Bundles the source code & the add-on assets, starts the local Firefox Developer edition with the add-on installed. This will watch for changes in the source code and reload the extension.            |
-| `yarn start:opera`        | Bundles the source code & the add-on assets. This will watch for changes in the source code and reload the extension.                                                                                  |
-| `yarn start:dapp-example` | Starts the example dApp at [http://localhost:8080](http://localhost:8080)                                                                                                                              |
-| `yarn test`               | Runs unit tests.                                                                                                                                                                                       |
-| `yarn test:coverage`      | Runs unit tests with coverage.                                                                                                                                                                         |
+| `pnpm build:chrome`       | Bundles the source code and Chrome specific assets into the `.chrome_build/` directory.                                                                                                                |
+| `pnpm build:edge`         | Bundles the source code and Microsoft Edge specific assets into the `.edge_build/` directory.                                                                                                          |
+| `pnpm build:firefox`      | Bundles the source code and Firefox specific assets into the `.firefox_build/` directory.                                                                                                              |
+| `pnpm build:opera`        | Bundles the source code and Firefox specific assets into the `.opera_build/` directory.                                                                                                                |
+| `pnpm install:chrome`     | Installs/updates the latest version of Chrome For Testing browser to the project root. This removes the existing version if it exists.                                                                 |
+| `pnpm install:firefox`    | Installs/updates the latest version of Firefox Developer Edition browser to the project root. This removes the existing version if it exists.                                                          |
+| `pnpm package:chrome`     | Packages the contents of the `.chrome_build/` directory into a `kibisis-chrome-{version}.zip` file, ready for submission.                                                                              |
+| `pnpm package:edge`       | Packages the contents of the `.edge_build/` directory into a `kibisis-edge-{version}.zip` file, ready for submission.                                                                                  |
+| `pnpm package:firefox`    | Packages the contents of the `.firefox_build/` directory into a `kibisis-firefox-{version}.zip` file, ready for submission.                                                                            |
+| `pnpm package:opera`      | Packages the contents of the `.opera_build/` directory into a `kibisis-opera-{version}.zip` file, ready for submission.                                                                                |
+| `pnpm prettier`           | Runs `prettier` with the same configuration that is run on the pre-commit hooks.                                                                                                                       |
+| `pnpm start:chrome`       | Bundles the source code & the add-on assets, starts the local Chrome For Testing Developer edition with the add-on installed. This will watch for changes in the source code and reload the extension. |
+| `pnpm start:edge`         | Bundles the source code & the add-on assets. This will watch for changes in the source code and reload the extension.                                                                                  |
+| `pnpm start:firefox`      | Bundles the source code & the add-on assets, starts the local Firefox Developer edition with the add-on installed. This will watch for changes in the source code and reload the extension.            |
+| `pnpm start:opera`        | Bundles the source code & the add-on assets. This will watch for changes in the source code and reload the extension.                                                                                  |
+| `pnpm start:dapp-example` | Starts the example dApp at [http://localhost:8080](http://localhost:8080)                                                                                                                              |
+| `pnpm test`               | Runs unit tests.                                                                                                                                                                                       |
+| `pnpm test:coverage`      | Runs unit tests with coverage.                                                                                                                                                                         |
 
 <sup>[Back to top ^][table-of-contents]</sup>
 

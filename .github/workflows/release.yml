@@ -18,7 +18,7 @@ jobs:
       - name: "🛎 Checkout"
         uses: actions/checkout@v4
       - name: "🔧 Setup"
-        uses: ./.github/actions/use-dependencies
+        uses: ./.github/actions/use-pnpm-dependencies
 
   ##
   # release
@@ -39,7 +39,7 @@ jobs:
       - name: "📦 Install yq"
         uses: ./.github/actions/install-yq
       - name: "🔧 Setup"
-        uses: ./.github/actions/use-dependencies
+        uses: ./.github/actions/use-pnpm-dependencies
       - name: "📝 Create .env file"
         uses: ./.github/actions/create-env-file
         with:
@@ -53,4 +53,4 @@ jobs:
           GIT_COMMITTER_EMAIL: builders@kibis.is
           # used to push the release commit and create the tags
           GITHUB_TOKEN: ${{ secrets.READ_AND_WRITE_REPOS_TOKEN }}
-        run: yarn semantic-release
+        run: pnpm semantic-release

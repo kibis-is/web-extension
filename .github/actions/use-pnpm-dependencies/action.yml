@@ -1,0 +1,17 @@
+name: "Use pnpm Dependencies"
+
+description: "Checks if the pnpm dependencies have been cached with the hash of the pnpm-lock.yaml file."
+
+runs:
+  using: "composite"
+  steps:
+    - name: "🔧 Setup pnpm"
+      uses: pnpm/action-setup@v4
+    - name: "🔧 Setup Node"
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.9.0'
+        cache: 'pnpm'
+    - name: "📦 Install"
+      run: pnpm install
+      shell: bash

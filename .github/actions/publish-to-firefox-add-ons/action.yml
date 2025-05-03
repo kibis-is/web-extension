@@ -22,9 +22,10 @@ runs:
     - name: "🔧 Setup"
       uses: actions/setup-node@v4
       with:
-        node-version: 20.9.0
+        node-version: '20.9.0'
+        cache: 'pnpm'
     - name: "📦 Install"
-      run: yarn --cwd ./.github/actions/publish-to-firefox-add-ons/ install
+      run: pnpm install --dir ./.github/actions/publish-to-firefox-add-ons/
       shell: bash
     - name: "🚀 Upload and Publish to Firefox Add-ons"
       env:
@@ -32,5 +33,5 @@ runs:
         JWT_ISSUER: ${{ inputs.jwt_issuer }}
         JWT_SECRET: ${{ inputs.jwt_secret }}
         ZIP_FILE_NAME: ${{ inputs.zip_file_name }}
-      run: yarn --cwd ./.github/actions/publish-to-firefox-add-ons/ start
+      run: pnpm start --dir ./.github/actions/publish-to-firefox-add-ons/
       shell: bash

@@ -3,15 +3,15 @@
 ### Table of contents
 
 * [1. Commit messages](#1-commit-messages)
-  * [1.1. Type](#11-type)
-  * [1.2. Scope](#12-scope)
-  * [1.3. Subject](#13-subject)
+  - [1.1. Type](#11-type)
+  - [1.2. Scope](#12-scope)
+  - [1.3. Subject](#13-subject)
 * [2. Pull requests](#2-pull-requests)
 * [3. Pre-releases](#3-pre-releases)
-  * [3.1. Working on a future release](#31-working-on-a-future-release)
-  * [3.2. Releasing a bug fix on the default distribution channel](#32-releasing-a-bug-fix-on-the-default-distribution-channel)
-  * [3.3. Publishing beta release to the default distribution channel](#33-publishing-beta-release-to-the-default-distribution-channel)
-  * [3.4. Working on a new future release](#34-working-on-a-new-future-release)
+  - [3.1. Working on a future release](#31-working-on-a-future-release)
+  - [3.2. Releasing a bug fix on the default distribution channel](#32-releasing-a-bug-fix-on-the-default-distribution-channel)
+  - [3.3. Publishing beta release to the default distribution channel](#33-publishing-beta-release-to-the-default-distribution-channel)
+  - [3.4. Working on a new future release](#34-working-on-a-new-future-release)
 
 ## 1. Commit messages
 
@@ -75,7 +75,7 @@ The subject contains a succinct description of the change:
 
 We now decide to work on a future major release, which will be composed of multiple features, some of them being breaking changes. We want to publish our package for each new feature developed for test purpose, however we do not want to increment our package version or make it available until all the features are developed and tested.
 
-To implement that workflow we can commit our first feature to the `beta` branch. When pushing that commit, **semantic-release** will publish the pre-release version `2.0.0-beta.1` on the dist-tag `@beta`. That allow us to install our module with `yarn add example-module@beta`. Others installing with `yarn add example-module` will still receive the version `1.0.0`.
+To implement that workflow we can commit our first feature to the `beta` branch. When pushing that commit, **semantic-release** will publish the pre-release version `2.0.0-beta.1` on the dist-tag `@beta`. That allow us to install our module with `pnpm add example-module@beta`. Others installing with `pnpm add example-module` will still receive the version `1.0.0`.
 
 The Git history of the repository is now:
 
@@ -158,7 +158,7 @@ We can now start to work on a new future major release, version `3.0.0`, on the 
 
 To do so we first need to update the `beta` branch with all the changes from `main` (the commits `fix: a fix`). As `beta` and `main` branches have diverged, this merge might require to resolve conflicts.
 
-We can now commit our new feature on `beta`. When pushing that commit, **semantic-release** will publish the pre-release version `3.0.0-beta.1` on the dist-tag `@beta`. That allow us to run integration tests by installing our module with `yarn install example-module@beta`. Other users installing with `yarn install example-module` will still receive the version `3.0.0`.
+We can now commit our new feature on `beta`. When pushing that commit, **semantic-release** will publish the pre-release version `3.0.0-beta.1` on the dist-tag `@beta`. That allow us to run integration tests by installing our module with `pnpm install example-module@beta`. Other users installing with `pnpm install example-module` will still receive the version `3.0.0`.
 
 The Git history of the repository is now:
 

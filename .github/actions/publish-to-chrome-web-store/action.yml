@@ -25,9 +25,10 @@ runs:
     - name: "🔧 Setup"
       uses: actions/setup-node@v4
       with:
-        node-version: 20.9.0
+        node-version: '20.9.0'
+        cache: 'pnpm'
     - name: "📦 Install"
-      run: yarn --cwd ./.github/actions/publish-to-chrome-web-store/ install
+      run: pnpm install --dir ./.github/actions/publish-to-chrome-web-store/
       shell: bash
     - name: "🚀 Upload and Publish to the Chrome Web Store"
       env:
@@ -36,5 +37,5 @@ runs:
         CLIENT_SECRET: ${{ inputs.client_secret }}
         REFRESH_TOKEN: ${{ inputs.refresh_token }}
         ZIP_FILE_NAME: ${{ inputs.zip_file_name }}
-      run: yarn --cwd ./.github/actions/publish-to-chrome-web-store/ start
+      run: pnpm start --dir ./.github/actions/publish-to-chrome-web-store/
       shell: bash

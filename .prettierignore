@@ -1,11 +1,8 @@
-.build/
 .chrome/
 .chrome_build/
 .chrome_profile/
 .dapp_example_build/
-.edge/
 .edge_build/
-.edge_profile/
 .firefox/
 .firefox_build/
 .firefox_profile/
