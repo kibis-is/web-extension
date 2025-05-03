@@ -1,0 +1,36 @@
+name: "Publish To Opera Add-ons"
+
+description: "GitHub action for publishing the extension to Opera add-ons"
+
+inputs:
+    email:
+      description: "The email for the Opera account."
+      required: true
+    extension_id:
+      description: "The Opera add-on ID."
+      required: true
+    password:
+      description: "The password for the Opera account."
+      required: true
+    zip_file_name:
+      description: "Name of the downloaded zip file."
+      required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: "🔧 Setup"
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20.9.0
+    - name: "📦 Install"
+      run: yarn --cwd ./.github/actions/publish-to-opera-add-ons/ install
+      shell: bash
+    - name: "🚀 Upload and publish to Opera add-ons"
+      env:
+        EMAIL: ${{ inputs.email }}
+        EXTENSION_ID: ${{ inputs.extension_id }}
+        PASSWORD: ${{ inputs.password }}
+        ZIP_FILE_NAME: ${{ inputs.zip_file_name }}
+      run: yarn --cwd ./.github/actions/publish-to-opera-add-ons/ start
+      shell: bash
