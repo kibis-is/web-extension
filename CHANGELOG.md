@@ -12,6 +12,13 @@
 
 * update icons ([#356](https://github.com/kibis-is/web-extension/issues/356)) ([6939380](https://github.com/kibis-is/web-extension/commit/693938066990b4791db9da39eaf34f88e0f2c585))
 
+## [2.5.1](https://github.com/kibis-is/web-extension/compare/v2.5.0...v2.5.1) (2025-05-03)
+
+
+### Bug Fixes
+
+* reinstate algorand provider support ([#358](https://github.com/kibis-is/web-extension/issues/358)) ([f19276f](https://github.com/kibis-is/web-extension/commit/f19276fc5d90e79e8bd51a0f809ddb61f24cac15))
+
 # [2.5.0](https://github.com/kibis-is/web-extension/compare/v2.4.0...v2.5.0) (2025-05-02)
 
 
