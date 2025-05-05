@@ -5,9 +5,9 @@ import { useDispatch } from 'react-redux';
 
 // components
 import PageHeader from '@provider/components/PageHeader';
-import SettingsButtonItem from '@provider/components/SettingsButtonItem';
-import SettingsSelectItem from '@provider/components/SettingsSelectItem';
-import SettingsSubHeading from '@provider/components/SettingsSubHeading';
+import SettingsButtonItem from '@provider/components/settings/SettingsButtonItem';
+import SettingsSelectItem from '@provider/components/settings/SettingsSelectItem';
+import SettingsSubHeading from '@provider/components/settings/SettingsSubHeading';
 
 // constants
 import { DEFAULT_GAP } from '@common/constants';

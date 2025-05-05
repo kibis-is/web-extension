@@ -13,7 +13,7 @@ import { useTranslation } from 'react-i18next';
 
 // components
 import PageHeader from '@provider/components/PageHeader';
-import SettingsLinkItem from '@provider/components/SettingsLinkItem';
+import SettingsLinkItem from '@provider/components/settings/SettingsLinkItem';
 
 // constants
 import { DEFAULT_GAP } from '@common/constants';

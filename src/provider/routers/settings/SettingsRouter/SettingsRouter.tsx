@@ -13,16 +13,16 @@ import {
 } from '@provider/constants';
 
 // pages
-import AboutSettingsPage from '@provider/pages/AboutSettingsPage';
-import AppearanceSettingsPage from '@provider/pages/AppearanceSettingsPage';
-import GeneralSettingsPage from '@provider/pages/GeneralSettingsPage';
-import PrivacySettingsPage from '@provider/pages/PrivacySettingsPage';
-import SettingsIndexPage from '@provider/pages/SettingsIndexPage';
-import SessionsSettingsPage from '@provider/pages/SessionsSettingsPage';
+import AboutSettingsPage from '@provider/pages/settings/AboutSettingsPage';
+import AppearanceSettingsPage from '@provider/pages/settings/AppearanceSettingsPage';
+import GeneralSettingsPage from '@provider/pages/settings/GeneralSettingsPage';
+import PrivacySettingsPage from '@provider/pages/settings/PrivacySettingsPage';
+import SettingsIndexPage from '@provider/pages/settings/SettingsIndexPage';
+import SessionsSettingsPage from '@provider/pages/settings/SessionsSettingsPage';
 
 // routers
-import AdvancedSettingsRouter from '@provider/routers/AdvancedSettingsRouter';
-import SecuritySettingsRouter from '@provider/routers/SecuritySettingsRouter';
+import AdvancedSettingsRouter from '@provider/routers/settings/AdvancedSettingsRouter';
+import SecuritySettingsRouter from '@provider/routers/settings/SecuritySettingsRouter';
 
 const SettingsRouter: FC = () => (
   <Routes>

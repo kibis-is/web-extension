@@ -7,7 +7,7 @@ import { useDispatch } from 'react-redux';
 
 // components
 import PageHeader from '@provider/components/PageHeader';
-import SettingsSelectItem from '@provider/components/SettingsSelectItem';
+import SettingsSelectItem from '@provider/components/settings/SettingsSelectItem';
 
 // constants
 import { DEFAULT_GAP } from '@common/constants';

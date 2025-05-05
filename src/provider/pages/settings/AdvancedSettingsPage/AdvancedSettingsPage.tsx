@@ -6,9 +6,9 @@ import { useDispatch } from 'react-redux';
 
 // components
 import PageHeader from '@provider/components/PageHeader';
-import SettingsLinkItem from '@provider/components/SettingsLinkItem';
-import SettingsSubHeading from '@provider/components/SettingsSubHeading';
-import SettingsSwitchItem from '@provider/components/SettingsSwitchItem';
+import SettingsLinkItem from '@provider/components/settings/SettingsLinkItem';
+import SettingsSubHeading from '@provider/components/settings/SettingsSubHeading';
+import SettingsSwitchItem from '@provider/components/settings/SettingsSwitchItem';
 
 // enums
 import { AccountTabEnum } from '@provider/enums';

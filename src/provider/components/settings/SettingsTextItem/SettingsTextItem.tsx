@@ -22,7 +22,7 @@ const SettingsTextItem: FC<IProps> = ({ children, fontSize, label, ...stackProps
     <HStack
       alignItems="center"
       justifyContent="space-between"
-      minH={SETTINGS_ITEM_HEIGHT / 2}
+      minH={SETTINGS_ITEM_HEIGHT}
       px={DEFAULT_GAP - 2}
       spacing={2}
       w="full"

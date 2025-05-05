@@ -5,7 +5,7 @@ import { Route, Routes } from 'react-router-dom';
 import { CUSTOM_NODES_ROUTE } from '@provider/constants';
 
 // pages
-import AdvancedSettingsPage from '@provider/pages/AdvancedSettingsPage';
+import AdvancedSettingsPage from '@provider/pages/settings/AdvancedSettingsPage';
 import CustomNodesPage from '@provider/pages/CustomNodesPage';
 
 const AdvancedSettingsRouter: FC = () => (

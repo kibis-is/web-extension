@@ -1,9 +1,8 @@
 import { Button, HStack, Icon, Tag, TagLabel, Text, VStack } from '@chakra-ui/react';
-import { encode as encodeHex } from '@stablelib/hex';
-import React, { FC } from 'react';
+import { randomString } from '@stablelib/random';
+import React, { FC, useMemo } from 'react';
 import { IoChevronForward } from 'react-icons/io5';
 import { Link } from 'react-router-dom';
-import { hash } from 'tweetnacl';
 
 // constants
 import { DEFAULT_GAP } from '@common/constants';
@@ -20,9 +19,9 @@ const SettingsLinkItem: FC<IProps> = ({ badges, icon, label, to }) => {
   // hooks
   const buttonHoverBackgroundColor = useButtonHoverBackgroundColor();
   const defaultTextColor = useDefaultTextColor();
-  // misc
-  const iconSize = 6;
-  const labelHash = encodeHex(hash(new TextEncoder().encode(label)), true);
+  // memos
+  const context = useMemo(() => randomString(8), []);
+  const iconSize = useMemo(() => 6, []);
 
   return (
     <Button
@@ -56,7 +55,7 @@ const SettingsLinkItem: FC<IProps> = ({ badges, icon, label, to }) => {
                 <Tag
                   borderRadius="full"
                   colorScheme={colorScheme}
-                  key={`settings-${labelHash.slice(0, 12)}-item-${index}`}
+                  key={`${context}-settings-link-badge-${index}`}
                   size="sm"
                   variant="solid"
                 >

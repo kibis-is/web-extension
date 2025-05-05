@@ -7,10 +7,10 @@ import { useDispatch } from 'react-redux';
 
 // components
 import PageHeader from '@provider/components/PageHeader';
-import SettingsLinkItem from '@provider/components/SettingsLinkItem';
-import SettingsSelectItem from '@provider/components/SettingsSelectItem';
-import SettingsSubHeading from '@provider/components/SettingsSubHeading';
-import SettingsSwitchItem from '@provider/components/SettingsSwitchItem';
+import SettingsLinkItem from '@provider/components/settings/SettingsLinkItem';
+import SettingsSelectItem from '@provider/components/settings/SettingsSelectItem';
+import SettingsSubHeading from '@provider/components/settings/SettingsSubHeading';
+import SettingsSwitchItem from '@provider/components/settings/SettingsSwitchItem';
 
 // constants
 import {
