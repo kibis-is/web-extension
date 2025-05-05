@@ -5,11 +5,13 @@ import { useDispatch } from 'react-redux';
 
 // components
 import PageHeader from '@provider/components/PageHeader';
-import SettingsSubHeading from '@provider/components/SettingsSubHeading';
-import SettingsSwitchItem from '@provider/components/SettingsSwitchItem';
+import SettingsExternalLinkItem from '@provider/components/settings/SettingsExternalLinkItem';
+import SettingsSubHeading from '@provider/components/settings/SettingsSubHeading';
+import SettingsSwitchItem from '@provider/components/settings/SettingsSwitchItem';
 
 // constants
 import { DEFAULT_GAP } from '@common/constants';
+import { KIBISIS_LINK } from '@provider/constants';
 
 // features
 import { saveToStorageThunk as saveSettingsToStorageThunk } from '@provider/features/settings';
@@ -44,16 +46,12 @@ const PrivacySettingsPage: FC = () => {
       <PageHeader colorMode={colorMode} title={t<string>('titles.page', { context: 'privacy' })} />
 
       <VStack spacing={DEFAULT_GAP - 2} w="full">
-        {/*analytics & tracking*/}
+        {/*information*/}
         <VStack w="full">
-          <SettingsSubHeading text={t<string>('headings.analyticsAndTracking')} />
+          <SettingsSubHeading text={t<string>('headings.information')} />
 
-          <SettingsSwitchItem
-            checked={settings.privacy.allowActionTracking}
-            description={t<string>('captions.allowActionTracking')}
-            label={t<string>('labels.allowActionTracking')}
-            onChange={handleOnSwitchChange('allowActionTracking')}
-          />
+          {/*privacy policy link*/}
+          <SettingsExternalLinkItem label={t<string>('labels.privacyPolicy')} to={`${KIBISIS_LINK}/privacy-policy`} />
         </VStack>
       </VStack>
     </>

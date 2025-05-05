@@ -13,7 +13,7 @@ import {
 import ChangePasswordPage from '@provider/pages/ChangePasswordPage';
 import ExportAccountPage from '@provider/pages/ExportAccountPage';
 import PasskeyPage from '@provider/pages/PasskeyPage';
-import SecuritySettingsPage from '@provider/pages/SecuritySettingsPage';
+import SecuritySettingsPage from '@provider/pages/settings/SecuritySettingsPage';
 import ViewSeedPhrasePage from '@provider/pages/ViewSeedPhrasePage';
 
 const SecuritySettingsRouter: FC = () => (

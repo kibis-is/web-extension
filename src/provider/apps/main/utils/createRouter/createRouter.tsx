@@ -20,7 +20,7 @@ import { setSideBar } from '@provider/features/layout';
 // pages
 import AssetPage from '@provider/pages/AssetPage';
 import NFTPage from '@provider/pages/NFTPage';
-import SettingsRouter from '@provider/routers/SettingsRouter';
+import SettingsRouter from '@provider/routers/settings/SettingsRouter';
 import TransactionPage from '@provider/pages/TransactionPage';
 
 // routers

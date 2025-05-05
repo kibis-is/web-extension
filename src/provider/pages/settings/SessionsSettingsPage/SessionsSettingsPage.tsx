@@ -9,7 +9,7 @@ import Button from '@common/components/Button';
 import EmptyState from '@common/components/EmptyState';
 import PageHeader from '@provider/components/PageHeader';
 import ScrollableContainer from '@provider/components/ScrollableContainer';
-import SettingsSessionItem, { SettingsSessionItemSkeleton } from '@provider/components/SettingsSessionItem';
+import SettingsSessionItem, { SettingsSessionItemSkeleton } from '@provider/components/settings/SettingsSessionItem';
 
 // components
 import { DEFAULT_GAP } from '@common/constants';

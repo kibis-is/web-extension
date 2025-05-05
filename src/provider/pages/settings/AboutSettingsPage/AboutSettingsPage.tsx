@@ -6,7 +6,7 @@ import browser from 'webextension-polyfill';
 // components
 import CopyIconButton from '@provider/components/CopyIconButton';
 import PageHeader from '@provider/components/PageHeader';
-import SettingsTextItem from '@provider/components/SettingsTextItem';
+import SettingsTextItem from '@provider/components/settings/SettingsTextItem';
 
 // hooks
 import useSubTextColor from '@provider/hooks/useSubTextColor';
