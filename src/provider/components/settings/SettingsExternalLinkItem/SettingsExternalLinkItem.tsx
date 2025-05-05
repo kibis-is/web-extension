@@ -18,7 +18,7 @@ const SettingsExternalLinkItem: FC<IProps> = ({ label, to }) => {
   const buttonHoverBackgroundColor = useButtonHoverBackgroundColor();
   const defaultTextColor = useDefaultTextColor();
   // memos
-  const iconSize = useMemo(() => 6, []);
+  const iconSize = useMemo(() => 4, []);
 
   return (
     <Button
