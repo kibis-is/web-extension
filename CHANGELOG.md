@@ -1,3 +1,10 @@
+# [2.6.0-beta.5](https://github.com/kibis-is/web-extension/compare/v2.6.0-beta.4...v2.6.0-beta.5) (2025-05-05)
+
+
+### Features
+
+* add privacy policy link to settings ([#363](https://github.com/kibis-is/web-extension/issues/363)) ([358162f](https://github.com/kibis-is/web-extension/commit/358162f50f417575b1380691b801c9221899d32f))
+
 # [2.6.0-beta.4](https://github.com/kibis-is/web-extension/compare/v2.6.0-beta.3...v2.6.0-beta.4) (2025-05-03)
 
 
