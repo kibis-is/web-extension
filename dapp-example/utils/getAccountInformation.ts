@@ -3,7 +3,7 @@ import { Algodv2, IntDecoding } from 'algosdk';
 import BigNumber from 'bignumber.js';
 
 // types
-import { IAVMAccountInformation, IAVMAsset, INetwork } from '@extension/types';
+import { IAVMAccountInformation, IAVMAsset, INetwork } from '@provider/types';
 import { IAccountInformation, IAssetInformation } from '../types';
 
 // utils

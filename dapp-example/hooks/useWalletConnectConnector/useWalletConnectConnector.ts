@@ -8,32 +8,20 @@ import { useEffect, useState } from 'react';
 import { useSelectLogger } from '../../selectors';
 
 // types
-import type { INetwork } from '@extension/types';
-import type {
-  IAccountInformation,
-  IConnectorParams,
-  IConnectorState,
-  ISignMessageActionResult,
-} from '../../types';
+import type { INetwork } from '@provider/types';
+import type { IAccountInformation, IConnectorParams, IConnectorState, ISignMessageActionResult } from '../../types';
 
 // utils
-import chainReferenceFromGenesisHash from '@extension/utils/chainReferenceFromGenesisHash';
-import {
-  getAccountInformation,
-  extractWalletConnectNamespaceFromNetwork,
-} from '../../utils';
+import chainReferenceFromGenesisHash from '@provider/utils/chainReferenceFromGenesisHash';
+import { getAccountInformation, extractWalletConnectNamespaceFromNetwork } from '../../utils';
 
-export default function useWalletConnectConnector({
-  toast,
-}: IConnectorParams): IConnectorState {
+export default function useWalletConnectConnector({ toast }: IConnectorParams): IConnectorState {
   const _hookName = 'useWalletConnectConnector';
   const projectId = '0451c3741ac5a5eba94c213ee1073cb1';
   // selectors
   const logger = useSelectLogger();
   // state
-  const [enabledAccounts, setEnabledAccounts] = useState<IAccountInformation[]>(
-    []
-  );
+  const [enabledAccounts, setEnabledAccounts] = useState<IAccountInformation[]>([]);
   const [network, setNetwork] = useState<INetwork | null>(null);
   const [signClient, setSignClient] = useState<SignClient | null>(null);
   const [session, setSession] = useState<SessionTypes.Struct | null>(null);
@@ -111,9 +99,7 @@ export default function useWalletConnectConnector({
 
     throw new Error(`signing a message not supported by wallet connect`);
   };
-  const signTransactionsAction = async (
-    transactions: IARC0001Transaction[]
-  ) => {
+  const signTransactionsAction = async (transactions: IARC0001Transaction[]) => {
     const _functionName = 'signTransactionsAction';
     let _error: string;
 
@@ -133,14 +119,9 @@ export default function useWalletConnectConnector({
     try {
       return await signClient.request<(string | null)[]>({
         topic: session.topic,
-        chainId: `${network.namespace.key}:${chainReferenceFromGenesisHash(
-          network.genesisHash
-        )}`,
+        chainId: `${network.namespace.key}:${chainReferenceFromGenesisHash(network.genesisHash)}`,
         request: {
-          method:
-            network.namespace.key === 'algorand'
-              ? 'algo_signTxn'
-              : 'avm_signTransactions',
+          method: network.namespace.key === 'algorand' ? 'algo_signTxn' : 'avm_signTransactions',
           params: transactions,
         },
       });
@@ -166,17 +147,11 @@ export default function useWalletConnectConnector({
       return signClient;
     }
 
-    descriptionMetaElement = window.document.querySelector(
-      'meta[name="description"]'
-    );
+    descriptionMetaElement = window.document.querySelector('meta[name="description"]');
     _signClient = await SignClient.init({
       metadata: {
-        description:
-          descriptionMetaElement?.content ||
-          'A simple dApp to test the features of the Kibisis wallet',
-        icons: [
-          `${window.location.protocol}//${window.location.host}/favicon.png`,
-        ],
+        description: descriptionMetaElement?.content || 'A simple dApp to test the features of the Kibisis wallet',
+        icons: [`${window.location.protocol}//${window.location.host}/favicon.png`],
         name: window.document.title,
         url: `${window.location.protocol}//${window.location.host}`,
       },
@@ -216,21 +191,16 @@ export default function useWalletConnectConnector({
       }
 
       // extract the addresses from the caip format of: <namespace>:<address>
-      addresses = session.namespaces[network.namespace.key].accounts.reduce(
-        (acc, value) => {
-          const address = value.split(':').pop() || null;
+      addresses = session.namespaces[network.namespace.key].accounts.reduce((acc, value) => {
+        const address = value.split(':').pop() || null;
 
-          return address ? [...acc, address] : acc;
-        },
-        []
-      );
+        return address ? [...acc, address] : acc;
+      }, []);
 
       try {
         setEnabledAccounts(
           await Promise.all(
-            addresses.map<Promise<IAccountInformation>>((address) =>
-              getAccountInformation({ address }, network)
-            )
+            addresses.map<Promise<IAccountInformation>>((address) => getAccountInformation({ address }, network))
           )
         );
       } catch (error) {

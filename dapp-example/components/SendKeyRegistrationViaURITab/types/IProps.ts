@@ -1,5 +1,5 @@
 // types
-import type { INetwork } from '@extension/types';
+import type { INetwork } from '@provider/types';
 import type { IAccountInformation } from '../../../types';
 
 interface IProps {

@@ -34,9 +34,7 @@ import { IWebpackEnvironmentVariables } from './types';
 // utils
 import { createCommonConfig } from './utils';
 
-const configs: (
-  env: IWebpackEnvironmentVariables
-) => (Configuration | DevelopmentConfiguration)[] = ({
+const configs: (env: IWebpackEnvironmentVariables) => (Configuration | DevelopmentConfiguration)[] = ({
   environment = EnvironmentEnum.Development,
   target = TargetEnum.Firefox,
 }: IWebpackEnvironmentVariables) => {
@@ -47,8 +45,8 @@ const configs: (
   let maxSize: number;
   // paths
   let buildPath: string;
-  let extensionPath: string;
   let manifestPaths: string[];
+  let providerPath: string;
   let tsConfigBuildPath: string;
   // performance
   let optimization: Record<string, unknown>;
@@ -67,7 +65,10 @@ const configs: (
   // load .env file
   config();
 
-  extensionPath = resolve(SRC_PATH, 'extension');
+  // @hack - interferes with tsconfig-paths-webpack-plugin causing the tsconfig to use the webpack version
+  delete process.env.TS_NODE_PROJECT;
+
+  providerPath = resolve(SRC_PATH, 'provider');
   tsConfigBuildPath = resolve(process.cwd(), 'tsconfig.build.json');
   commonConfig = createCommonConfig();
   dappExamplePort = 8080;
@@ -264,7 +265,7 @@ const configs: (
       entry: {
         ['client']: resolve(SRC_PATH, 'client', 'main.ts'),
         ['middleware']: resolve(SRC_PATH, 'middleware', 'main.ts'),
-        ['provider']: resolve(SRC_PATH, 'extension', 'main.ts'),
+        ['provider']: resolve(SRC_PATH, 'provider', 'main.ts'),
       },
       mode: environment,
       module: {
@@ -277,7 +278,7 @@ const configs: (
           tsLoaderRule,
         ],
       },
-      name: ConfigNameEnum.ExtensionScripts,
+      name: ConfigNameEnum.ProviderScripts,
       optimization: {
         removeAvailableModules: true,
         removeEmptyChunks: true,
@@ -291,24 +292,14 @@ const configs: (
     }),
 
     /**
-     * extension apps
+     * provider apps
      */
     merge(commonConfig, {
       devtool,
       entry: {
-        ['background-app']: resolve(
-          extensionPath,
-          'apps',
-          'background',
-          'index.ts'
-        ),
-        ['main-app']: resolve(extensionPath, 'apps', 'main', 'index.ts'),
-        ['registration-app']: resolve(
-          extensionPath,
-          'apps',
-          'registration',
-          'index.ts'
-        ),
+        ['background-app']: resolve(providerPath, 'apps', 'background', 'index.ts'),
+        ['main-app']: resolve(providerPath, 'apps', 'main', 'index.ts'),
+        ['registration-app']: resolve(providerPath, 'apps', 'registration', 'index.ts'),
       },
       mode: environment,
       module: {
@@ -321,7 +312,7 @@ const configs: (
           markdownLoaderRule,
         ],
       },
-      name: ConfigNameEnum.ExtensionApps,
+      name: ConfigNameEnum.ProviderApps,
       optimization,
       output,
       performance,
@@ -375,10 +366,7 @@ const configs: (
      * dapp example
      */
     merge(commonConfig, {
-      devtool:
-        environment === EnvironmentEnum.Production
-          ? 'source-map'
-          : 'eval-source-map',
+      devtool: environment === EnvironmentEnum.Production ? 'source-map' : 'eval-source-map',
       devServer: {
         port: dappExamplePort,
         watchFiles: [`${DAPP_EXAMPLE_SRC_PATH}/**/*`],

@@ -1,0 +1,146 @@
+import BigNumber from 'bignumber.js';
+
+// constants
+import { NETWORK_STAKING_APPS_ANTIQUATED_TIMEOUT } from '@provider/constants';
+
+// models
+import NetworkClient from '@provider/models/NetworkClient';
+import BaseSCSIndexer from '@provider/models/BaseSCSIndexer';
+
+// repositories
+import AccountRepository from '@provider/repositories/AccountRepository';
+
+// types
+import type { ISCSAccount } from '@provider/models/BaseSCSIndexer';
+import type { IAccountNetworkStakingApps, IAccountStakingApp, IAVMBlock } from '@provider/types';
+import type { IOptions } from './types';
+
+// utils
+import convertAVMAddressToPublicKey from '@provider/utils/convertAVMAddressToPublicKey';
+import getRandomItem from '@common/utils/getRandomItem';
+
+/**
+ * Fetches the staking apps for a given address.
+ * @param {IOptions} options - options needed to update the staking apps.
+ * @returns {Promise<IAccountNetworkStakingApps>} the updated staking apps.
+ */
+export default async function updateAccountStakingApps({
+  address,
+  currentNetworkStakingApps,
+  delay = 0,
+  logger,
+  network,
+  nodeID,
+}: IOptions): Promise<IAccountNetworkStakingApps> {
+  const _functionName = 'updateAccountStakingApps';
+  const scsIndexer: BaseSCSIndexer | null = getRandomItem(network.scsIndexers) || null;
+  let currentBlockTime: BigNumber;
+  let lastSeenBlock: BigNumber;
+  let lastSeenBlockTimestamp: BigNumber;
+  let scsAccounts: ISCSAccount[];
+  let stakingApps: IAccountStakingApp[];
+  let networkClient: NetworkClient;
+
+  // if there are no scs indexers or staking apps are not out-of-date just return the current information
+  // if (
+  //   !scsIndexer ||
+  //   currentNetworkStakingApps.lastUpdatedAt +
+  //     NETWORK_STAKING_APPS_ANTIQUATED_TIMEOUT >
+  //     new Date().getTime()
+  // ) {
+  //   logger?.debug(
+  //     `${_functionName}: last updated staking apps for "${address}" on "${new Date(
+  //       currentNetworkStakingApps.lastUpdatedAt
+  //     ).toString()}", skipping`
+  //   );
+  //
+  //   return currentNetworkStakingApps;
+  // }
+
+  try {
+    scsAccounts = await scsIndexer.fetchByAddress({
+      address,
+      logger,
+    });
+  } catch (error) {
+    logger?.error(`${_functionName}: failed to get staking apps for "${address}" on ${network.genesisId}:`, error);
+
+    return currentNetworkStakingApps;
+  }
+
+  networkClient = new NetworkClient({
+    logger,
+    network,
+  });
+  currentBlockTime = new BigNumber(network.currentBlockTime);
+  lastSeenBlock = new BigNumber(network.lastSeenBlock);
+  lastSeenBlockTimestamp = new BigNumber(network.lastSeenBlockTimestamp);
+
+  try {
+    stakingApps = await Promise.all(
+      scsAccounts.map(
+        async ({
+          contractAddress,
+          contractId,
+          createRound,
+          global_initial,
+          global_period,
+          global_total,
+          part_vote_lst,
+        }) => {
+          const { amount } = await networkClient.accountInformationWithDelay({
+            delay,
+            address: contractAddress,
+            nodeID,
+          });
+          const accountBalance = new BigNumber(amount.toString());
+          const balance = new BigNumber(global_total);
+          const lockupStartBlock = await networkClient.block({
+            delay,
+            round: new BigNumber(createRound.toString()).toFixed(0),
+            nodeID,
+          });
+          let participationKeyExpiresAt: string | null = null;
+          let participationKeyLastVoteBlock = typeof part_vote_lst === 'number' ? new BigNumber(part_vote_lst) : null;
+
+          // if we have the participation key expire block and the last seen block is less than the participation key
+          // expire block we can calculate the estimated timestamp the participation key expires
+          if (
+            participationKeyLastVoteBlock &&
+            currentBlockTime.gt(0) &&
+            lastSeenBlock.gt(0) &&
+            lastSeenBlockTimestamp.gt(0) &&
+            participationKeyLastVoteBlock.gte(lastSeenBlock)
+          ) {
+            participationKeyExpiresAt = lastSeenBlockTimestamp
+              .plus(participationKeyLastVoteBlock.minus(lastSeenBlock).multipliedBy(currentBlockTime))
+              .toFixed(0);
+          }
+
+          return {
+            appID: contractId.toString(),
+            availableBalance: accountBalance.minus(balance).toFixed(0),
+            balance: balance.toFixed(0),
+            lockupStartedAt: new BigNumber(String(lockupStartBlock.timestamp)).multipliedBy('1000').toFixed(0), // convert from seconds to milliseconds
+            lockupYears: global_period,
+            participationKeyExpiresAt,
+            phase: new BigNumber(global_initial).toNumber() > 0 ? 1 : 0, // if global_initial is set to "0" this indicates phase 2, otherwise it is phase 1
+            publicKey: AccountRepository.encode(convertAVMAddressToPublicKey(contractAddress)),
+            status: !participationKeyLastVoteBlock ? 'offline' : 'online',
+          };
+        }
+      )
+    );
+
+    logger?.debug(`${_functionName}: updated staking apps for "${address}" on "${network.genesisId}"`);
+
+    return {
+      apps: stakingApps,
+      lastUpdatedAt: new Date().getTime(),
+    };
+  } catch (error) {
+    logger?.error(`${_functionName}: failed to get staking apps for "${address}" on ${network.genesisId}:`, error);
+
+    return currentNetworkStakingApps;
+  }
+}

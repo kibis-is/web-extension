@@ -1,13 +1,8 @@
-import {
-  Algodv2,
-  makePaymentTxnWithSuggestedParams,
-  SuggestedParams,
-  Transaction,
-} from 'algosdk';
+import { Algodv2, makePaymentTxnWithSuggestedParams, SuggestedParams, Transaction } from 'algosdk';
 import BigNumber from 'bignumber.js';
 
 // types
-import { INetwork } from '@extension/types';
+import { INetwork } from '@provider/types';
 
 // utils
 import getRandomAlgodClient from './getRandomAlgodClient';
@@ -30,8 +25,7 @@ export default async function createPaymentTransaction({
   to,
 }: IOptions): Promise<Transaction> {
   const client = getRandomAlgodClient(network);
-  const _suggestedParams =
-    suggestedParams || (await client.getTransactionParams().do());
+  const _suggestedParams = suggestedParams || (await client.getTransactionParams().do());
 
   return makePaymentTxnWithSuggestedParams(
     from,

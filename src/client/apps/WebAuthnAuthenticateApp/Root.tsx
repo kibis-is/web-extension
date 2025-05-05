@@ -1,11 +1,4 @@
-import {
-  Avatar,
-  Box,
-  HStack,
-  Text,
-  type TextProps,
-  VStack,
-} from '@chakra-ui/react';
+import { Avatar, Box, HStack, Text, type TextProps, VStack } from '@chakra-ui/react';
 import React, { type FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { IoCloseOutline } from 'react-icons/io5';
@@ -19,10 +12,7 @@ import Notice from '@common/components/Notice';
 
 // constants
 import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@common/constants';
-import {
-  EXTERNAL_POPUP_MAX_HEIGHT,
-  EXTERNAL_POPUP_MAX_WIDTH,
-} from '@client/constants';
+import { EXTERNAL_POPUP_MAX_HEIGHT, EXTERNAL_POPUP_MAX_WIDTH } from '@client/constants';
 
 // enums
 import { ErrorCodeEnum } from '@common/enums';
@@ -32,8 +22,8 @@ import useDefaultTextColor from '@common/hooks/useDefaultTextColor';
 import useTextBackgroundColor from '@common/hooks/useTextBackgroundColor';
 
 // icons
-import KbPasskey from '@extension/icons/KbPasskey';
-import KbSignIn from '@extension/icons/KbSignIn';
+import KbPasskey from '@provider/icons/KbPasskey';
+import KbSignIn from '@provider/icons/KbSignIn';
 
 // theme
 import { theme } from '@common/theme';
@@ -80,13 +70,7 @@ const Root: FC<IRootProps> = ({
     }
 
     if (result) {
-      return (
-        <AccountItem
-          account={result.account}
-          colorMode={colorMode}
-          fontFamily={fontFamily}
-        />
-      );
+      return <AccountItem account={result.account} colorMode={colorMode} fontFamily={fontFamily} />;
     }
 
     return (
@@ -112,13 +96,7 @@ const Root: FC<IRootProps> = ({
   const renderCTAButton = () => {
     if (error) {
       return (
-        <Button
-          colorMode={colorMode}
-          onClick={onTryAgainClick}
-          size="sm"
-          variant="solid"
-          w="full"
-        >
+        <Button colorMode={colorMode} onClick={onTryAgainClick} size="sm" variant="solid" w="full">
           {t<string>('buttons.tryAgain')}
         </Button>
       );
@@ -167,29 +145,13 @@ const Root: FC<IRootProps> = ({
 
           <VStack align="start" justify="space-evenly" spacing={1} w="full">
             {/*name*/}
-            <Text
-              {...textProps}
-              color={defaultTextColor}
-              fontSize="xs"
-              textAlign="left"
-              width="full"
-            >
+            <Text {...textProps} color={defaultTextColor} fontSize="xs" textAlign="left" width="full">
               {clientInfo.appName}
             </Text>
 
             {/*host*/}
-            <Box
-              backgroundColor={textBackgroundColor}
-              borderRadius={theme.radii['3xl']}
-              px={DEFAULT_GAP / 3}
-              py={0}
-            >
-              <Text
-                {...textProps}
-                color={defaultTextColor}
-                fontSize="xs"
-                textAlign="left"
-              >
+            <Box backgroundColor={textBackgroundColor} borderRadius={theme.radii['3xl']} px={DEFAULT_GAP / 3} py={0}>
+              <Text {...textProps} color={defaultTextColor} fontSize="xs" textAlign="left">
                 {clientInfo.host}
               </Text>
             </Box>
@@ -212,13 +174,7 @@ const Root: FC<IRootProps> = ({
 
         {/*footer*/}
         <HStack spacing={DEFAULT_GAP / 3} w="full">
-          <Button
-            colorMode={colorMode}
-            onClick={onCancelClick}
-            size="sm"
-            variant="outline"
-            w="full"
-          >
+          <Button colorMode={colorMode} onClick={onCancelClick} size="sm" variant="outline" w="full">
             {t<string>('buttons.cancel')}
           </Button>
 

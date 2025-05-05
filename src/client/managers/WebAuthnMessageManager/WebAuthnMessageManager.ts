@@ -7,7 +7,7 @@ import {
 import { decode as decodeCOBOR } from 'cbor2';
 
 // cryptography
-import COSEPublicKey from '@extension/cryptography/COSEPublicKey';
+import COSEPublicKey from '@provider/cryptography/COSEPublicKey';
 
 // errors
 import {
@@ -40,12 +40,7 @@ import {
   ISerializedPublicKeyCredentialRequestOptions,
   TReplace,
 } from '@common/types';
-import {
-  IOptions,
-  IParsedAttestedCredentialData,
-  IParsedAuthenticatorData,
-  IResult,
-} from './types';
+import { IOptions, IParsedAttestedCredentialData, IParsedAuthenticatorData, IResult } from './types';
 
 // utils
 import bufferSourceToUint8Array from '@common/utils/bufferSourceToUint8Array';
@@ -72,9 +67,7 @@ export default class WebAuthnMessageManager {
    * @static
    * @private
    */
-  private static _parseAuthenticatorData(
-    authenticatorData: Uint8Array
-  ): IParsedAuthenticatorData {
+  private static _parseAuthenticatorData(authenticatorData: Uint8Array): IParsedAuthenticatorData {
     const rpIdHash = authenticatorData.slice(0, 32);
     const flags = authenticatorData.slice(32, 32 + 1);
     const signCount = authenticatorData.slice(33, 33 + 4);
@@ -89,14 +82,9 @@ export default class WebAuthnMessageManager {
       credentialIDLength = attestationDataView.getUint16(16);
       attestedCredentialData = {
         aaguid: encodedAttestedCredentialData.slice(0, 16), // first 16-bytes
-        credentialID: encodedAttestedCredentialData.slice(
-          16 + 2,
-          16 + 2 + credentialIDLength
-        ), // start after aaguid + credential id length for length of credential id
+        credentialID: encodedAttestedCredentialData.slice(16 + 2, 16 + 2 + credentialIDLength), // start after aaguid + credential id length for length of credential id
         credentialIDLength: encodedAttestedCredentialData.slice(16, 16 + 2), // start after aaguid for 2-bytes
-        credentialPublicKey: encodedAttestedCredentialData.slice(
-          16 + 2 + credentialIDLength
-        ), // start after aaguid + credential id length + credential id
+        credentialPublicKey: encodedAttestedCredentialData.slice(16 + 2 + credentialIDLength), // start after aaguid + credential id length + credential id
       };
     }
 
@@ -119,50 +107,30 @@ export default class WebAuthnMessageManager {
       id: encodeBase64URLSafe(decodedRawID).replace(/=/g, ''), // remove the padding
       rawId: uint8ArrayToArrayBuffer(decodedRawID),
       response: {
-        authenticatorData: uint8ArrayToArrayBuffer(
-          decodeBase64(credential.response.authenticatorData)
-        ),
-        clientDataJSON: uint8ArrayToArrayBuffer(
-          decodeBase64(credential.response.clientDataJSON)
-        ),
-        signature: uint8ArrayToArrayBuffer(
-          decodeBase64(credential.response.signature)
-        ),
-        userHandle: uint8ArrayToArrayBuffer(
-          decodeBase64(credential.response.userHandle)
-        ),
+        authenticatorData: uint8ArrayToArrayBuffer(decodeBase64(credential.response.authenticatorData)),
+        clientDataJSON: uint8ArrayToArrayBuffer(decodeBase64(credential.response.clientDataJSON)),
+        signature: uint8ArrayToArrayBuffer(decodeBase64(credential.response.signature)),
+        userHandle: uint8ArrayToArrayBuffer(decodeBase64(credential.response.userHandle)),
       },
     };
   }
 
   private static _deserializeAttestationCredential(
     credential: ISerializedPublicKeyCredential<ISerializedAuthenticatorAttestationResponse>
-  ): TReplace<
-    PublicKeyCredential,
-    'response',
-    AuthenticatorAttestationResponse
-  > {
-    const attestationObject = decodeBase64(
-      credential.response.attestationObject
-    );
-    const decodedAttestationObject =
-      decodeCOBOR<Record<string, Uint8Array>>(attestationObject);
+  ): TReplace<PublicKeyCredential, 'response', AuthenticatorAttestationResponse> {
+    const attestationObject = decodeBase64(credential.response.attestationObject);
+    const decodedAttestationObject = decodeCOBOR<Record<string, Uint8Array>>(attestationObject);
     const decodedRawID = decodeBase64(credential.rawId);
-    const { attestedCredentialData } =
-      WebAuthnMessageManager._parseAuthenticatorData(
-        decodedAttestationObject.authData
-      );
+    const { attestedCredentialData } = WebAuthnMessageManager._parseAuthenticatorData(
+      decodedAttestationObject.authData
+    );
     let cosePublicKey: COSEPublicKey;
 
     if (!attestedCredentialData) {
-      throw new DecodingError(
-        'failed to decode authenticator attestation credential'
-      );
+      throw new DecodingError('failed to decode authenticator attestation credential');
     }
 
-    cosePublicKey = COSEPublicKey.fromCBOR(
-      attestedCredentialData.credentialPublicKey
-    );
+    cosePublicKey = COSEPublicKey.fromCBOR(attestedCredentialData.credentialPublicKey);
 
     return {
       ...credential,
@@ -171,11 +139,8 @@ export default class WebAuthnMessageManager {
       rawId: uint8ArrayToArrayBuffer(decodedRawID),
       response: {
         attestationObject: uint8ArrayToArrayBuffer(attestationObject),
-        clientDataJSON: uint8ArrayToArrayBuffer(
-          decodeBase64(credential.response.clientDataJSON)
-        ),
-        getAuthenticatorData: () =>
-          uint8ArrayToArrayBuffer(decodedAttestationObject.authData),
+        clientDataJSON: uint8ArrayToArrayBuffer(decodeBase64(credential.response.clientDataJSON)),
+        getAuthenticatorData: () => uint8ArrayToArrayBuffer(decodedAttestationObject.authData),
         getPublicKey: () => null,
         getPublicKeyAlgorithm: () => cosePublicKey.algorithm(),
         getTransports: () => ['hybrid', 'internal'],
@@ -204,12 +169,10 @@ export default class WebAuthnMessageManager {
         id: encodeBase64(bufferSourceToUint8Array(user.id)),
       },
       ...(excludeCredentials && {
-        excludeCredentials: excludeCredentials.map(
-          ({ id, ...otherExcludeCredentialProps }) => ({
-            ...otherExcludeCredentialProps,
-            id: encodeBase64(bufferSourceToUint8Array(id)),
-          })
-        ),
+        excludeCredentials: excludeCredentials.map(({ id, ...otherExcludeCredentialProps }) => ({
+          ...otherExcludeCredentialProps,
+          id: encodeBase64(bufferSourceToUint8Array(id)),
+        })),
       }),
     };
   }
@@ -230,12 +193,10 @@ export default class WebAuthnMessageManager {
       ...otherOptions,
       challenge: encodeBase64(bufferSourceToUint8Array(challenge)),
       ...(allowCredentials && {
-        allowCredentials: allowCredentials.map(
-          ({ id, ...otherAllowCredentialProps }) => ({
-            ...otherAllowCredentialProps,
-            id: encodeBase64(bufferSourceToUint8Array(id)),
-          })
-        ),
+        allowCredentials: allowCredentials.map(({ id, ...otherAllowCredentialProps }) => ({
+          ...otherAllowCredentialProps,
+          id: encodeBase64(bufferSourceToUint8Array(id)),
+        })),
       }),
     };
   }
@@ -251,24 +212,16 @@ export default class WebAuthnMessageManager {
     let result: WebAuthnRegisterResponseMessageResult | null;
 
     if (!publicKeyOptions) {
-      throw new WebAuthnMalformedRegistrationRequestError(
-        'no public key creation options supplied'
-      );
+      throw new WebAuthnMalformedRegistrationRequestError('no public key creation options supplied');
     }
 
-    result = await dispatchMessageWithTimeout<
-      WebAuthnRegisterResponseMessageResult,
-      WebAuthnRegisterRequestMessage
-    >({
+    result = await dispatchMessageWithTimeout<WebAuthnRegisterResponseMessageResult, WebAuthnRegisterRequestMessage>({
       delay: WEB_AUTHN_REQUEST_TIMEOUT,
       message: new WebAuthnRegisterRequestMessage({
         id: generateUUID(),
         payload: {
           clientInfo,
-          options:
-            WebAuthnMessageManager._serializePublicKeyCreationOptions(
-              publicKeyOptions
-            ),
+          options: WebAuthnMessageManager._serializePublicKeyCreationOptions(publicKeyOptions),
         },
         reference: WebAuthnMessageReferenceEnum.RegisterRequest,
       }),
@@ -282,9 +235,7 @@ export default class WebAuthnMessageManager {
 
     return {
       account: result.account,
-      credential: WebAuthnMessageManager._deserializeAttestationCredential(
-        result.credential
-      ),
+      credential: WebAuthnMessageManager._deserializeAttestationCredential(result.credential),
     };
   }
 
@@ -295,9 +246,7 @@ export default class WebAuthnMessageManager {
     let result: WebAuthnAuthenticateResponseMessageResult | null;
 
     if (!publicKeyOptions) {
-      throw new WebAuthnMalformedAuthenticationRequestError(
-        'no public key creation options supplied'
-      );
+      throw new WebAuthnMalformedAuthenticationRequestError('no public key creation options supplied');
     }
 
     result = await dispatchMessageWithTimeout<
@@ -309,10 +258,7 @@ export default class WebAuthnMessageManager {
         id: generateUUID(),
         payload: {
           clientInfo,
-          options:
-            WebAuthnMessageManager._serializePublicKeyRequestOptions(
-              publicKeyOptions
-            ),
+          options: WebAuthnMessageManager._serializePublicKeyRequestOptions(publicKeyOptions),
         },
         reference: WebAuthnMessageReferenceEnum.AuthenticateRequest,
       }),
@@ -326,9 +272,7 @@ export default class WebAuthnMessageManager {
 
     return {
       account: result.account,
-      credential: WebAuthnMessageManager._deserializeAssertionCredential(
-        result.credential
-      ),
+      credential: WebAuthnMessageManager._deserializeAssertionCredential(result.credential),
     };
   }
 }

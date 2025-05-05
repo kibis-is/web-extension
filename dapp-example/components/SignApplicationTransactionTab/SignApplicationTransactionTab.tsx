@@ -13,21 +13,13 @@ import {
   useToast,
   VStack,
 } from '@chakra-ui/react';
-import {
-  decode as decodeBase64,
-  encode as encodeBase64,
-} from '@stablelib/base64';
+import { decode as decodeBase64, encode as encodeBase64 } from '@stablelib/base64';
 import { encode as encodeHex } from '@stablelib/hex';
-import {
-  decodeSignedTransaction,
-  encodeUnsignedTransaction,
-  SignedTransaction,
-  Transaction,
-} from 'algosdk';
+import { decodeSignedTransaction, encodeUnsignedTransaction, SignedTransaction, Transaction } from 'algosdk';
 import React, { ChangeEvent, FC, useState } from 'react';
 
 // enums
-import { TransactionTypeEnum } from '@extension/enums';
+import { TransactionTypeEnum } from '@provider/enums';
 
 // hooks
 import useDefaultTextColor from '../../hooks/useDefaultTextColor';
@@ -60,71 +52,64 @@ const SignApplicationTransactionTab: FC<IBaseTransactionProps> = ({
   const primaryColorScheme = usePrimaryColorScheme();
   const subTextColor = useSubTextColor();
   // states
-  const [signedTransaction, setSignedTransaction] =
-    useState<SignedTransaction | null>(null);
+  const [signedTransaction, setSignedTransaction] = useState<SignedTransaction | null>(null);
   const [note, setNote] = useState<string>('');
   // handlers
-  const handleNoteChange = (event: ChangeEvent<HTMLInputElement>) =>
-    setNote(event.target.value);
-  const handleSignTransactionClick =
-    (type: TransactionTypeEnum) => async () => {
-      let result: (string | null)[] | null = null;
-      let unsignedTransaction: Transaction | null = null;
+  const handleNoteChange = (event: ChangeEvent<HTMLInputElement>) => setNote(event.target.value);
+  const handleSignTransactionClick = (type: TransactionTypeEnum) => async () => {
+    let result: (string | null)[] | null = null;
+    let unsignedTransaction: Transaction | null = null;
 
-      if (!account || !connectionType || !network) {
+    if (!account || !connectionType || !network) {
+      toast({
+        description: 'You must first enable the dApp with the wallet.',
+        status: 'error',
+        title: 'No Account Not Found!',
+      });
+
+      return;
+    }
+
+    try {
+      unsignedTransaction = await createAppCallTransaction({
+        from: account.address,
+        network,
+        note: note.length > 0 ? note : null,
+        type,
+      });
+
+      if (!unsignedTransaction) {
         toast({
-          description: 'You must first enable the dApp with the wallet.',
           status: 'error',
-          title: 'No Account Not Found!',
+          title: 'Unknown Transaction Type',
         });
 
         return;
       }
 
-      try {
-        unsignedTransaction = await createAppCallTransaction({
-          from: account.address,
-          network,
-          note: note.length > 0 ? note : null,
-          type,
-        });
+      result = await signTransactionsAction([
+        {
+          txn: encodeBase64(encodeUnsignedTransaction(unsignedTransaction)),
+        },
+      ]);
 
-        if (!unsignedTransaction) {
-          toast({
-            status: 'error',
-            title: 'Unknown Transaction Type',
-          });
-
-          return;
-        }
-
-        result = await signTransactionsAction([
-          {
-            txn: encodeBase64(encodeUnsignedTransaction(unsignedTransaction)),
-          },
-        ]);
-
-        if (result && result[0]) {
-          toast({
-            description: `Successfully signed application transaction for provider "${connectionType}".`,
-            status: 'success',
-            title: 'Application Transaction Signed!',
-          });
-
-          setSignedTransaction(
-            decodeSignedTransaction(decodeBase64(result[0]))
-          );
-        }
-      } catch (error) {
+      if (result && result[0]) {
         toast({
-          description: (error as BaseARC0027Error).message,
-          status: 'error',
-          title: `${(error as BaseARC0027Error).code}: ${
-            (error as BaseARC0027Error).name
-          }`,
+          description: `Successfully signed application transaction for provider "${connectionType}".`,
+          status: 'success',
+          title: 'Application Transaction Signed!',
         });
+
+        setSignedTransaction(decodeSignedTransaction(decodeBase64(result[0])));
       }
-    };
+    } catch (error) {
+      toast({
+        description: (error as BaseARC0027Error).message,
+        status: 'error',
+        title: `${(error as BaseARC0027Error).code}: ${(error as BaseARC0027Error).name}`,
+      });
+    }
+  };
 
   return (
     <TabPanel w="full">
@@ -168,9 +153,7 @@ const SignApplicationTransactionTab: FC<IBaseTransactionProps> = ({
               Signed transaction signature (hex):
             </Text>
             <Code fontSize="sm" wordBreak="break-word">
-              {signedTransaction?.sig
-                ? encodeHex(signedTransaction.sig).toUpperCase()
-                : '-'}
+              {signedTransaction?.sig ? encodeHex(signedTransaction.sig).toUpperCase() : '-'}
             </Code>
           </HStack>
         </VStack>
@@ -207,9 +190,7 @@ const SignApplicationTransactionTab: FC<IBaseTransactionProps> = ({
               label: 'Send Update App Transaction',
             },
           ].map(({ label, type }, index) => (
-            <GridItem
-              key={`application-action-sign-transaction-button-item-${index}`}
-            >
+            <GridItem key={`application-action-sign-transaction-button-item-${index}`}>
               <Button
                 borderRadius={theme.radii['3xl']}
                 colorScheme={primaryColorScheme}

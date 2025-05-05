@@ -1,0 +1,56 @@
+import { Box, HStack, Text, VStack } from '@chakra-ui/react';
+import React, { type FC } from 'react';
+
+// components
+import Button from '@common/components/Button';
+
+// constants
+import { DEFAULT_GAP } from '@common/constants';
+import { SETTINGS_ITEM_HEIGHT } from '@provider/constants';
+
+// hooks
+import useDefaultTextColor from '@provider/hooks/useDefaultTextColor';
+import useSubTextColor from '@provider/hooks/useSubTextColor';
+
+// types
+import type { IProps } from './types';
+
+const SettingsButtonItem: FC<IProps> = ({ buttonLabel, colorMode, description, isWarning = false, label, onClick }) => {
+  // hooks
+  const defaultTextColor = useDefaultTextColor();
+  const subTextColor = useSubTextColor();
+
+  return (
+    <Box minH={SETTINGS_ITEM_HEIGHT} pb={DEFAULT_GAP - 2} px={DEFAULT_GAP - 2} w="full">
+      <HStack alignItems="center" justifyContent="space-between" spacing={DEFAULT_GAP / 3} w="full">
+        <VStack alignItems="flex-start" justifyContent="center" spacing={1}>
+          {/*label*/}
+          <Text color={defaultTextColor} fontSize="sm">
+            {label}
+          </Text>
+
+          {/*description*/}
+          {description && (
+            <Text color={subTextColor} fontSize="xs">
+              {description}
+            </Text>
+          )}
+        </VStack>
+
+        {/*button*/}
+        <Button
+          colorMode={colorMode}
+          onClick={onClick}
+          w="50%"
+          {...(isWarning && {
+            colorScheme: 'red',
+          })}
+        >
+          {buttonLabel}
+        </Button>
+      </HStack>
+    </Box>
+  );
+};
+
+export default SettingsButtonItem;

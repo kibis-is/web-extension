@@ -8,25 +8,16 @@ import {
 import { useState } from 'react';
 
 // types
-import type { INetwork } from '@extension/types';
-import type {
-  IAccountInformation,
-  IConnectorParams,
-  IConnectorState,
-  ISignMessageActionResult,
-} from '../../types';
+import type { INetwork } from '@provider/types';
+import type { IAccountInformation, IConnectorParams, IConnectorState, ISignMessageActionResult } from '../../types';
 
 // utils
 import { getAccountInformation } from '../../utils';
 
-export default function useAVMWebProviderConnector({
-  toast,
-}: IConnectorParams): IConnectorState {
+export default function useAVMWebProviderConnector({ toast }: IConnectorParams): IConnectorState {
   const __hook = 'useAVMWebProviderConnector';
   // state
-  const [enabledAccounts, setEnabledAccounts] = useState<IAccountInformation[]>(
-    []
-  );
+  const [enabledAccounts, setEnabledAccounts] = useState<IAccountInformation[]>([]);
   const [avmWebClient, setAVMWebClient] = useState<AVMWebClient | null>(null);
   // actions
   const connectAction = (network: INetwork) => {
@@ -51,9 +42,7 @@ export default function useAVMWebProviderConnector({
         }
 
         if (!result) {
-          console.error(
-            `${__hook}#${__function}: no result returned from enable request`
-          );
+          console.error(`${__hook}#${__function}: no result returned from enable request`);
 
           return resolve(false);
         }
@@ -61,9 +50,8 @@ export default function useAVMWebProviderConnector({
         try {
           setEnabledAccounts(
             await Promise.all(
-              result.accounts.map<Promise<IAccountInformation>>(
-                ({ address, name }) =>
-                  getAccountInformation({ address, name }, network)
+              result.accounts.map<Promise<IAccountInformation>>(({ address, name }) =>
+                getAccountInformation({ address, name }, network)
               )
             )
           );
@@ -122,10 +110,7 @@ export default function useAVMWebProviderConnector({
       providerId: __PROVIDER_ID__,
     });
   };
-  const signMessageAction = (
-    message: string,
-    signer?: string
-  ): Promise<ISignMessageActionResult> => {
+  const signMessageAction = (message: string, signer?: string): Promise<ISignMessageActionResult> => {
     return new Promise<ISignMessageActionResult>((resolve, reject) => {
       let _avmWebClient = getOrInitializeAVMWebClient();
       let listenerId: string;
@@ -181,9 +166,7 @@ export default function useAVMWebProviderConnector({
       });
     });
   };
-  const signTransactionsAction = async (
-    transactions: IARC0001Transaction[]
-  ) => {
+  const signTransactionsAction = async (transactions: IARC0001Transaction[]) => {
     return new Promise<(string | null)[]>((resolve, reject) => {
       let _avmWebClient = getOrInitializeAVMWebClient();
       let listenerId: string;

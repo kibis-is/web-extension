@@ -1,5 +1,5 @@
 // types
-import type { ISession } from '@extension/types';
+import type { ISession } from '@provider/types';
 
 interface IPayload {
   sessions: ISession[];

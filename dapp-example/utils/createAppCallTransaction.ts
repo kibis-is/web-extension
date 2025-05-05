@@ -17,10 +17,10 @@ import {
 import { TESTNET_APP_INDEX } from '../constants';
 
 // enums
-import { TransactionTypeEnum } from '@extension/enums';
+import { TransactionTypeEnum } from '@provider/enums';
 
 // types
-import { INetwork } from '@extension/types';
+import { INetwork } from '@provider/types';
 
 // utils
 import getRandomAlgodClient from './getRandomAlgodClient';
@@ -45,8 +45,7 @@ export default async function createAppCallTransaction({
   const encodedClearProgram: string = 'BIEB';
   const client: Algodv2 = getRandomAlgodClient(network);
   const encoder: TextEncoder = new TextEncoder();
-  const _suggestedParams: SuggestedParams =
-    suggestedParams || (await client.getTransactionParams().do());
+  const _suggestedParams: SuggestedParams = suggestedParams || (await client.getTransactionParams().do());
 
   switch (type) {
     case TransactionTypeEnum.ApplicationClearState:

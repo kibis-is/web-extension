@@ -9,17 +9,14 @@ import WebAuthnAuthenticateApp from '@client/apps/WebAuthnAuthenticateApp';
 import WebAuthnRegisterApp from '@client/apps/WebAuthnRegisterApp';
 
 // constants
-import {
-  COSE_ED25519_ALGORITHM,
-  COSE_ES256_ALGORITHM,
-} from '@common/constants';
+import { COSE_ED25519_ALGORITHM, COSE_ES256_ALGORITHM } from '@common/constants';
 
 // managers
 import ConfigManager from '@client/managers/ConfigManager';
 import WebAuthnMessageManager from '@client/managers/WebAuthnMessageManager';
 
 // translations
-import { en } from '@extension/translations';
+import { en } from '@provider/translations';
 
 // types
 import type { IExternalConfig, ILogger } from '@common/types';
@@ -62,8 +59,7 @@ export default class WebAuthnInterceptor {
     this._logger = logger || null;
     this._navigatorCredentialsCreateFn = navigatorCredentialsCreateFn;
     this._navigatorCredentialsGetFn = navigatorCredentialsGetFn;
-    this._webAuthnMessageManager =
-      webAuthnMessageManager || new WebAuthnMessageManager({ logger });
+    this._webAuthnMessageManager = webAuthnMessageManager || new WebAuthnMessageManager({ logger });
 
     // listen to config updates
     this._configManager.onUpdate(this._onConfigUpdate.bind(this));
@@ -152,9 +148,7 @@ export default class WebAuthnInterceptor {
    * public methods
    */
 
-  public async create(
-    options?: CredentialCreationOptions
-  ): Promise<PublicKeyCredential | null> {
+  public async create(options?: CredentialCreationOptions): Promise<PublicKeyCredential | null> {
     return new Promise(async (resolve) => {
       const __function = 'create';
       const onAbortListener = (_: Event, _root: Root) => {
@@ -165,10 +159,7 @@ export default class WebAuthnInterceptor {
 
         // clean up
         if (options?.signal) {
-          options.signal.removeEventListener(
-            'abort',
-            onAbortListener.bind(this, _root)
-          );
+          options.signal.removeEventListener('abort', onAbortListener.bind(this, _root));
         }
       };
       let root: Root;
@@ -184,9 +175,7 @@ export default class WebAuthnInterceptor {
 
       // if this the request is not public key credentials
       if (!options?.publicKey) {
-        this._logger?.debug(
-          `${WebAuthnInterceptor.name}#${__function}: public key credentials not requested`
-        );
+        this._logger?.debug(`${WebAuthnInterceptor.name}#${__function}: public key credentials not requested`);
 
         return resolve(this._navigatorCredentialsCreateFn.call(this, options));
       }
@@ -195,8 +184,7 @@ export default class WebAuthnInterceptor {
       if (
         options.publicKey.pubKeyCredParams.length > 0 &&
         !options.publicKey.pubKeyCredParams.find(
-          ({ alg }) =>
-            alg === COSE_ED25519_ALGORITHM || alg === COSE_ES256_ALGORITHM
+          ({ alg }) => alg === COSE_ED25519_ALGORITHM || alg === COSE_ES256_ALGORITHM
         )
       ) {
         this._logger?.debug(
@@ -204,9 +192,7 @@ export default class WebAuthnInterceptor {
             WebAuthnInterceptor.name
           }#${__function}: public key credentials requested [${options.publicKey.pubKeyCredParams
             .map(({ alg }) => alg)
-            .join(
-              ','
-            )}], but provider only supports: "-8" (Ed25519) and "-7" (ES256)`
+            .join(',')}], but provider only supports: "-8" (Ed25519) and "-7" (ES256)`
         );
 
         return resolve(this._navigatorCredentialsCreateFn.call(this, options));
@@ -216,10 +202,7 @@ export default class WebAuthnInterceptor {
 
       // handle abort signal
       if (options.signal) {
-        options.signal.addEventListener(
-          'abort',
-          onAbortListener.bind(this, root)
-        );
+        options.signal.addEventListener('abort', onAbortListener.bind(this, root));
       }
 
       root.render(
@@ -230,8 +213,7 @@ export default class WebAuthnInterceptor {
           i18n: await this._initializeI18n(),
           navigatorCredentialsCreateFn: this._navigatorCredentialsCreateFn,
           onClose: () => root.unmount(),
-          onResponse: (response: PublicKeyCredential | null) =>
-            resolve(response),
+          onResponse: (response: PublicKeyCredential | null) => resolve(response),
           ...(this._logger && {
             logger: this._logger,
           }),
@@ -241,9 +223,7 @@ export default class WebAuthnInterceptor {
     });
   }
 
-  public async get(
-    options?: CredentialRequestOptions
-  ): Promise<PublicKeyCredential | null> {
+  public async get(options?: CredentialRequestOptions): Promise<PublicKeyCredential | null> {
     return new Promise(async (resolve) => {
       const __function = 'get';
       const onAbortListener = (_: Event, _root: Root) => {
@@ -254,10 +234,7 @@ export default class WebAuthnInterceptor {
 
         // clean up
         if (options?.signal) {
-          options.signal.removeEventListener(
-            'abort',
-            onAbortListener.bind(this, _root)
-          );
+          options.signal.removeEventListener('abort', onAbortListener.bind(this, _root));
         }
       };
       let root: Root;
@@ -273,9 +250,7 @@ export default class WebAuthnInterceptor {
 
       // if this the request is not public key credentials
       if (!options?.publicKey) {
-        this._logger?.debug(
-          `${WebAuthnInterceptor.name}#${__function}: public key credentials not requested`
-        );
+        this._logger?.debug(`${WebAuthnInterceptor.name}#${__function}: public key credentials not requested`);
 
         return resolve(this._navigatorCredentialsGetFn.call(this, options));
       }
@@ -284,10 +259,7 @@ export default class WebAuthnInterceptor {
 
       // handle abort signal
       if (options.signal) {
-        options.signal.addEventListener(
-          'abort',
-          onAbortListener.bind(this, root)
-        );
+        options.signal.addEventListener('abort', onAbortListener.bind(this, root));
       }
 
       root.render(
@@ -298,8 +270,7 @@ export default class WebAuthnInterceptor {
           i18n: await this._initializeI18n(),
           navigatorCredentialsGetFn: this._navigatorCredentialsGetFn,
           onClose: () => root.unmount(),
-          onResponse: (response: PublicKeyCredential | null) =>
-            resolve(response),
+          onResponse: (response: PublicKeyCredential | null) => resolve(response),
           ...(this._logger && {
             logger: this._logger,
           }),

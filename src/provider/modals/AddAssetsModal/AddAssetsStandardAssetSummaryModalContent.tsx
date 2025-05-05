@@ -1,0 +1,376 @@
+import { HStack, Text, useDisclosure, VStack } from '@chakra-ui/react';
+import BigNumber from 'bignumber.js';
+import React, { FC } from 'react';
+import { useTranslation } from 'react-i18next';
+
+// components
+import AddressDisplay from '@provider/components/AddressDisplay';
+import AssetAvatar from '@provider/components/AssetAvatar';
+import AssetBadge from '@provider/components/AssetBadge';
+import AssetIcon from '@provider/components/icons/AssetIcon';
+import CopyIconButton from '@provider/components/CopyIconButton';
+import InfoIconTooltip from '@provider/components/InfoIconTooltip';
+import ModalAssetItem from '@provider/components/ModalAssetItem';
+import ModalItem from '@provider/components/ModalItem';
+import ModalTextItem from '@provider/components/ModalTextItem';
+import MoreInformationAccordion from '@provider/components/MoreInformationAccordion';
+import OpenTabIconButton from '@provider/components/OpenTabIconButton';
+import Warning from '@provider/components/Warning';
+
+// constants
+import { DEFAULT_GAP, MODAL_ITEM_HEIGHT } from '@common/constants';
+
+// enums
+import { AssetTypeEnum } from '@provider/enums';
+
+// hooks
+import useDefaultTextColor from '@provider/hooks/useDefaultTextColor';
+import usePrimaryButtonTextColor from '@provider/hooks/usePrimaryButtonTextColor';
+import useSubTextColor from '@provider/hooks/useSubTextColor';
+import useAddAssetStandardAssetSummaryContent from './hooks/useAddAssetStandardAssetSummaryContent';
+
+// repositories
+import AccountRepository from '@provider/repositories/AccountRepository';
+
+// types
+import type { IAddAssetsModalStandardAssetSummaryContentProps } from './types';
+
+// utils
+import convertToStandardUnit from '@common/utils/convertToStandardUnit';
+import formatCurrencyUnit from '@common/utils/formatCurrencyUnit';
+import convertPublicKeyToAVMAddress from '@common/utils/convertPublicKeyToAVMAddress';
+import createIconFromDataUri from '@provider/utils/createIconFromDataUri';
+import isAccountKnown from '@provider/utils/isAccountKnown';
+
+const AddAssetsStandardAssetSummaryModalContent: FC<IAddAssetsModalStandardAssetSummaryContentProps> = ({
+  account,
+  accounts,
+  asset,
+  blockExplorer,
+  network,
+}) => {
+  const { t } = useTranslation();
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  // hooks
+  const { accountBalanceInAtomicUnits, minimumBalanceRequirementInAtomicUnits, minimumTransactionFeesInAtomicUnits } =
+    useAddAssetStandardAssetSummaryContent({
+      account,
+      network,
+    });
+  const defaultTextColor: string = useDefaultTextColor();
+  const primaryButtonTextColor: string = usePrimaryButtonTextColor();
+  const subTextColor: string = useSubTextColor();
+  // misc
+  const accountAddress: string = convertPublicKeyToAVMAddress(AccountRepository.decode(account.publicKey));
+  const totalSupplyInStandardUnits: BigNumber = convertToStandardUnit(new BigNumber(asset.totalSupply), asset.decimals);
+  const isEnoughMinimumBalance: boolean = accountBalanceInAtomicUnits.gte(
+    minimumBalanceRequirementInAtomicUnits.plus(minimumTransactionFeesInAtomicUnits)
+  );
+  // handlers
+  const handleMoreInformationToggle = (value: boolean) => (value ? onOpen() : onClose());
+
+  return (
+    <VStack alignItems="flex-start" justifyContent="flex-start" px={DEFAULT_GAP} spacing={DEFAULT_GAP - 2} w="full">
+      <VStack alignItems="center" justifyContent="flex-start" spacing={1} w="full">
+        {/*asset icon*/}
+        <AssetAvatar
+          asset={asset}
+          fallbackIcon={<AssetIcon color={primaryButtonTextColor} networkTheme={network.chakraTheme} h={6} w={6} />}
+          size="md"
+        />
+
+        {/*unit*/}
+        {asset.unitName && (
+          <Text color={defaultTextColor} fontSize="md" textAlign="center">
+            {asset.unitName}
+          </Text>
+        )}
+
+        {/*not enough funds warning*/}
+        {!isEnoughMinimumBalance && (
+          <Warning
+            message={t<string>('captions.minimumBalanceTooLow', {
+              balance: formatCurrencyUnit(
+                convertToStandardUnit(accountBalanceInAtomicUnits, network.nativeCurrency.decimals),
+                {
+                  decimals: network.nativeCurrency.decimals,
+                }
+              ),
+              cost: formatCurrencyUnit(
+                convertToStandardUnit(
+                  minimumBalanceRequirementInAtomicUnits.plus(minimumTransactionFeesInAtomicUnits),
+                  network.nativeCurrency.decimals
+                ),
+                {
+                  decimals: network.nativeCurrency.decimals,
+                }
+              ),
+              symbol: network.nativeCurrency.symbol,
+            })}
+            size="sm"
+          />
+        )}
+
+        <VStack alignItems="flex-start" justifyContent="flex-start" spacing={0} w="full">
+          {/*asset id*/}
+          <HStack spacing={1} w="full">
+            <ModalTextItem flexGrow={1} isCode={true} label={`${t<string>('labels.assetId')}:`} value={asset.id} />
+
+            <CopyIconButton
+              ariaLabel={t<string>('labels.copyAssetId')}
+              tooltipLabel={t<string>('labels.copyAssetId')}
+              value={asset.id}
+            />
+
+            {blockExplorer && (
+              <OpenTabIconButton
+                tooltipLabel={t<string>('captions.openOn', {
+                  name: blockExplorer.canonicalName,
+                })}
+                url={blockExplorer.assetURL(asset.id)}
+              />
+            )}
+          </HStack>
+
+          {/*account*/}
+          <HStack spacing={1} w="full">
+            <ModalItem
+              flexGrow={1}
+              label={`${t<string>('labels.account')}:`}
+              value={
+                <AddressDisplay
+                  accounts={accounts}
+                  address={accountAddress}
+                  ariaLabel="Accoun to add the standard asset to"
+                  size="sm"
+                  network={network}
+                />
+              }
+            />
+
+            {/*open in explorer button*/}
+            {blockExplorer && (
+              <OpenTabIconButton
+                size="sm"
+                tooltipLabel={t<string>('captions.openOn', {
+                  name: blockExplorer.canonicalName,
+                })}
+                url={blockExplorer.accountURL(accountAddress)}
+              />
+            )}
+          </HStack>
+
+          {/*name*/}
+          {asset.name && (
+            <ModalTextItem label={`${t<string>('labels.name')}:`} tooltipLabel={asset.name} value={asset.name} />
+          )}
+
+          {/*url*/}
+          {asset.url && (
+            <HStack spacing={1} w="full">
+              <ModalTextItem flexGrow={1} isCode={true} label={`${t<string>('labels.url')}:`} value={asset.url} />
+
+              <OpenTabIconButton size="sm" tooltipLabel={t<string>('captions.openUrl')} url={asset.url} />
+            </HStack>
+          )}
+
+          {/*type*/}
+          <ModalItem label={`${t<string>('labels.type')}:`} value={<AssetBadge type={AssetTypeEnum.Standard} />} />
+
+          {/*fee*/}
+          <HStack spacing={1} w="full">
+            <ModalAssetItem
+              amountInAtomicUnits={minimumTransactionFeesInAtomicUnits}
+              decimals={network.nativeCurrency.decimals}
+              icon={createIconFromDataUri(network.nativeCurrency.iconUrl, {
+                color: subTextColor,
+                h: 3,
+                w: 3,
+              })}
+              label={`${t<string>('labels.fee')}:`}
+            />
+
+            {/*info*/}
+            <InfoIconTooltip color={subTextColor} label={t<string>('captions.optInFee')} />
+          </HStack>
+
+          <MoreInformationAccordion
+            color={defaultTextColor}
+            fontSize="xs"
+            isOpen={isOpen}
+            minButtonHeight={MODAL_ITEM_HEIGHT}
+            onChange={handleMoreInformationToggle}
+          >
+            <VStack spacing={0} w="full">
+              {/*decimals*/}
+              <ModalTextItem label={`${t<string>('labels.decimals')}:`} value={asset.decimals.toString()} />
+
+              {/*total supply*/}
+              <ModalTextItem
+                label={`${t<string>('labels.totalSupply')}:`}
+                tooltipLabel={formatCurrencyUnit(totalSupplyInStandardUnits, {
+                  decimals: asset.decimals,
+                  thousandSeparatedOnly: true,
+                })}
+                value={formatCurrencyUnit(totalSupplyInStandardUnits, {
+                  decimals: asset.decimals,
+                })}
+              />
+
+              {/*default frozen*/}
+              <ModalTextItem
+                label={`${t<string>('labels.defaultFrozen')}:`}
+                value={asset.defaultFrozen ? t<string>('labels.yes') : t<string>('labels.no')}
+              />
+
+              {/*creator account*/}
+              <HStack spacing={1} w="full">
+                <ModalItem
+                  flexGrow={1}
+                  label={`${t<string>('labels.creatorAccount')}:`}
+                  value={
+                    <AddressDisplay
+                      accounts={accounts}
+                      address={asset.creator}
+                      ariaLabel="Creator address"
+                      size="sm"
+                      network={network}
+                    />
+                  }
+                />
+
+                {/*open in explorer button*/}
+                {!isAccountKnown(accounts, asset.creator) && blockExplorer && (
+                  <OpenTabIconButton
+                    tooltipLabel={t<string>('captions.openOn', {
+                      name: blockExplorer.canonicalName,
+                    })}
+                    url={blockExplorer.accountURL(asset.creator)}
+                  />
+                )}
+              </HStack>
+
+              {/*clawback address*/}
+              {asset.clawbackAddress && (
+                <HStack spacing={1} w="full">
+                  <ModalItem
+                    flexGrow={1}
+                    label={`${t<string>('labels.clawbackAccount')}:`}
+                    value={
+                      <AddressDisplay
+                        accounts={accounts}
+                        address={asset.clawbackAddress}
+                        ariaLabel="Clawback address"
+                        size="sm"
+                        network={network}
+                      />
+                    }
+                  />
+
+                  {/*open in explorer button*/}
+                  {!isAccountKnown(accounts, asset.clawbackAddress) && blockExplorer && (
+                    <OpenTabIconButton
+                      tooltipLabel={t<string>('captions.openOn', {
+                        name: blockExplorer.canonicalName,
+                      })}
+                      url={blockExplorer.accountURL(asset.clawbackAddress)}
+                    />
+                  )}
+                </HStack>
+              )}
+
+              {/*freeze address*/}
+              {asset.freezeAddress && (
+                <HStack spacing={1} w="full">
+                  <ModalItem
+                    flexGrow={1}
+                    label={`${t<string>('labels.freezeAccount')}:`}
+                    value={
+                      <AddressDisplay
+                        accounts={accounts}
+                        address={asset.freezeAddress}
+                        ariaLabel="Freeze address"
+                        size="sm"
+                        network={network}
+                      />
+                    }
+                  />
+
+                  {/*open in explorer button*/}
+                  {!isAccountKnown(accounts, asset.freezeAddress) && blockExplorer && (
+                    <OpenTabIconButton
+                      tooltipLabel={t<string>('captions.openOn', {
+                        name: blockExplorer.canonicalName,
+                      })}
+                      url={blockExplorer.accountURL(asset.freezeAddress)}
+                    />
+                  )}
+                </HStack>
+              )}
+
+              {/*manager address*/}
+              {asset.managerAddress && (
+                <HStack spacing={1} w="full">
+                  <ModalItem
+                    flexGrow={1}
+                    label={`${t<string>('labels.managerAccount')}:`}
+                    value={
+                      <AddressDisplay
+                        accounts={accounts}
+                        address={asset.managerAddress}
+                        ariaLabel="Manager address"
+                        size="sm"
+                        network={network}
+                      />
+                    }
+                  />
+
+                  {/*open in explorer button*/}
+                  {!isAccountKnown(accounts, asset.managerAddress) && blockExplorer && (
+                    <OpenTabIconButton
+                      tooltipLabel={t<string>('captions.openOn', {
+                        name: blockExplorer.canonicalName,
+                      })}
+                      url={blockExplorer.accountURL(asset.managerAddress)}
+                    />
+                  )}
+                </HStack>
+              )}
+
+              {/*reserve address*/}
+              {asset.reserveAddress && (
+                <HStack spacing={1} w="full">
+                  <ModalItem
+                    flexGrow={1}
+                    label={`${t<string>('labels.reserveAccount')}:`}
+                    value={
+                      <AddressDisplay
+                        accounts={accounts}
+                        address={asset.reserveAddress}
+                        ariaLabel="Reserve address"
+                        size="sm"
+                        network={network}
+                      />
+                    }
+                  />
+
+                  {/*open in explorer button*/}
+                  {!isAccountKnown(accounts, asset.reserveAddress) && blockExplorer && (
+                    <OpenTabIconButton
+                      tooltipLabel={t<string>('captions.openOn', {
+                        name: blockExplorer.canonicalName,
+                      })}
+                      url={blockExplorer.accountURL(asset.reserveAddress)}
+                    />
+                  )}
+                </HStack>
+              )}
+            </VStack>
+          </MoreInformationAccordion>
+        </VStack>
+      </VStack>
+    </VStack>
+  );
+};
+
+export default AddAssetsStandardAssetSummaryModalContent;

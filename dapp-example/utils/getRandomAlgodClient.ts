@@ -1,7 +1,7 @@
 import { Algodv2 } from 'algosdk';
 
 // types
-import type { INetwork } from '@extension/types';
+import type { INetwork } from '@provider/types';
 
 /**
  * Gets an initialized algod client.
@@ -9,8 +9,7 @@ import type { INetwork } from '@extension/types';
  * @returns {Algodv2} an initialized algod client.
  */
 export default function getAlgodClient(network: INetwork): Algodv2 {
-  const node =
-    network.algods[Math.floor(Math.random() * network.algods.length)];
+  const node = network.algods[Math.floor(Math.random() * network.algods.length)];
 
   if (!node) {
     throw new Error(`no node found for network "${network.genesisId}"`);

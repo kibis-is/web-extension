@@ -22,22 +22,14 @@ import {
   UseToastOptions,
   VStack,
 } from '@chakra-ui/react';
-import {
-  decode as decodeBase64,
-  encode as encodeBase64,
-} from '@stablelib/base64';
+import { decode as decodeBase64, encode as encodeBase64 } from '@stablelib/base64';
 import { encode as encodeHex } from '@stablelib/hex';
-import {
-  decodeSignedTransaction,
-  encodeUnsignedTransaction,
-  SignedTransaction,
-  Transaction,
-} from 'algosdk';
+import { decodeSignedTransaction, encodeUnsignedTransaction, SignedTransaction, Transaction } from 'algosdk';
 import BigNumber from 'bignumber.js';
 import React, { ChangeEvent, FC, useEffect, useState } from 'react';
 
 // enums
-import { TransactionTypeEnum } from '@extension/enums';
+import { TransactionTypeEnum } from '@provider/enums';
 
 // hooks
 import useDefaultTextColor from '../../hooks/useDefaultTextColor';
@@ -78,186 +70,171 @@ const SignAssetTransactionTab: FC<IBaseTransactionProps> = ({
   const subTextColor = useSubTextColor();
   // states
   const [amount, setAmount] = useState<BigNumber>(new BigNumber('0'));
-  const [signedTransaction, setSignedTransaction] =
-    useState<SignedTransaction | null>(null);
+  const [signedTransaction, setSignedTransaction] = useState<SignedTransaction | null>(null);
   const [note, setNote] = useState<string>('');
-  const [selectedAsset, setSelectedAsset] = useState<IAssetInformation | null>(
-    null
-  );
+  const [selectedAsset, setSelectedAsset] = useState<IAssetInformation | null>(null);
   // handlers
-  const handleAmountChange = (valueAsString: string) =>
-    setAmount(new BigNumber(valueAsString));
-  const handleNoteChange = (event: ChangeEvent<HTMLInputElement>) =>
-    setNote(event.target.value);
+  const handleAmountChange = (valueAsString: string) => setAmount(new BigNumber(valueAsString));
+  const handleNoteChange = (event: ChangeEvent<HTMLInputElement>) => setNote(event.target.value);
   const handleSelectAssetChange = (assetId: string) => {
     if (!account) {
       return;
     }
 
-    handleUpdateAsset(
-      account.assets.find((value) => value.id === assetId) || null
-    );
+    handleUpdateAsset(account.assets.find((value) => value.id === assetId) || null);
   };
-  const handleSignTransactionClick =
-    (type: TransactionTypeEnum) => async () => {
-      let result: (string | null)[] | null = null;
-      let toastErrorOptions: UseToastOptions;
-      let unsignedTransaction: Transaction | null = null;
+  const handleSignTransactionClick = (type: TransactionTypeEnum) => async () => {
+    let result: (string | null)[] | null = null;
+    let toastErrorOptions: UseToastOptions;
+    let unsignedTransaction: Transaction | null = null;
 
-      if (!account || !connectionType || !network) {
+    if (!account || !connectionType || !network) {
+      toast({
+        description: 'You must first enable the dApp with the wallet.',
+        status: 'error',
+        title: 'No Account Not Found!',
+      });
+
+      return;
+    }
+
+    toastErrorOptions = {
+      description: 'Select an asset from the list.',
+      status: 'error',
+      title: 'No Asset Selected!',
+    };
+
+    try {
+      switch (type) {
+        case TransactionTypeEnum.AssetConfig:
+          if (!selectedAsset) {
+            toast(toastErrorOptions);
+
+            return;
+          }
+
+          unsignedTransaction = await createAssetConfigTransaction({
+            assetId: selectedAsset.id,
+            from: account.address,
+            network,
+            note: note.length > 0 ? note : null,
+          });
+
+          break;
+        case TransactionTypeEnum.AssetCreate:
+          unsignedTransaction = await createAssetCreateTransaction({
+            from: account.address,
+            network,
+            note: note.length > 0 ? note : null,
+          });
+
+          break;
+        case TransactionTypeEnum.AssetDestroy:
+          if (!selectedAsset) {
+            toast(toastErrorOptions);
+
+            return;
+          }
+
+          unsignedTransaction = await createAssetDestroyTransaction({
+            assetId: selectedAsset.id,
+            from: account.address,
+            network,
+            note: note.length > 0 ? note : null,
+          });
+
+          break;
+        case TransactionTypeEnum.AssetFreeze:
+          if (!selectedAsset) {
+            toast(toastErrorOptions);
+
+            return;
+          }
+
+          unsignedTransaction = await createAssetFreezeTransaction({
+            assetId: selectedAsset.id,
+            from: account.address,
+            freezeTarget: account.address,
+            isFreezing: true,
+            network,
+            note: note.length > 0 ? note : null,
+          });
+
+          break;
+        case TransactionTypeEnum.AssetTransfer:
+          if (!selectedAsset) {
+            toast(toastErrorOptions);
+
+            return;
+          }
+
+          unsignedTransaction = await createAssetTransferTransaction({
+            amount: convertToAtomicUnit(amount, selectedAsset.decimals),
+            assetId: selectedAsset.id,
+            from: account.address,
+            network,
+            note: note.length > 0 ? note : null,
+            to: null,
+          });
+
+          break;
+        case TransactionTypeEnum.AssetUnfreeze:
+          if (!selectedAsset) {
+            toast(toastErrorOptions);
+
+            return;
+          }
+
+          unsignedTransaction = await createAssetFreezeTransaction({
+            assetId: selectedAsset.id,
+            from: account.address,
+            freezeTarget: account.address,
+            isFreezing: false,
+            network,
+            note: note.length > 0 ? note : null,
+          });
+
+          break;
+
+        default:
+          break;
+      }
+
+      if (!unsignedTransaction) {
         toast({
-          description: 'You must first enable the dApp with the wallet.',
           status: 'error',
-          title: 'No Account Not Found!',
+          title: 'Unknown Transaction Type',
         });
 
         return;
       }
 
-      toastErrorOptions = {
-        description: 'Select an asset from the list.',
-        status: 'error',
-        title: 'No Asset Selected!',
-      };
+      result = await signTransactionsAction([
+        {
+          txn: encodeBase64(encodeUnsignedTransaction(unsignedTransaction)),
+        },
+      ]);
 
-      try {
-        switch (type) {
-          case TransactionTypeEnum.AssetConfig:
-            if (!selectedAsset) {
-              toast(toastErrorOptions);
-
-              return;
-            }
-
-            unsignedTransaction = await createAssetConfigTransaction({
-              assetId: selectedAsset.id,
-              from: account.address,
-              network,
-              note: note.length > 0 ? note : null,
-            });
-
-            break;
-          case TransactionTypeEnum.AssetCreate:
-            unsignedTransaction = await createAssetCreateTransaction({
-              from: account.address,
-              network,
-              note: note.length > 0 ? note : null,
-            });
-
-            break;
-          case TransactionTypeEnum.AssetDestroy:
-            if (!selectedAsset) {
-              toast(toastErrorOptions);
-
-              return;
-            }
-
-            unsignedTransaction = await createAssetDestroyTransaction({
-              assetId: selectedAsset.id,
-              from: account.address,
-              network,
-              note: note.length > 0 ? note : null,
-            });
-
-            break;
-          case TransactionTypeEnum.AssetFreeze:
-            if (!selectedAsset) {
-              toast(toastErrorOptions);
-
-              return;
-            }
-
-            unsignedTransaction = await createAssetFreezeTransaction({
-              assetId: selectedAsset.id,
-              from: account.address,
-              freezeTarget: account.address,
-              isFreezing: true,
-              network,
-              note: note.length > 0 ? note : null,
-            });
-
-            break;
-          case TransactionTypeEnum.AssetTransfer:
-            if (!selectedAsset) {
-              toast(toastErrorOptions);
-
-              return;
-            }
-
-            unsignedTransaction = await createAssetTransferTransaction({
-              amount: convertToAtomicUnit(amount, selectedAsset.decimals),
-              assetId: selectedAsset.id,
-              from: account.address,
-              network,
-              note: note.length > 0 ? note : null,
-              to: null,
-            });
-
-            break;
-          case TransactionTypeEnum.AssetUnfreeze:
-            if (!selectedAsset) {
-              toast(toastErrorOptions);
-
-              return;
-            }
-
-            unsignedTransaction = await createAssetFreezeTransaction({
-              assetId: selectedAsset.id,
-              from: account.address,
-              freezeTarget: account.address,
-              isFreezing: false,
-              network,
-              note: note.length > 0 ? note : null,
-            });
-
-            break;
-
-          default:
-            break;
-        }
-
-        if (!unsignedTransaction) {
-          toast({
-            status: 'error',
-            title: 'Unknown Transaction Type',
-          });
-
-          return;
-        }
-
-        result = await signTransactionsAction([
-          {
-            txn: encodeBase64(encodeUnsignedTransaction(unsignedTransaction)),
-          },
-        ]);
-
-        if (result && result[0]) {
-          toast({
-            description: `Successfully signed payment transaction for provider "${connectionType}".`,
-            status: 'success',
-            title: 'Payment Transaction Signed!',
-          });
-
-          setSignedTransaction(
-            decodeSignedTransaction(decodeBase64(result[0]))
-          );
-        }
-      } catch (error) {
+      if (result && result[0]) {
         toast({
-          description: error.message,
-          status: 'error',
-          title: `${(error as BaseARC0027Error).code}: ${
-            (error as BaseARC0027Error).name
-          }`,
+          description: `Successfully signed payment transaction for provider "${connectionType}".`,
+          status: 'success',
+          title: 'Payment Transaction Signed!',
         });
+
+        setSignedTransaction(decodeSignedTransaction(decodeBase64(result[0])));
       }
-    };
+    } catch (error) {
+      toast({
+        description: error.message,
+        status: 'error',
+        title: `${(error as BaseARC0027Error).code}: ${(error as BaseARC0027Error).name}`,
+      });
+    }
+  };
   const handleUpdateAsset = (newSelectedAsset: IAssetInformation | null) => {
     const maximumAmount: BigNumber = newSelectedAsset
-      ? convertToStandardUnit(
-          newSelectedAsset.balance,
-          newSelectedAsset.decimals
-        )
+      ? convertToStandardUnit(newSelectedAsset.balance, newSelectedAsset.decimals)
       : new BigNumber('0');
 
     setSelectedAsset(newSelectedAsset);
@@ -283,12 +260,7 @@ const SignAssetTransactionTab: FC<IBaseTransactionProps> = ({
             min={0}
             max={
               selectedAsset
-                ? parseFloat(
-                    convertToStandardUnit(
-                      selectedAsset.balance,
-                      selectedAsset.decimals
-                    ).toString()
-                  )
+                ? parseFloat(convertToStandardUnit(selectedAsset.balance, selectedAsset.decimals).toString())
                 : 0
             }
             precision={selectedAsset ? selectedAsset.decimals : 0}
@@ -316,11 +288,7 @@ const SignAssetTransactionTab: FC<IBaseTransactionProps> = ({
           Assets:
         </Text>
         {account && account.assets.length > 0 ? (
-          <RadioGroup
-            onChange={handleSelectAssetChange}
-            value={selectedAsset?.id}
-            w="full"
-          >
+          <RadioGroup onChange={handleSelectAssetChange} value={selectedAsset?.id} w="full">
             <Stack spacing={4} w="full">
               {account.assets.map((asset, index) => (
                 <HStack key={`asset-action-item-${index}`} spacing={2} w="full">
@@ -330,10 +298,7 @@ const SignAssetTransactionTab: FC<IBaseTransactionProps> = ({
                   </Text>
                   <Spacer />
                   <Text color={subTextColor} fontSize="sm">
-                    {convertToStandardUnit(
-                      asset.balance,
-                      asset.decimals
-                    ).toString()}
+                    {convertToStandardUnit(asset.balance, asset.decimals).toString()}
                   </Text>
                   {asset.symbol && (
                     <Text color={subTextColor} fontSize="sm">
@@ -345,12 +310,7 @@ const SignAssetTransactionTab: FC<IBaseTransactionProps> = ({
             </Stack>
           </RadioGroup>
         ) : (
-          <VStack
-            alignItems="center"
-            justifyContent="center"
-            minH={150}
-            w="full"
-          >
+          <VStack alignItems="center" justifyContent="center" minH={150} w="full">
             <Text color={defaultTextColor} fontSize="sm" textAlign="center">
               No assets found!
             </Text>
@@ -372,9 +332,7 @@ const SignAssetTransactionTab: FC<IBaseTransactionProps> = ({
               Signed transaction signature (hex):
             </Text>
             <Code fontSize="sm" wordBreak="break-word">
-              {signedTransaction?.sig
-                ? encodeHex(signedTransaction.sig).toUpperCase()
-                : '-'}
+              {signedTransaction?.sig ? encodeHex(signedTransaction.sig).toUpperCase() : '-'}
             </Code>
           </HStack>
         </VStack>
@@ -413,9 +371,7 @@ const SignAssetTransactionTab: FC<IBaseTransactionProps> = ({
               label: 'Send Asset Unfreeze Transaction',
             },
           ].map(({ disabled, label, type }, index) => (
-            <GridItem
-              key={`asset-action-sign-transaction-button-item-${index}`}
-            >
+            <GridItem key={`asset-action-sign-transaction-button-item-${index}`}>
               <Button
                 borderRadius={theme.radii['3xl']}
                 colorScheme={primaryColorScheme}

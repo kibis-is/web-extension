@@ -1,12 +1,7 @@
-import {
-  Algodv2,
-  makeAssetFreezeTxnWithSuggestedParams,
-  SuggestedParams,
-  Transaction,
-} from 'algosdk';
+import { Algodv2, makeAssetFreezeTxnWithSuggestedParams, SuggestedParams, Transaction } from 'algosdk';
 
 // types
-import { INetwork } from '@extension/types';
+import { INetwork } from '@provider/types';
 
 // utils
 import getRandomAlgodClient from './getRandomAlgodClient';
@@ -29,9 +24,7 @@ export default async function createAssetFreezeTransaction({
   note,
 }: IOptions): Promise<Transaction> {
   const client: Algodv2 = getRandomAlgodClient(network);
-  const suggestedParams: SuggestedParams = await client
-    .getTransactionParams()
-    .do();
+  const suggestedParams: SuggestedParams = await client.getTransactionParams().do();
 
   return makeAssetFreezeTxnWithSuggestedParams(
     from,

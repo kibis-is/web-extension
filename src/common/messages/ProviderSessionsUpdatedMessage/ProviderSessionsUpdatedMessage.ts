@@ -5,7 +5,7 @@ import { ProviderMessageReferenceEnum } from '@common/enums';
 import BaseProviderMessage from '@common/messages/BaseProviderMessage';
 
 // types
-import type { ISession } from '@extension/types';
+import type { ISession } from '@provider/types';
 import type { IPayload } from './types';
 
 export default class ProviderSessionsUpdatedMessage extends BaseProviderMessage {
