@@ -3,7 +3,7 @@
 [![Chrome extension](https://img.shields.io/chrome-web-store/v/hcgejekffjilpgbommjoklpneekbkajb?logo=googlechrome&logoColor=%23FFCE44&color=%23FFCE44)](https://chromewebstore.google.com/detail/kibisis/hcgejekffjilpgbommjoklpneekbkajb)
 [![Microsoft Edge add-on](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fmicrosoftedge.microsoft.com%2Faddons%2Fgetproductdetailsbycrxid%2Fbajncpocmkioafbijldokfbjajelkbmc%3Fhl%3Den-GB%26gl%3DGB&query=%24.version&prefix=v&logo=microsoftedge&logoColor=%230078D7&label=microsoft%20edge%20add-on&color=%230078D7)](https://microsoftedge.microsoft.com/addons/detail/kibisis/bajncpocmkioafbijldokfbjajelkbmc)
 [![Firefox add-on](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Faddons.mozilla.org%2Fapi%2Fv5%2Faddons%2Faddon%2Fkibisis%2F&query=%24.current_version.version&logo=firefox&logoColor=%23FF7139&label=firefox%20add-on&color=%23FF7139)](https://addons.mozilla.org/en-GB/firefox/addon/kibisis)
-[![Opera add-on](https://img.shields.io/badge/opera-FF1B2D?logo=opera)](https://addons.opera.com/en-gb/extensions/details/kibisis/)
+[![Opera add-on](https://img.shields.io/badge/opera_add_on-FF1B2D?logo=opera)](https://addons.opera.com/en-gb/extensions/details/kibisis/)
 
 </div>
 
