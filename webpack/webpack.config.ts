@@ -34,9 +34,7 @@ import { IWebpackEnvironmentVariables } from './types';
 // utils
 import { createCommonConfig } from './utils';
 
-const configs: (
-  env: IWebpackEnvironmentVariables
-) => (Configuration | DevelopmentConfiguration)[] = ({
+const configs: (env: IWebpackEnvironmentVariables) => (Configuration | DevelopmentConfiguration)[] = ({
   environment = EnvironmentEnum.Development,
   target = TargetEnum.Firefox,
 }: IWebpackEnvironmentVariables) => {
@@ -66,6 +64,9 @@ const configs: (
 
   // load .env file
   config();
+
+  // @hack - interferes with tsconfig-paths-webpack-plugin causing the tsconfig to use the webpack version
+  delete process.env.TS_NODE_PROJECT;
 
   extensionPath = resolve(SRC_PATH, 'extension');
   tsConfigBuildPath = resolve(process.cwd(), 'tsconfig.build.json');
@@ -296,19 +297,9 @@ const configs: (
     merge(commonConfig, {
       devtool,
       entry: {
-        ['background-app']: resolve(
-          extensionPath,
-          'apps',
-          'background',
-          'index.ts'
-        ),
+        ['background-app']: resolve(extensionPath, 'apps', 'background', 'index.ts'),
         ['main-app']: resolve(extensionPath, 'apps', 'main', 'index.ts'),
-        ['registration-app']: resolve(
-          extensionPath,
-          'apps',
-          'registration',
-          'index.ts'
-        ),
+        ['registration-app']: resolve(extensionPath, 'apps', 'registration', 'index.ts'),
       },
       mode: environment,
       module: {
@@ -375,10 +366,7 @@ const configs: (
      * dapp example
      */
     merge(commonConfig, {
-      devtool:
-        environment === EnvironmentEnum.Production
-          ? 'source-map'
-          : 'eval-source-map',
+      devtool: environment === EnvironmentEnum.Production ? 'source-map' : 'eval-source-map',
       devServer: {
         port: dappExamplePort,
         watchFiles: [`${DAPP_EXAMPLE_SRC_PATH}/**/*`],
