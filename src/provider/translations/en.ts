@@ -606,6 +606,7 @@ const translation: IResourceLanguage = {
     preferredBlockExplorer: 'Preferred Block Explorer',
     preferredNFTExplorer: 'Preferred NFT Explorer',
     primary: 'Primary',
+    privacyPolicy: 'Privacy policy',
     publicKey: 'Public Key',
     reKey: 'Re-key',
     reKeyed: 'Re-keyed',
