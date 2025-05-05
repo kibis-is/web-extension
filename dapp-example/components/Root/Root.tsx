@@ -45,7 +45,7 @@ import useUseWalletConnector from '../../hooks/useUseWalletConnector';
 import useWalletConnectConnector from '../../hooks/useWalletConnectConnector';
 
 // types
-import type { INetwork } from '@extension/types';
+import type { INetwork } from '@provider/types';
 import type { IAccountInformation, IBaseTransactionProps } from '../../types';
 import type { IOnConnectParams } from '../ConnectMenu';
 
@@ -80,28 +80,20 @@ const Root: FC = () => {
     signTransactionsAction: walletConnectSignTransactionsAction,
   } = useWalletConnectConnector({ toast });
   // states
-  const [connectionType, setConnectionType] =
-    useState<ConnectionTypeEnum | null>(null);
-  const [enabledAccounts, setEnabledAccounts] = useState<IAccountInformation[]>(
-    []
-  );
-  const [selectedAccount, setSelectedAccount] =
-    useState<IAccountInformation | null>(null);
+  const [connectionType, setConnectionType] = useState<ConnectionTypeEnum | null>(null);
+  const [enabledAccounts, setEnabledAccounts] = useState<IAccountInformation[]>([]);
+  const [selectedAccount, setSelectedAccount] = useState<IAccountInformation | null>(null);
   const [selectedNetwork, setSelectedNetwork] = useState<INetwork | null>(null);
   // handlers
   const handleAddressSelect = (event: ChangeEvent<HTMLSelectElement>) => {
     const account: IAccountInformation | null =
-      enabledAccounts.find((value) => value.address === event.target.value) ||
-      null;
+      enabledAccounts.find((value) => value.address === event.target.value) || null;
 
     if (account) {
       setSelectedAccount(account);
     }
   };
-  const handleConnect = async ({
-    connectionType,
-    network,
-  }: IOnConnectParams) => {
+  const handleConnect = async ({ connectionType, network }: IOnConnectParams) => {
     let result = false;
 
     switch (connectionType) {
@@ -198,17 +190,11 @@ const Root: FC = () => {
 
               <SignKeyRegistrationTransactionTab {...signTransactionProps} />
 
-              <SignMessageTab
-                account={selectedAccount}
-                signMessageAction={avmWebProviderSignMessageAction}
-              />
+              <SignMessageTab account={selectedAccount} signMessageAction={avmWebProviderSignMessageAction} />
 
               <ImportAccountViaQRCodeTab />
 
-              <SendKeyRegistrationViaURITab
-                account={selectedAccount}
-                network={selectedNetwork}
-              />
+              <SendKeyRegistrationViaURITab account={selectedAccount} network={selectedNetwork} />
             </TabPanels>
           </Tabs>
         );
@@ -260,10 +246,7 @@ const Root: FC = () => {
 
               <ImportAccountViaQRCodeTab />
 
-              <SendKeyRegistrationViaURITab
-                account={selectedAccount}
-                network={selectedNetwork}
-              />
+              <SendKeyRegistrationViaURITab account={selectedAccount} network={selectedNetwork} />
             </TabPanels>
           </Tabs>
         );
@@ -316,10 +299,7 @@ const Root: FC = () => {
 
               <ImportAccountViaQRCodeTab />
 
-              <SendKeyRegistrationViaURITab
-                account={selectedAccount}
-                network={selectedNetwork}
-              />
+              <SendKeyRegistrationViaURITab account={selectedAccount} network={selectedNetwork} />
             </TabPanels>
           </Tabs>
         );
@@ -355,15 +335,8 @@ const Root: FC = () => {
         setEnabledAccounts([]);
         break;
     }
-  }, [
-    avmWebProviderEnabledAccounts,
-    useWalletEnabledAccounts,
-    walletConnectEnabledAccounts,
-  ]);
-  useEffect(
-    () => setSelectedAccount(enabledAccounts[0] || null),
-    [enabledAccounts]
-  );
+  }, [avmWebProviderEnabledAccounts, useWalletEnabledAccounts, walletConnectEnabledAccounts]);
+  useEffect(() => setSelectedAccount(enabledAccounts[0] || null), [enabledAccounts]);
 
   return (
     <Center as="main" backgroundColor={BODY_BACKGROUND_COLOR}>
@@ -378,19 +351,10 @@ const Root: FC = () => {
         w="full"
       >
         <VStack spacing={8} w="full">
-          <HStack
-            alignItems="flex-start"
-            justifyContent="space-between"
-            w="full"
-          >
+          <HStack alignItems="flex-start" justifyContent="space-between" w="full">
             <IconButton
               aria-label="Change color mode"
-              icon={
-                <Icon
-                  as={colorMode === 'light' ? IoMoonOutline : IoSunnyOutline}
-                  color={subTextColor}
-                />
-              }
+              icon={<Icon as={colorMode === 'light' ? IoMoonOutline : IoSunnyOutline} color={subTextColor} />}
               onClick={handleOnChangeColorMode}
               variant="ghost"
             />
@@ -401,22 +365,13 @@ const Root: FC = () => {
                 {document.title}
               </Heading>
 
-              <Text
-                color={subTextColor}
-                fontSize="sm"
-                textAlign="center"
-                w="full"
-              >
+              <Text color={subTextColor} fontSize="sm" textAlign="center" w="full">
                 [FOR DEVELOPMENT PURPOSES ONLY]
               </Text>
             </VStack>
 
             {/*connect menu*/}
-            <ConnectMenu
-              onConnect={handleConnect}
-              onDisconnect={handleDisconnect}
-              toast={toast}
-            />
+            <ConnectMenu onConnect={handleConnect} onDisconnect={handleDisconnect} toast={toast} />
           </HStack>
 
           {/*enabled accounts table*/}

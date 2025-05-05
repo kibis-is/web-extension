@@ -1,13 +1,8 @@
-import {
-  Algodv2,
-  makeAssetTransferTxnWithSuggestedParams,
-  SuggestedParams,
-  Transaction,
-} from 'algosdk';
+import { Algodv2, makeAssetTransferTxnWithSuggestedParams, SuggestedParams, Transaction } from 'algosdk';
 import BigNumber from 'bignumber.js';
 
 // types
-import { INetwork } from '@extension/types';
+import { INetwork } from '@provider/types';
 
 // utils
 import getRandomAlgodClient from './getRandomAlgodClient';
@@ -32,8 +27,7 @@ export default async function createAssetTransferTransaction({
   to,
 }: IOptions): Promise<Transaction> {
   const client: Algodv2 = getRandomAlgodClient(network);
-  const _suggestedParams: SuggestedParams =
-    suggestedParams || (await client.getTransactionParams().do());
+  const _suggestedParams: SuggestedParams = suggestedParams || (await client.getTransactionParams().do());
   const encoder: TextEncoder = new TextEncoder();
 
   // for all other assets, use asset transfer transactions

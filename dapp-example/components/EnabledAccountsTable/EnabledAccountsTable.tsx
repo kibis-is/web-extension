@@ -1,16 +1,4 @@
-import {
-  Table,
-  TableCaption,
-  TableContainer,
-  Tbody,
-  Text,
-  Td,
-  Th,
-  Thead,
-  Tr,
-  VStack,
-  HStack,
-} from '@chakra-ui/react';
+import { Table, TableCaption, TableContainer, Tbody, Text, Td, Th, Thead, Tr, VStack, HStack } from '@chakra-ui/react';
 import React, { type FC } from 'react';
 
 // constants
@@ -25,7 +13,7 @@ import useDefaultTextColor from '../../hooks/useDefaultTextColor';
 import useSubTextColor from '../../hooks/useSubTextColor';
 
 // types
-import type { INetwork } from '@extension/types';
+import type { INetwork } from '@provider/types';
 import type { IAccountInformation } from '../../types';
 
 // utils
@@ -37,32 +25,17 @@ interface IProps {
   network: INetwork | null;
 }
 
-const EnabledAccountsTable: FC<IProps> = ({
-  enabledAccounts,
-  connectionType,
-  network,
-}) => {
+const EnabledAccountsTable: FC<IProps> = ({ enabledAccounts, connectionType, network }) => {
   // hooks
   const borderColor = useBorderColor();
   const defaultTextColor = useDefaultTextColor();
   const subTextColor = useSubTextColor();
 
   return (
-    <TableContainer
-      borderColor={borderColor}
-      borderRadius="md"
-      borderStyle="solid"
-      borderWidth={1}
-      w="full"
-    >
+    <TableContainer borderColor={borderColor} borderRadius="md" borderStyle="solid" borderWidth={1} w="full">
       <Table variant="simple">
         <TableCaption>
-          <VStack
-            alignItems="center"
-            justifyContent="center"
-            spacing={1}
-            w="full"
-          >
+          <VStack alignItems="center" justifyContent="center" spacing={1} w="full">
             <HStack spacing={DEFAULT_GAP / 3}>
               <Text as="b" color={defaultTextColor}>
                 Network:
@@ -76,9 +49,7 @@ const EnabledAccountsTable: FC<IProps> = ({
                 Connection Type:
               </Text>
 
-              <Text color={subTextColor}>
-                {connectionType ? parseConnectorType(connectionType) : 'N/A'}
-              </Text>
+              <Text color={subTextColor}>{connectionType ? parseConnectorType(connectionType) : 'N/A'}</Text>
             </HStack>
           </VStack>
         </TableCaption>

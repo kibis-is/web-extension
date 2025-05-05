@@ -1,0 +1,104 @@
+import { Input, InputGroup, InputRightElement, Text, VStack } from '@chakra-ui/react';
+import { encodeURLSafe as encodeBase64URLSafe } from '@stablelib/base64';
+import React, { type FC, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { IoEye, IoEyeOff } from 'react-icons/io5';
+import { randomBytes } from '@stablelib/random';
+
+// components
+import IconButton from '@common/components/IconButton';
+import Label from '@common/components/Label';
+
+// constants
+import { DEFAULT_GAP, INPUT_HEIGHT } from '@common/constants';
+
+// hooks
+import usePrimaryColor from '@provider/hooks/usePrimaryColor';
+import useSubTextColor from '@provider/hooks/useSubTextColor';
+
+// types
+import type { IProps } from './types';
+
+const PasswordInput: FC<IProps> = ({
+  colorMode,
+  disabled,
+  error,
+  hint,
+  id,
+  inputRef,
+  label,
+  onKeyUp,
+  onChange,
+  required = false,
+  value,
+}) => {
+  const { t } = useTranslation();
+  // hooks
+  const primaryColor = usePrimaryColor();
+  const subTextColor = useSubTextColor();
+  // state
+  const [show, setShow] = useState<boolean>(false);
+  // misc
+  const _id = id || encodeBase64URLSafe(randomBytes(6));
+  // handlers
+  const handleShowHideClick = () => setShow(!show);
+
+  return (
+    <VStack alignItems="flex-start" spacing={DEFAULT_GAP / 3} w="full">
+      {/*label*/}
+      <Label
+        colorMode={colorMode}
+        error={error}
+        inputID={_id}
+        label={label || t<string>('labels.password')}
+        px={DEFAULT_GAP - 2}
+        required={required}
+      />
+
+      {/*input*/}
+      <InputGroup size="md">
+        <Input
+          autoComplete="current-password"
+          borderRadius="full"
+          focusBorderColor={error ? 'red.300' : primaryColor}
+          h={INPUT_HEIGHT}
+          id={_id}
+          isDisabled={disabled}
+          isInvalid={!!error}
+          name="password"
+          onChange={onChange}
+          onKeyUp={onKeyUp}
+          placeholder={t<string>('placeholders.enterPassword')}
+          pr={DEFAULT_GAP * 2}
+          ref={inputRef}
+          type={show ? 'text' : 'password'}
+          value={value}
+          w="full"
+        />
+
+        <InputRightElement h={INPUT_HEIGHT}>
+          <IconButton
+            aria-label={t<string>('labels.showHidePassword')}
+            borderRadius="full"
+            colorMode={colorMode}
+            disabled={disabled}
+            icon={show ? IoEye : IoEyeOff}
+            mr={DEFAULT_GAP / 3}
+            onClick={handleShowHideClick}
+            size="md"
+            variant="ghost"
+          />
+        </InputRightElement>
+      </InputGroup>
+
+      {/*info*/}
+      {hint && (
+        <Text color={subTextColor} fontSize="xs" px={DEFAULT_GAP - 2} textAlign="left" w="full">
+          {hint}
+        </Text>
+      )}
+    </VStack>
+  );
+};
+
+export default PasswordInput;

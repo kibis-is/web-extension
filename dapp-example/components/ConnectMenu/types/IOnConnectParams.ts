@@ -2,7 +2,7 @@
 import { ConnectionTypeEnum } from '../../../enums';
 
 // types
-import type { INetwork } from '@extension/types';
+import type { INetwork } from '@provider/types';
 
 interface IOnConnectParams {
   connectionType: ConnectionTypeEnum;

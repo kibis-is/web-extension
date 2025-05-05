@@ -1,7 +1,7 @@
 enum ConfigNameEnum {
   DappExample = 'dapp-example',
-  ExtensionApps = 'extension-apps',
-  ExtensionScripts = 'extension-scripts',
+  ProviderApps = 'provider-apps',
+  ProviderScripts = 'provider-scripts',
 }
 
 export default ConfigNameEnum;

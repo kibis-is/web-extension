@@ -28,10 +28,7 @@ import {
   useToast,
   VStack,
 } from '@chakra-ui/react';
-import {
-  decode as decodeBase64,
-  encode as encodeBase64,
-} from '@stablelib/base64';
+import { decode as decodeBase64, encode as encodeBase64 } from '@stablelib/base64';
 import { encode as encodeHex } from '@stablelib/hex';
 import {
   assignGroupID,
@@ -44,7 +41,7 @@ import BigNumber from 'bignumber.js';
 import React, { FC, useEffect, useState } from 'react';
 
 // enums
-import { TransactionTypeEnum } from '@extension/enums';
+import { TransactionTypeEnum } from '@provider/enums';
 
 // hooks
 import useBorderColor from '../../hooks/useBorderColor';
@@ -62,11 +59,7 @@ import type { IAssetInformation, IBaseTransactionProps } from '../../types';
 import convertToAtomicUnit from '@common/utils/convertToAtomicUnit';
 import convertToStandardUnit from '@common/utils/convertToStandardUnit';
 import formatCurrencyUnit from '@common/utils/formatCurrencyUnit';
-import {
-  createAppCallTransaction,
-  createAssetTransferTransaction,
-  createPaymentTransaction,
-} from '../../utils';
+import { createAppCallTransaction, createAssetTransferTransaction, createPaymentTransaction } from '../../utils';
 
 interface IAssetValue extends IAssetInformation {
   amount: BigNumber;
@@ -91,15 +84,10 @@ const SignAtomicTransactionsTab: FC<IBaseTransactionProps> = ({
   const subTextColor = useSubTextColor();
   // states
   const [assetValues, setAssetValues] = useState<IAssetValue[]>([]);
-  const [includeApplicationCall, setIncludeApplicationCall] =
-    useState<boolean>(false);
-  const [signedTransactions, setSignedTransactions] = useState<
-    (SignedTransaction | null)[]
-  >([]);
+  const [includeApplicationCall, setIncludeApplicationCall] = useState<boolean>(false);
+  const [signedTransactions, setSignedTransactions] = useState<(SignedTransaction | null)[]>([]);
   // misc
-  const createUnsignedAtomicTransactions = async (
-    extraTransactions?: Transaction[]
-  ): Promise<Transaction[] | null> => {
+  const createUnsignedAtomicTransactions = async (extraTransactions?: Transaction[]): Promise<Transaction[] | null> => {
     const unsignedTransactions: Transaction[] = [];
     let assetValue: IAssetValue;
 
@@ -163,9 +151,7 @@ const SignAtomicTransactionsTab: FC<IBaseTransactionProps> = ({
       ...(extraTransactions ? extraTransactions : []),
     ]);
   };
-  const handleSigningTransactions = async (
-    unsignedTransactions: Transaction[]
-  ) => {
+  const handleSigningTransactions = async (unsignedTransactions: Transaction[]) => {
     let result: (string | null)[] | null = null;
 
     try {
@@ -182,19 +168,13 @@ const SignAtomicTransactionsTab: FC<IBaseTransactionProps> = ({
           title: 'Atomic Transactions Signed!',
         });
 
-        setSignedTransactions(
-          result.map((value) =>
-            value ? decodeSignedTransaction(decodeBase64(value)) : null
-          )
-        );
+        setSignedTransactions(result.map((value) => (value ? decodeSignedTransaction(decodeBase64(value)) : null)));
       }
     } catch (error) {
       toast({
         description: error.message,
         status: 'error',
-        title: `${(error as BaseARC0027Error).code}: ${
-          (error as BaseARC0027Error).name
-        }`,
+        title: `${(error as BaseARC0027Error).code}: ${(error as BaseARC0027Error).name}`,
       });
 
       setSignedTransactions([]);
@@ -233,8 +213,7 @@ const SignAtomicTransactionsTab: FC<IBaseTransactionProps> = ({
       )
     );
   };
-  const handleIncludeApplicationCallCheckChange = () =>
-    setIncludeApplicationCall(!includeApplicationCall);
+  const handleIncludeApplicationCallCheckChange = () => setIncludeApplicationCall(!includeApplicationCall);
   const handleSignAGroupOfAtomicTransactionsClick = async () => {
     let unsignedTransactionsOne: Transaction[] | null;
     let unsignedTransactionsTwo: Transaction[] | null;
@@ -266,10 +245,7 @@ const SignAtomicTransactionsTab: FC<IBaseTransactionProps> = ({
     }
 
     // add a group of atomic transactions; a group of groups
-    await handleSigningTransactions([
-      ...unsignedTransactionsOne,
-      ...unsignedTransactionsTwo,
-    ]);
+    await handleSigningTransactions([...unsignedTransactionsOne, ...unsignedTransactionsTwo]);
   };
   const handleSignAtomicTransactionsAndASingleTransactionClick = async () => {
     let unsignedTransactions: Transaction[] | null;
@@ -303,8 +279,7 @@ const SignAtomicTransactionsTab: FC<IBaseTransactionProps> = ({
     ]);
   };
   const handleSignAtomicTransactionsClick = async () => {
-    const unsignedTransactions: Transaction[] | null =
-      await createUnsignedAtomicTransactions();
+    const unsignedTransactions: Transaction[] | null = await createUnsignedAtomicTransactions();
 
     if (!unsignedTransactions) {
       return;
@@ -341,13 +316,7 @@ const SignAtomicTransactionsTab: FC<IBaseTransactionProps> = ({
     <TabPanel w="full">
       <VStack justifyContent="center" spacing={8} w="full">
         {/*signed transactions table*/}
-        <TableContainer
-          borderColor={borderColor}
-          borderRadius={15}
-          borderStyle="solid"
-          borderWidth={1}
-          w="full"
-        >
+        <TableContainer borderColor={borderColor} borderRadius={15} borderStyle="solid" borderWidth={1} w="full">
           <Table variant="simple">
             <Thead>
               <Tr>
@@ -382,9 +351,7 @@ const SignAtomicTransactionsTab: FC<IBaseTransactionProps> = ({
                   {/*group id*/}
                   <Td>
                     <Code fontSize="sm" wordBreak="break-word">
-                      {value?.txn.group
-                        ? value.txn.group.toString('base64')
-                        : 'N/A'}
+                      {value?.txn.group ? value.txn.group.toString('base64') : 'N/A'}
                     </Code>
                   </Td>
 
@@ -405,11 +372,7 @@ const SignAtomicTransactionsTab: FC<IBaseTransactionProps> = ({
             {/*assets*/}
             {assetValues.length > 0 ? (
               assetValues.map((value, index) => (
-                <HStack
-                  key={`atomic-transaction-action-asset-item-${index}`}
-                  spacing={2}
-                  w="full"
-                >
+                <HStack key={`atomic-transaction-action-asset-item-${index}`} spacing={2} w="full">
                   {/*asset id/name*/}
                   <HStack>
                     <Checkbox
@@ -419,12 +382,7 @@ const SignAtomicTransactionsTab: FC<IBaseTransactionProps> = ({
                       value={value.id}
                     />
                     <Tooltip label={value.name || value.id}>
-                      <Text
-                        color={subTextColor}
-                        noOfLines={1}
-                        fontSize="sm"
-                        w={200}
-                      >
+                      <Text color={subTextColor} noOfLines={1} fontSize="sm" w={200}>
                         {value.name || value.id}
                       </Text>
                     </Tooltip>
@@ -439,9 +397,7 @@ const SignAtomicTransactionsTab: FC<IBaseTransactionProps> = ({
                   >
                     <HStack flexGrow={1}>
                       <Text color={subTextColor} fontSize="sm">
-                        {formatCurrencyUnit(
-                          convertToStandardUnit(value.balance, value.decimals)
-                        )}
+                        {formatCurrencyUnit(convertToStandardUnit(value.balance, value.decimals))}
                       </Text>
                       {value.symbol && (
                         <Text color={subTextColor} fontSize="sm">
@@ -456,16 +412,7 @@ const SignAtomicTransactionsTab: FC<IBaseTransactionProps> = ({
                     flexGrow={1}
                     isDisabled={!value.isChecked}
                     min={0}
-                    max={
-                      value
-                        ? parseFloat(
-                            convertToStandardUnit(
-                              value.balance,
-                              value.decimals
-                            ).toString()
-                          )
-                        : 0
-                    }
+                    max={value ? parseFloat(convertToStandardUnit(value.balance, value.decimals).toString()) : 0}
                     maxW={200}
                     precision={value.decimals}
                     onChange={handleAmountChange(value.id)}
@@ -480,12 +427,7 @@ const SignAtomicTransactionsTab: FC<IBaseTransactionProps> = ({
                 </HStack>
               ))
             ) : (
-              <VStack
-                alignItems="center"
-                justifyContent="center"
-                minH={150}
-                w="full"
-              >
+              <VStack alignItems="center" justifyContent="center" minH={150} w="full">
                 <Text color={defaultTextColor} fontSize="sm" textAlign="center">
                   No assets found!
                 </Text>

@@ -3,12 +3,8 @@ import type { Property } from 'csstype';
 import type { PropsWithChildren } from 'react';
 
 // types
-import type {
-  IBaseComponentProps,
-  IExternalAccount,
-  TSizes,
-} from '@common/types';
-import type { IAccountWithExtendedProps } from '@extension/types';
+import type { IBaseComponentProps, IExternalAccount, TSizes } from '@common/types';
+import type { IAccountWithExtendedProps } from '@provider/types';
 
 interface IProps {
   account: IAccountWithExtendedProps | IExternalAccount;

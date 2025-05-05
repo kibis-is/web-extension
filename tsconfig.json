@@ -22,8 +22,8 @@
       "@client/*": ["src/client/*"],
       "@common/*": ["src/common/*"],
       "@docs/*": ["src/docs/*"],
-      "@extension/*": ["src/extension/*"],
       "@middleware/*": ["src/middleware/*"],
+      "@provider/*": ["src/provider/*"],
       "@test/*": ["test/*"]
     },
     "removeComments": false,

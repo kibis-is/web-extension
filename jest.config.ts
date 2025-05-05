@@ -1,17 +1,14 @@
 import type { Config } from 'jest';
 
 const config: Config = {
-  collectCoverageFrom: [
-    '<rootDir>/src/**/*.{ts,tsx}',
-    '!<rootDir>/src/**/*.d.ts',
-  ],
+  collectCoverageFrom: ['<rootDir>/src/**/*.{ts,tsx}', '!<rootDir>/src/**/*.d.ts'],
   coverageDirectory: 'coverage',
   moduleFileExtensions: ['js', 'ts', 'tsx'],
   moduleNameMapper: {
     '@client/(.*)': '<rootDir>/src/client/$1',
     '@common/(.*)': '<rootDir>/src/common/$1',
-    '@extension/(.*)': '<rootDir>/src/extension/$1',
     '@middleware/(.*)': '<rootDir>/src/middleware/$1',
+    '@provider/(.*)': '<rootDir>/src/provider/$1',
   },
   rootDir: '.',
   setupFilesAfterEnv: ['<rootDir>/test/setup.ts'],

@@ -1,15 +1,10 @@
-import {
-  Algodv2,
-  makeApplicationOptInTxn,
-  SuggestedParams,
-  Transaction,
-} from 'algosdk';
+import { Algodv2, makeApplicationOptInTxn, SuggestedParams, Transaction } from 'algosdk';
 
 // constants
 import { TESTNET_APP_INDEX } from '../constants';
 
 // types
-import { INetwork } from '@extension/types';
+import { INetwork } from '@provider/types';
 
 // utils
 import getRandomAlgodClient from './getRandomAlgodClient';
@@ -20,15 +15,9 @@ interface IOptions {
   note: string | null;
 }
 
-export default async function createAppOptInTransaction({
-  from,
-  network,
-  note,
-}: IOptions): Promise<Transaction> {
+export default async function createAppOptInTransaction({ from, network, note }: IOptions): Promise<Transaction> {
   const client: Algodv2 = getRandomAlgodClient(network);
-  const suggestedParams: SuggestedParams = await client
-    .getTransactionParams()
-    .do();
+  const suggestedParams: SuggestedParams = await client.getTransactionParams().do();
   const encoder: TextEncoder = new TextEncoder();
 
   return makeApplicationOptInTxn(

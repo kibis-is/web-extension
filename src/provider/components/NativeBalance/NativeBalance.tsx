@@ -1,0 +1,80 @@
+import { HStack, Text, Tooltip } from '@chakra-ui/react';
+import React, { type FC, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
+
+// components
+import InformationIcon from '@provider/components/icons/InformationIcon';
+
+// constants
+import { DEFAULT_GAP } from '@common/constants';
+
+// hooks
+import useDefaultTextColor from '@provider/hooks/useDefaultTextColor';
+import useTextBackgroundColor from '@provider/hooks/useTextBackgroundColor';
+
+// utils
+import convertToStandardUnit from '@common/utils/convertToStandardUnit';
+import formatCurrencyUnit from '@common/utils/formatCurrencyUnit';
+import createIconFromDataUri from '@provider/utils/createIconFromDataUri';
+
+// types
+import type { IProps } from './types';
+
+// utils
+import calculateIconSize from '@common/utils/calculateIconSize';
+
+const NativeBalance: FC<IProps> = ({ atomicBalance, minAtomicBalance, nativeCurrency }) => {
+  const { t } = useTranslation();
+  // hooks
+  const defaultTextColor = useDefaultTextColor();
+  const textBackgroundColor = useTextBackgroundColor();
+  // memos
+  const balanceStandardUnit = useMemo(
+    () => convertToStandardUnit(atomicBalance, nativeCurrency.decimals),
+    [atomicBalance, nativeCurrency]
+  );
+  const minimumStandardUnit = useMemo(
+    () => convertToStandardUnit(minAtomicBalance, nativeCurrency.decimals),
+    [atomicBalance, nativeCurrency]
+  );
+
+  return (
+    <HStack alignItems="center" justifyContent="center" spacing={1}>
+      <Tooltip
+        aria-label="Full balance"
+        label={`${formatCurrencyUnit(balanceStandardUnit, {
+          decimals: nativeCurrency.decimals,
+          thousandSeparatedOnly: true,
+        })} ${nativeCurrency.symbol.toUpperCase()}`}
+      >
+        <HStack backgroundColor={textBackgroundColor} borderRadius="full" px={DEFAULT_GAP / 2} py={1} spacing={1}>
+          <Text color={defaultTextColor} fontSize="sm">{`${t<string>('labels.balance')}:`}</Text>
+
+          <Text color={defaultTextColor} fontSize="sm">
+            {formatCurrencyUnit(balanceStandardUnit, {
+              decimals: balanceStandardUnit.gt(1) ? 2 : nativeCurrency.decimals,
+            })}
+          </Text>
+
+          {createIconFromDataUri(nativeCurrency.iconUrl, {
+            color: defaultTextColor,
+            boxSize: calculateIconSize('xs'),
+          })}
+        </HStack>
+      </Tooltip>
+
+      {/*minimum balance icon*/}
+      <InformationIcon
+        ariaLabel="Minimum balance information"
+        tooltipLabel={t<string>('captions.minimumBalance', {
+          amount: formatCurrencyUnit(minimumStandardUnit, {
+            decimals: nativeCurrency.decimals,
+          }),
+          code: nativeCurrency.symbol.toUpperCase(),
+        })}
+      />
+    </HStack>
+  );
+};
+
+export default NativeBalance;

@@ -14,7 +14,7 @@ import useDefaultTextColor from '@common/hooks/useDefaultTextColor';
 import useSubTextColor from '@common/hooks/useSubTextColor';
 
 // icons
-import KbPasskey from '@extension/icons/KbPasskey';
+import KbPasskey from '@provider/icons/KbPasskey';
 
 // types
 import type { IProps } from './types';
@@ -24,22 +24,13 @@ import calculateIconSize from '@common/utils/calculateIconSize';
 import convertPublicKeyToAVMAddress from '@common/utils/convertPublicKeyToAVMAddress';
 import ellipseAddress from '@common/utils/ellipseAddress';
 
-const AccountItem: FC<IProps> = ({
-  account,
-  colorMode,
-  fontFamily,
-  subTextColor,
-  textColor,
-}) => {
+const AccountItem: FC<IProps> = ({ account, colorMode, fontFamily, subTextColor, textColor }) => {
   // hooks
   const borderColor = useBorderColor(colorMode);
   const defaultSubTextColor = useSubTextColor(colorMode);
   const defaultTextColor = useDefaultTextColor(colorMode);
   // misc
-  const address = useMemo(
-    () => convertPublicKeyToAVMAddress(account.publicKey),
-    [account]
-  );
+  const address = useMemo(() => convertPublicKeyToAVMAddress(account.publicKey), [account]);
 
   return (
     <HStack
@@ -55,23 +46,12 @@ const AccountItem: FC<IProps> = ({
     >
       {/*avatar*/}
       <Center>
-        <AccountAvatar
-          account={account}
-          colorMode={colorMode}
-          fontFamily={fontFamily}
-          size="xs"
-        />
+        <AccountAvatar account={account} colorMode={colorMode} fontFamily={fontFamily} size="xs" />
       </Center>
 
       {/*name/address*/}
       {account.name ? (
-        <VStack
-          align="flex-start"
-          flexGrow={1}
-          h={EXTERNAL_INPUT_HEIGHT}
-          justify="space-evenly"
-          spacing={0}
-        >
+        <VStack align="flex-start" flexGrow={1} h={EXTERNAL_INPUT_HEIGHT} justify="space-evenly" spacing={0}>
           <Text
             color={textColor || defaultTextColor}
             fontFamily={fontFamily}

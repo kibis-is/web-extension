@@ -1,15 +1,4 @@
-import {
-  Box,
-  Button,
-  Checkbox,
-  Code,
-  Flex,
-  HStack,
-  TabPanel,
-  Text,
-  useToast,
-  VStack,
-} from '@chakra-ui/react';
+import { Box, Button, Checkbox, Code, Flex, HStack, TabPanel, Text, useToast, VStack } from '@chakra-ui/react';
 import { encode as encodeHex } from '@stablelib/hex';
 import { randomBytes } from '@stablelib/random';
 import { encodeAddress } from 'algosdk';
@@ -19,10 +8,7 @@ import React, { ChangeEvent, FC, useEffect, useState } from 'react';
 import { InfinitySpin } from 'react-loader-spinner';
 
 // constants
-import {
-  EXPORT_ACCOUNT_PAGE_LIMIT,
-  EXPORT_ACCOUNT_QR_CODE_DURATION,
-} from '@extension/constants';
+import { EXPORT_ACCOUNT_PAGE_LIMIT, EXPORT_ACCOUNT_QR_CODE_DURATION } from '@provider/constants';
 
 // hooks
 import useDefaultTextColor from '../../hooks/useDefaultTextColor';
@@ -30,13 +16,13 @@ import usePrimaryColorScheme from '../../hooks/usePrimaryColorScheme';
 import useSubTextColor from '../../hooks/useSubTextColor';
 
 // cryptography
-import Ed21559KeyPair from '@extension/cryptography/Ed21559KeyPair';
+import Ed21559KeyPair from '@provider/cryptography/Ed21559KeyPair';
 
 // theme
 import { theme } from '@common/theme';
 
 // utils
-import createAccountImportURI from '@extension/utils/createAccountImportURI';
+import createAccountImportURI from '@provider/utils/createAccountImportURI';
 
 const ImportAccountViaQRCodeTab: FC = () => {
   const toast = useToast({
@@ -62,9 +48,7 @@ const ImportAccountViaQRCodeTab: FC = () => {
 
     // for multiple account, use the maximum per page and if pagination, add 3 page's worth
     if (multipleAccounts) {
-      length = isPagination
-        ? EXPORT_ACCOUNT_PAGE_LIMIT * 3 - 2
-        : EXPORT_ACCOUNT_PAGE_LIMIT;
+      length = isPagination ? EXPORT_ACCOUNT_PAGE_LIMIT * 3 - 2 : EXPORT_ACCOUNT_PAGE_LIMIT;
     }
 
     setPagination([1, Math.ceil(length / EXPORT_ACCOUNT_PAGE_LIMIT)]);
@@ -73,14 +57,11 @@ const ImportAccountViaQRCodeTab: FC = () => {
   };
   const qrCodeSize = 350;
   // handlers
-  const handleAddNamesCheckChange = (event: ChangeEvent<HTMLInputElement>) =>
-    setAddNames(event.target.checked);
+  const handleAddNamesCheckChange = (event: ChangeEvent<HTMLInputElement>) => setAddNames(event.target.checked);
   const handleGenerateNewAccountsClick = () => generateKeyPairs();
-  const handleMultipleAccountsCheckChange = (
-    event: ChangeEvent<HTMLInputElement>
-  ) => setMultipleAccounts(event.target.checked);
-  const handlePaginationCheckChange = (event: ChangeEvent<HTMLInputElement>) =>
-    setIsPagination(event.target.checked);
+  const handleMultipleAccountsCheckChange = (event: ChangeEvent<HTMLInputElement>) =>
+    setMultipleAccounts(event.target.checked);
+  const handlePaginationCheckChange = (event: ChangeEvent<HTMLInputElement>) => setIsPagination(event.target.checked);
 
   useEffect(() => {
     const intervalId: number = window.setInterval(() => {
@@ -138,21 +119,14 @@ const ImportAccountViaQRCodeTab: FC = () => {
     })();
   }, [keyPairs]);
   // regenerate accounts
-  useEffect(
-    () => generateKeyPairs(),
-    [addNames, multipleAccounts, isPagination]
-  );
+  useEffect(() => generateKeyPairs(), [addNames, multipleAccounts, isPagination]);
 
   return (
     <TabPanel w="full">
       <VStack justifyContent="center" spacing={8} w="full">
         {/*add names checkbox*/}
         <HStack alignItems="center" spacing={2} w="full">
-          <Checkbox
-            isChecked={addNames}
-            onChange={handleAddNamesCheckChange}
-            size="lg"
-          />
+          <Checkbox isChecked={addNames} onChange={handleAddNamesCheckChange} size="lg" />
 
           <Text color={subTextColor} fontSize="sm" w="full">
             Add names?
@@ -161,11 +135,7 @@ const ImportAccountViaQRCodeTab: FC = () => {
 
         {/*multiple accounts checkbox*/}
         <HStack alignItems="center" spacing={2} w="full">
-          <Checkbox
-            isChecked={multipleAccounts}
-            onChange={handleMultipleAccountsCheckChange}
-            size="lg"
-          />
+          <Checkbox isChecked={multipleAccounts} onChange={handleMultipleAccountsCheckChange} size="lg" />
 
           <Text color={subTextColor} fontSize="sm" w="full">
             Multiple accounts?
@@ -196,24 +166,13 @@ const ImportAccountViaQRCodeTab: FC = () => {
             }}
           />
         ) : (
-          <Flex
-            alignItems="center"
-            h={qrCodeSize}
-            justifyContent="center"
-            w={qrCodeSize}
-          >
-            <InfinitySpin
-              color={theme.colors.primaryLight['500']}
-              width={`${qrCodeSize}px`}
-            />
+          <Flex alignItems="center" h={qrCodeSize} justifyContent="center" w={qrCodeSize}>
+            <InfinitySpin color={theme.colors.primaryLight['500']} width={`${qrCodeSize}px`} />
           </Flex>
         )}
 
         {/*captions*/}
-        <Text
-          color={subTextColor}
-          fontSize="sm"
-        >{`Displaying ${pagination[0]} of ${pagination[1]}`}</Text>
+        <Text color={subTextColor} fontSize="sm">{`Displaying ${pagination[0]} of ${pagination[1]}`}</Text>
 
         {/*value*/}
         <VStack spacing={2} w="full">
@@ -224,11 +183,7 @@ const ImportAccountViaQRCodeTab: FC = () => {
           <VStack spacing={1} w="full">
             {uris ? (
               uris.map((value, index) => (
-                <Code
-                  fontSize="sm"
-                  key={`import-account uri-${index}`}
-                  wordBreak="break-word"
-                >
+                <Code fontSize="sm" key={`import-account uri-${index}`} wordBreak="break-word">
                   {value}
                 </Code>
               ))
@@ -244,11 +199,7 @@ const ImportAccountViaQRCodeTab: FC = () => {
 
           <VStack spacing={1} w="full">
             {keyPairs.map((value, index) => (
-              <Code
-                fontSize="sm"
-                key={`import-account-address-${index}`}
-                wordBreak="break-word"
-              >
+              <Code fontSize="sm" key={`import-account-address-${index}`} wordBreak="break-word">
                 {encodeAddress(value.publicKey())}
               </Code>
             ))}
