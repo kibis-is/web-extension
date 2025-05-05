@@ -1,6 +1,6 @@
 import { Button, HStack, Icon, Tag, TagLabel, Text, VStack } from '@chakra-ui/react';
 import { encode as encodeHex } from '@stablelib/hex';
-import React, { FC } from 'react';
+import React, { FC, useMemo } from 'react';
 import { IoChevronForward } from 'react-icons/io5';
 import { Link } from 'react-router-dom';
 import { hash } from 'tweetnacl';
@@ -21,7 +21,7 @@ const SettingsLinkItem: FC<IProps> = ({ badges, icon, label, to }) => {
   const buttonHoverBackgroundColor = useButtonHoverBackgroundColor();
   const defaultTextColor = useDefaultTextColor();
   // misc
-  const iconSize = 6;
+  const iconSize = useMemo(() => 6, []);
   const labelHash = encodeHex(hash(new TextEncoder().encode(label)), true);
 
   return (
