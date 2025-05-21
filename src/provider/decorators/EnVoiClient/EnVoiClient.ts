@@ -24,7 +24,7 @@ export default class EnVoiClient {
    */
 
   private async _request<Response>(path: string): Promise<Response> {
-    const response = await fetch(`${this._url}/api/${path}`);
+    const response = await fetch(`${this._url}/api${path}`);
 
     return (await response.json()) as Response;
   }

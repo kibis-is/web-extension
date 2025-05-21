@@ -270,13 +270,10 @@ export default class AccountRepository extends BaseRepository {
     }: IAccountInformation,
     version: number
   ): IAccountInformation {
-    const _enVoi = enVoi;
+    let _enVoi = enVoi;
 
     if (version < 1) {
-      enVoi.items = enVoi.items.map((item) => ({
-        ...item,
-        tokenID: item['tokenId'],
-      }));
+      _enVoi = AccountRepository.initializeDefaultAccountInformation().enVoi; // reset envoi to be fetched later
     }
 
     return {
