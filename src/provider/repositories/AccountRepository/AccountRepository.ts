@@ -226,6 +226,7 @@ export default class AccountRepository extends BaseRepository {
       groupIndex: typeof groupIndex === 'number' ? groupIndex : null, // if 0, this is "falsy" in the js world, so let's be specific
       icon,
       id,
+      index: typeof index === 'number' ? index : null, // if 0, this is "falsy" in the js world, so let's be specific
       name,
       networkInformation: Object.keys(networkInformation).reduce<Record<string, IAccountInformation>>(
         (acc, value) => ({
@@ -242,7 +243,6 @@ export default class AccountRepository extends BaseRepository {
         }),
         {}
       ),
-      index: typeof index === 'number' ? index : null, // if 0, this is "falsy" in the js world, so let's be specific
       passkeys,
       publicKey,
       updatedAt,
