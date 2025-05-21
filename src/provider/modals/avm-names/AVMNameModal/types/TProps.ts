@@ -1,8 +1,8 @@
 // types
-import type { IARC0072AssetHolding, IModalProps, INetworkWithTransactionParams } from '@provider/types';
+import type { IEnVoiHolding, IModalProps, INetworkWithTransactionParams } from '@provider/types';
 
 interface IProps {
-  item: IARC0072AssetHolding | null;
+  item: IEnVoiHolding | null;
   network: INetworkWithTransactionParams | null;
 }
 

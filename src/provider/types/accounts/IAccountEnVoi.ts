@@ -1,8 +1,8 @@
 // types
-import type { IARC0072AssetHolding } from '@provider/types';
+import type { IEnVoiHolding } from '@provider/types';
 
 interface IAccountEnVoi {
-  items: IARC0072AssetHolding[];
+  items: IEnVoiHolding[];
   primaryName: string | null;
 }
 
