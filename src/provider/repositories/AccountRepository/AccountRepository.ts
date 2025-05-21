@@ -377,7 +377,7 @@ export default class AccountRepository extends BaseRepository {
       };
     });
 
-    return sortByIndex(accounts);
+    return sortByIndex(accounts.map((value) => this._sanitize(value)));
   }
 
   /**
@@ -388,8 +388,9 @@ export default class AccountRepository extends BaseRepository {
    */
   public async fetchByPublicKey(publicKey: string): Promise<IAccount | null> {
     const accounts = await this.fetchAll();
+    const account = accounts.find((value) => value.publicKey.toUpperCase() === publicKey.toUpperCase()) || null;
 
-    return accounts.find((value) => value.publicKey.toUpperCase() === publicKey.toUpperCase()) || null;
+    return account ? this._sanitize(account) : null;
   }
 
   /**
@@ -405,12 +406,12 @@ export default class AccountRepository extends BaseRepository {
       return null;
     }
 
-    return {
+    return this._sanitize({
       ...AccountRepository.initializeDefaultAccount({
         publicKey: item.publicKey,
       }),
       ...item,
-    };
+    });
   }
 
   /**
