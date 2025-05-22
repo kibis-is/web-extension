@@ -7,7 +7,7 @@ import {
   useDisclosure,
   VStack,
 } from '@chakra-ui/react';
-import React, { type FC, useEffect, useMemo, useState } from 'react';
+import React, { type FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { IoChevronDownOutline } from 'react-icons/io5';
 
@@ -55,16 +55,19 @@ const Select: FC<IProps> = ({
   // hooks
   const borderColor = useBorderColor();
   const buttonHoverBackgroundColor = useButtonHoverBackgroundColor();
-  const disabledBackgroundColor: string = useColorModeValue(theme.colors.gray['300'], theme.colors.whiteAlpha['300']);
+  const disabledBackgroundColor = useColorModeValue(theme.colors.gray['300'], theme.colors.whiteAlpha['300']);
   const subTextColor = useSubTextColor();
   // memos
   const iconSize = useMemo(() => calculateIconSize('sm'), []);
-  // handlers
-  const handleOnClick = () => !disabled && onSelectModalOpen();
-  const handleOnSelect = (index: number) => {
-    setSelectedIndex(index);
-    onSelect(options[index] || -1);
-  };
+  // callbacks
+  const handleOnClick = useCallback(() => !disabled && onSelectModalOpen(), [disabled, onSelectModalOpen]);
+  const handleOnSelect = useCallback(
+    (index: number) => {
+      setSelectedIndex(index);
+      onSelect(options[index] || -1);
+    },
+    [onSelect, setSelectedIndex]
+  );
 
   useEffect(() => {
     let index: number;
