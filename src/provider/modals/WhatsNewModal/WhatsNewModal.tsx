@@ -16,7 +16,7 @@ import { useDispatch } from 'react-redux';
 
 // components
 import Button from '@common/components/Button';
-import Markdown from '@provider/components/Markdown';
+import Markdown from '@provider/components/generic/Markdown';
 
 // constants
 import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@common/constants';
