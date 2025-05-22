@@ -19,11 +19,11 @@ import { useDispatch } from 'react-redux';
 
 // components
 import Button from '@common/components/Button';
-import EditableText from '@provider/components/EditableText';
-import GenericInput from '@provider/components/GenericInput';
+import EditableText from '@provider/components/generic/EditableText';
+import GenericInput from '@provider/components/generic/GenericInput';
 import IconButton from '@common/components/IconButton';
-import ModalSubHeading from '@provider/components/ModalSubHeading';
-import ScrollableContainer from '@provider/components/ScrollableContainer';
+import ModalSubHeading from '@provider/components/modals/ModalSubHeading';
+import ScrollableContainer from '@provider/components/generic/ScrollableContainer';
 
 // constants
 import { BODY_BACKGROUND_COLOR, DEFAULT_GAP, INPUT_HEIGHT } from '@common/constants';

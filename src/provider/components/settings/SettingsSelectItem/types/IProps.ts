@@ -1,6 +1,6 @@
 // types
 import type { IBaseComponentProps } from '@common/types';
-import type { IOption } from '@provider/components/Select';
+import type { IOption } from '@provider/components/generic/Select';
 
 interface IProps extends IBaseComponentProps {
   buttonTooltipLabel?: string;

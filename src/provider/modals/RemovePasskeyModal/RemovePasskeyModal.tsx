@@ -20,7 +20,7 @@ import { useDispatch } from 'react-redux';
 // components
 import Button from '@common/components/Button';
 import CircularProgressWithIcon from '@common/components/CircularProgressWithIcon';
-import ReEncryptKeysLoadingContent from '@provider/components/ReEncryptKeysLoadingContent';
+import ReEncryptKeysLoadingContent from '@provider/components/authentication/ReEncryptKeysLoadingContent';
 
 // constants
 import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@common/constants';

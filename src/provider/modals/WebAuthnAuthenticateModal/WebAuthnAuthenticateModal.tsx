@@ -27,8 +27,8 @@ import Button from '@common/components/Button';
 import EmptyPasskeyIcon from '@common/components/EmptyPasskeyIcon';
 import EmptyState from '@common/components/EmptyState';
 import AccountSelect from '@provider/components/accounts/AccountSelect';
-import ModalSubHeading from '@provider/components/ModalSubHeading';
-import ScrollableContainer from '@provider/components/ScrollableContainer';
+import ModalSubHeading from '@provider/components/modals/ModalSubHeading';
+import ScrollableContainer from '@provider/components/generic/ScrollableContainer';
 import Item from './Item';
 
 // constants

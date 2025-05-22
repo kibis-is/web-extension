@@ -21,8 +21,8 @@ import { IoCheckmarkOutline, IoQrCodeOutline } from 'react-icons/io5';
 // components
 import Button from '@common/components/Button';
 import CircularProgressWithIcon from '@common/components/CircularProgressWithIcon';
-import CopyIconButton from '@provider/components/CopyIconButton';
-import PillSwitch from '@provider/components/PillSwitch';
+import CopyIconButton from '@provider/components/generic/CopyIconButton';
+import PillSwitch from '@provider/components/generic/PillSwitch';
 
 // constants
 import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@common/constants';

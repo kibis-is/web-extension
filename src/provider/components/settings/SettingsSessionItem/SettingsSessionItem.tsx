@@ -4,9 +4,9 @@ import { useTranslation } from 'react-i18next';
 import { IoUnlinkOutline, IoWalletOutline } from 'react-icons/io5';
 
 // components
-import NetworkBadge from '@provider/components/NetworkBadge';
-import OverflowMenu from '@provider/components/OverflowMenu';
-import SessionAvatar from '@provider/components/SessionAvatar';
+import NetworkBadge from '@provider/components/networks/NetworkBadge';
+import OverflowMenu from '@provider/components/generic/OverflowMenu';
+import SessionAvatar from '@provider/components/sessions/SessionAvatar';
 
 // constants
 import { DEFAULT_GAP } from '@common/constants';

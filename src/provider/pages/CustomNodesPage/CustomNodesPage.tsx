@@ -7,10 +7,10 @@ import { useDispatch } from 'react-redux';
 // components
 import Button from '@common/components/Button';
 import EmptyState from '@common/components/EmptyState';
-import CustomNodeItem from '@provider/components/CustomNodeItem';
-import NetworkSelect from '@provider/components/NetworkSelect';
-import PageHeader from '@provider/components/PageHeader';
-import ScrollableContainer from '@provider/components/ScrollableContainer';
+import CustomNodeItem from '@provider/components/nodes/CustomNodeItem';
+import NetworkSelect from '@provider/components/networks/NetworkSelect';
+import PageHeader from '@provider/components/pages/PageHeader';
+import ScrollableContainer from '@provider/components/generic/ScrollableContainer';
 
 // constants
 import { DEFAULT_GAP } from '@common/constants';

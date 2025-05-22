@@ -12,7 +12,7 @@ import {
 import { useTranslation } from 'react-i18next';
 
 // components
-import PageHeader from '@provider/components/PageHeader';
+import PageHeader from '@provider/components/pages/PageHeader';
 import SettingsLinkItem from '@provider/components/settings/SettingsLinkItem';
 
 // constants

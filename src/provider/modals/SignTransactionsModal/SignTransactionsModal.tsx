@@ -19,7 +19,7 @@ import { useDispatch } from 'react-redux';
 
 // components
 import Button from '@common/components/Button';
-import ClientHeader, { ClientHeaderSkeleton } from '@provider/components/ClientHeader';
+import ClientHeader, { ClientHeaderSkeleton } from '@provider/components/generic/ClientHeader';
 import AtomicTransactionsContent from './AtomicTransactionsContent';
 import GroupOfTransactionsContent from './GroupOfTransactionsContent';
 import SingleTransactionContent from './SingleTransactionContent';

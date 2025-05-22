@@ -14,7 +14,7 @@ import { reducer as registrationReducer } from '@provider/features/registration'
 import { reducer as systemReducer } from '@provider/features/system';
 
 // providers
-import ThemeProvider from '@provider/components/ThemeProvider';
+import ThemeProvider from '@provider/containers/ThemeProvider';
 
 // types
 import type { IAppProps, IRegistrationRootState } from '@provider/types';

@@ -21,10 +21,10 @@ import { useDispatch } from 'react-redux';
 
 // components
 import Button from '@common/components/Button';
-import CustomNodeSummaryModalContent from '@provider/components/CustomNodeSummaryModalContent';
-import GenericInput from '@provider/components/GenericInput';
-import ModalSubHeading from '@provider/components/ModalSubHeading';
-import MoreInformationAccordion from '@provider/components/MoreInformationAccordion';
+import CustomNodeSummaryModalContent from '@provider/components/nodes/CustomNodeSummaryModalContent';
+import GenericInput from '@provider/components/generic/GenericInput';
+import ModalSubHeading from '@provider/components/modals/ModalSubHeading';
+import MoreInformationAccordion from '@provider/components/information/MoreInformationAccordion';
 import AddCustomNodeLoadingModalContent from './AddCustomNodeLoadingModalContent';
 
 // constants

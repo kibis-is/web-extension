@@ -2,7 +2,7 @@
 import { BaseExtensionError } from '@common/errors';
 
 // types
-import type { IEncryptionState } from '@provider/components/ReEncryptKeysLoadingContent';
+import type { IEncryptionState } from '@provider/components/authentication/ReEncryptKeysLoadingContent';
 import type { IPasskeyCredential } from '@provider/types';
 import type IAddPasskeyActionOptions from './IAddPasskeyActionOptions';
 

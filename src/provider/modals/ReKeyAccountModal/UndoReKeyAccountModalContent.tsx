@@ -4,10 +4,10 @@ import React, { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
 // components
-import AddressDisplay from '@provider/components/AddressDisplay';
-import InfoIconTooltip from '@provider/components/InfoIconTooltip';
-import ModalAssetItem from '@provider/components/ModalAssetItem';
-import ModalItem from '@provider/components/ModalItem';
+import AddressDisplay from '@provider/components/accounts/AddressDisplay';
+import InfoIconTooltip from '@provider/components/information/InfoIconTooltip';
+import ModalAssetItem from '@provider/components/modals/ModalAssetItem';
+import ModalItem from '@provider/components/modals/ModalItem';
 
 // constants
 import { DEFAULT_GAP } from '@common/constants';

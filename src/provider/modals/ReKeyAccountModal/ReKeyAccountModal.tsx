@@ -17,13 +17,13 @@ import { IoArrowUndoOutline, IoLockClosedOutline } from 'react-icons/io5';
 import { useDispatch } from 'react-redux';
 
 // components
-import AddressDisplay from '@provider/components/AddressDisplay';
-import AddressInput from '@provider/components/AddressInput';
+import AddressDisplay from '@provider/components/accounts/AddressDisplay';
+import AddressInput from '@provider/components/accounts/AddressInput';
 import Button from '@common/components/Button';
-import InfoIconTooltip from '@provider/components/InfoIconTooltip';
-import ModalAssetItem from '@provider/components/ModalAssetItem';
-import ModalItem from '@provider/components/ModalItem';
-import ModalSkeletonItem from '@provider/components/ModalSkeletonItem';
+import InfoIconTooltip from '@provider/components/information/InfoIconTooltip';
+import ModalAssetItem from '@provider/components/modals/ModalAssetItem';
+import ModalItem from '@provider/components/modals/ModalItem';
+import ModalSkeletonItem from '@provider/components/modals/ModalSkeletonItem';
 import ReKeyAccountConfirmingModalContent from './ReKeyAccountConfirmingModalContent';
 import UndoReKeyAccountModalContent from './UndoReKeyAccountModalContent';
 

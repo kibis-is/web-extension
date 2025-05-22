@@ -4,7 +4,7 @@ import { IoChevronForward } from 'react-icons/io5';
 import { Link } from 'react-router-dom';
 
 // components
-import AssetBadge from '@provider/components/AssetBadge';
+import AssetBadge from '@provider/components/assets/AssetBadge';
 import AssetIcon from '@provider/components/icons/AssetIcon';
 import NFTAvatar from '@provider/components/nfts/NFTAvatar';
 

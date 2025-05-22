@@ -9,7 +9,7 @@ import { useDispatch } from 'react-redux';
 // components
 import Button from '@common/components/Button';
 import EmptyState from '@common/components/EmptyState';
-import PageHeader from '@provider/components/PageHeader';
+import PageHeader from '@provider/components/pages/PageHeader';
 
 // constants
 import { DEFAULT_GAP } from '@common/constants';

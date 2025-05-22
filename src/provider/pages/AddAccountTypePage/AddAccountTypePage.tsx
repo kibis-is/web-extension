@@ -6,9 +6,9 @@ import { useNavigate } from 'react-router-dom';
 
 // components
 import AccountTypeItem from '@provider/components/accounts/AccountTypeItem';
-import CreateNewAccountIcon from '@provider/components/CreateNewAccountIcon';
+import CreateNewAccountIcon from '@provider/components/icons/CreateNewAccountIcon';
 import ImportAccountIcon from '@provider/components/icons/ImportAccountIcon';
-import PageHeader from '@provider/components/PageHeader';
+import PageHeader from '@provider/components/pages/PageHeader';
 
 // constants
 import { DEFAULT_GAP } from '@common/constants';

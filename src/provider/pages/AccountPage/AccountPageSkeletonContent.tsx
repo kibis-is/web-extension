@@ -3,8 +3,8 @@ import { faker } from '@faker-js/faker';
 import React, { type FC, useMemo } from 'react';
 
 // components
-import { NetworkSelectSkeleton } from '@provider/components/NetworkSelect';
-import { NativeBalanceSkeleton } from '@provider/components/NativeBalance';
+import { NetworkSelectSkeleton } from '@provider/components/networks/NetworkSelect';
+import { NativeBalanceSkeleton } from '@provider/components/accounts/NativeBalance';
 
 // hooks
 import useDefaultTextColor from '@provider/hooks/useDefaultTextColor';

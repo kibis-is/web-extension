@@ -6,14 +6,14 @@ import { useTranslation } from 'react-i18next';
 import { IoArrowBackOutline } from 'react-icons/io5';
 
 // components
-import ARC0300AccountImportModalContent from '@provider/components/ARC0300AccountImportModalContent';
-import ARC0300AssetAddModalContent from '@provider/components/ARC0300AssetAddModalContent';
-import ARC0300KeyRegistrationTransactionSendModalContent from '@provider/components/ARC0300KeyRegistrationTransactionSendModalContent';
-import ScanModeModalContent from '@provider/components/ScanModeModalContent';
-import ScanQRCodeViaCameraModalContent from '@provider/components/ScanQRCodeViaCameraModalContent';
-import ScanQRCodeViaScreenCaptureModalContent from '@provider/components/ScanQRCodeViaScreenCaptureModalContent';
-import ScanQRCodeViaTabModalContent from '@provider/components/ScanQRCodeViaTabModalContent';
-import UnknownURIModalContent from '@provider/components/UnknownURIModalContent';
+import ARC0300AccountImportModalContent from '@provider/components/vip-0300/ARC0300AccountImportModalContent';
+import ARC0300AssetAddModalContent from '@provider/components/vip-0300/ARC0300AssetAddModalContent';
+import ARC0300KeyRegistrationTransactionSendModalContent from '@provider/components/vip-0300/ARC0300KeyRegistrationTransactionSendModalContent';
+import ScanModeModalContent from '@provider/components/qr-codes/ScanModeModalContent';
+import ScanQRCodeViaCameraModalContent from '@provider/components/qr-codes/ScanQRCodeViaCameraModalContent';
+import ScanQRCodeViaScreenCaptureModalContent from '@provider/components/qr-codes/ScanQRCodeViaScreenCaptureModalContent';
+import ScanQRCodeViaTabModalContent from '@provider/components/qr-codes/ScanQRCodeViaTabModalContent';
+import UnknownURIModalContent from '@provider/components/qr-code/UnknownURIModalContent';
 
 // enums
 import { ARC0300AuthorityEnum, ARC0300PathEnum } from '@provider/enums';

@@ -7,13 +7,13 @@ import { useDispatch } from 'react-redux';
 
 // components
 import Button from '@common/components/Button';
-import CopyIconButton from '@provider/components/CopyIconButton';
-import COSEAlgorithmBadge from '@provider/components/COSEAlgorithmBadge';
-import MoreInformationAccordion from '@provider/components/MoreInformationAccordion';
-import PageHeader from '@provider/components/PageHeader';
-import PageSubHeading from '@provider/components/PageSubHeading';
-import PageItem from '@provider/components/PageItem';
-import PasskeyCapabilities from '@provider/components/PasskeyCapabilities';
+import CopyIconButton from '@provider/components/generic/CopyIconButton';
+import COSEAlgorithmBadge from '@provider/components/cryptography/COSEAlgorithmBadge';
+import MoreInformationAccordion from '@provider/components/information/MoreInformationAccordion';
+import PageHeader from '@provider/components/pages/PageHeader';
+import PageSubHeading from '@provider/components/pages/PageSubHeading';
+import PageItem from '@provider/components/pages/PageItem';
+import PasskeyCapabilities from '@provider/components/passkeys/PasskeyCapabilities';
 
 // constants
 import { DEFAULT_GAP } from '@common/constants';

@@ -27,12 +27,12 @@ import { IoFlagOutline } from 'react-icons/io5';
 
 // components
 import Button from '@common/components/Button';
-import InfoIconTooltip from '@provider/components/InfoIconTooltip';
-import ModalAccountItem from '@provider/components/ModalAccountItem';
-import ModalItem from '@provider/components/ModalItem';
-import ModalSubHeading from '@provider/components/ModalSubHeading';
-import ModalTextItem from '@provider/components/ModalTextItem';
-import MoreInformationAccordion from '@provider/components/MoreInformationAccordion';
+import InfoIconTooltip from '@provider/components/information/InfoIconTooltip';
+import ModalAccountItem from '@provider/components/modals/ModalAccountItem';
+import ModalItem from '@provider/components/modals/ModalItem';
+import ModalSubHeading from '@provider/components/modals/ModalSubHeading';
+import ModalTextItem from '@provider/components/modals/ModalTextItem';
+import MoreInformationAccordion from '@provider/components/information/MoreInformationAccordion';
 
 // constants
 import { BODY_BACKGROUND_COLOR, DEFAULT_GAP, MODAL_ITEM_HEIGHT } from '@common/constants';

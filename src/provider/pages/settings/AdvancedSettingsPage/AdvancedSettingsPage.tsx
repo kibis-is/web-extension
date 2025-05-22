@@ -5,7 +5,7 @@ import { IoGlobeOutline } from 'react-icons/io5';
 import { useDispatch } from 'react-redux';
 
 // components
-import PageHeader from '@provider/components/PageHeader';
+import PageHeader from '@provider/components/pages/PageHeader';
 import SettingsLinkItem from '@provider/components/settings/SettingsLinkItem';
 import SettingsSubHeading from '@provider/components/settings/SettingsSubHeading';
 import SettingsSwitchItem from '@provider/components/settings/SettingsSwitchItem';

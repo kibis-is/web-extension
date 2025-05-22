@@ -23,7 +23,7 @@ import { useDispatch } from 'react-redux';
 // components
 import AccountSelect from '@provider/components/accounts/AccountSelect';
 import Button from '@common/components/Button';
-import ModalSubHeading from '@provider/components/ModalSubHeading';
+import ModalSubHeading from '@provider/components/modals/ModalSubHeading';
 
 // constants
 import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@common/constants';

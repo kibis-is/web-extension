@@ -5,8 +5,8 @@ import { useTranslation } from 'react-i18next';
 
 // components
 import EmptyState from '@common/components/EmptyState';
-import ScrollableContainer from '@provider/components/ScrollableContainer';
-import TabLoadingItem from '@provider/components/TabLoadingItem';
+import ScrollableContainer from '@provider/components/generic/ScrollableContainer';
+import TabLoadingItem from '@provider/components/generic/TabLoadingItem';
 import Item from './Item';
 
 // constants

@@ -15,11 +15,11 @@ import { IoFolderOutline } from 'react-icons/io5';
 import { useDispatch } from 'react-redux';
 
 // components
-import ActionItem from '@provider/components/ActionItem';
+import ActionItem from '@provider/components/generic/ActionItem';
 import Button from '@common/components/Button';
-import GenericInput from '@provider/components/GenericInput';
-import ModalSubHeading from '@provider/components/ModalSubHeading';
-import ScrollableContainer from '@provider/components/ScrollableContainer';
+import GenericInput from '@provider/components/generic/GenericInput';
+import ModalSubHeading from '@provider/components/modals/ModalSubHeading';
+import ScrollableContainer from '@provider/components/generic/ScrollableContainer';
 
 // constants
 import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@common/constants';

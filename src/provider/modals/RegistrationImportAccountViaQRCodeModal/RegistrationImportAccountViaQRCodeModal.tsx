@@ -15,12 +15,12 @@ import { IoArrowBackOutline, IoDownloadOutline } from 'react-icons/io5';
 
 // components
 import Button from '@common/components/Button';
-import NewAccountItem from '@provider/components/NewAccountItem';
-import ScanModeModalContent from '@provider/components/ScanModeModalContent';
-import ScanQRCodeViaCameraModalContent from '@provider/components/ScanQRCodeViaCameraModalContent';
-import ScanQRCodeViaScreenCaptureModalContent from '@provider/components/ScanQRCodeViaScreenCaptureModalContent';
-import ScanQRCodeViaTabModalContent from '@provider/components/ScanQRCodeViaTabModalContent';
-import UnknownURIModalContent from '@provider/components/UnknownURIModalContent';
+import NewAccountItem from '@provider/components/accounts/NewAccountItem';
+import ScanModeModalContent from '@provider/components/qr-codes/ScanModeModalContent';
+import ScanQRCodeViaCameraModalContent from '@provider/components/qr-codes/ScanQRCodeViaCameraModalContent';
+import ScanQRCodeViaScreenCaptureModalContent from '@provider/components/qr-codes/ScanQRCodeViaScreenCaptureModalContent';
+import ScanQRCodeViaTabModalContent from '@provider/components/qr-codes/ScanQRCodeViaTabModalContent';
+import UnknownURIModalContent from '@provider/components/qr-codes/UnknownURIModalContent';
 
 // constants
 import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@common/constants';

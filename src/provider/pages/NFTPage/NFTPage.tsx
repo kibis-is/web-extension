@@ -4,11 +4,11 @@ import { useTranslation } from 'react-i18next';
 import { NavigateFunction, useNavigate, useParams } from 'react-router-dom';
 
 // components
-import AssetBadge from '@provider/components/AssetBadge';
-import CopyIconButton from '@provider/components/CopyIconButton';
-import OpenTabIconButton from '@provider/components/OpenTabIconButton';
-import PageHeader from '@provider/components/PageHeader';
-import PageItem from '@provider/components/PageItem';
+import AssetBadge from '@provider/components/assets/AssetBadge';
+import CopyIconButton from '@provider/components/generic/CopyIconButton';
+import OpenTabIconButton from '@provider/components/generic/OpenTabIconButton';
+import PageHeader from '@provider/components/pages/PageHeader';
+import PageItem from '@provider/components/pages/PageItem';
 
 // constants
 import { DEFAULT_GAP } from '@common/constants';

@@ -4,8 +4,8 @@ import { useTranslation } from 'react-i18next';
 import { IoChevronForward, IoCheckmarkCircleOutline } from 'react-icons/io5';
 
 // components
-import AssetAvatar from '@provider/components/AssetAvatar';
-import AssetBadge from '@provider/components/AssetBadge';
+import AssetAvatar from '@provider/components/assets/AssetAvatar';
+import AssetBadge from '@provider/components/assets/AssetBadge';
 import AssetIcon from '@provider/components/icons/AssetIcon';
 
 // constants

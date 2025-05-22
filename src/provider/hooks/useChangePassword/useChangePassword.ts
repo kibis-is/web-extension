@@ -16,7 +16,7 @@ import PasswordTagRepository from '@provider/repositories/PasswordTagRepository'
 import PrivateKeyRepository from '@provider/repositories/PrivateKeyRepository';
 
 // types
-import type { IEncryptionState } from '@provider/components/ReEncryptKeysLoadingContent';
+import type { IEncryptionState } from '@provider/components/authentication/ReEncryptKeysLoadingContent';
 import type { IPasswordTag, IPrivateKey } from '@provider/types';
 import type { IChangePasswordActionOptions, IState } from './types';
 

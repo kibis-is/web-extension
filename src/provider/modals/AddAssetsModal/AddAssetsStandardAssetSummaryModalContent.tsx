@@ -4,18 +4,18 @@ import React, { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
 // components
-import AddressDisplay from '@provider/components/AddressDisplay';
-import AssetAvatar from '@provider/components/AssetAvatar';
-import AssetBadge from '@provider/components/AssetBadge';
+import AddressDisplay from '@provider/components/accounts/AddressDisplay';
+import AssetAvatar from '@provider/components/assets/AssetAvatar';
+import AssetBadge from '@provider/components/assets/AssetBadge';
 import AssetIcon from '@provider/components/icons/AssetIcon';
-import CopyIconButton from '@provider/components/CopyIconButton';
-import InfoIconTooltip from '@provider/components/InfoIconTooltip';
-import ModalAssetItem from '@provider/components/ModalAssetItem';
-import ModalItem from '@provider/components/ModalItem';
-import ModalTextItem from '@provider/components/ModalTextItem';
-import MoreInformationAccordion from '@provider/components/MoreInformationAccordion';
-import OpenTabIconButton from '@provider/components/OpenTabIconButton';
-import Warning from '@provider/components/Warning';
+import CopyIconButton from '@provider/components/generic/CopyIconButton';
+import InfoIconTooltip from '@provider/components/information/InfoIconTooltip';
+import ModalAssetItem from '@provider/components/modals/ModalAssetItem';
+import ModalItem from '@provider/components/modals/ModalItem';
+import ModalTextItem from '@provider/components/modals/ModalTextItem';
+import MoreInformationAccordion from '@provider/components/information/MoreInformationAccordion';
+import OpenTabIconButton from '@provider/components/generic/OpenTabIconButton';
+import Warning from '@provider/components/information/Warning';
 
 // constants
 import { DEFAULT_GAP, MODAL_ITEM_HEIGHT } from '@common/constants';

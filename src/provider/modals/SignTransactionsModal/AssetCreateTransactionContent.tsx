@@ -5,14 +5,14 @@ import React, { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
 // components
-import AddressDisplay from '@provider/components/AddressDisplay';
-import NetworkBadge from '@provider/components/NetworkBadge';
-import ModalAssetItem from '@provider/components/ModalAssetItem';
-import ModalItem from '@provider/components/ModalItem';
-import ModalSkeletonItem from '@provider/components/ModalSkeletonItem';
-import ModalTextItem from '@provider/components/ModalTextItem';
-import MoreInformationAccordion from '@provider/components/MoreInformationAccordion';
-import OpenTabIconButton from '@provider/components/OpenTabIconButton';
+import AddressDisplay from '@provider/components/accounts/AddressDisplay';
+import NetworkBadge from '@provider/components/networks/NetworkBadge';
+import ModalAssetItem from '@provider/components/modals/ModalAssetItem';
+import ModalItem from '@provider/components/modals/ModalItem';
+import ModalSkeletonItem from '@provider/components/modals/ModalSkeletonItem';
+import ModalTextItem from '@provider/components/modals/ModalTextItem';
+import MoreInformationAccordion from '@provider/components/information/MoreInformationAccordion';
+import OpenTabIconButton from '@provider/components/generic/OpenTabIconButton';
 
 // constants
 import { DEFAULT_GAP } from '@common/constants';

@@ -7,11 +7,11 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 // components
 import Button from '@common/components/Button';
-import CopyIconButton from '@provider/components/CopyIconButton';
-import COSEAlgorithmBadge from '@provider/components/COSEAlgorithmBadge';
-import MoreInformationAccordion from '@provider/components/MoreInformationAccordion';
-import PageHeader from '@provider/components/PageHeader';
-import PageItem from '@provider/components/PageItem';
+import CopyIconButton from '@provider/components/generic/CopyIconButton';
+import COSEAlgorithmBadge from '@provider/components/cryptography/COSEAlgorithmBadge';
+import MoreInformationAccordion from '@provider/components/information/MoreInformationAccordion';
+import PageHeader from '@provider/components/pages/PageHeader';
+import PageItem from '@provider/components/pages/PageItem';
 
 // constants
 import { DEFAULT_GAP } from '@common/constants';
@@ -46,7 +46,7 @@ import calculateIconSize from '@common/utils/calculateIconSize';
 import convertPublicKeyToAVMAddress from '@common/utils/convertPublicKeyToAVMAddress';
 import ellipseAddress from '@common/utils/ellipseAddress';
 import formatTimestamp from '@common/utils/formatTimestamp';
-import OpenTabIconButton from '@provider/components/OpenTabIconButton';
+import OpenTabIconButton from '@provider/components/generic/OpenTabIconButton';
 
 const AccountPasskeyPage: FC = () => {
   const { t } = useTranslation();

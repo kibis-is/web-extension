@@ -4,14 +4,14 @@ import React, { type FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
 // components
-import AddressDisplay from '@provider/components/AddressDisplay';
-import AssetAvatar from '@provider/components/AssetAvatar';
-import AssetBadge from '@provider/components/AssetBadge';
+import AddressDisplay from '@provider/components/accounts/AddressDisplay';
+import AssetAvatar from '@provider/components/assets/AssetAvatar';
+import AssetBadge from '@provider/components/assets/AssetBadge';
 import AssetIcon from '@provider/components/icons/AssetIcon';
-import ModalAssetItem from '@provider/components/ModalAssetItem';
-import ModalItem from '@provider/components/ModalItem';
-import ModalTextItem from '@provider/components/ModalTextItem';
-import Warning from '@provider/components/Warning';
+import ModalAssetItem from '@provider/components/modals/ModalAssetItem';
+import ModalItem from '@provider/components/modals/ModalItem';
+import ModalTextItem from '@provider/components/modals/ModalTextItem';
+import Warning from '@provider/components/information/Warning';
 
 // constants
 import { DEFAULT_GAP } from '@common/constants';

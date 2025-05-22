@@ -8,10 +8,10 @@ import { useNavigate } from 'react-router-dom';
 
 // components
 import Button from '@common/components/Button';
-import GenericInput from '@provider/components/GenericInput';
-import PageHeader from '@provider/components/PageHeader';
-import SeedPhraseInput from '@provider/components/SeedPhraseInput';
-import Steps from '@provider/components/Steps';
+import GenericInput from '@provider/components/generic/GenericInput';
+import PageHeader from '@provider/components/pages/PageHeader';
+import SeedPhraseInput from '@provider/components/authentication/SeedPhraseInput';
+import Steps from '@provider/components/generic/Steps';
 
 // constants
 import { DEFAULT_GAP } from '@common/constants';
@@ -39,7 +39,7 @@ import { useSelectLogger, useSelectSettingsColorMode } from '@provider/selectors
 import type { IAddAccountPageProps, IAppThunkDispatch, IMainRootState, IRegistrationRootState } from '@provider/types';
 
 // utils
-import { validate } from '@provider/components/SeedPhraseInput';
+import { validate } from '@provider/components/authentication/SeedPhraseInput';
 import convertPublicKeyToAVMAddress from '@common/utils/convertPublicKeyToAVMAddress';
 import convertSeedPhraseToPrivateKey from '@provider/utils/convertSeedPhraseToPrivateKey';
 

@@ -31,23 +31,23 @@ import { useNavigate } from 'react-router-dom';
 
 // components
 import AccountPageAddressDisplay from '@provider/components/accounts/AccountPageAddressDisplay';
-import ActivityTab from '@provider/components/ActivityTab';
-import AssetsTab from '@provider/components/AssetsTab';
+import ActivityTab from '@provider/components/transactions/ActivityTab';
+import AssetsTab from '@provider/components/assets/AssetsTab';
 import AVMNamesTab from '@provider/components/avm-names/AVMNamesTab';
-import CopyIconButton from '@provider/components/CopyIconButton';
+import CopyIconButton from '@provider/components/generic/CopyIconButton';
 import EmptyState from '@common/components/EmptyState';
 import IconButton from '@common/components/IconButton';
-import GroupBadge from '@provider/components/GroupBadge';
-import NativeBalance from '@provider/components/NativeBalance';
-import NetworkSelect from '@provider/components/NetworkSelect';
+import GroupBadge from '@provider/components/accounts/GroupBadge';
+import NativeBalance from '@provider/components/accounts/NativeBalance';
+import NetworkSelect from '@provider/components/networks/NetworkSelect';
 import NFTsTab from '@provider/components/nfts/NFTsTab';
-import OpenTabIconButton from '@provider/components/OpenTabIconButton';
-import OverflowMenu from '@provider/components/OverflowMenu';
-import PasskeysTab from '@provider/components/PasskeysTab';
+import OpenTabIconButton from '@provider/components/generic/OpenTabIconButton';
+import OverflowMenu from '@provider/components/generic/OverflowMenu';
+import PasskeysTab from '@provider/components/passkeys/PasskeysTab';
 import PolisAccountBadge from '@provider/components/PolisAccountBadge';
-import ReKeyedAccountBadge from '@provider/components/RekeyedAccountBadge';
-import StakingTab from '@provider/components/StakingTab';
-import WatchAccountBadge from '@provider/components/WatchAccountBadge';
+import ReKeyedAccountBadge from '@provider/components/accounts/RekeyedAccountBadge';
+import StakingTab from '@provider/components/staking/StakingTab';
+import WatchAccountBadge from '@provider/components/accounts/WatchAccountBadge';
 import AccountPageSkeletonContent from './AccountPageSkeletonContent';
 
 // constants
