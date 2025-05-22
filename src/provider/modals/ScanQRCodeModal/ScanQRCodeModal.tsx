@@ -13,7 +13,7 @@ import ScanModeModalContent from '@provider/components/qr-codes/ScanModeModalCon
 import ScanQRCodeViaCameraModalContent from '@provider/components/qr-codes/ScanQRCodeViaCameraModalContent';
 import ScanQRCodeViaScreenCaptureModalContent from '@provider/components/qr-codes/ScanQRCodeViaScreenCaptureModalContent';
 import ScanQRCodeViaTabModalContent from '@provider/components/qr-codes/ScanQRCodeViaTabModalContent';
-import UnknownURIModalContent from '@provider/components/qr-code/UnknownURIModalContent';
+import UnknownURIModalContent from '@provider/components/qr-codes/UnknownURIModalContent';
 
 // enums
 import { ARC0300AuthorityEnum, ARC0300PathEnum } from '@provider/enums';

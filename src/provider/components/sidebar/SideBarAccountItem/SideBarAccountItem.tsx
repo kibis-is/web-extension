@@ -6,7 +6,7 @@ import { BsFolderMinus, BsFolderPlus } from 'react-icons/bs';
 import { IoReorderTwoOutline } from 'react-icons/io5';
 
 // components
-import AccountAvatarWithBadges from '@provider/components/AccountAvatarWithBadges';
+import AccountAvatarWithBadges from '@provider/components/accounts/AccountAvatarWithBadges';
 
 // constants
 import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@common/constants';

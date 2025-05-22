@@ -21,10 +21,10 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 
 // components
-import AccountAvatarWithBadges from '@provider/components/AccountAvatarWithBadges';
+import AccountAvatarWithBadges from '@provider/components/accounts/AccountAvatarWithBadges';
 import Button from '@common/components/Button';
 import NetworkBadge from '@provider/components/networks/NetworkBadge';
-import ClientHeader, { ClientHeaderSkeleton } from '@provider/components/generic/ClienttHeader';
+import ClientHeader, { ClientHeaderSkeleton } from '@provider/components/generic/ClientHeader';
 import EmptyState from '@common/components/EmptyState';
 
 // constants
