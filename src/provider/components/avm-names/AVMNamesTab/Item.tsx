@@ -31,7 +31,7 @@ const Item: FC<TItemProps> = ({ colorMode, item, onViewClick }) => {
   const defaultTextColor = useDefaultTextColor();
   const subTextColor = useSubTextColor();
   // handlers
-  const handleOnViewClick = useCallback(() => onViewClick(item.tokenId), []);
+  const handleOnViewClick = useCallback(() => onViewClick(item.tokenID), []);
 
   return (
     <HStack
@@ -48,13 +48,13 @@ const Item: FC<TItemProps> = ({ colorMode, item, onViewClick }) => {
     >
       <VStack alignItems="flex-start" flexGrow={1} h="full" justifyContent="space-evenly" spacing={1} w="full">
         <Text color={defaultTextColor} fontSize="sm" maxW={175} noOfLines={1}>
-          {item.metadata.name}
+          {item.name}
         </Text>
 
         <HStack alignItems="flex-start" justifyContent="space-between" spacing={1} w="full">
           {/*token id*/}
           <Text color={subTextColor} fontSize="xs">
-            {formatID(item.tokenId, true)}
+            {formatID(item.tokenID, true)}
           </Text>
 
           {/*type*/}

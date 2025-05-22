@@ -297,7 +297,7 @@ export default class BaseContract {
   }
 
   /**
-   * Convenience function that simply removes the null bytes ("\x00") from a decoded string.
+   * Removes the null bytes ("\x00") from a decoded string.
    * @param {string} input - the string to trim.
    * @returns {string} the string with the null bytes trimmed.
    * @protected

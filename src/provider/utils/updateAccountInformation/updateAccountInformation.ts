@@ -10,6 +10,7 @@ import type {
   IAVMAccountInformation,
   IARC0072AssetHolding,
   IARC0200AssetHolding,
+  IEnVoiHolding,
 } from '@provider/types';
 import type { IOptions } from './types';
 
@@ -34,7 +35,8 @@ export default async function updateAccountInformation({
   let avmAccountInformation: IAVMAccountInformation;
   let arc0072AssetHoldings: IARC0072AssetHolding[];
   let arc200AssetHoldings: IARC0200AssetHolding[];
-  let enVoiHoldings: IARC0072AssetHolding[] = [];
+  let enVoiARC0072Holdings: IARC0072AssetHolding[] = [];
+  let enVoiHoldings: IEnVoiHolding[] = [];
   let enVoiPrimaryName: string | null = null;
   let networkClient: NetworkClient;
 
@@ -92,11 +94,14 @@ export default async function updateAccountInformation({
 
   // if we have an envoi client, filter any envoi names from the arc0072 asset holdings
   if (network.enVoi) {
-    enVoiHoldings = arc0072AssetHoldings.filter(({ id }) => id === network.enVoi?.contractID());
+    enVoiARC0072Holdings = arc0072AssetHoldings.filter(({ id }) => id === network.enVoi?.contractID());
     arc0072AssetHoldings = arc0072AssetHoldings.filter(({ id }) => id !== network.enVoi?.contractID());
 
     try {
-      enVoiPrimaryName = await network.enVoi.name(address);
+      if (enVoiARC0072Holdings.length > 0) {
+        enVoiHoldings = await network.enVoi.fromTokenIDs(enVoiARC0072Holdings.map(({ tokenId }) => tokenId));
+        enVoiPrimaryName = await network.enVoi.name(address);
+      }
     } catch (error) {
       logger?.error(`${__function}: failed to get envoi name for "${address}" on ${network.genesisId}:`, error);
     }

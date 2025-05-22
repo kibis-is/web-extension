@@ -26,6 +26,7 @@ import IAccountPasskey from './IAccountPasskey';
  * @property {IAccountPasskey[]} passkeys - Registered passkeys associated with this account.
  * @property {string} publicKey - The hexadecimal encoded public key.
  * @property {number} updatedAt - A timestamp (in milliseconds) for when this account was last saved to storage.
+ * @property {number} version - The version of this resource.
  */
 interface IAccount {
   _delimiter: DelimiterEnum.Account;
@@ -43,6 +44,7 @@ interface IAccount {
   passkeys: IAccountPasskey[];
   publicKey: string;
   updatedAt: number;
+  version: number;
 }
 
 export default IAccount;

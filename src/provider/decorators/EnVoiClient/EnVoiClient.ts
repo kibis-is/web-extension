@@ -1,5 +1,11 @@
 // types
-import type { IEnVoiClientParameters, IEnVoiResponse, INameResolutionResult } from './types';
+import type { IEnVoiHolding } from '@provider/types';
+import type {
+  IEnVoiClientParameters,
+  IEnVoiResponse,
+  INameResolutionResult,
+  ITokenIDResolutionResponse,
+} from './types';
 
 export default class EnVoiClient {
   // public static variables
@@ -18,7 +24,7 @@ export default class EnVoiClient {
    */
 
   private async _request<Response>(path: string): Promise<Response> {
-    const response = await fetch(`${this._url}/api/${path}`);
+    const response = await fetch(`${this._url}/api${path}`);
 
     return (await response.json()) as Response;
   }
@@ -41,6 +47,27 @@ export default class EnVoiClient {
     const result = await this._request<IEnVoiResponse<INameResolutionResult>>(`/name/${address}`);
 
     return result.results[0]?.name ?? null;
+  }
+
+  /**
+   * Gets the enVois from the token IDs.
+   * @param {string[]} tokenIDs - A list of token IDs.
+   * @returns {Promise<IEnVoiHolding[]>} A promise that resolves to the enVois for the given token IDs.
+   * @public
+   */
+  public async fromTokenIDs(tokenIDs: string[]): Promise<IEnVoiHolding[]> {
+    let result: IEnVoiResponse<ITokenIDResolutionResponse>;
+
+    if (tokenIDs.length <= 0) {
+      return [];
+    }
+
+    result = await this._request<IEnVoiResponse<ITokenIDResolutionResponse>>(`/token/${tokenIDs.join(',')}`);
+
+    return result.results.reduce<IEnVoiHolding[]>(
+      (acc, { name, token_id }) => (!name ? acc : [...acc, { name, tokenID: token_id }]),
+      []
+    );
   }
 
   public url(): string {

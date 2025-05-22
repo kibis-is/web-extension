@@ -13,6 +13,7 @@ export * from './asset-holdings';
 export * from './assets';
 export * from './authentication';
 export * from './avm';
+export * from './avm-names';
 export * from './components';
 export * from './events';
 export * from './i18n';

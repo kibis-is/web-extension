@@ -1,3 +1,10 @@
+# [2.6.0-beta.6](https://github.com/kibis-is/web-extension/compare/v2.6.0-beta.5...v2.6.0-beta.6) (2025-05-22)
+
+
+### Bug Fixes
+
+* envoi name not always showing ([#364](https://github.com/kibis-is/web-extension/issues/364)) ([a7149ee](https://github.com/kibis-is/web-extension/commit/a7149ee649533837e4f45c6eeb94dd6f0c53947b))
+
 # [2.6.0-beta.5](https://github.com/kibis-is/web-extension/compare/v2.6.0-beta.4...v2.6.0-beta.5) (2025-05-05)
 
 

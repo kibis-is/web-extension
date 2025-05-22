@@ -98,7 +98,7 @@ const AVMNameModal: FC<TProps> = ({ item, network, onClose }) => {
     return (
       <>
         <Heading color={defaultTextColor} size="md" textAlign="center" w="full">
-          {item.metadata.name}
+          {item.name}
         </Heading>
 
         {/*address*/}
@@ -116,7 +116,7 @@ const AVMNameModal: FC<TProps> = ({ item, network, onClose }) => {
     );
   }, [address, defaultTextColor, item, loadingHeading, loadingText, subTextColor]);
   const renderBody = useCallback(() => {
-    if (!item || !network) {
+    if (!item || !network || !network.enVoi) {
       return (
         <VStack align="center" spacing={DEFAULT_GAP / 3} w="full">
           <Skeleton>
@@ -141,8 +141,8 @@ const AVMNameModal: FC<TProps> = ({ item, network, onClose }) => {
           copyButtonLabel={t<string>('labels.copyTokenID')}
           isCode={true}
           label={t<string>('labels.tokenId')}
-          tooltipLabel={item.tokenId}
-          value={formatID(item.tokenId, true)}
+          tooltipLabel={item.tokenID}
+          value={formatID(item.tokenID, true)}
         />
 
         {/*app id*/}
@@ -151,8 +151,8 @@ const AVMNameModal: FC<TProps> = ({ item, network, onClose }) => {
             copyButtonLabel={t<string>('labels.copyApplicationId')}
             isCode={true}
             label={t<string>('labels.applicationId')}
-            tooltipLabel={item.id}
-            value={formatID(item.id)}
+            tooltipLabel={network.enVoi.contractID()}
+            value={formatID(network.enVoi.contractID())}
           />
 
           {/*open in explorer button*/}
@@ -162,7 +162,7 @@ const AVMNameModal: FC<TProps> = ({ item, network, onClose }) => {
               tooltipLabel={t<string>('captions.openOn', {
                 name: explorer.canonicalName,
               })}
-              url={explorer.applicationURL(item.id)}
+              url={explorer.applicationURL(network.enVoi.contractID())}
             />
           )}
         </HStack>
