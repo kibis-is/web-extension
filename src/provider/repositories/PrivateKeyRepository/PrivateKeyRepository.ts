@@ -37,7 +37,7 @@ import type { ICreateOptions, IUpgradeOptions } from './types';
  */
 export default class PrivateKeyRepository extends BaseRepository {
   // public static variables
-  public static readonly latestVersion: number = 2;
+  public static readonly latestVersion = 2;
 
   /**
    * public static functions

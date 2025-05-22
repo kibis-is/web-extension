@@ -7,7 +7,7 @@ import { networks } from '@provider/config';
 import { ACCOUNTS_ITEM_KEY_PREFIX } from '@provider/constants';
 
 // enums
-import { AssetTypeEnum, DelimiterEnum } from '@provider/enums';
+import { DelimiterEnum } from '@provider/enums';
 
 // repositories
 import BaseRepository from '@provider/repositories/BaseRepository';
@@ -28,7 +28,19 @@ import type { ISaveOptions } from './types';
 import convertGenesisHashToHex from '@provider/utils/convertGenesisHashToHex';
 import sortByIndex from '@provider/utils/sortByIndex';
 
+/**
+ * Handles all interactions with the account items in storage.
+ *
+ * @version 0:
+ * * The `enVoi` property in the account information uses `IARC0072AssetHolding` from the NFT indexer, but these will
+ * not show the proper metadata.
+ * @version 1:
+ * * The `enVoi` property in the account information uses the new `IEnVoiHolding` that is derived from the enVoi API.
+ */
 export default class AccountRepository extends BaseRepository {
+  // public static variables
+  public static readonly latestVersion = 1;
+
   /**
    * public static functions
    */
@@ -112,6 +124,7 @@ export default class AccountRepository extends BaseRepository {
       passkeys: [],
       publicKey,
       updatedAt: createdAtOrNow,
+      version: AccountRepository.latestVersion,
     };
   }
 
@@ -189,59 +202,98 @@ export default class AccountRepository extends BaseRepository {
   }
 
   /**
-   * Sanitizes the account, only returning properties that are in the account object.
-   * @param {IAccount} account - the account object to sanitize.
-   * @returns {IAccount} the sanitized account object.
+   * Sanitizes the account, only returning properties that are in the account object. This function acts to perform
+   * "upgrades" of the account.
+   * @param {IAccount} account - The account to sanitize.
+   * @returns {IAccount} The sanitized account object.
    * @private
    */
-  private _sanitize(account: IAccount): IAccount {
+  private _sanitize({
+    color,
+    createdAt,
+    groupID,
+    groupIndex,
+    icon,
+    id,
+    index,
+    name,
+    networkInformation,
+    networkStakingApps,
+    networkTransactions,
+    passkeys,
+    publicKey,
+    updatedAt,
+    version,
+  }: IAccount): IAccount {
+    const _version = !version ? 0 : version; // if there is no version, start at zero (legacy)
+
     return {
       _delimiter: DelimiterEnum.Account,
-      color: account.color,
-      createdAt: account.createdAt,
-      groupID: account.groupID,
-      groupIndex: typeof account.groupIndex === 'number' ? account.groupIndex : null, // if 0, this is "falsy" in the js world, so let's be specific
-      icon: account.icon,
-      id: account.id,
-      name: account.name,
-      networkInformation: Object.keys(account.networkInformation).reduce<Record<string, IAccountInformation>>(
+      color,
+      createdAt,
+      groupID,
+      groupIndex: typeof groupIndex === 'number' ? groupIndex : null, // if 0, this is "falsy" in the js world, so let's be specific
+      icon,
+      id,
+      index: typeof index === 'number' ? index : null, // if 0, this is "falsy" in the js world, so let's be specific
+      name,
+      networkInformation: Object.keys(networkInformation).reduce<Record<string, IAccountInformation>>(
         (acc, value) => ({
           ...acc,
-          [value]: this._sanitizeAccountInformation(account.networkInformation[value]),
+          [value]: this._sanitizeAccountInformation(networkInformation[value], _version),
         }),
         {}
       ),
-      networkStakingApps: account.networkStakingApps,
-      networkTransactions: Object.keys(account.networkTransactions).reduce<Record<string, IAccountTransactions>>(
+      networkStakingApps: networkStakingApps,
+      networkTransactions: Object.keys(networkTransactions).reduce<Record<string, IAccountTransactions>>(
         (acc, value) => ({
           ...acc,
-          [value]: this._sanitizeAccountTransactions(account.networkTransactions[value]),
+          [value]: this._sanitizeAccountTransactions(networkTransactions[value]),
         }),
         {}
       ),
-      index: typeof account.index === 'number' ? account.index : null, // if 0, this is "falsy" in the js world, so let's be specific
-      passkeys: account.passkeys,
-      publicKey: account.publicKey,
-      updatedAt: account.updatedAt,
+      passkeys,
+      publicKey,
+      updatedAt,
+      version: AccountRepository.latestVersion,
     };
   }
 
   /**
    * Sanitizes the account information, only returning properties that are in the account information object.
-   * @param {IAccountInformation} accountInformation - the account information object to sanitize.
+   * @param {IAccountInformation} accountInformation - The account information object to sanitize.
+   * @param {number} version - The version of the account.
    * @returns {IAccountInformation} the sanitized account information object.
    * @private
    */
-  private _sanitizeAccountInformation(accountInformation: IAccountInformation): IAccountInformation {
+  private _sanitizeAccountInformation(
+    {
+      arc0072AssetHoldings,
+      arc200AssetHoldings,
+      atomicBalance,
+      authAddress,
+      enVoi,
+      minAtomicBalance,
+      standardAssetHoldings,
+      updatedAt,
+    }: IAccountInformation,
+    version: number
+  ): IAccountInformation {
+    let _enVoi = enVoi;
+
+    if (version < 1) {
+      _enVoi = AccountRepository.initializeDefaultAccountInformation().enVoi; // reset envoi to be fetched later
+    }
+
     return {
-      arc0072AssetHoldings: accountInformation.arc0072AssetHoldings,
-      arc200AssetHoldings: accountInformation.arc200AssetHoldings,
-      atomicBalance: accountInformation.atomicBalance,
-      authAddress: accountInformation.authAddress,
-      enVoi: accountInformation.enVoi,
-      minAtomicBalance: accountInformation.minAtomicBalance,
-      standardAssetHoldings: accountInformation.standardAssetHoldings,
-      updatedAt: accountInformation.updatedAt,
+      arc0072AssetHoldings,
+      arc200AssetHoldings,
+      atomicBalance,
+      authAddress,
+      enVoi: _enVoi,
+      minAtomicBalance,
+      standardAssetHoldings,
+      updatedAt,
     };
   }
 
@@ -268,70 +320,9 @@ export default class AccountRepository extends BaseRepository {
    * @public
    */
   public async fetchAll(): Promise<IAccount[]> {
-    let accounts = await this._fetchByPrefixKey<IAccount>(ACCOUNTS_ITEM_KEY_PREFIX);
+    const accounts = await this._fetchByPrefixKey<IAccount>(ACCOUNTS_ITEM_KEY_PREFIX);
 
-    accounts = accounts.map((value) => {
-      const account = {
-        ...AccountRepository.initializeDefaultAccount({
-          publicKey: value.publicKey,
-        }),
-        ...value,
-      };
-
-      return {
-        ...account,
-        // if there are new networks in the config, create default account information and transactions for these new networks
-        networkInformation: networks.reduce<Record<string, IAccountInformation>>((acc, { genesisHash }) => {
-          const encodedGenesisHash = convertGenesisHashToHex(genesisHash);
-          const accountInformation = {
-            ...AccountRepository.initializeDefaultAccountInformation(), // initialize with any new values
-            ...account.networkInformation[encodedGenesisHash],
-          };
-
-          return {
-            ...acc,
-            [encodedGenesisHash]: {
-              ...AccountRepository.initializeDefaultAccountInformation(),
-              ...(accountInformation && {
-                ...accountInformation,
-                arc200AssetHoldings: accountInformation.arc200AssetHoldings.map((value) => ({
-                  ...value,
-                  type: AssetTypeEnum.ARC0200,
-                })),
-                standardAssetHoldings: accountInformation.standardAssetHoldings.map((value) => ({
-                  ...value,
-                  type: AssetTypeEnum.Standard,
-                })),
-              }),
-            },
-          };
-        }, {}),
-        networkStakingApps: networks.reduce<Record<string, IAccountNetworkStakingApps>>((acc, { genesisHash }) => {
-          const encodedGenesisHash = convertGenesisHashToHex(genesisHash);
-
-          return {
-            ...acc,
-            [encodedGenesisHash]: {
-              ...AccountRepository.initializeDefaultNetworkStakingApps(), // initialize with any new values
-              ...account.networkStakingApps[encodedGenesisHash],
-            },
-          };
-        }, {}),
-        networkTransactions: networks.reduce<Record<string, IAccountTransactions>>((acc, { genesisHash }) => {
-          const encodedGenesisHash = convertGenesisHashToHex(genesisHash);
-
-          return {
-            ...acc,
-            [encodedGenesisHash]: {
-              ...AccountRepository.initializeDefaultAccountTransactions(), // initialize with any new values
-              ...account.networkTransactions[encodedGenesisHash],
-            },
-          };
-        }, {}),
-      };
-    });
-
-    return sortByIndex(accounts);
+    return sortByIndex(accounts.map((value) => this._sanitize(value)));
   }
 
   /**
@@ -342,8 +333,9 @@ export default class AccountRepository extends BaseRepository {
    */
   public async fetchByPublicKey(publicKey: string): Promise<IAccount | null> {
     const accounts = await this.fetchAll();
+    const account = accounts.find((value) => value.publicKey.toUpperCase() === publicKey.toUpperCase()) || null;
 
-    return accounts.find((value) => value.publicKey.toUpperCase() === publicKey.toUpperCase()) || null;
+    return account ? this._sanitize(account) : null;
   }
 
   /**
@@ -359,12 +351,12 @@ export default class AccountRepository extends BaseRepository {
       return null;
     }
 
-    return {
+    return this._sanitize({
       ...AccountRepository.initializeDefaultAccount({
         publicKey: item.publicKey,
       }),
       ...item,
-    };
+    });
   }
 
   /**

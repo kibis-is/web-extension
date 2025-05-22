@@ -25,6 +25,7 @@ export default function mapAccountWithExtendedPropsToAccount({
   passkeys,
   publicKey,
   updatedAt,
+  version,
 }: IAccountWithExtendedProps): IAccount {
   return {
     _delimiter: DelimiterEnum.Account,
@@ -42,5 +43,6 @@ export default function mapAccountWithExtendedPropsToAccount({
     passkeys,
     publicKey,
     updatedAt,
+    version,
   };
 }

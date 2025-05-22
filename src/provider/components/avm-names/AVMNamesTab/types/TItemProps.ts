@@ -1,9 +1,9 @@
 // types
 import type { IBaseComponentProps } from '@common/types';
-import type { IARC0072AssetHolding } from '@provider/types';
+import type { IEnVoiHolding } from '@provider/types';
 
 interface IProps {
-  item: IARC0072AssetHolding;
+  item: IEnVoiHolding;
   onViewClick: (id: string) => void;
 }
 
