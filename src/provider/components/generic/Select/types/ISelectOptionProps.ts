@@ -4,6 +4,7 @@ import type IOption from './IOption';
 interface ISelectOptionProps {
   color?: string;
   fontSize?: string;
+  maxWidth?: string;
   value: IOption;
 }
 

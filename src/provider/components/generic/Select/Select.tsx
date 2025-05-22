@@ -7,7 +7,7 @@ import {
   useDisclosure,
   VStack,
 } from '@chakra-ui/react';
-import React, { type FC, useEffect, useState } from 'react';
+import React, { type FC, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { IoChevronDownOutline } from 'react-icons/io5';
 
@@ -57,8 +57,8 @@ const Select: FC<IProps> = ({
   const buttonHoverBackgroundColor = useButtonHoverBackgroundColor();
   const disabledBackgroundColor: string = useColorModeValue(theme.colors.gray['300'], theme.colors.whiteAlpha['300']);
   const subTextColor = useSubTextColor();
-  // misc
-  const iconSize = calculateIconSize('sm');
+  // memos
+  const iconSize = useMemo(() => calculateIconSize('sm'), []);
   // handlers
   const handleOnClick = () => !disabled && onSelectModalOpen();
   const handleOnSelect = (index: number) => {
@@ -94,7 +94,7 @@ const Select: FC<IProps> = ({
         })}
       />
 
-      <VStack alignItems="flex-start" spacing={DEFAULT_GAP / 3} w="full">
+      <VStack align="flex-start" spacing={DEFAULT_GAP / 3} w="full">
         {/*label*/}
         {label && <Label colorMode={colorMode} label={label} required={required} />}
 
@@ -124,7 +124,7 @@ const Select: FC<IProps> = ({
             {value ? (
               <SelectOption value={value} />
             ) : (
-              <Text color={subTextColor} fontSize="sm" maxW={250} noOfLines={1}>
+              <Text color={subTextColor} fontSize="sm" minW={100} noOfLines={1}>
                 {t<string>(emptyOptionLabel || 'placeholders.pleaseSelect')}
               </Text>
             )}

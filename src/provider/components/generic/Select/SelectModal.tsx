@@ -100,7 +100,8 @@ const SelectModal: FC<TSelectModalProps> = ({
           justifyContent="space-between"
           key={`${_context}-select-modal-item-${index}`}
           onClick={handleOnChange(index)}
-          p={DEFAULT_GAP / 3}
+          py={DEFAULT_GAP / 3}
+          px={DEFAULT_GAP / 2}
           rightIcon={<Icon as={IoChevronForward} boxSize={iconSize} color={fontColor} />}
           variant="ghost"
           w="full"

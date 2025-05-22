@@ -1,5 +1,5 @@
 import { HStack, Icon, Text } from '@chakra-ui/react';
-import React, { type FC } from 'react';
+import React, { type FC, useMemo } from 'react';
 
 // constants
 import { DEFAULT_GAP } from '@common/constants';
@@ -16,23 +16,24 @@ import calculateIconSize from '@common/utils/calculateIconSize';
 const SelectOption: FC<ISelectOptionProps> = ({ color, fontSize = 'md', value }) => {
   // hooks
   const subTextColor = useSubTextColor();
-  // misc
-  const textColor = color || subTextColor;
+  // memos
+  const textColor = useMemo(() => color || subTextColor, [color, subTextColor]);
 
   return (
-    <HStack
-      alignItems="center"
-      justifyContent="flex-start"
-      m={0}
-      p={DEFAULT_GAP / 2}
-      spacing={DEFAULT_GAP - 2}
-      w="full"
-    >
+    <HStack align="center" justify="flex-start" spacing={DEFAULT_GAP - 2}>
       {/*icon*/}
       {value.icon && <Icon as={value.icon} boxSize={calculateIconSize()} color={textColor} />}
 
       {/*label*/}
-      <Text color={textColor} fontSize={fontSize} maxW={250} noOfLines={1}>
+      <Text
+        color={textColor}
+        fontSize={fontSize}
+        sx={{
+          display: 'inline-block',
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
+        }}
+      >
         {value.label}
       </Text>
     </HStack>
