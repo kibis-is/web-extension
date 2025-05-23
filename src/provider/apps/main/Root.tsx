@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { Outlet } from 'react-router-dom';
 
 // components
-import MainLayout from '@provider/components/MainLayout';
+import MainLayout from '@provider/containers/MainLayout';
 
 // features
 import { reset as resetAddAsset } from '@provider/features/add-assets';

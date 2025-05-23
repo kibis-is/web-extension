@@ -14,10 +14,10 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 // components
-import Divider from '@provider/components/Divider';
+import Divider from '@provider/components/generic/Divider';
 import IconButton from '@common/components/IconButton';
 import KibisisIcon from '@provider/components/icons/KibisisIcon';
-import ScrollableContainer from '@provider/components/ScrollableContainer';
+import ScrollableContainer from '@provider/components/generic/ScrollableContainer';
 import SideBarAccountList from '@provider/components/sidebar/SideBarAccountList';
 import SideBarActionItem from '@provider/components/sidebar/SideBarActionItem';
 import SideBarGroupList from '@provider/components/sidebar/SideBarGroupList';

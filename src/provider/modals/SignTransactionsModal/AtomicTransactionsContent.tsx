@@ -6,10 +6,10 @@ import React, { FC, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 // components
-import NetworkBadge from '@provider/components/NetworkBadge';
-import KeyRegistrationTransactionModalBody from '@provider/components/KeyRegistrationTransactionModalBody';
-import ModalItem from '@provider/components/ModalItem';
-import ModalTextItem from '@provider/components/ModalTextItem';
+import NetworkBadge from '@provider/components/networks/NetworkBadge';
+import KeyRegistrationTransactionModalBody from '@provider/components/transactions/KeyRegistrationTransactionModalBody';
+import ModalItem from '@provider/components/modals/ModalItem';
+import ModalTextItem from '@provider/components/modals/ModalTextItem';
 import ApplicationTransactionContent from './ApplicationTransactionContent';
 import AssetConfigTransactionContent from './AssetConfigTransactionContent';
 import AssetCreateTransactionContent from './AssetCreateTransactionContent';

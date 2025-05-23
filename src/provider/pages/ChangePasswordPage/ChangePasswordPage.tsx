@@ -6,8 +6,8 @@ import { useDispatch } from 'react-redux';
 
 // components
 import Button from '@common/components/Button';
-import NewPasswordInput from '@provider/components/NewPasswordInput';
-import PageHeader from '@provider/components/PageHeader';
+import NewPasswordInput from '@provider/components/passwords/NewPasswordInput';
+import PageHeader from '@provider/components/pages/PageHeader';
 
 // constants
 import { DEFAULT_GAP } from '@common/constants';

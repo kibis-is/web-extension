@@ -19,7 +19,7 @@ import PasswordManager from '@provider/managers/PasswordManager';
 import PrivateKeyRepository from '@provider/repositories/PrivateKeyRepository';
 
 // types
-import type { IEncryptionState } from '@provider/components/ReEncryptKeysLoadingContent';
+import type { IEncryptionState } from '@provider/components/authentication/ReEncryptKeysLoadingContent';
 import type { IAppThunkDispatch, IMainRootState, IPrivateKey } from '@provider/types';
 import type { IRemovePasskeyActionOptions, IState } from './types';
 

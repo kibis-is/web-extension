@@ -19,10 +19,10 @@ import { useTranslation } from 'react-i18next';
 // components
 import Button from '@common/components/Button';
 import AVMNameBadge from '@provider/components/avm-names/AVMNameBadge';
-import ModalItem from '@provider/components/ModalItem';
-import ModalSubHeading from '@provider/components/ModalSubHeading';
-import ModalTextItem from '@provider/components/ModalTextItem';
-import OpenTabIconButton from '@provider/components/OpenTabIconButton';
+import ModalItem from '@provider/components/modals/ModalItem';
+import ModalSubHeading from '@provider/components/modals/ModalSubHeading';
+import ModalTextItem from '@provider/components/modals/ModalTextItem';
+import OpenTabIconButton from '@provider/components/generic/OpenTabIconButton';
 
 // constants
 import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@common/constants';

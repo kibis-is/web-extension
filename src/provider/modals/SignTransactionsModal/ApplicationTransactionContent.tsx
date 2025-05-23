@@ -6,15 +6,15 @@ import { useTranslation } from 'react-i18next';
 import { IoInformationCircleOutline } from 'react-icons/io5';
 
 // components
-import AddressDisplay from '@provider/components/AddressDisplay';
-import NetworkBadge from '@provider/components/NetworkBadge';
-import CopyIconButton from '@provider/components/CopyIconButton';
-import ModalAssetItem from '@provider/components/ModalAssetItem';
-import ModalItem from '@provider/components/ModalItem';
-import ModalTextItem from '@provider/components/ModalTextItem';
-import MoreInformationAccordion from '@provider/components/MoreInformationAccordion';
-import OpenTabIconButton from '@provider/components/OpenTabIconButton';
-import Warning from '@provider/components/Warning';
+import AddressDisplay from '@provider/components/accounts/AddressDisplay';
+import NetworkBadge from '@provider/components/networks/NetworkBadge';
+import CopyIconButton from '@provider/components/generic/CopyIconButton';
+import ModalAssetItem from '@provider/components/modals/ModalAssetItem';
+import ModalItem from '@provider/components/modals/ModalItem';
+import ModalTextItem from '@provider/components/modals/ModalTextItem';
+import MoreInformationAccordion from '@provider/components/information/MoreInformationAccordion';
+import OpenTabIconButton from '@provider/components/generic/OpenTabIconButton';
+import Warning from '@provider/components/information/Warning';
 
 // constants
 import { DEFAULT_GAP } from '@common/constants';

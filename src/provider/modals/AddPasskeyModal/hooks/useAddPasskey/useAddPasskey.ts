@@ -19,7 +19,7 @@ import PrivateKeyRepository from '@provider/repositories/PrivateKeyRepository';
 import { useSelectLogger } from '@provider/selectors';
 
 // types
-import type { IEncryptionState } from '@provider/components/ReEncryptKeysLoadingContent';
+import type { IEncryptionState } from '@provider/components/authentication/ReEncryptKeysLoadingContent';
 import type { IAppThunkDispatch, IMainRootState, IPasskeyCredential, IPrivateKey } from '@provider/types';
 import type { IAddPasskeyActionOptions, IState } from './types';
 

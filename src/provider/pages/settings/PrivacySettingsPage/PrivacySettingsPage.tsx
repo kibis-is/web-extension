@@ -3,7 +3,7 @@ import React, { type FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
 // components
-import PageHeader from '@provider/components/PageHeader';
+import PageHeader from '@provider/components/pages/PageHeader';
 import SettingsExternalLinkItem from '@provider/components/settings/SettingsExternalLinkItem';
 
 // constants

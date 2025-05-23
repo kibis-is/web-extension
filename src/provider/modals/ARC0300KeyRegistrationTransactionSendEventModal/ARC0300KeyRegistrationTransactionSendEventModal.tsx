@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 // components
 import ARC0300KeyRegistrationTransactionSendModalContent, {
   ARC0300KeyRegistrationTransactionSendModalContentSkeleton,
-} from '@provider/components/ARC0300KeyRegistrationTransactionSendModalContent';
+} from '@provider/components/vip-0300/ARC0300KeyRegistrationTransactionSendModalContent';
 
 // enums
 import { EventTypeEnum } from '@provider/enums';

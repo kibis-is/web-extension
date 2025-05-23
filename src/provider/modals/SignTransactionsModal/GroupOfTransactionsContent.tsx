@@ -5,10 +5,10 @@ import { useTranslation } from 'react-i18next';
 import { IoArrowForwardOutline } from 'react-icons/io5';
 
 // components
-import NetworkBadge from '@provider/components/NetworkBadge';
-import ModalItem from '@provider/components/ModalItem';
-import ModalSubHeading from '@provider/components/ModalSubHeading';
-import ModalTextItem from '@provider/components/ModalTextItem';
+import NetworkBadge from '@provider/components/networks/NetworkBadge';
+import ModalItem from '@provider/components/modals/ModalItem';
+import ModalSubHeading from '@provider/components/modals/ModalSubHeading';
+import ModalTextItem from '@provider/components/modals/ModalTextItem';
 import AtomicTransactionsContent from './AtomicTransactionsContent';
 import SingleTransactionContent from './SingleTransactionContent';
 

@@ -4,7 +4,7 @@ import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 
 // components
-import ThemeProvider from '@provider/components/ThemeProvider';
+import ThemeProvider from '@provider/containers/ThemeProvider';
 import Root from './Root';
 
 // features

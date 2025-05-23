@@ -21,7 +21,7 @@ import { useDispatch } from 'react-redux';
 import AccountItem from '@provider/components/accounts/AccountItem';
 import AccountSelect from '@provider/components/accounts/AccountSelect';
 import Button from '@common/components/Button';
-import ClientHeader, { ClientHeaderSkeleton } from '@provider/components/ClientHeader';
+import ClientHeader, { ClientHeaderSkeleton } from '@provider/components/generic/ClientHeader';
 import SignMessageContentSkeleton from './SignMessageContentSkeleton';
 
 // constants

@@ -39,6 +39,10 @@
 </h1>
 
 <h4 align="center">
+  "ki-bi-sis"
+</h4>
+
+<h4 align="center">
   The wallet for your lifestyle.
 </h4>
 

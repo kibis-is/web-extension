@@ -6,7 +6,7 @@ import { IoKeyOutline, IoLockClosedOutline, IoPushOutline } from 'react-icons/io
 import { useDispatch } from 'react-redux';
 
 // components
-import PageHeader from '@provider/components/PageHeader';
+import PageHeader from '@provider/components/pages/PageHeader';
 import SettingsLinkItem from '@provider/components/settings/SettingsLinkItem';
 import SettingsSelectItem from '@provider/components/settings/SettingsSelectItem';
 import SettingsSubHeading from '@provider/components/settings/SettingsSubHeading';
@@ -57,7 +57,7 @@ import {
 } from '@provider/selectors';
 
 // types
-import type { IOption } from '@provider/components/Select';
+import type { IOption } from '@provider/components/generic/Select';
 import type { IAppThunkDispatch, IMainRootState, TEncryptionCredentials } from '@provider/types';
 
 const SecuritySettingsPage: FC = () => {

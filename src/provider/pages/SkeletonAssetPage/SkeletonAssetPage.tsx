@@ -3,7 +3,7 @@ import { faker } from '@faker-js/faker';
 import React, { type FC, useMemo } from 'react';
 
 // components
-import PageHeader from '@provider/components/PageHeader';
+import PageHeader from '@provider/components/pages/PageHeader';
 
 // constants
 import { DEFAULT_GAP } from '@common/constants';

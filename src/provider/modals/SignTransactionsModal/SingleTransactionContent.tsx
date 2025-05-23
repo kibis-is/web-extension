@@ -4,7 +4,7 @@ import { TransactionType } from 'algosdk';
 import React, { FC, useEffect, useState } from 'react';
 
 // components
-import KeyRegistrationTransactionModalBody from '@provider/components/KeyRegistrationTransactionModalBody';
+import KeyRegistrationTransactionModalBody from '@provider/components/transactions/KeyRegistrationTransactionModalBody';
 import ApplicationTransactionContent from './ApplicationTransactionContent';
 import AssetConfigTransactionContent from './AssetConfigTransactionContent';
 import AssetCreateTransactionContent from './AssetCreateTransactionContent';

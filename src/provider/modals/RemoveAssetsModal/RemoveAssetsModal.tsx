@@ -18,15 +18,15 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 // components
-import AddressDisplay from '@provider/components/AddressDisplay';
-import AssetBadge from '@provider/components/AssetBadge';
+import AddressDisplay from '@provider/components/accounts/AddressDisplay';
+import AssetBadge from '@provider/components/assets/AssetBadge';
 import Button from '@common/components/Button';
-import CopyIconButton from '@provider/components/CopyIconButton';
-import InfoIconTooltip from '@provider/components/InfoIconTooltip';
-import ModalAssetItem from '@provider/components/ModalAssetItem';
-import ModalItem from '@provider/components/ModalItem';
-import ModalTextItem from '@provider/components/ModalTextItem';
-import OpenTabIconButton from '@provider/components/OpenTabIconButton';
+import CopyIconButton from '@provider/components/generic/CopyIconButton';
+import InfoIconTooltip from '@provider/components/information/InfoIconTooltip';
+import ModalAssetItem from '@provider/components/modals/ModalAssetItem';
+import ModalItem from '@provider/components/modals/ModalItem';
+import ModalTextItem from '@provider/components/modals/ModalTextItem';
+import OpenTabIconButton from '@provider/components/generic/OpenTabIconButton';
 import RemoveAssetsConfirmingModalContent from './RemoveAssetsConfirmingModalContent';
 
 // constants

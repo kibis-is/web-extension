@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 import { RouterProvider } from 'react-router-dom';
 
 // providers
-import ThemeProvider from '@provider/components/ThemeProvider';
+import ThemeProvider from '@provider/containers/ThemeProvider';
 
 // features
 import { reducer as accountsReducer } from '@provider/features/accounts';

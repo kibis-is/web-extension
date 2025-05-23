@@ -4,7 +4,7 @@ import { IoArrowDownOutline, IoLockClosedOutline, IoLockOpenOutline } from 'reac
 import { useTranslation } from 'react-i18next';
 
 // components
-import AddressDisplay from '@provider/components/AddressDisplay';
+import AddressDisplay from '@provider/components/accounts/AddressDisplay';
 import CircularProgressWithIcon from '@common/components/CircularProgressWithIcon';
 
 // constants

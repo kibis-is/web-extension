@@ -1,28 +1,19 @@
 ## Summary
 
-### Features
+### Fixes
 
-* 🔤 enVoi support - you can now see your enVoi names alongside your accounts.
-* 💰 Staking contract support - a new tab displays your account's linked staking contracts.
-* 🔑 Authenticate using your AVM account - you can now sign in to websites that allow passkey authentication and use your accounts
+* 🔤 enVoi names should correctly appear and no longer display "name .voi".
+* 💅 Addresses correctly truncated on the account page.
 
 ## Community Highlights
 
-### It has been a while...
+### EnVoi Naming Service
 
-Kibisis has been on a bit of a sabbatical - life is full of surprises, and it tends to catch us all off-guard at some point.
+Let's be honest, AVM addresses are just not very easy to read. Us humans are just not meant to read those long, capitalized, jumble of letters and numbers. However, the amazing folks over at [enVoi](https://envoi.sh) have worked hard to release Voi's very own naming service!
 
-However, we have picked up the torch once more and are working to support some of the brilliant community-driven projects that have been gaining traction.
+Now you can own your very own, human-friendly, `.voi` name. This globally unique identifier allows you to couple your address and define your decentralized identity.
 
-We will continue to add support for these projects to provide you with the richest experience possible. 😊
-
-### Voi Improvement Proposals - VIPs
-
-Like most Layer 1 blockchains, standards and specifications begin to develop as the chain grows in popularity. It benefits all current and future builders to have these standards and specifications well documented.
-
-We are pleased to introduce a community-driven effort to create a consolidated source for standards and specifications - focused on, but not limited to, the Voi blockchain: [Voi Improvement Proposals (VIPs)](https://vips.voi.community).
-
-The VIP process is open to everyone who shares Voi’s community-driven vision (and even those who don’t 😉).
+Kibisis is working closely with the enVoi team and will be providing first-class support for `.voi` names.
 
 ## Closing Words
 

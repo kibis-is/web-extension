@@ -2,7 +2,7 @@ import { Box, HStack, Text, VStack } from '@chakra-ui/react';
 import React, { type FC } from 'react';
 
 // components
-import Select from '@provider/components/Select';
+import Select from '@provider/components/generic/Select';
 
 // constants
 import { DEFAULT_GAP } from '@common/constants';
@@ -13,7 +13,7 @@ import useDefaultTextColor from '@provider/hooks/useDefaultTextColor';
 import useSubTextColor from '@provider/hooks/useSubTextColor';
 
 // types
-import type { IOption } from '@provider/components/Select';
+import type { IOption } from '@provider/components/generic/Select';
 import type { IProps } from './types';
 
 const SettingsSelectItem: FC<IProps> = ({

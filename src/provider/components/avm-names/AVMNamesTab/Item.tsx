@@ -5,7 +5,7 @@ import { IoEyeOutline } from 'react-icons/io5';
 
 // components
 import AVMNameBadge from '@provider/components/avm-names/AVMNameBadge';
-import OverflowMenu from '@provider/components/OverflowMenu';
+import OverflowMenu from '@provider/components/generic/OverflowMenu';
 
 // constants
 import { DEFAULT_GAP, TAB_ITEM_HEIGHT } from '@common/constants';

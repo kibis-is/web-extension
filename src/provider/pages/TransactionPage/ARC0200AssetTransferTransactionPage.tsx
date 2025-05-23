@@ -4,17 +4,17 @@ import React, { FC, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 // components
-import AddressDisplay from '@provider/components/AddressDisplay';
-import AssetBadge from '@provider/components/AssetBadge';
-import AssetDisplay from '@provider/components/AssetDisplay';
-import AssetAvatar from '@provider/components/AssetAvatar';
+import AddressDisplay from '@provider/components/accounts/AddressDisplay';
+import AssetBadge from '@provider/components/assets/AssetBadge';
+import AssetDisplay from '@provider/components/assets/AssetDisplay';
+import AssetAvatar from '@provider/components/assets/AssetAvatar';
 import AssetIcon from '@provider/components/icons/AssetIcon';
-import CopyIconButton from '@provider/components/CopyIconButton';
+import CopyIconButton from '@provider/components/generic/CopyIconButton';
 import LoadingTransactionPage from '@provider/pages/TransactionPage/LoadingTransactionPage';
-import MoreInformationAccordion from '@provider/components/MoreInformationAccordion';
-import OpenTabIconButton from '@provider/components/OpenTabIconButton';
-import PageHeader from '@provider/components/PageHeader';
-import PageItem from '@provider/components/PageItem';
+import MoreInformationAccordion from '@provider/components/information/MoreInformationAccordion';
+import OpenTabIconButton from '@provider/components/generic/OpenTabIconButton';
+import PageHeader from '@provider/components/pages/PageHeader';
+import PageItem from '@provider/components/pages/PageItem';
 
 // constants
 import { DEFAULT_GAP } from '@common/constants';

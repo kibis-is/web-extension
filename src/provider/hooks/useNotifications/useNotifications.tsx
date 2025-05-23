@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
 // components
-import Toast from '@provider/components/Toast';
+import Toast from '@provider/components/generic/Toast';
 
 // constants
 import { DEFAULT_NOTIFICATION_DURATION } from '@provider/constants';

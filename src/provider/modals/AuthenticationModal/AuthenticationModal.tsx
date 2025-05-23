@@ -7,7 +7,7 @@ import browser from 'webextension-polyfill';
 // components
 import Button from '@common/components/Button';
 import CircularProgressWithIcon from '@common/components/CircularProgressWithIcon';
-import PasswordInput from '@provider/components/PasswordInput';
+import PasswordInput from '@provider/components/passwords/PasswordInput';
 
 // constants
 import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@common/constants';

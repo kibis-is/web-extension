@@ -21,13 +21,13 @@ import { useDispatch } from 'react-redux';
 // components
 import Button from '@common/components/Button';
 import CircularProgressWithIcon from '@common/components/CircularProgressWithIcon';
-import CopyIconButton from '@provider/components/CopyIconButton';
-import COSEAlgorithmBadge from '@provider/components/COSEAlgorithmBadge';
-import ModalItem from '@provider/components/ModalItem';
-import ModalTextItem from '@provider/components/ModalTextItem';
-import MoreInformationAccordion from '@provider/components/MoreInformationAccordion';
-import PasskeyCapabilities from '@provider/components/PasskeyCapabilities';
-import ReEncryptKeysLoadingContent from '@provider/components/ReEncryptKeysLoadingContent';
+import CopyIconButton from '@provider/components/generic/CopyIconButton';
+import COSEAlgorithmBadge from '@provider/components/cryptography/COSEAlgorithmBadge';
+import ModalItem from '@provider/components/modals/ModalItem';
+import ModalTextItem from '@provider/components/modals/ModalTextItem';
+import MoreInformationAccordion from '@provider/components/information/MoreInformationAccordion';
+import PasskeyCapabilities from '@provider/components/passkeys/PasskeyCapabilities';
+import ReEncryptKeysLoadingContent from '@provider/components/authentication/ReEncryptKeysLoadingContent';
 
 // constants
 import { BODY_BACKGROUND_COLOR, DEFAULT_GAP, MODAL_ITEM_HEIGHT } from '@common/constants';

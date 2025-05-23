@@ -16,13 +16,13 @@ import React, { FC, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 // components
-import AssetDisplay from '@provider/components/AssetDisplay';
-import CopyIconButton from '@provider/components/CopyIconButton';
-import InnerTransactionAccordion from '@provider/components/InnerTransactionAccordion';
-import MoreInformationAccordion from '@provider/components/MoreInformationAccordion';
-import OpenTabIconButton from '@provider/components/OpenTabIconButton';
-import PageHeader from '@provider/components/PageHeader';
-import PageItem from '@provider/components/PageItem';
+import AssetDisplay from '@provider/components/assets/AssetDisplay';
+import CopyIconButton from '@provider/components/generic/CopyIconButton';
+import InnerTransactionAccordion from '@provider/components/transactions/InnerTransactionAccordion';
+import MoreInformationAccordion from '@provider/components/information/MoreInformationAccordion';
+import OpenTabIconButton from '@provider/components/generic/OpenTabIconButton';
+import PageHeader from '@provider/components/pages/PageHeader';
+import PageItem from '@provider/components/pages/PageItem';
 
 // constants
 import { DEFAULT_GAP } from '@common/constants';

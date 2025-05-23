@@ -24,7 +24,7 @@ import IconButton from '@common/components/IconButton';
 import AddAssetsARC0200AssetItem from './AddAssetsARC0200AssetItem';
 import AddAssetsARC0200AssetSummaryModalContent from './AddAssetsARC0200AssetSummaryModalContent';
 import AddAssetsConfirmingModalContent from './AddAssetsConfirmingModalContent';
-import Warning from '@provider/components/Warning';
+import Warning from '@provider/components/information/Warning';
 
 // constants
 import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@common/constants';

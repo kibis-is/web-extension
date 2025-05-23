@@ -18,11 +18,11 @@ import { useDispatch } from 'react-redux';
 
 // components
 import AccountSelect from '@provider/components/accounts/AccountSelect';
-import AddressInput from '@provider/components/AddressInput';
-import AmountInput from '@provider/components/AmountInput';
-import AssetSelect from '@provider/components/AssetSelect';
+import AddressInput from '@provider/components/accounts/AddressInput';
+import AmountInput from '@provider/components/assets/AmountInput';
+import AssetSelect from '@provider/components/assets/AssetSelect';
 import Button from '@common/components/Button';
-import GenericTextarea from '@provider/components/GenericTextarea';
+import GenericTextarea from '@provider/components/generic/GenericTextarea';
 import SendAssetModalConfirmingContent from './SendAssetModalConfirmingContent';
 import SendAssetModalContentSkeleton from './SendAssetModalContentSkeleton';
 import SendAssetModalSummaryContent from './SendAssetModalSummaryContent';

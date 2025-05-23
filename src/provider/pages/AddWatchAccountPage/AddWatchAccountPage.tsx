@@ -8,9 +8,9 @@ import { useNavigate } from 'react-router-dom';
 
 // components
 import Button from '@common/components/Button';
-import GenericInput from '@provider/components/GenericInput';
-import PageHeader from '@provider/components/PageHeader';
-import Steps from '@provider/components/Steps';
+import GenericInput from '@provider/components/generic/GenericInput';
+import PageHeader from '@provider/components/pages/PageHeader';
+import Steps from '@provider/components/generic/Steps';
 
 // constants
 import { DEFAULT_GAP } from '@common/constants';

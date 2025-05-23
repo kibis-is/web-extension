@@ -22,7 +22,7 @@ import { useTranslation } from 'react-i18next';
 import { IoCheckmarkOutline, IoChevronForward } from 'react-icons/io5';
 
 // components
-import AccountAvatarWithBadges from '@provider/components/AccountAvatarWithBadges';
+import AccountAvatarWithBadges from '@provider/components/accounts/AccountAvatarWithBadges';
 import Button from '@common/components/Button';
 import EmptyState from '@common/components/EmptyState';
 

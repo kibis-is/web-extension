@@ -2,7 +2,7 @@ import { Modal, ModalBody, ModalContent, ModalOverlay, useColorMode } from '@cha
 import React, { FC } from 'react';
 
 // components
-import ReEncryptKeysLoadingContent from '@provider/components/ReEncryptKeysLoadingContent';
+import ReEncryptKeysLoadingContent from '@provider/components/authentication/ReEncryptKeysLoadingContent';
 
 // constants
 import { BODY_BACKGROUND_COLOR, DEFAULT_GAP } from '@common/constants';

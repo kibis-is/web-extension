@@ -62,7 +62,7 @@ const AccountPageAddressDisplay: FC<IProps> = ({ account, network }) => {
       return (
         <>
           {/*envoi*/}
-          <Heading color={defaultTextColor} maxW="650px" noOfLines={1} size="md" textAlign="left">
+          <Heading color={defaultTextColor} maxW="400px" noOfLines={1} size="md" textAlign="left">
             {enVoiName}
           </Heading>
 
@@ -78,15 +78,9 @@ const AccountPageAddressDisplay: FC<IProps> = ({ account, network }) => {
 
     // if there is no name or envoi, display the address
     return (
-      <Tooltip label={ellipseAddress(address, { end: 15, start: 15 })}>
-        <Heading
-          color={defaultTextColor}
-          maxW="650px" // full address length
-          noOfLines={1}
-          size="md"
-          textAlign="left"
-        >
-          {address}
+      <Tooltip label={address}>
+        <Heading color={defaultTextColor} size="md" textAlign="left">
+          {ellipseAddress(address, { end: 10, start: 10 })}
         </Heading>
       </Tooltip>
     );

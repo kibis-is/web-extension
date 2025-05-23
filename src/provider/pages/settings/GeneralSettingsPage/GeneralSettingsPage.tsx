@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 
 // components
-import PageHeader from '@provider/components/PageHeader';
+import PageHeader from '@provider/components/pages/PageHeader';
 import SettingsButtonItem from '@provider/components/settings/SettingsButtonItem';
 import SettingsSelectItem from '@provider/components/settings/SettingsSelectItem';
 import SettingsSubHeading from '@provider/components/settings/SettingsSubHeading';
@@ -31,7 +31,7 @@ import {
 } from '@provider/selectors';
 
 // types
-import type { IOption } from '@provider/components/Select';
+import type { IOption } from '@provider/components/generic/Select';
 import type { IAppThunkDispatch, IMainRootState } from '@provider/types';
 
 // utils

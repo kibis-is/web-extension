@@ -4,8 +4,8 @@ import { useTranslation } from 'react-i18next';
 import browser from 'webextension-polyfill';
 
 // components
-import CopyIconButton from '@provider/components/CopyIconButton';
-import PageHeader from '@provider/components/PageHeader';
+import CopyIconButton from '@provider/components/generic/CopyIconButton';
+import PageHeader from '@provider/components/pages/PageHeader';
 import SettingsExternalLinkItem from '@provider/components/settings/SettingsExternalLinkItem';
 import SettingsTextItem from '@provider/components/settings/SettingsTextItem';
 import SettingsSubHeading from '@provider/components/settings/SettingsSubHeading';

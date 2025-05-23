@@ -7,9 +7,9 @@ import { useDispatch } from 'react-redux';
 // components
 import AccountSelect from '@provider/components/accounts/AccountSelect';
 import Button from '@common/components/Button';
-import CopyButton from '@provider/components/CopyButton';
-import PageHeader from '@provider/components/PageHeader';
-import SeedPhraseDisplay, { SeedPhraseDisplaySkeleton } from '@provider/components/SeedPhraseDisplay';
+import CopyButton from '@provider/components/generic/CopyButton';
+import PageHeader from '@provider/components/pages/PageHeader';
+import SeedPhraseDisplay, { SeedPhraseDisplaySkeleton } from '@provider/components/authentication/SeedPhraseDisplay';
 
 // constants
 import { DEFAULT_GAP } from '@common/constants';

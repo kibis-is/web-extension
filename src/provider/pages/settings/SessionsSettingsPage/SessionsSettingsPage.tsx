@@ -7,8 +7,8 @@ import { useDispatch } from 'react-redux';
 // components
 import Button from '@common/components/Button';
 import EmptyState from '@common/components/EmptyState';
-import PageHeader from '@provider/components/PageHeader';
-import ScrollableContainer from '@provider/components/ScrollableContainer';
+import PageHeader from '@provider/components/pages/PageHeader';
+import ScrollableContainer from '@provider/components/generic/ScrollableContainer';
 import SettingsSessionItem, { SettingsSessionItemSkeleton } from '@provider/components/settings/SettingsSessionItem';
 
 // components
