@@ -1,3 +1,10 @@
+# [2.6.0-beta.7](https://github.com/kibis-is/web-extension/compare/v2.6.0-beta.6...v2.6.0-beta.7) (2025-05-23)
+
+
+### Bug Fixes
+
+* address and dropdown not truncated ([#365](https://github.com/kibis-is/web-extension/issues/365)) ([25ab1c0](https://github.com/kibis-is/web-extension/commit/25ab1c044fb87e784e1e8be22cda3119d22ee03d))
+
 # [2.6.0-beta.6](https://github.com/kibis-is/web-extension/compare/v2.6.0-beta.5...v2.6.0-beta.6) (2025-05-22)
 
 
