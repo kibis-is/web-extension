@@ -59,6 +59,11 @@ export default async function queueProviderEvent({
       `${_functionName}: main app window open, posting that event "${event.id}" has been added to the queue`
     );
 
+    // bring the window into focus
+    await browser.windows.update(mainAppWindows[0].windowId, {
+      focused: true,
+    });
+
     return await browser.runtime.sendMessage(new ProviderEventAddedMessage(event.id));
   }
 
