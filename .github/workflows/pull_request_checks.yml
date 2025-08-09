@@ -5,25 +5,11 @@ on:
 
 jobs:
   ##
-  # install
-  ##
-
-  install:
-    name: "Install"
-    runs-on: ubuntu-latest
-    steps:
-      - name: "🛎 Checkout"
-        uses: actions/checkout@v4
-      - name: "🔧 Setup"
-        uses: ./.github/actions/use-pnpm-dependencies
-
-  ##
   # validation
   ##
 
   validate_pr_title:
     name: "Validate PR Title"
-    needs: install
     runs-on: ubuntu-latest
     steps:
       - name: "🛎 Checkout"
@@ -51,7 +37,7 @@ jobs:
 
   lint:
     name: "Lint"
-    needs: [install, validate_pr_title]
+    needs: [validate_pr_title]
     runs-on: ubuntu-latest
     steps:
       - name: "🛎 Checkout"
@@ -64,7 +50,7 @@ jobs:
 # TODO: disable until chakra-ui is updated
 #  type_check:
 #    name: "Type Check"
-#    needs: [install, validate_pr_title]
+#    needs: [validate_pr_title]
 #    runs-on: ubuntu-latest
 #    steps:
 #      - name: "🛎 Checkout"
@@ -76,7 +62,7 @@ jobs:
 
   test:
     name: "Test"
-    needs: install
+    needs: [validate_pr_title]
     runs-on: ubuntu-latest
     steps:
       - name: "🛎 Checkout"
@@ -92,7 +78,7 @@ jobs:
 
   build_chrome:
     name: "Build Chrome"
-    needs: [install, validate_pr_title]
+    needs: [validate_pr_title]
     runs-on: ubuntu-latest
     environment: development
     steps:
@@ -109,7 +95,7 @@ jobs:
 
   build_edge:
     name: "Build Edge"
-    needs: [install, validate_pr_title]
+    needs: [validate_pr_title]
     runs-on: ubuntu-latest
     environment: development
     steps:
@@ -126,7 +112,7 @@ jobs:
 
   build_firefox:
     name: "Build Firefox"
-    needs: [install, validate_pr_title]
+    needs: [validate_pr_title]
     runs-on: ubuntu-latest
     environment: development
     steps:
@@ -145,7 +131,7 @@ jobs:
 
   build_opera:
     name: "Build Opera"
-    needs: [install, validate_pr_title]
+    needs: [validate_pr_title]
     runs-on: ubuntu-latest
     environment: development
     steps:
