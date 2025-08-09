@@ -1,3 +1,19 @@
+# [2.6.0](https://github.com/kibis-is/web-extension/compare/v2.5.2...v2.6.0) (2025-08-09)
+
+
+### Bug Fixes
+
+* address and dropdown not truncated ([#365](https://github.com/kibis-is/web-extension/issues/365)) ([25ab1c0](https://github.com/kibis-is/web-extension/commit/25ab1c044fb87e784e1e8be22cda3119d22ee03d))
+* envoi name not always showing ([#364](https://github.com/kibis-is/web-extension/issues/364)) ([a7149ee](https://github.com/kibis-is/web-extension/commit/a7149ee649533837e4f45c6eeb94dd6f0c53947b))
+* update voi testnet genesis hash ([#357](https://github.com/kibis-is/web-extension/issues/357)) ([9502926](https://github.com/kibis-is/web-extension/commit/95029266f2bbe03d624743498efbc5e84d4c3261))
+* updates the focus when main window is open and action is enacted ([#366](https://github.com/kibis-is/web-extension/issues/366)) ([a0b81a5](https://github.com/kibis-is/web-extension/commit/a0b81a5fa420d7d4b106bd9da28a0382e62bda45))
+
+
+### Features
+
+* add privacy policy link to settings ([#363](https://github.com/kibis-is/web-extension/issues/363)) ([358162f](https://github.com/kibis-is/web-extension/commit/358162f50f417575b1380691b801c9221899d32f))
+* update icons ([#356](https://github.com/kibis-is/web-extension/issues/356)) ([6939380](https://github.com/kibis-is/web-extension/commit/693938066990b4791db9da39eaf34f88e0f2c585))
+
 # [2.6.0-beta.8](https://github.com/kibis-is/web-extension/compare/v2.6.0-beta.7...v2.6.0-beta.8) (2025-08-09)
 
 
