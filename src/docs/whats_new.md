@@ -4,7 +4,7 @@
 
 * 🔤 enVoi names should correctly appear and no longer display "name .voi".
 * 💅 Addresses correctly truncated on the account page.
-* 🪟 App window should be brought into focus when connecting/signing transactions.
+* 🪟 Wallet window is brought into focus when connecting/signing transactions.
 
 ## Community Highlights
 
