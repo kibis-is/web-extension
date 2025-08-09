@@ -1,3 +1,10 @@
+# [2.6.0-beta.8](https://github.com/kibis-is/web-extension/compare/v2.6.0-beta.7...v2.6.0-beta.8) (2025-08-09)
+
+
+### Bug Fixes
+
+* updates the focus when main window is open and action is enacted ([#366](https://github.com/kibis-is/web-extension/issues/366)) ([a0b81a5](https://github.com/kibis-is/web-extension/commit/a0b81a5fa420d7d4b106bd9da28a0382e62bda45))
+
 # [2.6.0-beta.7](https://github.com/kibis-is/web-extension/compare/v2.6.0-beta.6...v2.6.0-beta.7) (2025-05-23)
 
 
