@@ -2,7 +2,7 @@
   "name": "publish-to-opera-add-ons",
   "version": "1.0.0",
   "scripts": {
-    "start": "ts-node index.ts"
+    "start": "tsx index.ts"
   },
   "packageManager": "pnpm@10.3.0",
   "dependencies": {
@@ -12,7 +12,7 @@
   },
   "devDependencies": {
     "@types/node": "^20.11.0",
-    "ts-node": "^10.9.2",
+    "tsx": "^4.20.3",
     "typescript": "^5.3.3"
   },
   "pnpm": {

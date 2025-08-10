@@ -19,13 +19,15 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - name: "🔧 Setup pnpm"
+      uses: pnpm/action-setup@v4
     - name: "🔧 Setup"
       uses: actions/setup-node@v4
       with:
         node-version: '20.9.0'
         cache: 'pnpm'
     - name: "📦 Install"
-      run: pnpm install --dir ./.github/actions/publish-to-opera-add-ons/
+      run: pnpm --dir ./.github/actions/publish-to-opera-add-ons/ install
       shell: bash
     - name: "🚀 Upload and publish to Opera add-ons"
       env:
@@ -33,5 +35,5 @@ runs:
         EXTENSION_ID: ${{ inputs.extension_id }}
         PASSWORD: ${{ inputs.password }}
         ZIP_FILE_NAME: ${{ inputs.zip_file_name }}
-      run: pnpm start --dir ./.github/actions/publish-to-opera-add-ons/
+      run: pnpm --dir ./.github/actions/publish-to-opera-add-ons/ start
       shell: bash
